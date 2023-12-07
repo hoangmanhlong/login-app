@@ -1,4 +1,4 @@
-package com.example.loginapp.adapter.data;
+package com.example.loginapp.data;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SliderItem;

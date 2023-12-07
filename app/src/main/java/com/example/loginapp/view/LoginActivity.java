@@ -1,5 +1,6 @@
 package com.example.loginapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -9,21 +10,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityLoginBinding;
-import com.example.loginapp.presenter.AppPresenter;
+import com.example.loginapp.presenter.LoginPresenter;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
-    private AppPresenter appPresenter;
+    private LoginPresenter loginPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appPresenter = new AppPresenter(this);
+        loginPresenter = new LoginPresenter(this);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.setLoginActivity(this);
-
+        loginPresenter.automaticallyUserInfo();
     }
+
+    public void setUserAccount(String email, String password) {
+        binding.emailInput.setText(email);
+        binding.passwordInput.setText(password);
+    }
+
 
     public void onNumberPhoneBtn() {
         binding.numberPhoneInput.setVisibility(View.VISIBLE);
@@ -42,14 +49,24 @@ public class LoginActivity extends AppCompatActivity {
     public void onLogin() {
         String email = binding.emailInput.getText().toString();
         String password = binding.passwordInput.getText().toString();
-        appPresenter.putUserInput(email, password);
+        loginPresenter.putUserInput(email, password);
     }
 
-    public void showSuccess() {
-        Toast.makeText(this, "Xác thực thành công!", Toast.LENGTH_SHORT).show();
+    public void showSuccess(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    public void showFail() {
-        Toast.makeText(this, "Không hợp lệ!", Toast.LENGTH_SHORT).show();
+    public void showFail(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+    public void onCreateAccountBtn() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
+    public void goHomeScreen() {
+        startActivity(new Intent(this, HomeActivity.class));
+    }
+
 }
