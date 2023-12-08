@@ -1,10 +1,16 @@
 package com.example.loginapp.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +22,24 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private LoginPresenter loginPresenter;
 
+    ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+            Log.d(this.toString(), String.valueOf(result.getResultCode()));
+            if (result.getResultCode() == RESULT_OK) {
+                Intent intent = result.getData();
+                if (intent != null) {
+                    String email = intent.getStringExtra("email");
+                    String password = intent.getStringExtra("password");
+                    binding.emailInput.setText(email);
+                    binding.passwordInput.setText(password);
+                    Log.d(this.toString(), email.toString());
+                    Log.d(this.toString(), password.toString());
+                }
+            }
+        }
+    );
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,14 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.setLoginActivity(this);
-        loginPresenter.automaticallyUserInfo();
     }
-
-    public void setUserAccount(String email, String password) {
-        binding.emailInput.setText(email);
-        binding.passwordInput.setText(password);
-    }
-
 
     public void onNumberPhoneBtn() {
         binding.numberPhoneInput.setVisibility(View.VISIBLE);
@@ -62,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onCreateAccountBtn() {
         Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        mGetContent.launch(intent);
     }
 
     public void goHomeScreen() {

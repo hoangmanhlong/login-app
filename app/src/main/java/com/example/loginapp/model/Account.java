@@ -1,8 +1,6 @@
 package com.example.loginapp.model;
 
-import lombok.Data;
 
-@Data
 public class Account {
     private String email;
     private String password;
@@ -18,13 +16,5 @@ public class Account {
 
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-            "email='" + email + '\'' +
-            ", password='" + password + '\'' +
-            '}';
     }
 }

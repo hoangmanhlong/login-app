@@ -20,7 +20,7 @@
             android:layout_width="@dimen/_79sdp"
             android:layout_height="@dimen/_79sdp"
             android:contentDescription="@null"
-            android:src="@drawable/cil_fastfood" />
+            android:src="@drawable/foreground" />
 
         <TextView
             android:id="@+id/aliments"

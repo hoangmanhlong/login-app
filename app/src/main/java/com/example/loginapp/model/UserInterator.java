@@ -9,21 +9,27 @@ import com.example.loginapp.presenter.LoginPresenter;
 import com.example.loginapp.presenter.MainPresenter;
 import com.example.loginapp.presenter.RegisterPresenter;
 
-
 public class UserInterator {
     private final String TAG = this.toString();
 
-    public void validateInfo(Context context, String email, String password, LoginPresenter loginPresenter) {
+    public void login(
+        Context context,
+        String email,
+        String password,
+        LoginPresenter loginPresenter
+    ) {
         if (email.equals("") || password.equals("")) {
             loginPresenter.onFail("Please enter complete information");
         } else {
-            Account account = AppSharedPreferences.getUserInfo(context);
+            Account account = AppSharedPreferences.getInstance(context).getUserInfo();
             if (account == null) {
                 loginPresenter.onFail("Account does not exist");
             } else {
-                boolean check = email.equals(account.getEmail()) && password.equals(account.getPassword());
+                boolean check =
+                    email.equals(account.getEmail()) && password.equals(account.getPassword());
                 if (check) {
                     loginPresenter.goHomeScreen();
+                    AppSharedPreferences.getInstance(context).setLoginStatus(true);
                     loginPresenter.onSuccess("Logged in successfully");
                 } else {
                     loginPresenter.onFail("Account information or password is incorrect");
@@ -32,23 +38,29 @@ public class UserInterator {
         }
     }
 
-    public void automaticallyUserInfo(Context context, LoginPresenter presenter) {
-        Account account = AppSharedPreferences.getUserInfo(context);
-        if (account == null) {
-            presenter.automatically("", "");
-        } else {
-            presenter.automatically(account.getEmail(), account.getPassword());
-        }
-    }
+//    public void fillUserInfo(Context context, LoginPresenter presenter) {
+//        Account account = AppSharedPreferences.getInstance(context).getUserInfo();
+//        if (account == null) {
+//            presenter.fillInfo("", "");
+//        } else {
+//            presenter.fillInfo(account.getEmail(), account.getPassword());
+//        }
+//    }
 
-    public void registerAccount(Context context, String email, String password, String confirmPassword, RegisterPresenter presenter) {
+    public void registerAccount(
+        Context context,
+        String email,
+        String password,
+        String confirmPassword,
+        RegisterPresenter presenter
+    ) {
         if (email.equals("") || password.equals("") || confirmPassword.equals("")) {
             presenter.onFail("Please enter complete information");
         } else if (!password.equals(confirmPassword)) {
             presenter.onFail("Passwords are not duplicates");
         } else {
             try {
-                AppSharedPreferences.saveUserAccount(context, email, password);
+                AppSharedPreferences.getInstance(context).saveUserAccount(email, password);
                 presenter.goLoginScreen();
                 presenter.onSuccess("Sign Up Success");
             } catch (Exception e) {
@@ -57,8 +69,8 @@ public class UserInterator {
         }
     }
 
-    public void hasUser(Context context, MainPresenter presenter) {
-        if (AppSharedPreferences.hasUser(context)) {
+    public void isLogged(Context context, MainPresenter presenter) {
+        if (AppSharedPreferences.getInstance(context).getLoginStatus()) {
             presenter.goHomeScreen();
         } else {
             Log.d(TAG, "...");
@@ -66,7 +78,7 @@ public class UserInterator {
     }
 
     public void logout(Context context, HomePresenter presenter) {
-        AppSharedPreferences.clearUserAccount(context);
+        AppSharedPreferences.getInstance(context).setLoginStatus(false);
         presenter.goLoginScreen();
     }
 }

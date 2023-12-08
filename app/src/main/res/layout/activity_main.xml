@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="mainActivity"
             type="com.example.loginapp.view.MainActivity" />
     </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -55,9 +58,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_25sdp"
                     android:background="@drawable/login_button_background"
+                    android:onClick="@{() -> mainActivity.goLoginScreen()}"
                     android:text="@string/login"
                     android:textAllCaps="false"
-                    android:onClick="@{() -> mainActivity.goLoginScreen()}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
 
@@ -65,10 +68,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/create_account_button_background"
-                    android:text="@string/create_account"
-                    android:textColor="@color/white"
-                    android:textAllCaps="false"
                     android:onClick="@{() -> mainActivity.onCreateAccountBtn()}"
+                    android:text="@string/create_account"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
         </LinearLayout>

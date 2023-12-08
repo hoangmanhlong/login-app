@@ -14,7 +14,7 @@ public class MainPresenter {
     }
 
     public void UserIsExist() {
-        userInterator.hasUser(mainActivity, this);
+        userInterator.isLogged(mainActivity, this);
     }
 
     public void goHomeScreen() {

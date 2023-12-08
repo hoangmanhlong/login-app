@@ -1,10 +1,14 @@
 package com.example.loginapp.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +19,7 @@ import com.example.loginapp.presenter.RegisterPresenter;
 public class RegisterActivity extends AppCompatActivity {
     private ActivityRegisterBinding binding;
     private RegisterPresenter registerPresenter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +38,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void goLoginScreen() {
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        intent.putExtra("email", binding.emailInput.getText().toString());
+        intent.putExtra("password", binding.passwordInput.getText().toString());
+        setResult(RESULT_OK, intent);
+//        startActivity(intent);
+        finish();
     }
 
     public void showSuccess(String message) {

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mainPresenter.UserIsExist();
 
         sliderView = binding.sliderView;
-        SliderAdapter adapter = new SliderAdapter(this);
+        SliderAdapter adapter = new SliderAdapter();
         binding.sliderView.setSliderAdapter(adapter);
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);

@@ -59,10 +59,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textAllCaps="false"
                     android:background="@drawable/background_login_select"
                     android:onClick='@{() -> loginActivity.onNumberPhoneBtn()}'
                     android:text="@string/phone_number"
+                    android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
@@ -72,10 +72,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textAllCaps="false"
                     android:background="@drawable/wrap_select_option_login_background"
                     android:onClick='@{() -> loginActivity.onEmailClick()}'
                     android:text="@string/email"
+                    android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
@@ -160,9 +160,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_24ssp"
-                    android:textAllCaps="false"
                     android:background="@drawable/button_login"
                     android:text="Request OTP"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
@@ -203,6 +203,7 @@
                     android:background="@drawable/button_login"
                     android:onClick="@{() -> loginActivity.onLogin()}"
                     android:text="Login"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
 
@@ -279,25 +280,26 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_31sdp"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_login_google">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
                     android:text="Not Registered yet? "
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
+                    android:onClick="@{() -> loginActivity.onCreateAccountBtn()}"
                     android:text="Create an Account"
-                    android:textSize="14sp"
                     android:textColor="@color/cam"
-                    android:textStyle="bold"
-                    android:onClick="@{() -> loginActivity.onCreateAccountBtn()}"/>
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

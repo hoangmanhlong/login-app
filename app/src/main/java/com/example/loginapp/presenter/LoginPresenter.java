@@ -18,16 +18,16 @@ public class LoginPresenter implements Listener {
     }
 
     public void putUserInput(String email, String password) {
-        userInterator.validateInfo(loginActivity, email, password, this);
+        userInterator.login(loginActivity, email, password, this);
     }
 
-    public void automaticallyUserInfo() {
-        userInterator.automaticallyUserInfo(loginActivity, this);
-    }
-
-    public void automatically(String email, String password) {
-        loginActivity.setUserAccount(email, password);
-    }
+//    public void automaticallyUserInfo() {
+//        userInterator.fillUserInfo(loginActivity, this);
+//    }
+//
+//    public void fillInfo(String email, String password) {
+//        loginActivity.setUserAccount(email, password);
+//    }
 
     @Override
     public void onSuccess(String message) {

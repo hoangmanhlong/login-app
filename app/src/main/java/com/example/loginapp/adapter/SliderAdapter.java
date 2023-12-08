@@ -12,15 +12,9 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SliderAdapter extends
-    SliderViewAdapter<SliderAdapter.SliderAdapterViewHolder> {
+public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterViewHolder> {
 
-    private Context context;
-    private List<SliderItem> mSliderItems = DataSource.sliderItems;
-
-    public SliderAdapter(Context context) {
-        this.context = context;
-    }
+    private final List<SliderItem> mSliderItems = DataSource.sliderItems;
 
     @Override
     public SliderAdapterViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -43,7 +37,7 @@ public class SliderAdapter extends
         return mSliderItems.size();
     }
 
-    class SliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
+    static class SliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
         private ItemSliderviewBinding binding;
 
         public SliderAdapterViewHolder(ItemSliderviewBinding binding) {
