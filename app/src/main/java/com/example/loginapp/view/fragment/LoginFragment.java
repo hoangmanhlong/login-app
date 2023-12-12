@@ -2,7 +2,6 @@ package com.example.loginapp.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,8 +18,6 @@ import androidx.navigation.Navigation;
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentLoginBinding;
 import com.example.loginapp.presenter.LoginPresenter;
-
-import java.util.Objects;
 
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
@@ -54,6 +49,7 @@ public class LoginFragment extends Fragment {
         @Nullable Bundle savedInstanceState
     ) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+        int a =0;
         return binding.getRoot();
     }
 
