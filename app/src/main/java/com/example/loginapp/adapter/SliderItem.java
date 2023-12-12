@@ -4,12 +4,9 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 
 public class SliderItem {
-    @DrawableRes
-    private int image;
-    @StringRes
-    private int title;
-    @StringRes
-    private int description;
+    @DrawableRes private int image;
+    @StringRes private int title;
+    @StringRes private int description;
 
     public SliderItem(int item, int title, int description) {
         this.image = item;

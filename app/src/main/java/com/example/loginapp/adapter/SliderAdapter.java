@@ -1,15 +1,13 @@
 package com.example.loginapp.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.example.loginapp.R;
 import com.example.loginapp.data.DataSource;
-import com.example.loginapp.databinding.ItemSliderviewBinding;
+import com.example.loginapp.databinding.LayoutItemSliderviewBinding;
+import com.example.loginapp.databinding.LayoutItemSliderviewBinding;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterViewHolder> {
@@ -19,7 +17,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     @Override
     public SliderAdapterViewHolder onCreateViewHolder(ViewGroup parent) {
         return new SliderAdapterViewHolder(
-            ItemSliderviewBinding.inflate(
+            LayoutItemSliderviewBinding.inflate(
                 LayoutInflater.from(parent.getContext()),
                 parent,
                 false
@@ -38,9 +36,9 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     }
 
     static class SliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
-        private ItemSliderviewBinding binding;
+        private LayoutItemSliderviewBinding binding;
 
-        public SliderAdapterViewHolder(ItemSliderviewBinding binding) {
+        public SliderAdapterViewHolder(LayoutItemSliderviewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

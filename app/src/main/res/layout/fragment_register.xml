@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="registerActivity"
-            type="com.example.loginapp.view.RegisterActivity" />
+            name="registerFragment"
+            type="com.example.loginapp.view.fragment.RegisterFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,6 +41,8 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/email"
                 android:hint="Email ID"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/_12ssp" />
 
@@ -50,6 +52,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:drawableStart="@drawable/lock"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 android:hint="Password"
                 android:textColorHint="@color/gray"
                 android:textSize="14sp" />
@@ -60,6 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:drawableStart="@drawable/ic_key"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
                 android:hint="Confirm password"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/_12sdp" />
@@ -70,7 +76,7 @@
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_24sdp"
                 android:background="@drawable/button_login"
-                android:onClick="@{() -> registerActivity.register()}"
+                android:onClick="@{() -> registerFragment.register()}"
                 android:text="@string/register"
                 android:textAllCaps="false"
                 android:textColor="@color/white"

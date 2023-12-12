@@ -1,19 +1,22 @@
 package com.example.loginapp.data;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.loginapp.model.Account;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AppSharedPreferences {
 
     private static final String ACCOUNT_PREFERENCES_NAME = "account_preferences";
-    private static final String USER_EMAIL_NAME = "user_email_name";
-    private static final String USER_PASSWORD_NAME = "user_password_name";
+    private static final String ACCOUNT_KEY = "accounts";
     private static final String IS_LOGGED_NAME = "is_logged_name";
 
     private static AppSharedPreferences instance;
@@ -32,18 +35,22 @@ public class AppSharedPreferences {
     }
 
     public void saveUserAccount(String email, String password) {
+        List<Account> accounts = getAccounts();
+        accounts.add(new Account(email, password));
+        String updatedAccountsJson = new Gson().toJson(accounts);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(USER_EMAIL_NAME, email);
-        editor.putString(USER_PASSWORD_NAME, password);
+        editor.putString(ACCOUNT_KEY, updatedAccountsJson);
         editor.apply();
     }
+
     @Nullable
-    public Account getUserInfo() {
+    public List<Account> getAccounts() {
         try {
-            String email = preferences.getString(USER_EMAIL_NAME, null);
-            String password = preferences.getString(USER_PASSWORD_NAME, null);
-            if (email != null && password != null) {
-                return new Account(email, password);
+            String accountsJson = preferences.getString(ACCOUNT_KEY, "[]");
+            List<Account> accountList =
+                new ArrayList<>(Arrays.asList(new Gson().fromJson(accountsJson, Account[].class)));
+            if (!accountsJson.isEmpty()) {
+                return accountList;
             } else {
                 return null;
             }

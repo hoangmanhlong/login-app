@@ -2,40 +2,32 @@ package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.Listener;
 import com.example.loginapp.model.UserInterator;
-import com.example.loginapp.view.LoginActivity;
+import com.example.loginapp.view.fragment.LoginFragment;
 
 public class LoginPresenter implements Listener {
-    private LoginActivity loginActivity;
+    private LoginFragment loginFragment;
     private UserInterator userInterator;
 
-    public LoginPresenter(LoginActivity loginActivity) {
-        this.loginActivity = loginActivity;
+    public LoginPresenter(LoginFragment loginFragment) {
+        this.loginFragment = loginFragment;
         userInterator = new UserInterator();
     }
 
     public void goHomeScreen() {
-        loginActivity.goHomeScreen();
+        loginFragment.goHomeScreen();
     }
 
     public void putUserInput(String email, String password) {
-        userInterator.login(loginActivity, email, password, this);
+        userInterator.login(loginFragment.getContext(), email, password, this);
     }
-
-//    public void automaticallyUserInfo() {
-//        userInterator.fillUserInfo(loginActivity, this);
-//    }
-//
-//    public void fillInfo(String email, String password) {
-//        loginActivity.setUserAccount(email, password);
-//    }
 
     @Override
     public void onSuccess(String message) {
-        loginActivity.showSuccess(message);
+        loginFragment.showSuccess(message);
     }
 
     @Override
     public void onFail(String message) {
-        loginActivity.showFail(message);
+        loginFragment.showFail(message);
     }
 }
