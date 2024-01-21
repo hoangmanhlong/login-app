@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="title">
+        <item name="android:textColor">@color/cam</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/_23ssp</item>
+    </style>
+
+    <style name="content">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">@dimen/_14ssp</item>
+    </style>
+
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?attr/dividerHorizontal</item>
+    </style>
+
+    <style name="customfontstyle" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+    </style>
+
+    <style name="specific_rounded_corner">
+    </style>
+
+    <style name="circleImageView" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="discount_image">
+        <item name="cornerSize">@dimen/_10sdp</item>
+    </style>
+
+    <style name="spinerStyle">
+        <item name="fontFamily">@font/overpass_regular</item>
+    </style>
+
+<!--    <style name="App.Splash" parent="Theme.SplashScreen">-->
+<!--&lt;!&ndash;        <item name="android:windowBackground">@drawable/</item>&ndash;&gt;-->
+<!--        <item name="android:windowSplashScreenBackground">#152B36</item>-->
+<!--        <item name="postSplashScreenTheme">@style/Base.Theme.LoginApp</item>-->
+<!--        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_app</item>-->
+
+
+<!--        &lt;!&ndash;        <item name="colorPrimaryDark">@color/green_3</item>&ndash;&gt;-->
+<!--        <item name="android:windowDisablePreview">true</item>-->
+<!--        <item name="windowActionBarOverlay">true</item>-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+<!--    </style>-->
+
+</resources>

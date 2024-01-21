@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Smarteshop</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aliments">Aliments</string>
+    <string name="food_delive">Food Delivery Services</string>
+    <string name="loopr">LOOPR</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create an account</string>
+    <string name="best_prices">Best Prices &amp; Deals</string>
+    <string name="find_your_f">Find your favorite Meals at the best prices with exclusive deals only on aliments app.</string>
+    <string name="track_your_">Track your Orders</string>
+    <string name="track_your">Track your orders in realtime from the app</string>
+    <string name="free_and_fa_">Free and Fast Delivery</string>
+    <string name="free_and_fa">Free and fast delivery for all meals above ₹100.</string>
+    <string name="phone_number">Phone number</string>
+    <string name="email">Email</string>
+    <string name="register">Register</string>
+    <string name="price_format">%s$</string>
+    <string name="brand">Brand: %s</string>
+    <string name="welcome">Hi %s !</string>
+    <string name="description_label">Description: </string>
+    <string name="searchbar_hint">Search a product</string>
+    <string name="dialog_message">Are you sure you want to delete the product?</string>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="logout">Log out</string>
+    <string name="buy_now">Buy now</string>
+    <string name="try_again">Try again</string>
+    <string name="network_error_message">No Internet connection</string>
+    <string name="positive_button_title">OK</string>
+    <string name="negative_button_title">Cancel</string>
+    <string name="quantity_item">%s items</string>
+    <string name="effective_up_to_date">Effective up to date: %s</string>
+    <string name="voucher_number">All(%s)</string>
+    <string name="otp_description">An 6 digit code has been sent to</string>
+</resources>
