@@ -8,12 +8,12 @@ import java.util.List;
 public interface HomeListener {
     void getUserData(UserData userData);
 
-    void onLoadProducts(List<Product> products);
+    void getApiProducts(List<Product> products);
 
-    void onLoadError(String message);
-
-    void onLoadCategories(List<String> categories);
+    void onMessage(String message);
 
     void showProcessBar(Boolean show);
+
+    void getFavoriteProducts(List<Product> products);
 
 }

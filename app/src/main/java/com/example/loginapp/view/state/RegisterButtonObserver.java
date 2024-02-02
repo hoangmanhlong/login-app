@@ -23,9 +23,7 @@ public class RegisterButtonObserver implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if(s.toString().trim().isEmpty()) {
-            button.setEnabled(false);
-        } else button.setEnabled(true);
+        button.setEnabled(s.length() != 0);
     }
 
     @Override
@@ -38,6 +36,7 @@ public class RegisterButtonObserver implements TextWatcher {
         boolean allFieldsNotEmpty = true;
         for (EditText editText : editTexts) {
             if (TextUtils.isEmpty(editText.getText().toString())) {
+
                 allFieldsNotEmpty = false;
                 break;
             }

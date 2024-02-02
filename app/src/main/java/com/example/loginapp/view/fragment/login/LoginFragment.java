@@ -1,16 +1,12 @@
 package com.example.loginapp.view.fragment.login;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,20 +14,19 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.loginapp.R;
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.databinding.FragmentLoginBinding;
 import com.example.loginapp.presenter.LoginPresenter;
+import com.example.loginapp.view.AppMessage;
 import com.example.loginapp.view.HideKeyboard;
 import com.example.loginapp.view.LoadingDialog;
 import com.example.loginapp.view.activities.MainActivity;
 import com.example.loginapp.view.state.LoginEmailButtonObserver;
 import com.example.loginapp.view.state.LoginPhoneNumberButtonObserver;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
 public class LoginFragment extends Fragment implements LoginView {
-
-    public static String PHONE_NUMBER_KEY = "PNK";
 
     private FragmentLoginBinding binding;
 
@@ -43,7 +38,6 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -53,38 +47,38 @@ public class LoginFragment extends Fragment implements LoginView {
         super.onViewCreated(view, savedInstanceState);
         binding.setLoginFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
+        HideKeyboard.setupHideKeyboard(view, requireActivity());
 
         if (getArguments() != null) {
-            String email = getArguments().getString("email");
-            String password = getArguments().getString("password");
-            if (!email.isEmpty() && !password.isEmpty()) {
-                binding.emailInput.setText(email);
-                binding.passwordInput.setText(password);
-                binding.loginEmailBtn.setEnabled(true);
-                onEmailClick();
-            }
+            String email = getArguments().getString(Constant.EMAIL_KEY);
+            String password = getArguments().getString(Constant.PASSWORD_KEY);
+            binding.emailInput.setText(email);
+            binding.passwordInput.setText(password);
+            binding.loginEmailBtn.setEnabled(true);
+            onEmailClick();
+
         }
 
         if (!binding.etPhoneNumber.getText().toString().isEmpty()) binding.requestOtpBtn.setEnabled(true);
 
-        binding.loginEmailBtn.setEnabled(
-            !Objects.requireNonNull(binding.emailInput.getText()).toString().isEmpty() &&
-                !Objects.requireNonNull(binding.passwordInput.getText()).toString().isEmpty());
+        binding.loginEmailBtn.setEnabled(!Objects.requireNonNull(binding.emailInput.getText()).toString().isEmpty() &&
+                        !Objects.requireNonNull(binding.passwordInput.getText()).toString().isEmpty());
+        buttonState();
+    }
 
-        HideKeyboard.setupHideKeyboard(view, requireActivity());
-
+    private void buttonState() {
         binding.emailInput.addTextChangedListener(new LoginEmailButtonObserver(
-            binding.loginEmailBtn,
-            binding.tvLoginFailed,
-            binding.emailInput,
-            binding.passwordInput
+                binding.loginEmailBtn,
+                binding.tvLoginFailed,
+                binding.emailInput,
+                binding.passwordInput
         ));
 
         binding.passwordInput.addTextChangedListener(new LoginEmailButtonObserver(
-            binding.loginEmailBtn,
-            binding.tvLoginFailed,
-            binding.emailInput,
-            binding.passwordInput
+                binding.loginEmailBtn,
+                binding.tvLoginFailed,
+                binding.emailInput,
+                binding.passwordInput
         ));
 
         binding.etPhoneNumber.addTextChangedListener(new LoginPhoneNumberButtonObserver(binding.requestOtpBtn));
@@ -111,8 +105,7 @@ public class LoginFragment extends Fragment implements LoginView {
     }
 
     public void goRegisterScreen() {
-        Navigation.findNavController(binding.getRoot())
-            .navigate(R.id.action_loginFragment_to_registerFragment);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_loginFragment_to_registerFragment);
     }
 
     public void goHomeScreen() {
@@ -122,7 +115,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onLoginMessage(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        AppMessage.showMessage(requireContext(), message);
     }
 
     @Override
@@ -140,8 +133,7 @@ public class LoginFragment extends Fragment implements LoginView {
     public void onLoginPhoneNumberClick() {
         String phoneNumber = binding.etPhoneNumber.getText().toString();
         Bundle bundle = new Bundle();
-        bundle.putString(PHONE_NUMBER_KEY, phoneNumber);
-        Navigation.findNavController(binding.getRoot())
-            .navigate(R.id.action_loginFragment_to_verificationFragment, bundle);
+        bundle.putString(Constant.PHONE_NUMBER_KEY, phoneNumber);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_loginFragment_to_verificationFragment, bundle);
     }
 }

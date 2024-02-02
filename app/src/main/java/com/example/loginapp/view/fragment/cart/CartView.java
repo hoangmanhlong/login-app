@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragment.cart;
 
 import com.example.loginapp.model.entity.FirebaseProduct;
+import com.example.loginapp.model.entity.Product;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface CartView {
 
     void onDeleteProduct(int id);
 
-    void onItemClick(int id);
+    void onItemClick(Product product);
 
     void setCheckAllChecked(boolean isChecked);
 

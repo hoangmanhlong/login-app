@@ -19,62 +19,35 @@
         android:orientation="vertical"
         tools:context=".view.fragment.voucher.VoucherFragment">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="?attr/actionBarSize">
 
-            <ImageButton
-                android:id="@+id/favorite_btn"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_margin="@dimen/_8sdp"
-                android:background="@color/gray_1000"
-                android:contentDescription="@null"
-                android:onClick="@{() -> fragment.onNavigateUp()}"
-                android:src="@drawable/arrow___left_2" />
-
-            <TextView
+            <Button
+                android:id="@+id/navigateUpButton"
+                style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> fragment.onNavigateUp()}"
+                app:icon="@drawable/ic_arrow_left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:includeFontPadding="false"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Discount code"
+                android:text="@string/discount_code"
                 android:textColor="@color/black_100"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/navigateUpButton"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="#000"
-            app:tabIndicatorFullWidth="true"
-            android:background="@color/gray_1000"
-            app:tabTextColor="#000">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/AllTabItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="All"/>
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Smarteshop" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Shop" />
-        </com.google.android.material.tabs.TabLayout>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:background="#000"
-            android:layout_height="1dp" />
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/voucherRecyclerview"

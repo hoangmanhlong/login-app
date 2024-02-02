@@ -28,9 +28,7 @@ public class LoginPhoneNumberButtonObserver implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         String text = s.toString().trim();
-        if (text.length() < 9) {
-            button.setEnabled(false);
-        } else button.setEnabled(true);
+        button.setEnabled(text.length() == 10 && text.startsWith("0"));
     }
 
     @Override

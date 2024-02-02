@@ -6,4 +6,6 @@ public interface FavoriteListener {
     void onItemAdded(Product products);
 
     void onMessage(String message);
+
+    void notifyItemRemoved(Product product);
 }

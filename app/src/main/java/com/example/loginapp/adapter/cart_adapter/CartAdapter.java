@@ -1,7 +1,6 @@
 package com.example.loginapp.adapter.cart_adapter;
 
 import android.annotation.SuppressLint;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.example.loginapp.databinding.LayoutItemCartBinding;
 import com.example.loginapp.model.entity.FirebaseProduct;
 
 public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCartViewHolder> {
-    private final String TAG = this.toString();
 
     private final CartItemClickListener listener;
 
@@ -24,21 +22,19 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
         this.listener = listener;
     }
 
+    public void getProductByPosition(int pos) {
+        listener.onDeleteProduct(getItem(pos).getId());
+    }
+
     @NonNull
     @Override
     public ItemCartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemCartViewHolder holder = new ItemCartViewHolder(LayoutItemCartBinding.inflate(
-            LayoutInflater.from(parent.getContext()),
-            parent,
-            false
+        return new ItemCartViewHolder(LayoutItemCartBinding.inflate(
+                LayoutInflater.from(parent.getContext()),
+                parent,
+                false
         ), listener);
-        return holder;
     }
-
-    public void removeItem(int position) {
-        listener.onDeleteProduct(getItem(position).getId());
-    }
-
 
     @Override
     public void onBindViewHolder(ItemCartViewHolder holder, int position) {
@@ -46,6 +42,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
     }
 
     public class ItemCartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         private final LayoutItemCartBinding binding;
 
         private final CartItemClickListener listener;
@@ -59,7 +56,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
             binding.minus.setOnClickListener(this);
             binding.checkbox.setOnClickListener(this);
             binding.checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                listener.onItemChecked(getItem(getAdapterPosition()), isChecked)
+                    listener.onItemChecked(getItem(getAdapterPosition()), isChecked)
             );
         }
 
@@ -74,26 +71,26 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
             if (v.getId() == binding.minus.getId()) {
                 if (quantity > 1) listener.updateQuantity(product.getId(), quantity - 1);
                 else listener.onDeleteProduct(product.getId());
-            } else if (v.getId() == binding.add.getId()) {
-                listener.updateQuantity(product.getId(), quantity + 1);
-            } else if (v.getId() == binding.getRoot().getId()) {
-                listener.onItemClick(product.getId());
+            }
+            if (v.getId() == binding.add.getId()) listener.updateQuantity(product.getId(), quantity + 1);
+            if (v.getId() == binding.getRoot().getId()) {
+                listener.onItemClick(product.toProduct());
             }
         }
     }
 
     public static final DiffUtil.ItemCallback<FirebaseProduct> DiffCallback =
-        new DiffUtil.ItemCallback<FirebaseProduct>() {
+            new DiffUtil.ItemCallback<FirebaseProduct>() {
 
-            @Override
-            public boolean areItemsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
-                return oldItem.getId() == newItem.getId();
-            }
+                @Override
+                public boolean areItemsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
 
-            @SuppressLint("DiffUtilEquals")
-            @Override
-            public boolean areContentsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
-                return oldItem.equals(newItem);
-            }
-        };
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 }

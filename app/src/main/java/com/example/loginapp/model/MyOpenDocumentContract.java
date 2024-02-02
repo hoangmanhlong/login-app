@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 public class MyOpenDocumentContract extends ActivityResultContracts.OpenDocument {
     @NonNull
     @Override
-    public Intent createIntent(Context context, String[] input) {
+    public Intent createIntent(@NonNull Context context, String[] input) {
         Intent intent = super.createIntent(context, input);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 

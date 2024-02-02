@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.EditUserProfileInterator;
 import com.example.loginapp.model.listener.EditUserProfileListener;
 import com.example.loginapp.view.fragment.edit_user_profile.EditUserProfileView;
@@ -17,10 +16,6 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
 
     public EditUserProfilePresenter(EditUserProfileView view) {
         this.view = view;
-    }
-
-    public void getUserData() {
-        interator.getUserData();
     }
 
     @Override
@@ -39,17 +34,7 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
 
     @Override
     public void goUserProfile() {
-        view.goUserProfile();
+        view.onNavigateUp();
     }
 
-    @Override
-    public void getUserData(UserData userData) {
-        String name = userData.getUsername();
-        String phone = userData.getPhoneNumber();
-        String address = userData.getAddress();
-        if (name == null) name = "";
-        if (phone == null) phone = "";
-        if (address == null) address = "";
-        view.loadUserData(new UserData(name, phone, address, userData.getPhotoUrl()));
-    }
 }

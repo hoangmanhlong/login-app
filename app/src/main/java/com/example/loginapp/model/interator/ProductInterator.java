@@ -2,33 +2,29 @@ package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
 
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.data.remote.api.AppApiService;
-import com.example.loginapp.data.remote.service.Constant;
+import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.ProductListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductInterator {
-    private final DatabaseReference favoriteProductRef = FirebaseDatabase.getInstance().getReference().child(Constant.FAVORITE_PRODUCT_REF);
 
-    private final DatabaseReference cartRef =
-        FirebaseDatabase.getInstance().getReference().child(Constant.CART_REF);
+    private final DatabaseReference favoriteProductRef = Constant.favoriteProductRef;
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private final DatabaseReference cartRef = Constant.cartRef;
+
+    private final FirebaseUser currentUser = Constant.currentUser;
 
     private final ProductListener listener;
 
@@ -36,46 +32,12 @@ public class ProductInterator {
         this.listener = listener;
     }
 
-    public List<Product> products;
-
-    public void getProduct(int id) {
-        listener.isLoading(true);
-        products = new ArrayList<>();
-        Call<Product> call = AppApiService.retrofit.getProduct(id);
-        call.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful()) {
-                    Product product = response.body();
-                    if (product != null) {
-                        listener.onGetProduct(product);
-                        products.add(product);
-                        listener.isLoading(false);
-                        if (products.size() == 2) {
-                            compare(products.get(0), products.get(1));
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                listener.onMessage(t.getMessage());
-            }
-        });
-
-        assert currentUser != null;
-        favoriteProductRef.child(currentUser.getUid()).child(String.valueOf(id)).addValueEventListener(new ValueEventListener() {
+    public void getFavoriteProduct(Product product) {
+        favoriteProductRef.child(currentUser.getUid())
+                .child(String.valueOf(product.getId())).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    Product product = snapshot.getValue(Product.class);
-                    products.add(product);
-                    listener.onGetProduct(product);
-                    if (products.size() == 2) {
-                        compare(products.get(0), products.get(1));
-                    }
-                }
+                if (snapshot.exists()) listener.enableFavorite(true);
             }
 
             @Override
@@ -84,20 +46,16 @@ public class ProductInterator {
         });
     }
 
-    public void compare(Product apiProduct, Product firebaseProduct) {
-        listener.enableFavorite(apiProduct != null && firebaseProduct != null && apiProduct.getId() == firebaseProduct.getId());
-    }
-
     public void saveFavoriteProduct(Product product) {
         String productId = String.valueOf(product.getId());
         favoriteProductRef.child(currentUser.getUid()).child(productId).setValue(product)
-            .addOnCompleteListener(s -> listener.enableFavorite(true))
-            .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
+                .addOnCompleteListener(s -> listener.enableFavorite(true))
+                .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
     }
 
     public void removeFavoriteProduct(int productID) {
         favoriteProductRef.child(currentUser.getUid()).child(String.valueOf(productID)).removeValue()
-            .addOnCompleteListener(task -> listener.removeSuccess());
+                .addOnCompleteListener(task -> listener.removeSuccess());
     }
 
     public void updateQuantity(FirebaseProduct product) {
@@ -107,15 +65,38 @@ public class ProductInterator {
                 FirebaseProduct product1 = task.getResult().getValue(FirebaseProduct.class);
                 if (product1 == null) {
                     cartRef.child(currentUser.getUid()).child(id).setValue(product)
-                        .addOnCompleteListener(a -> listener.saveToBasketSuccess())
-                        .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
+                            .addOnCompleteListener(a -> listener.saveToBasketSuccess())
+                            .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
                 } else {
-                    cartRef
-                        .child(currentUser.getUid()).child(id).child("quantity")
-                        .setValue(String.valueOf(Integer.parseInt(product1.getQuantity()) + 1))
-                        .addOnCompleteListener(a -> listener.saveToBasketSuccess())
-                        .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
+                    cartRef.child(currentUser.getUid()).child(id).child("quantity")
+                            .setValue(String.valueOf(Integer.parseInt(product1.getQuantity()) + 1))
+                            .addOnCompleteListener(a -> listener.saveToBasketSuccess())
+                            .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
                 }
+            }
+        });
+    }
+
+    public void getComments() {
+        Call<CommentRespond> call = AppApiService.retrofit.getComments(5);
+        call.enqueue(new Callback<CommentRespond>() {
+            @Override
+            public void onResponse(Call<CommentRespond> call, Response<CommentRespond> response) {
+                if (response.isSuccessful()) {
+                    CommentRespond commentRespond = response.body();
+                    if (commentRespond != null) {
+                        listener.getCommentRespond(commentRespond);
+                    } else {
+                        listener.onMessage("Empty");
+                    }
+                } else {
+                    listener.onMessage("Respond fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentRespond> call, Throwable t) {
+                listener.onMessage(t.getMessage());
             }
         });
     }

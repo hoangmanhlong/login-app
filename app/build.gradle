@@ -102,4 +102,11 @@ dependencies {
     debugImplementation "com.github.chuckerteam.chucker:library:4.0.0"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:4.0.0"
 
+    implementation("org.greenrobot:eventbus:3.3.1")
+
+    implementation "com.airbnb.android:lottie:6.3.0"
+
+    implementation "androidx.constraintlayout:constraintlayout:2.2.0-alpha13"
+
+
 }

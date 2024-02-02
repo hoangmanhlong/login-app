@@ -7,32 +7,42 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.loginapp.R;
-import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.databinding.FragmentBottomSheetBinding;
-import com.example.loginapp.presenter.BottomSheetPresenter;
-import com.example.loginapp.view.fragment.product_detail.ProductFragment;
+import com.example.loginapp.model.entity.Order;
+import com.example.loginapp.model.entity.OrderProduct;
+import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.Voucher;
+import com.example.loginapp.view.fragment.select_voucher_fragment.MessageVoucherSelected;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModalBottomSheetFragment extends BottomSheetDialogFragment implements SheetView {
 
-    private BottomSheetPresenter presenter;
+    public static final String TAG = "ModalBottomSheetFragment";
 
-    private int count = 1;
+    private int quantity = 1;
+
+    private Boolean isClearCode = false;
+
+    private Product currentProduct;
 
     private FragmentBottomSheetBinding binding;
-    private int productId;
+
+    private Voucher voucher;
 
     @Nullable
     @Override
-    public View onCreateView(
-        @NonNull LayoutInflater inflater,
-        @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState
-    ) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentBottomSheetBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -40,33 +50,79 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new BottomSheetPresenter(this);
         binding.setFragment(this);
-        if (getArguments() != null) {
-            productId = getArguments().getInt(ProductFragment.PRODUCT_KEY);
-            presenter.getProduct(productId);
-        }
-    }
-
-    public static final String TAG = "ModalBottomSheet";
-
-    @Override
-    public void onLoadProduct(Product product) {
-        binding.setProduct(product);
+        currentProduct = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
+        binding.setProduct(currentProduct);
     }
 
     public void onPlusBtnClick() {
-        count++;
-        binding.quantity.setText(String.valueOf(count));
+        quantity++;
+        binding.quantity.setText(String.valueOf(quantity));
     }
 
     public void onMinusBtnClick() {
-        if (count > 1) count--;
-        binding.quantity.setText(String.valueOf(count));
+        if (quantity > 1) quantity--;
+        binding.quantity.setText(String.valueOf(quantity));
     }
 
     public void onBuyClick() {
-        NavController navController = Navigation.findNavController(requireParentFragment().requireView());
-        navController.navigate(R.id.action_productFragment_to_checkoutInfoFragment);
+        Bundle bundle = new Bundle();
+        List<OrderProduct> orderProducts = new ArrayList<>();
+        orderProducts.add(currentProduct.toOrderProduct(quantity));
+        Order order;
+        if (voucher != null) order = new Order(orderProducts, voucher);
+        else order = new Order(orderProducts);
+        bundle.putSerializable(Constant.ORDER_KEY, order);
+        bundle.putBoolean(Constant.IS_CART, false);
+        Navigation.findNavController(requireParentFragment().requireView()).navigate(R.id.action_productFragment_to_checkoutInfoFragment, bundle);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void getSelectedVoucher(MessageVoucherSelected messageVoucherSelected) {
+        voucher = messageVoucherSelected.getVoucher();
+        binding.discountCode.setText(messageVoucherSelected.getVoucher().getVoucherCode());
+        binding.clearDiscountCodeView.setVisibility(View.VISIBLE);
+        binding.selectDiscountCodeView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MessageVoucherSelected stickyEvent = EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
+        if (stickyEvent != null) {
+            EventBus.getDefault().removeStickyEvent(stickyEvent);
+        }
+    }
+
+    public void onClearDiscountCodeClick() {
+        isClearCode = !isClearCode;
+        if (isClearCode) {
+            binding.clearDiscountCodeView.setVisibility(View.GONE);
+            binding.selectDiscountCodeView.setVisibility(View.VISIBLE);
+        }
+        else {
+            binding.clearDiscountCodeView.setVisibility(View.VISIBLE);
+            binding.selectDiscountCodeView.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateUI() {
+
+    }
+
+    public void onSelectCodeClick() {
+        Navigation.findNavController(requireParentFragment().requireView()).navigate(R.id.action_productFragment_to_selectVoucherFragment);
     }
 }

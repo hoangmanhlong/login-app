@@ -134,17 +134,9 @@
                 android:layout_marginVertical="@dimen/_8sdp"
                 android:backgroundTint="#FF621F"
                 android:enabled="false"
-                android:onClick="@{() -> registerFragment.register()}"
+                android:onClick="@{() -> registerFragment.onRegisterButtonClick()}"
                 android:text="@string/register"
                 android:textAllCaps="false" />
-
-            <ProgressBar
-                android:id="@+id/register_processBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/poppins_bold"
-                android:visibility="gone" />
 
 
         </LinearLayout>

@@ -1,9 +1,13 @@
 package com.example.loginapp.model.entity;
 
-public class UserData {
+import java.io.Serializable;
+
+public class UserData implements Serializable {
 
     private String uid;
+
     private String email;
+
     private String password;
 
     private String username;

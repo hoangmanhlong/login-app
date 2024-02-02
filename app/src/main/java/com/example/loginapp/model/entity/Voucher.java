@@ -1,65 +1,105 @@
 package com.example.loginapp.model.entity;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class Voucher {
-    private String voucherCode;
+public class Voucher implements Serializable {
 
-    private String voucherName;
+    private String voucherCode = "VC" + System.currentTimeMillis();
 
     private String voucherDescription;
 
     private float discountPercentage;
 
-    private String validUntil;
+    private Long startDate;
 
-    private String paymentMethods;
+    private Long endDate;
+
+    private int quantityLimit;
 
     private Long minPriceApply;
 
     private Long minimizePrice;
 
-    private List<Category> categoriesApply;
+    private VoucherStatus voucherStatus;
 
-    private String status;
+    private PaymentMethod paymentMethod;
 
-    public Voucher() {}
+    private VoucherType voucherType;
 
-    public Voucher(String voucherCode, String voucherName, String voucherDescription, float discountPercentage, String validUntil, String paymentMethods, String status) {
-        this.voucherCode = voucherCode;
-        this.voucherName = voucherName;
+    public Voucher() {
+    }
+
+    public Voucher(String voucherDescription, float discountPercentage, Long startDate, Long endDate, int quantityLimit, Long minPriceApply, Long minimizePrice, VoucherStatus voucherStatus, PaymentMethod paymentMethod, VoucherType voucherType) {
         this.voucherDescription = voucherDescription;
         this.discountPercentage = discountPercentage;
-        this.validUntil = validUntil;
-        this.paymentMethods = paymentMethods;
-        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.quantityLimit = quantityLimit;
+        this.minPriceApply = minPriceApply;
+        this.minimizePrice = minimizePrice;
+        this.voucherStatus = voucherStatus;
+        this.paymentMethod = paymentMethod;
+        this.voucherType = voucherType;
     }
 
     public String getVoucherCode() {
         return voucherCode;
     }
 
-    public float getDiscountPercentage() {
-        return discountPercentage;
-    }
-
-    public String getValidUntil() {
-        return validUntil;
-    }
-
-    public String getVoucherName() {
-        return voucherName;
-    }
-
     public String getVoucherDescription() {
         return voucherDescription;
     }
 
-    public String getPaymentMethods() {
-        return paymentMethods;
+    public float getDiscountPercentage() {
+        return discountPercentage;
     }
 
-    public String getStatus() {
-        return status;
+    public Long getStartDate() {
+        return startDate;
+    }
+
+    public Long getEndDate() {
+        return endDate;
+    }
+
+    public int getQuantityLimit() {
+        return quantityLimit;
+    }
+
+    public Long getMinPriceApply() {
+        return minPriceApply;
+    }
+
+    public Long getMinimizePrice() {
+        return minimizePrice;
+    }
+
+    public VoucherStatus getVoucherStatus() {
+        return voucherStatus;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public VoucherType getVoucherType() {
+        return voucherType;
+    }
+
+    @Override
+    public String toString() {
+        return "Voucher{" +
+                "voucherCode='" + voucherCode + '\'' +
+                ", voucherDescription='" + voucherDescription + '\'' +
+                ", discountPercentage=" + discountPercentage +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", quantityLimit=" + quantityLimit +
+                ", minPriceApply=" + minPriceApply +
+                ", minimizePrice=" + minimizePrice +
+                ", voucherStatus=" + voucherStatus +
+                ", paymentMethod=" + paymentMethod +
+                ", voucherType=" + voucherType +
+                '}';
     }
 }

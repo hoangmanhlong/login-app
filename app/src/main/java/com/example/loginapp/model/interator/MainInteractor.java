@@ -1,30 +1,21 @@
 package com.example.loginapp.model.interator;
 
+import android.app.Activity;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.data.remote.service.Constant;
-import com.example.loginapp.model.entity.FirebaseProduct;
+import com.example.loginapp.data.Constant;
+import com.example.loginapp.data.local.AppSharedPreferences;
+import com.example.loginapp.model.SaveCallback;
 import com.example.loginapp.model.listener.MainListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainInteractor {
-    private final DatabaseReference cartRef =
-        FirebaseDatabase.getInstance().getReference().child(Constant.CART_REF);
 
-    private final DatabaseReference favoriteRef =
-        FirebaseDatabase.getInstance().getReference().child(Constant.FAVORITE_PRODUCT_REF);
-
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private final String TAG = this.toString();
 
     private final MainListener listener;
 
@@ -32,46 +23,40 @@ public class MainInteractor {
         this.listener = listener;
     }
 
-    public void getNumber() {
-        if (currentUser != null) {
-            String id = currentUser.getUid();
-            cartRef.child(id).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    int count = 0;
-                    List<FirebaseProduct> products = new ArrayList<>();
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                        FirebaseProduct product = postSnapshot.getValue(FirebaseProduct.class);
-//                        products.add(product);
-                        count++;
-                    }
-                    listener.onLoadBasket(count);
+    public void getNumber(Activity activity) {
+        String id = Constant.currentUser.getUid();
+        Constant.cartRef.child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int backendCount = (int) dataSnapshot.getChildrenCount();
+                if (AppSharedPreferences.getInstance(activity).getNumberOfProductInBasket() == -1) {
+                    AppSharedPreferences.getInstance(activity).saveNumberOfProductInBasket(backendCount, true);
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                if (backendCount > AppSharedPreferences.getInstance(activity).getNumberOfProductInBasket()) {
+                    listener.getNumberOfBasketFromServer(backendCount);
                 }
-            });
+            }
 
-            favoriteRef.child(id).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    int count = 0;
-                    List<Product> products = new ArrayList<>();
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                        Product product = postSnapshot.getValue(Product.class);
-//                        products.add(product);
-                        count++;
-                    }
-                    listener.onLoadFavoriteProducts(count);
-                }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
-                }
-            });
-        }
+        Constant.favoriteProductRef.child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int backendCount = (int) dataSnapshot.getChildrenCount();
+                if (AppSharedPreferences.getInstance(activity).getNumberOfProductInWishlist() == -1)
+                    AppSharedPreferences.getInstance(activity).saveNumberOfProductInBasket(backendCount, false);
+                if (backendCount > AppSharedPreferences.getInstance(activity).getNumberOfProductInWishlist())
+                    listener.getNumberOfWishlistFromServer(backendCount);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

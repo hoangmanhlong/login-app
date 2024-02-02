@@ -1,19 +1,15 @@
 package com.example.loginapp.view.fragment.voucher;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.R;
 import com.example.loginapp.adapter.voucher_adapter.VoucherAdapter;
 import com.example.loginapp.databinding.FragmentVoucherBinding;
 import com.example.loginapp.model.entity.Voucher;
@@ -41,14 +37,8 @@ public class VoucherFragment extends Fragment implements VoucherView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-
-        LinearLayout bottomNavigationView =
-            requireActivity().findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setVisibility(View.GONE);
-
-        RecyclerView recyclerView = binding.voucherRecyclerview;
-        recyclerView.setAdapter(adapter);
-        adapter.submitList(presenter.vouchers);
+        binding.voucherRecyclerview.setAdapter(adapter);
+        presenter.getVouchers();
     }
 
     public void onNavigateUp() {
@@ -56,9 +46,7 @@ public class VoucherFragment extends Fragment implements VoucherView {
     }
 
     @Override
-    public void notifyVoucherAdded(List<Voucher> vouchers) {
-        Log.d(this.toString(), "notifyVoucherAdded: " + vouchers.size());
+    public void getVouchers(List<Voucher> vouchers) {
         adapter.submitList(vouchers);
-        adapter.notifyItemInserted(vouchers.size() - 1);
     }
 }

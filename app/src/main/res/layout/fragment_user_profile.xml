@@ -68,7 +68,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearance="@style/circleImageView" />
+                        app:shapeAppearance="@style/circleImageView"
+                        tools:src="@drawable/dog" />
 
                     <ImageButton
                         android:id="@+id/editAvatar"
@@ -86,11 +87,11 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_8sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:textStyle="bold"
-                    tools:text="Hoang long"
-                    android:textSize="16sp"
+                    android:text="@{userData.username}"
                     android:textColor="#202020"
-                    android:text="@{userData.username}" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Hoang long" />
 
             </LinearLayout>
 
@@ -163,7 +164,6 @@
                             android:textAlignment="center"
                             android:textSize="20sp" />
 
-
                     </LinearLayout>
                 </LinearLayout>
 
@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Pending"
+                        android:text="Processing"
                         android:textAlignment="center"
                         android:textColor="@color/gray_500"
                         android:textSize="11sp" />
@@ -217,9 +217,10 @@
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:onClick="@{() -> profileFragment.goOrdersScreen()}"
                     android:text="My order"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
@@ -227,18 +228,15 @@
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    app:dividerColor="@color/gray_600"
+                    android:layout_height="0.5dp"
                     app:dividerInsetEnd="16dp"
                     app:dividerInsetStart="16dp" />
 
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"                    android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.goVoucherScreen()}"
                     android:text="Voucher"
                     android:textAlignment="viewStart"
@@ -247,17 +245,16 @@
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    app:dividerColor="@color/gray_600"
+                    android:layout_height="0.5dp"
                     app:dividerInsetEnd="16dp"
                     app:dividerInsetStart="16dp" />
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:onClick="@{() -> profileFragment.goCoinRewardScreen()}"
                     android:text="Coins reward"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
@@ -265,17 +262,16 @@
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    app:dividerColor="@color/gray_600"
+                    android:layout_height="0.5dp"
                     app:dividerInsetEnd="16dp"
                     app:dividerInsetStart="16dp" />
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:onClick="@{() -> profileFragment.goShippingAddressesScreen()}"
                     android:text="Shipping address"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
@@ -283,17 +279,14 @@
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    app:dividerColor="@color/gray_600"
+                    android:layout_height="0.5dp"
                     app:dividerInsetEnd="16dp"
                     app:dividerInsetStart="16dp" />
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"                    android:fontFamily="@font/dm_sans_36pt_regular"
                     android:text="FAQ"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
@@ -301,16 +294,14 @@
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    app:dividerColor="@color/gray_600"
+                    android:layout_height="0.5dp"
                     app:dividerInsetEnd="16dp"
                     app:dividerInsetStart="16dp" />
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
                     android:text="Customer service"
                     android:textAlignment="viewStart"
@@ -319,17 +310,14 @@
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    app:dividerColor="@color/gray_600"
+                    android:layout_height="0.5dp"
                     app:dividerInsetEnd="16dp"
                     app:dividerInsetStart="16dp" />
 
                 <Button
                     style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"                    android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.logOut()}"
                     android:text="Log out"
                     android:textAlignment="viewStart"

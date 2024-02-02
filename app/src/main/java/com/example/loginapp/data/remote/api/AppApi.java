@@ -1,6 +1,8 @@
 package com.example.loginapp.data.remote.api;
 
 
+import com.example.loginapp.model.entity.Comment;
+import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.data.remote.api.dto.ProductResponse;
 
@@ -26,5 +28,8 @@ public interface AppApi {
 
     @GET("products/search")
     Call<ProductResponse> searchProduct(@Query("q") String query);
+
+    @GET("comments")
+    Call<CommentRespond> getComments(@Query("limit") int limit);
 
 }

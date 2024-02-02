@@ -54,7 +54,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -285,13 +286,14 @@
                     android:id="@+id/btVerify"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_45sdp"
-                    android:layout_marginTop="@dimen/_54sdp"
+                    android:layout_marginTop="68dp"
                     android:backgroundTint="#FF621F"
                     android:onClick="@{() -> fragment.onVerifyClick()}"
                     android:text="Verify"
+                    android:enabled="false"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/llNumberInput" />
 

@@ -19,6 +19,7 @@ import com.smarteist.autoimageslider.SliderView;
 
 
 public class OverviewFragment extends Fragment {
+
     private FragmentOverviewBinding binding;
 
     @Nullable

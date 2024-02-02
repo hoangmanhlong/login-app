@@ -1,9 +1,12 @@
 package com.example.loginapp.view.fragment.register;
 
+import android.util.Pair;
+
 public interface RegisterView {
-    void goLoginScreen();
 
-    void onRegisterMessage(String message);
+    void goLoginScreen(String email, String password);
 
-    void onShowProcessBar(Boolean show);
+    void onMessage(String message);
+
+    void isLoading(Boolean loading);
 }

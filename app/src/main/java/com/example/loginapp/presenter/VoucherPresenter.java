@@ -19,7 +19,6 @@ public class VoucherPresenter implements VoucherListener {
 
     public VoucherPresenter(VoucherView view) {
         this.view = view;
-        getVouchers();
     }
 
     public void getVouchers() {
@@ -27,9 +26,8 @@ public class VoucherPresenter implements VoucherListener {
     }
 
     @Override
-    public void getVouchers(Voucher voucher) {
-        vouchers.add(voucher);
-        Log.d(this.toString(), "notifyVoucherAdded: " + vouchers.size());
-        view.notifyVoucherAdded(vouchers);
+    public void getVouchers(List<Voucher> vouchers) {
+        this.vouchers = vouchers;
+        view.getVouchers(vouchers);
     }
 }

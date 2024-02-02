@@ -1,9 +1,10 @@
 package com.example.loginapp.model.entity;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable {
 
     private int id;
     private String title;
@@ -95,4 +96,9 @@ public class Product {
         NumberFormat numberFormat = NumberFormat.getInstance();
         return numberFormat.format(price);
     }
+
+    public OrderProduct toOrderProduct(int quantity) {
+        return new OrderProduct(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images, quantity);
+    }
+
 }

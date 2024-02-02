@@ -16,6 +16,8 @@
         <variable
             name="isFavorite"
             type="Boolean" />
+
+        <import type="android.content.Context" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -27,29 +29,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/navigationIcon"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:background="@color/gray_1000"
-                    android:contentDescription="@null"
-                    android:onClick="@{() -> fragment.onNavigateIconClick()}"
-                    android:src="@drawable/arrow___left_2"
+                <Button
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> fragment.onNavigateUp()}"
+                    app:icon="@drawable/ic_arrow_left"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <ImageButton
                     android:id="@+id/favorite_btn"
@@ -59,14 +53,20 @@
                     android:background="@color/gray_1000"
                     android:contentDescription="@null"
                     android:onClick="@{() -> fragment.onFavoriteIconClick()}"
-                    android:src="@drawable/ic_favorite_gray" />
-            </LinearLayout>
+                    android:src="@drawable/ic_favorite_gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ScrollView
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.core.widget.NestedScrollView
                 android:id="@+id/productContentView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -145,6 +145,7 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
@@ -154,12 +155,13 @@
                                     android:fontFamily="@font/poppins_regular"
                                     android:text="@{product.category}"
                                     android:textColor="@color/gray_500"
-                                    android:textSize="12sp"
+                                    android:textSize="13sp"
                                     tools:text="Iphone" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:ellipsize="end"
                                     android:fontFamily="@font/montserrat_regular"
                                     android:lineSpacingExtra="-27sp"
                                     android:text="@{product.title}"
@@ -189,9 +191,9 @@
                             android:layout_marginTop="@dimen/_25sdp"
                             android:layout_weight="4"
                             android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
                             android:text="@string/description_label"
                             android:textColor="@color/black_100"
-                            android:textSize="13sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -202,12 +204,80 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="@{product.description}"
                             android:textColor="@color/gray_500"
+                            android:textSize="13sp"
+                            tools:text="Here is new mobile phone of world" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:text="@string/rating_label"
+                                android:textColor="@color/black_100"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Button
+                                style="?attr/materialIconButtonStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:icon="@drawable/ic_arrow_forward"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@string/rating_des"
+                            android:textColor="@color/gray_500"
                             android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                bindRatingRounded="@{product.rating}"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:includeFontPadding="false"
+                                android:textColor="#000"
+                                android:textSize="36sp"
+                                android:textStyle="bold"
+                                tools:text="4.5" />
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_star_rate" />
+                        </LinearLayout>
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/commentRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:overScrollMode="never"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/layout_comment" />
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bottomActionView"
@@ -244,13 +314,14 @@
 
                 <Button
                     android:id="@+id/buy"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="@dimen/_190sdp"
                     android:layout_height="@dimen/_50sdp"
                     android:layout_marginEnd="@dimen/_14sdp"
-                    android:backgroundTint="@color/black"
                     android:fontFamily="@font/poppins_bold"
                     android:onClick="@{() -> fragment.showBottomSheet()}"
                     android:text="@string/buy_now"
+                    app:elevation="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -260,6 +331,7 @@
         </LinearLayout>
 
         <include layout="@layout/fragment_bottom_sheet" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

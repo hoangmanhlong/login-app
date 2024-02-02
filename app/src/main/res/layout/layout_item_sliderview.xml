@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                imgRes='@{sliderItem.image}'
+                imgRes="@{sliderItem.image}"
                 tools:src="@drawable/option1"
                 android:layout_width="@dimen/_180sdp"
                 android:layout_height="@dimen/_180sdp"

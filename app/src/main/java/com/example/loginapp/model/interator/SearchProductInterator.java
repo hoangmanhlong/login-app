@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import com.example.loginapp.data.remote.api.AppApiService;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.data.remote.api.dto.ProductResponse;
-import com.example.loginapp.data.remote.service.Constant;
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.listener.SearchListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +27,10 @@ import retrofit2.Response;
 
 public class SearchProductInterator {
     private final String TAG = this.toString();
-    private SearchListener listener;
+    private final SearchListener listener;
 
     private final DatabaseReference searchHistoriesRef =
-        FirebaseDatabase.getInstance().getReference().child(Constant.SEARCH_HISTORY_REF);
+        FirebaseDatabase.getInstance().getReference().child(Constant.SEARCH_HISTORY_REF_KEY);
 
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     public SearchProductInterator(SearchListener listener) {
@@ -72,19 +72,6 @@ public class SearchProductInterator {
 
     public void saveSearchHistory(String text) {
         searchHistoriesRef.child(currentUser.getUid()).child(text).setValue(new SearchHistory(text));
-//        DatabaseReference userSearchHistoryRef = searchHistoriesRef.child(currentUser.getUid());
-//
-//        // Tạo một tham chiếu mới sử dụng push() để có ID tự động
-//        DatabaseReference newSearchHistoryRef = userSearchHistoryRef.push();
-//
-//        // Lấy ID mới tạo
-//        String newSearchHistoryId = newSearchHistoryRef.getKey();
-//
-//        // Tạo một đối tượng SearchHistory với ID mới và thông tin khác
-//        SearchHistory newSearchHistory = new SearchHistory(newSearchHistoryId, text);
-//
-//        // Lưu SearchHistory lên Firebase
-//        newSearchHistoryRef.setValue(newSearchHistory);
     }
 
     public void getSearchHistories() {

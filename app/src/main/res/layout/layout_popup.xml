@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:contentDescription="@null"
             android:src="@drawable/shoes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +24,7 @@
             android:id="@+id/ivClosePopup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_12sdp"
+            android:padding="@dimen/_10sdp"
             android:src="@drawable/ic_cancel_popup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,6 +48,7 @@
             android:id="@+id/divideView"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="2dp"
+            app:dividerColor="#fff"
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,12 +77,14 @@
         android:layout_height="@dimen/_50sdp">
 
         <Button
+            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#444444"
             android:fontFamily="@font/poppins_regular"
             android:includeFontPadding="false"
             android:text="Buy now"
+            android:textColor="#fff"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <variable
+            name="deliveryAddress"
+            type="com.example.loginapp.model.entity.DeliveryAddress" />
 
         <variable
             name="fragment"
             type="com.example.loginapp.view.fragment.checkout.CheckoutInfoFragment" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray_1000"
@@ -17,29 +21,27 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal">
+            android:layout_height="?attr/actionBarSize">
 
-            <ImageButton
-                android:id="@+id/favorite_btn"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_margin="@dimen/_8sdp"
-                android:background="@color/gray_1000"                android:contentDescription="@null"
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.onNavigateUp()}"
-                android:src="@drawable/arrow___left_2"
+                app:icon="@drawable/ic_arrow_left"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Checkout"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold"
+                android:layout_height="20sp"
                 android:fontFamily="@font/montserrat_regular"
+                android:includeFontPadding="false"
+                android:text="@string/checkout"
                 android:textColor="@color/black_100"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,24 +49,22 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:gravity="center"
-
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -146,6 +146,48 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/selectAddressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:cardBackgroundColor="#fff"
+                    app:strokeWidth="0.5dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/updateInfoLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="Use existing addresses"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/updateInfoButton"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:onClick="@{() -> fragment.goSelectDeliveryAddressScreen()}"
+                            android:text="Select"
+                            android:textColor="#000"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -153,10 +195,10 @@
                     android:padding="@dimen/_16sdp">
 
                     <TextView
-                        android:layout_marginTop="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
+                        android:includeFontPadding="false"
                         android:text="Billing address"
                         android:textColor="@color/black_100"
                         android:textSize="@dimen/_14ssp" />
@@ -165,46 +207,75 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="Full name"
                         android:textColor="@color/gray_700"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="12sp" />
 
                     <EditText
-
+                        android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
                         android:background="@android:color/transparent"
-                        android:textSize="@dimen/_12ssp" />
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text="@{deliveryAddress.recipientName}" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_8sdp"
-                        app:dividerColor="@color/gray_600" />
+                        android:layout_height="0.5dp"
+                        android:layout_marginVertical="@dimen/_8sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
-                        android:text="Address"
-                        android:textColor="@color/gray_500"
-                        android:textSize="@dimen/_10ssp" />
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Phone number"
+                        android:textColor="@color/gray_700"
+                        android:textSize="12sp" />
 
                     <EditText
+                        android:id="@+id/etPhoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
                         android:background="@android:color/transparent"
-                        android:textSize="@dimen/_12ssp" />
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:text="@{deliveryAddress.phoneNumber}" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginVertical="@dimen/_8sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_8sdp"
-                        app:dividerColor="@color/gray_600" />
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="Address"
+                        android:textColor="@color/gray_500"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30sdp"
+                        android:background="@android:color/transparent"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text="@{deliveryAddress.address}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginVertical="@dimen/_8sdp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -221,9 +292,11 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:includeFontPadding="false"
                                 android:text="Province"
                                 android:textColor="@color/gray_700"
-                                android:textSize="@dimen/_10ssp" />
+                                android:textSize="12sp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -232,13 +305,15 @@
                                 android:orientation="horizontal">
 
                                 <EditText
+                                    android:id="@+id/etProvince"
                                     android:layout_width="0dp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:layout_weight="1"
-                                    android:singleLine="true"
-                                    android:imeOptions="actionNext"
                                     android:background="@android:color/transparent"
-                                    android:textSize="@dimen/_12ssp" />
+                                    android:imeOptions="actionNext"
+                                    android:inputType="text"
+                                    android:singleLine="true"
+                                    android:text="@{deliveryAddress.province}" />
 
                                 <ImageButton
                                     android:layout_width="@dimen/_18sdp"
@@ -250,9 +325,8 @@
 
                             <com.google.android.material.divider.MaterialDivider
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="@dimen/_8sdp"
-                                app:dividerColor="@color/gray_600" />
+                                android:layout_height="0.5dp"
+                                android:layout_marginVertical="@dimen/_8sdp" />
                         </LinearLayout>
 
                         <View
@@ -268,24 +342,26 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:includeFontPadding="false"
                                 android:text="Postal Code"
                                 android:textColor="@color/gray_500"
-                                android:textSize="@dimen/_10ssp" />
+                                android:textSize="12sp" />
 
                             <EditText
+                                android:id="@+id/etPostalCode"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_30sdp"
-                                android:singleLine="true"
+                                android:background="@android:color/transparent"
                                 android:imeOptions="actionNext"
                                 android:inputType="number"
-                                android:background="@android:color/transparent"
-                                android:textSize="@dimen/_12ssp" />
+                                android:singleLine="true"
+                                android:text="@{deliveryAddress.getFormatPostalCode()}" />
 
                             <com.google.android.material.divider.MaterialDivider
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="@dimen/_8sdp"
-                                app:dividerColor="@color/gray_600" />
+                                android:layout_height="0.5dp"
+                                android:layout_marginVertical="@dimen/_8sdp" />
                         </LinearLayout>
 
 
@@ -295,9 +371,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="Country"
                         android:textColor="@color/gray_700"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -306,13 +384,15 @@
                         android:orientation="horizontal">
 
                         <EditText
+                            android:id="@+id/etCountry"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_weight="1"
-                            android:singleLine="true"
-                            android:imeOptions="actionNext"
                             android:background="@android:color/transparent"
-                            android:textSize="@dimen/_12ssp" />
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:text="@{deliveryAddress.country}" />
 
                         <ImageButton
                             android:layout_width="@dimen/_18sdp"
@@ -324,17 +404,18 @@
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_8sdp"
-                        app:dividerColor="@color/gray_600" />
+                        android:layout_height="0.5dp"
+                        android:layout_marginVertical="@dimen/_8sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="Shipping Options"
                         android:textColor="@color/gray_700"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -343,13 +424,14 @@
                         android:orientation="horizontal">
 
                         <EditText
+                            android:id="@+id/etShoppingOption"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_weight="1"
-                            android:singleLine="true"
-                            android:imeOptions="actionDone"
                             android:background="@android:color/transparent"
-                            android:textSize="@dimen/_12ssp" />
+                            android:imeOptions="actionDone"
+                            android:singleLine="true"
+                            android:text="@{deliveryAddress.shippingOptions}" />
 
                         <ImageButton
                             android:layout_width="@dimen/_18sdp"
@@ -361,19 +443,20 @@
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_8sdp"
-                        app:dividerColor="@color/gray_600" />
+                        android:layout_height="0.5dp"
+                        android:layout_marginVertical="@dimen/_8sdp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/saveAddressView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_30sdp">
+                        android:layout_marginTop="@dimen/_16sdp">
 
                         <CheckBox
                             android:id="@+id/saveAddressCheckBox"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            app:buttonTint="#000"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -381,9 +464,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
                             android:text="Save details for future billing addresses"
                             android:textColor="@color/gray_700"
-                            android:textSize="@dimen/_11ssp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@id/saveAddressCheckBox"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -393,11 +477,11 @@
                         android:id="@+id/buy"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp"
-                        android:layout_marginTop="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
                         android:backgroundTint="@color/black"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="Proceed to Payment"
                         android:onClick="@{() -> fragment.onPaymentOptionScreen()}"
+                        android:text="Proceed to Payment"
                         app:elevation="@dimen/_10sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

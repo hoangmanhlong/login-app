@@ -1,59 +1,63 @@
 package com.example.loginapp.presenter;
 
-import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.FirebaseProduct;
+import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.ProductInterator;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.view.fragment.product_detail.ProductView;
 
 public class ProductPresenter implements ProductListener {
 
-    public Product currentProduct;
+    private Product product;
 
     public boolean isFavorite = false;
 
     private final ProductView view;
 
+    public Voucher voucher;
+
     private final ProductInterator interator = new ProductInterator(this);
+
+    public void initData() {
+
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+        view.setProductToView(product);
+        interator.getFavoriteProduct(product);
+    }
 
     public ProductPresenter(ProductView view) {
         this.view = view;
     }
 
-    public void addFavoriteProduct() {
-        interator.saveFavoriteProduct(currentProduct);
-    }
-
-    public void getProduct(int productId) {
-        interator.getProduct(productId);
-    }
-
-    @Override
-    public void onGetProduct(Product product) {
-        view.onLoadProduct(product);
-        currentProduct = product;
-    }
-
-    public void removeFavorite() {
-        interator.removeFavoriteProduct(currentProduct.getId());
+    public void updateFavorite() {
+        if (isFavorite) interator.removeFavoriteProduct(product.getId());
+        else interator.saveFavoriteProduct(product);
     }
 
     public void addToCart() {
-        Product product = currentProduct;
         interator.updateQuantity(
-            new FirebaseProduct(
-                product.getId(),
-                product.getTitle(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getDiscountPercentage(),
-                product.getRating(),
-                product.getStock(),
-                product.getBrand(),
-                product.getCategory(),
-                product.getThumbnail(),
-                product.getImages()
-            ));
+                new FirebaseProduct(
+                        product.getId(),
+                        product.getTitle(),
+                        product.getDescription(),
+                        product.getPrice(),
+                        product.getDiscountPercentage(),
+                        product.getRating(),
+                        product.getStock(),
+                        product.getBrand(),
+                        product.getCategory(),
+                        product.getThumbnail(),
+                        product.getImages()
+                ));
     }
 
     @Override
@@ -69,9 +73,8 @@ public class ProductPresenter implements ProductListener {
         }
     }
 
-    @Override
-    public void isLoading(Boolean loading) {
-        view.isLoading(loading);
+    public void getComments() {
+        interator.getComments();
     }
 
     @Override
@@ -83,5 +86,11 @@ public class ProductPresenter implements ProductListener {
     @Override
     public void saveToBasketSuccess() {
         view.saveToBasketSuccess();
+    }
+
+    @Override
+    public void getCommentRespond(CommentRespond commentRespond) {
+        view.getComments(commentRespond.getComments());
+        view.getCommentCount(String.valueOf(commentRespond.getLimit()));
     }
 }

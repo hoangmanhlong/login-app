@@ -7,8 +7,15 @@
             name="fragment"
             type="com.example.loginapp.view.fragment.cart.CartFragment" />
 
-    </data>
+        <variable
+            name="quantity"
+            type="String" />
 
+        <variable
+            name="price"
+            type="String" />
+
+    </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -31,7 +38,7 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Basket"
                 android:textColor="@color/black_100"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,10 +52,55 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/emptyCartView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animationView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_300sdp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/cart_empty_animation" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:fontFamily="@font/averia_gruesa_libre_regular"
+                        android:includeFontPadding="false"
+                        android:text="Oops, your shopping cart is empty"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/averia_gruesa_libre_regular"
+                        android:includeFontPadding="false"
+                        android:text="Brownse our awesome deals now!"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <LinearLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -58,7 +110,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/_8sdp"
                     android:visibility="gone">
 
                     <CheckBox
@@ -66,6 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:gravity="center"
                         android:onClick="@{() -> fragment.onCheckboxAllClick()}"
                         app:buttonTint="#000" />
@@ -73,11 +125,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="All" />
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="Select all"
+                        android:textColor="#000"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/favorite_recyclerView"
+                    android:id="@+id/basket_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -90,10 +145,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/checkout_background"
                 android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/_25sdp"
-                android:paddingTop="@dimen/_25sdp"
-                android:paddingBottom="@dimen/_14sdp"
-                android:visibility="gone"
+                android:padding="@dimen/_16sdp"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
@@ -101,50 +153,84 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Discount code"
+                    android:includeFontPadding="false"
+                    android:text="@string/discount_code"
                     android:textColor="@color/gray_500"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/discountCode"
+                <LinearLayout
+                    android:id="@+id/selectDiscountCodeView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:includeFontPadding="false"
-                    android:text="NV24Q3U"
-                    android:textColor="@color/black_100"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/clearDiscountCode"
-                    app:layout_constraintEnd_toStartOf="@id/clearDiscountCode"
-                    app:layout_constraintTop_toTopOf="@id/clearDiscountCode" />
-
-                <ImageView
-                    android:id="@+id/clearDiscountCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_clear"
+                    android:gravity="center_vertical"
+                    android:onClick="@{() -> fragment.onSelectCodeClick()}"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="Select code"
+                        android:textColor="@color/gray_500" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/ic_arrow_forward" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/clearDiscountCodeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/discountCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/black_100"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/clearDiscountCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> fragment.onClearDiscountCodeClick()}"
+                        android:src="@drawable/ic_clear"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/productQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="0 item"
+                    android:includeFontPadding="false"
+                    android:text="@{@string/quantity_item(quantity)}"
                     android:textColor="@color/gray_500"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/discountCodeView" />
+                    app:layout_constraintTop_toBottomOf="@id/discountCodeView"
+                    tools:text="2 item(s)" />
 
                 <TextView
                     android:id="@+id/priceTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="0$"
+                    android:includeFontPadding="false"
+                    android:text="@{@string/price_format(price)}"
                     android:textColor="@color/black_100"
                     android:textStyle="bold"
                     app:layout_constraintBaseline_toBaselineOf="@id/productQuantity"
@@ -152,25 +238,47 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="1000$" />
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divide"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintTop_toBottomOf="@id/priceTotal" />
+
+                <TextView
+                    android:id="@+id/totalPriceView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:text="Total"
+                    android:textColor="@color/gray_500"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divide" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@id/totalPriceView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="$1.000.000.000" />
+
                 <Button
                     android:id="@+id/buy"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:backgroundTint="#000"
+                    android:layout_height="@dimen/_46sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/poppins_bold"
-                    android:onClick="@{() -> fragment.onBuyClick()}"
-                    android:text="Check out"
+                    android:includeFontPadding="false"
+                    android:onClick="@{() -> fragment.onCheckoutClick()}"
+                    android:text="@string/checkout"
                     android:textColor="#fff"
                     app:elevation="@dimen/_10sdp"
-                    app:layout_constraintTop_toBottomOf="@id/productQuantity" />
+                    app:layout_constraintTop_toBottomOf="@id/totalPriceView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </layout>

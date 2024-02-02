@@ -3,57 +3,42 @@ package com.example.loginapp.model.interator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.data.remote.service.Constant;
 import com.example.loginapp.model.listener.FavoriteListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class FavoriteInterator {
-    private final DatabaseReference favoriteRef =
-        FirebaseDatabase.getInstance().getReference().child(Constant.FAVORITE_PRODUCT_REF);
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-    private FavoriteListener listener;
+    private final FavoriteListener listener;
 
     public FavoriteInterator(FavoriteListener listener) {
         this.listener = listener;
     }
 
     public void getFavoriteProductFromFirebase() {
-        assert currentUser != null;
-        String id = currentUser.getUid();
-        favoriteRef.child(id).addChildEventListener(new ChildEventListener() {
+        Constant.favoriteProductRef.child(Constant.currentUser.getUid()).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(
-                @NonNull DataSnapshot snapshot,
-                @Nullable String previousChildName
-            ) {
-                Product product = snapshot.getValue(Product.class);
-                listener.onItemAdded(product);
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                listener.onItemAdded(snapshot.getValue(Product.class));
             }
 
             @Override
-            public void onChildChanged(
-                @NonNull DataSnapshot snapshot,
-                @Nullable String previousChildName
-            ) {
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                listener.notifyItemRemoved(snapshot.getValue(Product.class));
             }
 
             @Override
             public void onChildMoved(
-                @NonNull DataSnapshot snapshot,
-                @Nullable String previousChildName
+                    @NonNull DataSnapshot snapshot,
+                    @Nullable String previousChildName
             ) {
 
             }
@@ -63,5 +48,12 @@ public class FavoriteInterator {
 
             }
         });
+    }
+
+    public void deleteProduct(int id) {
+        Constant.favoriteProductRef.child(Constant.currentUser.getUid())
+                .child(String.valueOf(id))
+                .removeValue()
+                .addOnFailureListener(e -> listener.onMessage("Error"));
     }
 }

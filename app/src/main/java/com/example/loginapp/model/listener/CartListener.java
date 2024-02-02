@@ -12,6 +12,4 @@ public interface CartListener {
     void notifyItemChanged(FirebaseProduct product, String previousChildName);
 
     void onMessage(String message);
-
-    void getVouchers(Voucher voucher);
 }

@@ -1,20 +1,15 @@
 package com.example.loginapp.view.fragment.home;
 
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,12 +17,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.discount_adapter.DiscountAdapter;
-import com.example.loginapp.adapter.product_adapter.HomeAdapter;
 import com.example.loginapp.adapter.product_adapter.OnItemClickListener;
-import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.adapter.product_adapter.ProductAdapter;
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.databinding.FragmentHomeBinding;
+import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.Products;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.HomePresenter;
+import com.example.loginapp.view.AppAnimationState;
+import com.example.loginapp.view.AppMessage;
 import com.example.loginapp.view.LoadingDialog;
 import com.example.loginapp.view.activities.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,11 +42,11 @@ public class HomeFragment extends Fragment implements HomeView, OnItemClickListe
 
     private final HomePresenter presenter = new HomePresenter(this);
 
-    private final HomeAdapter recommendedAdapter = new HomeAdapter(this);
+    private final ProductAdapter recommendedAdapter = new ProductAdapter(this);
 
-    private final HomeAdapter topChartsAdapter = new HomeAdapter(this);
+    private final ProductAdapter topChartsAdapter = new ProductAdapter(this);
 
-    private final HomeAdapter discountAdapter = new HomeAdapter(this);
+    private final ProductAdapter discountAdapter = new ProductAdapter(this);
 
     private Dialog dialog;
 
@@ -73,21 +72,17 @@ public class HomeFragment extends Fragment implements HomeView, OnItemClickListe
 
     private void initView() {
         binding.setHomeFragment(this);
-
         dialog = LoadingDialog.getLoadingDialog(requireContext());
 
         RecyclerView recommendedRecyclerview = binding.recommendedRecyclerview;
         recommendedRecyclerview.setAdapter(recommendedAdapter);
-        recommendedAdapter.submitList(presenter.recommendedProducts);
-
 
         RecyclerView topChartsRecyclerview = binding.topChartsRecyclerview;
         topChartsRecyclerview.setAdapter(topChartsAdapter);
-        topChartsAdapter.submitList(presenter.topChartsProducts);
+
 
         RecyclerView rvDiscount = binding.rvDiscount;
         rvDiscount.setAdapter(discountAdapter);
-        discountAdapter.submitList(presenter.discountProducts);
 
         presenter.iniData();
 
@@ -105,9 +100,6 @@ public class HomeFragment extends Fragment implements HomeView, OnItemClickListe
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         sliderView.setScrollTimeInSec(4);
         sliderView.startAutoCycle();
-
-        LinearLayout bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -131,56 +123,61 @@ public class HomeFragment extends Fragment implements HomeView, OnItemClickListe
         discountAdapter.submitList(products);
     }
 
+    public void onExpandRecommendProductsButtonClick() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.recommendedProducts));
+        bundle.putString(Constant.EXPAND_LABEL_KEY, "Recommended for you");
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_expandProductsFragment, bundle);
+    }
+
+    public void onExpandDiscountProductsButtonClick() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.discountProducts));
+        bundle.putString(Constant.EXPAND_LABEL_KEY, "Discount");
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_expandProductsFragment, bundle);
+    }
+
+    public void onExpandTopChartProductsButtonClick() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.topChartsProducts));
+        bundle.putString(Constant.EXPAND_LABEL_KEY, "Top charts");
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_expandProductsFragment, bundle);
+    }
+
     @Override
     public void getUserData(UserData userData) {
+        ConstraintLayout userView = binding.userView;
+        ConstraintLayout updateInfoBanner = binding.updateInfoBanner;
         if (userData.getUsername() == null || userData.getPhotoUrl() == null || userData.getUsername().equals("") || userData.getPhotoUrl().equals("")) {
-            binding.userView.setVisibility(View.GONE);
-
-            binding.updateInfoBanner.setTranslationY(-100f);
-            binding.updateInfoBanner.setVisibility(View.VISIBLE);
-            ObjectAnimator slideDown = ObjectAnimator.ofFloat(binding.updateInfoBanner, "translationY", 0f);
-            slideDown.setDuration(500); // Adjust the duration as needed
-            // Start the animation
-            slideDown.start();
+            AppAnimationState.setUserViewState(userView, requireActivity(), false);
+            AppAnimationState.setUserViewState(updateInfoBanner, requireActivity(), true);
         } else {
-//            binding.userView.setVisibility(View.VISIBLE);
-            binding.updateInfoBanner.setVisibility(View.GONE);
-            // Set initial translationY to -100f (you can adjust this value)
-            binding.userView.setTranslationY(-100f);
-            binding.userView.setVisibility(View.VISIBLE);
-
-            // Create ObjectAnimator for translationY property
-            ObjectAnimator slideDown = ObjectAnimator.ofFloat(binding.userView, "translationY", 0f);
-            slideDown.setDuration(600); // Adjust the duration as needed
-
-            // Start the animation
-            slideDown.start();
+            AppAnimationState.setUserViewState(userView, requireActivity(), true);
+            AppAnimationState.setUserViewState(updateInfoBanner, requireActivity(), false);
             binding.setUserData(userData);
         }
     }
 
     @Override
-    public void onLoadError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onLoadCategories(List<String> categories) {
-
+    public void onMessage(String message) {
+        AppMessage.showMessage(requireContext(), message);
     }
 
     @Override
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
-        bundle.putInt("productId", product.getId());
+        bundle.putSerializable(Constant.PRODUCT_KEY, product);
         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_productFragment, bundle);
     }
 
     public void onLaterButtonClick() {
-        binding.updateInfoBanner.setVisibility(View.GONE);
+        ConstraintLayout updateInfoBanner = binding.updateInfoBanner;
+        AppAnimationState.setUserViewState(updateInfoBanner, requireActivity(), false);
     }
 
     public void onUpdateButtonClick() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_editUserInformationFragment);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.USER_KEY_NAME, presenter.currentUserData);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_editUserInformationFragment, bundle);
     }
 }

@@ -9,6 +9,4 @@ public interface EditUserProfileListener {
     void showProcessBar(Boolean show);
 
     void goUserProfile();
-
-    void getUserData(UserData userData);
 }

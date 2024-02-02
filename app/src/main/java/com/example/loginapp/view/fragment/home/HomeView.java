@@ -8,9 +8,7 @@ import java.util.List;
 public interface HomeView {
     void getUserData(UserData userData);
 
-    void onLoadError(String message);
-
-    void onLoadCategories(List<String> categories);
+    void onMessage(String message);
 
     void showProcessBar(Boolean show);
 

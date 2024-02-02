@@ -4,4 +4,6 @@ import com.example.loginapp.model.entity.Product;
 
 public interface FavoriteItemClickListener {
     void onItemClick(Product product);
+
+    void getProductByPosition(int productId);
 }

@@ -32,21 +32,12 @@
         <item name="cornerSize">@dimen/_10sdp</item>
     </style>
 
-    <style name="spinerStyle">
-        <item name="fontFamily">@font/overpass_regular</item>
+    <style name="Theme.App.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#152B36</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.LoginApp</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_app</item>
+<!--        <item name="windowSplashScreenAnimationDuration">200</item>-->
     </style>
 
-<!--    <style name="App.Splash" parent="Theme.SplashScreen">-->
-<!--&lt;!&ndash;        <item name="android:windowBackground">@drawable/</item>&ndash;&gt;-->
-<!--        <item name="android:windowSplashScreenBackground">#152B36</item>-->
-<!--        <item name="postSplashScreenTheme">@style/Base.Theme.LoginApp</item>-->
-<!--        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_app</item>-->
-
-
-<!--        &lt;!&ndash;        <item name="colorPrimaryDark">@color/green_3</item>&ndash;&gt;-->
-<!--        <item name="android:windowDisablePreview">true</item>-->
-<!--        <item name="windowActionBarOverlay">true</item>-->
-<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
-<!--    </style>-->
 
 </resources>

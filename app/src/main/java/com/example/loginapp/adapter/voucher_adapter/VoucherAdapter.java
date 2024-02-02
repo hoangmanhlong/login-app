@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginapp.R;
 import com.example.loginapp.databinding.LayoutVoucherBinding;
 import com.example.loginapp.model.entity.Voucher;
+import com.example.loginapp.model.entity.VoucherType;
 
 public class VoucherAdapter extends ListAdapter<Voucher, VoucherAdapter.VoucherViewHolder> {
 
@@ -40,6 +42,10 @@ public class VoucherAdapter extends ListAdapter<Voucher, VoucherAdapter.VoucherV
 
         public void bind(Voucher voucher) {
             binding.setVoucher(voucher);
+            if (voucher.getVoucherType() == VoucherType.FreeShipping) {
+                binding.voucherImageView.setBackgroundResource(R.color.free_shipping_color);
+            }
+            else binding.voucherImageView.setBackgroundResource(R.color.orange);
         }
     }
 

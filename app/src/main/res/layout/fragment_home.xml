@@ -20,6 +20,7 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
+            android:overScrollMode="never"
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,7 +38,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +120,7 @@
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="0.5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -142,40 +142,41 @@
                     app:sliderIndicatorMargin="15dp"
                     app:sliderIndicatorOrientation="horizontal"
                     app:sliderIndicatorPadding="3dp"
-                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorRadius="1.5dp"
                     app:sliderIndicatorSelectedColor="@color/gray_1000"
                     app:sliderIndicatorUnselectedColor="#5A5A5A"
                     app:sliderScrollTimeInSec="1"
                     app:sliderStartAutoCycle="true" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_14sdp"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginHorizontal="@dimen/_14sdp">
 
                     <TextView
                         android:id="@+id/recommendedLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/overpass_regular"
-                        android:text="Recommended for you"
+                        android:text="@string/recommended"
                         android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
 
-                    <ImageView
+                    <Button
+                        android:id="@+id/expandRecommendProductsButton"
+                        style="?attr/materialIconButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_16sdp"
-                        android:src="@drawable/ic_arrow_forward" />
-                </LinearLayout>
+                        android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
+                        app:icon="@drawable/ic_arrow_forward_black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recommendedRecyclerview"
@@ -184,39 +185,39 @@
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
+                    android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/_8sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_14sdp"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginHorizontal="@dimen/_14sdp">
 
                     <TextView
                         android:id="@+id/tvTopCharts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/overpass_regular"
-                        android:text="Top charts"
+                        android:text="@string/top_charts"
                         android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <ImageView
+                    <Button
+                        android:id="@+id/expandTopChartProductsButton"
+                        style="?attr/materialIconButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_16sdp"
-                        android:src="@drawable/ic_arrow_forward" />
-                </LinearLayout>
+                        android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
+                        app:icon="@drawable/ic_arrow_forward_black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topChartsRecyclerview"
@@ -224,39 +225,39 @@
                     android:layout_height="@dimen/_138sdp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
+                    android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/_8sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_14sdp"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginHorizontal="@dimen/_14sdp">
 
                     <TextView
                         android:id="@+id/tvDiscount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/overpass_regular"
-                        android:text="Discount"
+                        android:text="@string/discount"
                         android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <ImageView
+                    <Button
+                        android:id="@+id/expandDiscountProductsButton"
+                        style="?attr/materialIconButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_16sdp"
-                        android:src="@drawable/ic_arrow_forward" />
-                </LinearLayout>
+                        android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
+                        app:icon="@drawable/ic_arrow_forward_black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDiscount"
@@ -264,12 +265,12 @@
                     android:layout_height="@dimen/_138sdp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
+                    android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/_8sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
             </LinearLayout>
-
 
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

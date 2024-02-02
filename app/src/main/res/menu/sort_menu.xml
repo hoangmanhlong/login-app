@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/price_low_to_high"
+        android:icon="@drawable/ic_cancel"
+        android:title="@string/price_low_to_high" />
+    <item
+        android:id="@+id/price_high_to_low"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/price_high_to_low" />
+    <item
+        android:id="@+id/rate_low_to_high"
+        android:icon="@drawable/ic_star_rate"
+        android:title="@string/rate_low_to_high" />
+    <item
+        android:id="@+id/rate_high_to_low"
+        android:icon="@drawable/ic_star_rate"
+        android:title="@string/rate_high_to_low" />
+</menu>

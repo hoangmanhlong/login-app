@@ -2,6 +2,8 @@ package com.example.loginapp.presenter;
 
 import com.example.loginapp.adapter.cart_adapter.CartItemClickListener;
 import com.example.loginapp.model.entity.FirebaseProduct;
+import com.example.loginapp.model.entity.OrderProduct;
+import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.CartInterator;
 import com.example.loginapp.model.listener.CartListener;
@@ -17,49 +19,43 @@ public class CartPresenter implements CartListener, CartItemClickListener {
 
     private final CartView view;
 
-    int count = 0;
-
     public final List<FirebaseProduct> basket = new ArrayList<>();
+
+    public List<FirebaseProduct> selectedProduct = new ArrayList<>();
+
+    public Voucher seletedVoucher;
 
     public CartPresenter(CartView view) {
         this.view = view;
     }
 
     public void initBasket() {
-        List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
-        view.isCheckAllVisibility(basket.size() > 0, selectedProduct.size() == basket.size());
-        setTotalToView();
-        count++;
-        if (count <= 1) {
-            interator.getFavoriteProductFromFirebase();
-        }
+        updateUI();
+        if (basket.size() == 0) interator.getFavoriteProductFromFirebase();
+        else view.notifyItemAdded(basket);
     }
 
     @Override
     public void notifyItemAdded(FirebaseProduct product, String previousChildName) {
         basket.add(product);
-        List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
-        view.isCheckAllVisibility(basket.size() > 0, selectedProduct.size() == basket.size());
+        updateUI();
         view.notifyItemAdded(basket);
-        setTotalToView();
     }
 
     @Override
     public void notifyItemRemoved(FirebaseProduct product) {
         int index = basket.indexOf(basket.stream().filter(p -> p.getId() == product.getId()).collect(Collectors.toList()).get(0));
         basket.remove(index);
+        updateUI();
         view.notifyItemRemoved(index);
-        setTotalToView();
     }
 
     @Override
     public void notifyItemChanged(FirebaseProduct product, String previousChildName) {
         int index = basket.indexOf(basket.stream().filter(p -> p.getId() == product.getId()).collect(Collectors.toList()).get(0));
         basket.set(index, product);
+        updateUI();
         view.notifyItemChanged(index);
-        List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
-        view.isCheckAllVisibility(basket.size() > 0, selectedProduct.size() == basket.size());
-        setTotalToView();
     }
 
     @Override
@@ -67,19 +63,13 @@ public class CartPresenter implements CartListener, CartItemClickListener {
         view.onMessage(message);
     }
 
-    @Override
-    public void getVouchers(Voucher voucher) {
-
-    }
-
-
     public void deleteProductInFirebase(int id) {
         interator.deleteProductInFirebase(id);
     }
 
     @Override
-    public void onItemClick(int id) {
-        view.onItemClick(id);
+    public void onItemClick(Product product) {
+        view.onItemClick(product);
     }
 
     @Override
@@ -97,12 +87,14 @@ public class CartPresenter implements CartListener, CartItemClickListener {
         }
     }
 
-    private void setTotalToView() {
+    private void updateUI() {
         int totalTemp;
         List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
         totalTemp = selectedProduct.stream().mapToInt(product -> product.getPrice() * Integer.parseInt(product.getQuantity())).sum();
+        view.isCheckAllVisibility(basket.size() > 0, selectedProduct.size() == basket.size());
         view.showCheckoutView(totalTemp != 0);
         view.setTotal(String.valueOf(totalTemp), String.valueOf(selectedProduct.size()));
+        this.selectedProduct = selectedProduct;
     }
 
     @Override
@@ -114,5 +106,11 @@ public class CartPresenter implements CartListener, CartItemClickListener {
         for (FirebaseProduct product : basket) {
             interator.updateChecked(product.getId(), checked);
         }
+    }
+
+    public List<OrderProduct> listProduct() {
+        List<OrderProduct> list = new ArrayList<>();
+        for (FirebaseProduct product : selectedProduct) list.add(product.toOrderProduct());
+        return list;
     }
 }

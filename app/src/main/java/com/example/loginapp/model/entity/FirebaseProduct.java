@@ -114,6 +114,14 @@ public class FirebaseProduct {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
+
+    public Product toProduct() {
+        return new Product(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images);
+    }
+
+    public OrderProduct toOrderProduct() {
+        return new OrderProduct(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images, Integer.parseInt(this.quantity));
+    }
 }
 
 

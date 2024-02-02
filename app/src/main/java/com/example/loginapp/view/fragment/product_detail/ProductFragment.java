@@ -1,54 +1,49 @@
 package com.example.loginapp.view.fragment.product_detail;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.loginapp.R;
+import com.example.loginapp.adapter.comment_adapter.CommentAdapter;
 import com.example.loginapp.adapter.product_images_adapter.OnImageClickListener;
 import com.example.loginapp.adapter.product_images_adapter.ProductImageAdapter;
-import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.databinding.FragmentProductBinding;
+import com.example.loginapp.model.entity.Comment;
+import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.ProductPresenter;
-import com.example.loginapp.view.LoadingDialog;
+import com.example.loginapp.view.AppAnimationState;
+import com.example.loginapp.view.AppMessage;
 import com.example.loginapp.view.fragment.bottom_sheet.ModalBottomSheetFragment;
 
-public class ProductFragment extends Fragment implements ProductView, OnImageClickListener {
+import java.util.List;
 
-    public static final String PRODUCT_KEY = "AA#23";
+public class ProductFragment extends Fragment implements ProductView, OnImageClickListener {
 
     private final ProductPresenter presenter = new ProductPresenter(this);
 
     private final ProductImageAdapter productImageAdapter = new ProductImageAdapter(this);
 
+    private final CommentAdapter commentAdapter = new CommentAdapter();
+
     private FragmentProductBinding binding;
 
     private ImageButton btFavorite;
 
-    private Dialog dialog;
-
     @Nullable
     @Override
-    public View onCreateView(
-        @NonNull LayoutInflater inflater,
-        @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState
-    ) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentProductBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -60,37 +55,44 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     }
 
     private void initView() {
-        dialog = LoadingDialog.getLoadingDialog(requireContext());
+        binding.setFragment(this);
+        AppAnimationState.setBottomActionView(binding.bottomActionView, requireActivity(), true);
+        getDataShared();
         RecyclerView recyclerView = binding.productImageRecyclerview;
         recyclerView.setAdapter(productImageAdapter);
 
-        binding.setFragment(this);
+        RecyclerView commentRecyclerView = binding.commentRecyclerView;
+        commentRecyclerView.setAdapter(commentAdapter);
+
         btFavorite = binding.favoriteBtn;
-        requireActivity().findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
+    }
+
+    private void getDataShared() {
         if (getArguments() != null) {
-            int productId = getArguments().getInt("productId");
-            presenter.getProduct(productId);
+            Product product = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
+            if (product != null) {
+                presenter.setProduct(product);
+            }
         }
     }
 
     public void showBottomSheet() {
-        Product product = presenter.currentProduct;
+        Product product = presenter.getProduct();
         if (product != null) {
             ModalBottomSheetFragment modalBottomSheetFragment = new ModalBottomSheetFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt(PRODUCT_KEY, presenter.currentProduct.getId());
+            bundle.putSerializable(Constant.PRODUCT_KEY, product);
             modalBottomSheetFragment.setArguments(bundle);
             modalBottomSheetFragment.show(getChildFragmentManager(), ModalBottomSheetFragment.TAG);
         }
     }
 
-    public void onNavigateIconClick() {
+    public void onNavigateUp() {
         Navigation.findNavController(binding.getRoot()).navigateUp();
     }
 
     public void onFavoriteIconClick() {
-        if (presenter.isFavorite) presenter.removeFavorite();
-        else presenter.addFavoriteProduct();
+        presenter.updateFavorite();
     }
 
     public void onCartBtnClick() {
@@ -99,24 +101,8 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     }
 
     @Override
-    public void onLoadProduct(Product product) {
-        binding.setProduct(product);
-        productImageAdapter.submitList(product.getImages());
-
-//        ConstraintLayout bottomActionView = binding.bottomActionView;
-//        binding.bottomActionView.setVisibility(View.VISIBLE);
-//
-//        ObjectAnimator animator = ObjectAnimator
-//            .ofFloat(bottomActionView, "translationY", bottomActionView.getHeight(), 0);
-//        animator.setDuration(2000);
-//
-//        // Start the animation when the activity is created
-//        animator.start();
-    }
-
-    @Override
     public void onMessage(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        AppMessage.showMessage(requireContext(), message);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -127,22 +113,32 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     }
 
     @Override
-    public void isLoading(Boolean loading) {
-        if (loading) dialog.show();
-        else dialog.dismiss();
-    }
-
-    @Override
     public void saveToBasketSuccess() {
         binding.tvAddToCart.setVisibility(View.GONE);
     }
 
     @Override
+    public void getComments(List<Comment> comments) {
+        commentAdapter.submitList(comments);
+    }
+
+    @Override
+    public void getCommentCount(String number) {
+
+    }
+
+    @Override
+    public void setProductToView(Product product) {
+        binding.setProduct(product);
+        productImageAdapter.submitList(product.getImages());
+    }
+
+    @Override
     public void onImageClick(String url) {
         Glide.with(requireContext())
-            .load(url)
-            .placeholder(R.drawable.loading_animation)
-            .error(R.drawable.ic_broken_image)
-            .into(binding.imThumbnail);
+                .load(url)
+                .placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_broken_image)
+                .into(binding.imThumbnail);
     }
 }

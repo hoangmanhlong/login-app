@@ -10,11 +10,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.R;
 import com.example.loginapp.databinding.LayoutSearchSuggestionBinding;
 import com.example.loginapp.model.entity.SearchHistory;
-
-import java.util.Objects;
 
 public class SearchSuggestAdapter extends ListAdapter<SearchHistory, SearchSuggestAdapter.ItemViewHolder> {
     private OnSearchSuggestionClickListener listener;
@@ -56,7 +53,7 @@ public class SearchSuggestAdapter extends ListAdapter<SearchHistory, SearchSugge
         public void onClick(View v) {
             SearchHistory history = getItem(getAdapterPosition());
             if (v.getId() == binding.searchHistory.getId()) {
-                listener.onClick(history);
+                listener.onSearchSuggestClick(history);
             }
         }
     }

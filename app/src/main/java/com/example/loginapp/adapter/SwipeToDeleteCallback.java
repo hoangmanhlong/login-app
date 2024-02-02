@@ -1,42 +1,30 @@
 package com.example.loginapp.adapter;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
+import android.graphics.RectF;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.R;
-
 abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
-    Context mContext;
     private final Paint mClearPaint;
-    private final ColorDrawable mBackground;
-    private final int backgroundColor;
-    private final Drawable deleteDrawable;
-    private final int intrinsicWidth;
-    private final int intrinsicHeight;
 
-    protected SwipeToDeleteCallback(Context context) {
-        mContext = context;
-        mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#b80f0a");
+    protected SwipeToDeleteCallback() {
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_delete);
-        intrinsicWidth = deleteDrawable.getIntrinsicWidth();
-        intrinsicHeight = deleteDrawable.getIntrinsicHeight();
+    }
+
+    @Override
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        return false;
     }
 
     @Override
@@ -45,16 +33,10 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
-        return false;
-    }
-
-    @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
         View itemView = viewHolder.itemView;
-        int itemHeight = itemView.getHeight();
+        float translationX = dX;
+        float viewSwipeWidth = Math.min(-dX, itemView.getWidth() * (1.0f / 5.0f));
 
         boolean isCancelled = dX == 0 && !isCurrentlyActive;
 
@@ -64,50 +46,53 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
             return;
         }
 
-        mBackground.setColor(backgroundColor);
-        mBackground.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        mBackground.draw(c);
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX <= 0) {
+            Paint paint = new Paint();
+            int deleteBackgroundColor = Color.RED;
+            int similarBackgroundColor = Color.parseColor("#FFA500");
+            RectF similarBackground = new RectF(
+                    (float) itemView.getRight() - (2 * viewSwipeWidth),
+                    (float) itemView.getTop(),
+                    (float) itemView.getRight() - viewSwipeWidth,
+                    (float) itemView.getBottom()
+            );
 
-        int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-        int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
-        int deleteIconRight = itemView.getRight() - deleteIconMargin;
-        int deleteIconBottom = deleteIconTop + intrinsicHeight;
+            RectF deleteBackground = new RectF(
+                    (float) itemView.getRight() - viewSwipeWidth,
+                    (float) itemView.getTop(),
+                    (float) itemView.getRight(),
+                    (float) itemView.getBottom()
+            );
 
-//        View removeView = LayoutInflater.from(mContext).inflate(R.layout.layout_remove_product, null);
-//        removeView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//        removeView.layout(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-//        removeView.draw(c);
+            paint.setColor(similarBackgroundColor);
+            c.drawRect(similarBackground, paint);
 
-//        // Đo kích thước của removeView
-//        int widthSpec = View.MeasureSpec.makeMeasureSpec(itemView.getWidth(), View.MeasureSpec.EXACTLY);
-//        int heightSpec = View.MeasureSpec.makeMeasureSpec(itemView.getHeight(), View.MeasureSpec.EXACTLY);
-//        removeView.measure(widthSpec, heightSpec);
+            paint.setColor(deleteBackgroundColor);
+            c.drawRect(deleteBackground, paint);
 
-//// Đặt vị trí của removeView
-//        int left = itemView.getRight() + (int) dX;
-//        int top = itemView.getTop();
-//        int right = left + removeView.getMeasuredWidth();
-//        int bottom = top + removeView.getMeasuredHeight();
-//        removeView.layout(left, top, right, bottom);
+            // Vẽ chữ "Similar" và "Delete" ở giữa vùng bấm
+            Paint textPaint = new Paint();
+            textPaint.setColor(Color.WHITE);
+            textPaint.setTextSize(40); // Kích thước chữ
+            textPaint.setTextAlign(Paint.Align.CENTER);
 
-// Vẽ removeView
-//        removeView.draw(c);
+            // Tính toán vị trí và vẽ chữ "Similar"
+            float similarTextX = similarBackground.centerX();
+            float textY = similarBackground.centerY() - (textPaint.descent() + textPaint.ascent()) / 2;
+            c.drawText("Similar", similarTextX, textY, textPaint);
 
+            // Tính toán vị trí và vẽ chữ "Delete"
+            float deleteTextX = deleteBackground.centerX();
+            c.drawText("Delete", deleteTextX, textY, textPaint);
+            translationX = -(2* viewSwipeWidth);
 
+        }
 
-        deleteDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
-        deleteDrawable.draw(c);
-
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        if (translationX == -(2 * viewSwipeWidth)) translationX = -(2 * viewSwipeWidth);
+        super.onChildDraw(c, recyclerView, viewHolder, translationX, dY, actionState, isCurrentlyActive);
     }
 
     private void clearCanvas(Canvas c, Float left, Float top, Float right, Float bottom) {
         c.drawRect(left, top, right, bottom, mClearPaint);
-    }
-
-    @Override
-    public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-        return 0.5f;
     }
 }

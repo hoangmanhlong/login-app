@@ -22,7 +22,6 @@ public final class HideKeyboard {
         }
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     public static void setupHideKeyboard(View view, Activity activity) {
 

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface VoucherView {
 
-    void notifyVoucherAdded(List<Voucher> vouchers);
+    void getVouchers(List<Voucher> vouchers);
 }

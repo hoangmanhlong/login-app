@@ -8,7 +8,7 @@ import java.util.List;
 public interface SearchView {
     void onLoadProducts(List<Product> products);
 
-    void onLoadError(String message);
+    void onMessage(String message);
 
     void showProcessBar(Boolean show);
 

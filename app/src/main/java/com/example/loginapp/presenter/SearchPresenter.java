@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.adapter.seach_suggest_adapter.OnSearchSuggestionClickListener;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
@@ -15,13 +13,10 @@ import java.util.stream.Collectors;
 
 public class SearchPresenter implements SearchListener, OnSearchSuggestionClickListener {
 
-    private String TAG = this.toString();
 
-    private final SearchProductInterator interator;
+    private final SearchProductInterator interator = new SearchProductInterator(this);
 
     private final SearchView view;
-
-    int count = 0;
 
     public List<SearchHistory> histories = new ArrayList<>();
 
@@ -29,14 +24,11 @@ public class SearchPresenter implements SearchListener, OnSearchSuggestionClickL
 
     public SearchPresenter(SearchView view) {
         this.view = view;
-        interator = new SearchProductInterator(this);
     }
 
     public void initData() {
-        count++;
-        if (count <= 1) {
-            interator.getSearchHistories();
-        }
+        if (histories.size() == 0) getSearchHistories();
+        else view.notifyItemAdded(histories);
     }
 
     public void onSearchProduct(String query) {
@@ -45,8 +37,12 @@ public class SearchPresenter implements SearchListener, OnSearchSuggestionClickL
             interator.searchProduct(query);
             interator.saveSearchHistory(query);
         } else {
-            view.onLoadError("Invalid information");
+            view.onMessage("Invalid information");
         }
+    }
+
+    private void getSearchHistories() {
+        interator.getSearchHistories();
     }
 
     @Override
@@ -58,7 +54,6 @@ public class SearchPresenter implements SearchListener, OnSearchSuggestionClickL
     @Override
     public void notifyItemAdded(SearchHistory history) {
         histories.add(history);
-        Log.d(TAG, "notifyItemAdded: " + histories.size());
         histories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
         view.notifyItemAdded(histories);
     }
@@ -67,13 +62,12 @@ public class SearchPresenter implements SearchListener, OnSearchSuggestionClickL
     public void notifyItemRemoved(SearchHistory history) {
         int index = histories.indexOf(histories.stream().filter(p -> p.getTime().equals(history.getTime())).collect(Collectors.toList()).get(0));
         histories.remove(index);
-        Log.d(TAG, "notifyItemRemoved: " + histories.size() + " Index: " + index);
         view.notifyItemRemoved(index);
     }
 
     @Override
     public void onLoadError(String message) {
-        view.onLoadError(message);
+        view.onMessage(message);
     }
 
     @Override
@@ -87,7 +81,7 @@ public class SearchPresenter implements SearchListener, OnSearchSuggestionClickL
     }
 
     @Override
-    public void onClick(SearchHistory history) {
+    public void onSearchSuggestClick(SearchHistory history) {
         view.searchWithHistory(history.getText());
         interator.searchProduct(history.getText());
     }
