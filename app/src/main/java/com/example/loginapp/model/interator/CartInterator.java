@@ -32,8 +32,6 @@ public class CartInterator {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 FirebaseProduct product = snapshot.getValue(FirebaseProduct.class);
-                assert product != null;
-                Log.d(TAG, product.getTitle());
                 listener.notifyItemAdded(product, previousChildName);
             }
 

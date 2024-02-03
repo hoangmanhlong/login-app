@@ -27,6 +27,7 @@
     <string name="logout_message">Are you sure you want to logout?</string>
     <string name="delete_delivery_address">Are you sure you want to delete the delivery address?</string>
     <string name="logout">Log out</string>
+    <string name="ok">OK</string>
     <string name="buy_now">Buy now</string>
     <string name="try_again">Try again</string>
     <string name="network_error_message">No Internet connection</string>

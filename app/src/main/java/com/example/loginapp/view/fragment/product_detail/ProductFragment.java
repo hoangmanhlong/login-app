@@ -27,6 +27,8 @@ import com.example.loginapp.view.AppAnimationState;
 import com.example.loginapp.view.AppMessage;
 import com.example.loginapp.view.fragment.bottom_sheet.ModalBottomSheetFragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 public class ProductFragment extends Fragment implements ProductView, OnImageClickListener {
@@ -91,13 +93,13 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
         Navigation.findNavController(binding.getRoot()).navigateUp();
     }
 
-    public void onFavoriteIconClick() {
+    public void onFavoriteButtonClick() {
         presenter.updateFavorite();
     }
 
     public void onCartBtnClick() {
         binding.tvAddToCart.setVisibility(View.VISIBLE);
-        presenter.addToCart();
+        presenter.addProductToCart();
     }
 
     @Override
@@ -115,6 +117,7 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     @Override
     public void saveToBasketSuccess() {
         binding.tvAddToCart.setVisibility(View.GONE);
+        EventBus.getDefault().postSticky(new NewProductInBasketMessage(true));
     }
 
     @Override
@@ -128,9 +131,14 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     }
 
     @Override
-    public void setProductToView(Product product) {
+    public void bindProduct(Product product) {
         binding.setProduct(product);
         productImageAdapter.submitList(product.getImages());
+    }
+
+    @Override
+    public void hasNewFavoriteProduct() {
+        EventBus.getDefault().postSticky(new NewProductInWishlistMessage(true));
     }
 
     @Override

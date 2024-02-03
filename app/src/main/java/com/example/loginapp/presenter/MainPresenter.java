@@ -2,49 +2,38 @@ package com.example.loginapp.presenter;
 
 import android.app.Activity;
 
+import com.example.loginapp.data.Constant;
 import com.example.loginapp.data.local.AppSharedPreferences;
-import com.example.loginapp.model.interator.MainInteractor;
-import com.example.loginapp.model.listener.MainListener;
 import com.example.loginapp.view.activities.MainView;
 
-public class MainPresenter implements MainListener {
-
-    private final MainInteractor interactor = new MainInteractor(this);
+public class MainPresenter {
 
     private final MainView view;
-
-    private int numberOfBasket = -1;
-
-    private int numberOfWishlist = -1;
 
     public MainPresenter(MainView view) {
         this.view = view;
     }
 
     public void getStatus(Activity activity) {
-        interactor.getNumber(activity);
+        getBasketStatus(activity);
+        getWishlistStatus(activity);
     }
 
-
-    public void saveNumberOfProductInBasket(Activity activity) {
-        AppSharedPreferences.getInstance(activity).saveNumberOfProductInBasket(numberOfBasket, true);
-        view.notifyCartChanged(false);
+    public void getBasketStatus(Activity activity) {
+        view.notifyCartChanged(AppSharedPreferences.getInstance(activity).getNumberOfProductInBasket());
     }
 
-    public void saveNumberOfProductInWishlist(Activity activity) {
-        AppSharedPreferences.getInstance(activity).saveNumberOfProductInBasket(numberOfWishlist, false);
-        view.notifyFavoriteChanged(false);
+    public void getWishlistStatus(Activity activity) {
+        view.notifyFavoriteChanged(AppSharedPreferences.getInstance(activity).getNumberOfProductInWishlist());
     }
 
-    @Override
-    public void getNumberOfBasketFromServer(int number) {
-        view.notifyCartChanged(true);
-        this.numberOfBasket = number;
+    public void setViewedShoppingCart(Activity activity, boolean viewedShoppingCart) {
+        AppSharedPreferences.getInstance(activity).saveViewedStatus(Constant.IS_VIEWED_SHOPPING_CART_KEY, viewedShoppingCart);
+        getBasketStatus(activity);
     }
 
-    @Override
-    public void getNumberOfWishlistFromServer(int number) {
-        view.notifyFavoriteChanged(true);
-        this.numberOfWishlist = number;
+    public void setViewedFavoritesList(Activity activity, boolean viewedFavoritesList) {
+        AppSharedPreferences.getInstance(activity).saveViewedStatus(Constant.IS_VIEWED_FAVORITES_LIST_KEY, viewedFavoritesList);
+        getWishlistStatus(activity);
     }
 }

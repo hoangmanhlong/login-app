@@ -52,7 +52,7 @@
                     android:layout_margin="@dimen/_8sdp"
                     android:background="@color/gray_1000"
                     android:contentDescription="@null"
-                    android:onClick="@{() -> fragment.onFavoriteIconClick()}"
+                    android:onClick="@{() -> fragment.onFavoriteButtonClick()}"
                     android:src="@drawable/ic_favorite_gray"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

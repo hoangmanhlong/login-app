@@ -106,7 +106,7 @@ public class CartFragment extends Fragment implements CartView {
     }
 
     @Override
-    public void notifyItemAdded(List<FirebaseProduct> products) {
+    public void bindProducts(List<FirebaseProduct> products) {
         adapter.submitList(products);
         adapter.notifyItemInserted(products.size() - 1);
     }
@@ -151,7 +151,7 @@ public class CartFragment extends Fragment implements CartView {
     }
 
     public void onCheckboxAllClick() {
-        presenter.updateCheckboxAllSelected(true);
+        presenter.updateCheckboxAllSelected(binding.checkAll.isChecked());
     }
 
     @Override

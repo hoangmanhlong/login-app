@@ -31,9 +31,9 @@ public class VoucherAdapter extends ListAdapter<Voucher, VoucherAdapter.VoucherV
         holder.bind(getItem(position));
     }
 
-    public class VoucherViewHolder extends RecyclerView.ViewHolder {
+    public static class VoucherViewHolder extends RecyclerView.ViewHolder {
 
-        private LayoutVoucherBinding binding;
+        private final LayoutVoucherBinding binding;
 
         public VoucherViewHolder(LayoutVoucherBinding binding) {
             super(binding.getRoot());
@@ -42,9 +42,8 @@ public class VoucherAdapter extends ListAdapter<Voucher, VoucherAdapter.VoucherV
 
         public void bind(Voucher voucher) {
             binding.setVoucher(voucher);
-            if (voucher.getVoucherType() == VoucherType.FreeShipping) {
+            if (voucher.getVoucherType() == VoucherType.FreeShipping)
                 binding.voucherImageView.setBackgroundResource(R.color.free_shipping_color);
-            }
             else binding.voucherImageView.setBackgroundResource(R.color.orange);
         }
     }

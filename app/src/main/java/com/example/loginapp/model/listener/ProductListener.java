@@ -6,11 +6,11 @@ public interface ProductListener {
 
     void onMessage(String message);
 
-    void enableFavorite(Boolean compare);
-
-    void removeSuccess();
+    void isFavoriteProduct(Boolean isFavoriteProduct);
 
     void saveToBasketSuccess();
 
     void getCommentRespond(CommentRespond commentRespond);
+
+    void hasNewFavoriteProduct();
 }

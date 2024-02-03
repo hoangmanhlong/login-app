@@ -1,5 +1,6 @@
 package com.example.loginapp.view.fragment.home;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -80,9 +81,8 @@ public class HomeFragment extends Fragment implements HomeView, OnItemClickListe
         RecyclerView topChartsRecyclerview = binding.topChartsRecyclerview;
         topChartsRecyclerview.setAdapter(topChartsAdapter);
 
-
-        RecyclerView rvDiscount = binding.rvDiscount;
-        rvDiscount.setAdapter(discountAdapter);
+        RecyclerView discountRecyclerView = binding.discountRecyclerView;
+        discountRecyclerView.setAdapter(discountAdapter);
 
         presenter.iniData();
 
@@ -108,9 +108,11 @@ public class HomeFragment extends Fragment implements HomeView, OnItemClickListe
         else dialog.dismiss();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void showRecommendedProducts(List<Product> products) {
         recommendedAdapter.submitList(products);
+        recommendedAdapter.notifyDataSetChanged();
     }
 
     @Override

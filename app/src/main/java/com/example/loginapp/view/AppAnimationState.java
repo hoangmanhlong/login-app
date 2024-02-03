@@ -57,5 +57,4 @@ public final class AppAnimationState {
             bottomActionView.startAnimation(animation);
         }
     }
-
 }

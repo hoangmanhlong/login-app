@@ -16,11 +16,16 @@ import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.presenter.MainPresenter;
 import com.example.loginapp.view.AppAnimationState;
+import com.example.loginapp.view.fragment.product_detail.NewProductInBasketMessage;
+import com.example.loginapp.view.fragment.product_detail.NewProductInWishlistMessage;
+import com.example.loginapp.view.fragment.select_voucher_fragment.MessageVoucherSelected;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements MainView {
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-    private final String TAG = MainActivity.class.getName();
+public class MainActivity extends AppCompatActivity implements MainView {
 
     private final MainPresenter presenter = new MainPresenter(this);
 
@@ -86,22 +91,55 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 setDestinationUI(views[1], imageViews[1], parentViews[1], R.drawable.ic_search_dark);
             if (currentDestinationId == R.id.cartFragment) {
                 setDestinationUI(views[2], imageViews[2], parentViews[2], R.drawable.ic_cart_dark);
-                presenter.saveNumberOfProductInBasket(this);
+                presenter.setViewedShoppingCart(this, true);
             }
             if (currentDestinationId == R.id.favoriteProductFragment) {
                 setDestinationUI(views[3], imageViews[3], parentViews[3], R.drawable.favorite);
-                presenter.saveNumberOfProductInWishlist(this);
+                presenter.setViewedFavoritesList(this, true);
             }
             if (currentDestinationId == R.id.userProfileFragment)
                 setDestinationUI(views[4], imageViews[4], parentViews[4], R.drawable.ic_user_dark);
-
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void getBasketStatus(NewProductInBasketMessage message) {
+        presenter.setViewedShoppingCart(this, false);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void getWishlistStatus(NewProductInWishlistMessage message) {
+        presenter.setViewedFavoritesList(this, false);
     }
 
     private void setDestinationUI(View view, ImageView icon, ConstraintLayout navigationItemView, int iconResource) {
         view.setBackgroundResource(viewBackground);
         icon.setImageResource(iconResource);
         navigationItemView.setClickable(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NewProductInWishlistMessage newProductInWishlistMessage = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
+        if (newProductInWishlistMessage != null)
+            EventBus.getDefault().removeStickyEvent(newProductInWishlistMessage);
+
+        NewProductInBasketMessage newProductInBasketMessage = EventBus.getDefault().getStickyEvent(NewProductInBasketMessage.class);
+        if (newProductInBasketMessage != null)
+            EventBus.getDefault().removeStickyEvent(newProductInBasketMessage);
     }
 
     private void initView() {
@@ -192,13 +230,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void notifyCartChanged(Boolean show) {
-        if (show) binding.cartStatusImageView.setVisibility(View.VISIBLE);
-        else binding.cartStatusImageView.setVisibility(View.GONE);
+        if (show) binding.cartStatusImageView.setVisibility(View.GONE);
+        else binding.cartStatusImageView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void notifyFavoriteChanged(Boolean show) {
-        if (show) binding.favoriteStatusImageView.setVisibility(View.VISIBLE);
-        else binding.favoriteStatusImageView.setVisibility(View.GONE);
+        if (show) binding.favoriteStatusImageView.setVisibility(View.GONE);
+        else binding.favoriteStatusImageView.setVisibility(View.VISIBLE);
     }
 }

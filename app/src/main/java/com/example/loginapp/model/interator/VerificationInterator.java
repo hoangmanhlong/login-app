@@ -29,8 +29,7 @@ public class VerificationInterator {
 
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    private final DatabaseReference userRef =
-            FirebaseDatabase.getInstance().getReference().child(Constant.USER_REF_NAME);
+    private final DatabaseReference userRef = Constant.userRef;
 
     private String mVerificationId;
 

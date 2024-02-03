@@ -30,8 +30,8 @@ public class ProductPresenter implements ProductListener {
 
     public void setProduct(Product product) {
         this.product = product;
-        view.setProductToView(product);
-        interator.getFavoriteProduct(product);
+        view.bindProduct(product);
+        interator.isFavoriteProduct(product);
     }
 
     public ProductPresenter(ProductView view) {
@@ -43,7 +43,7 @@ public class ProductPresenter implements ProductListener {
         else interator.saveFavoriteProduct(product);
     }
 
-    public void addToCart() {
+    public void addProductToCart() {
         interator.updateQuantity(
                 new FirebaseProduct(
                         product.getId(),
@@ -65,22 +65,21 @@ public class ProductPresenter implements ProductListener {
         view.onMessage(message);
     }
 
+
+    /***
+     *  Method check product is favorite from server
+     */
     @Override
-    public void enableFavorite(Boolean compare) {
-        if (compare) {
-            isFavorite = true;
-            view.enableFavorite(true);
-        }
+    public void isFavoriteProduct(Boolean isFavoriteProduct) {
+        isFavorite = isFavoriteProduct;
+        view.enableFavorite(isFavoriteProduct);
     }
 
+    /***
+     * Get comments from API
+     */
     public void getComments() {
         interator.getComments();
-    }
-
-    @Override
-    public void removeSuccess() {
-        isFavorite = false;
-        view.enableFavorite(false);
     }
 
     @Override
@@ -92,5 +91,10 @@ public class ProductPresenter implements ProductListener {
     public void getCommentRespond(CommentRespond commentRespond) {
         view.getComments(commentRespond.getComments());
         view.getCommentCount(String.valueOf(commentRespond.getLimit()));
+    }
+
+    @Override
+    public void hasNewFavoriteProduct() {
+        view.hasNewFavoriteProduct();
     }
 }

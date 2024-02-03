@@ -9,7 +9,7 @@ public interface CartView {
 
     void onMessage(String message);
 
-    void notifyItemAdded(List<FirebaseProduct> products);
+    void bindProducts(List<FirebaseProduct> products);
 
     void notifyItemRemoved(int index);
 

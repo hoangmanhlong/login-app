@@ -78,13 +78,8 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
 
     public void onDeleteButtonClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.logout).setMessage(R.string.delete_delivery_address)
-                .setPositiveButton(
-                        R.string.delete,
-                        (dialog, which) -> {
-                            presenter.deleteDeliveryAddress();
-                        }
-                )
+        builder.setTitle(R.string.delete).setMessage(R.string.delete_delivery_address)
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteDeliveryAddress())
                 .setNegativeButton(R.string.negative_button_title, (dialog, which) -> {
                 })
                 .setCancelable(false)

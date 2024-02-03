@@ -31,15 +31,15 @@ public class CartPresenter implements CartListener, CartItemClickListener {
 
     public void initBasket() {
         updateUI();
-        if (basket.size() == 0) interator.getFavoriteProductFromFirebase();
-        else view.notifyItemAdded(basket);
+        if (basket.isEmpty()) interator.getFavoriteProductFromFirebase();
+        else view.bindProducts(basket);
     }
 
     @Override
     public void notifyItemAdded(FirebaseProduct product, String previousChildName) {
         basket.add(product);
         updateUI();
-        view.notifyItemAdded(basket);
+        view.bindProducts(basket);
     }
 
     @Override

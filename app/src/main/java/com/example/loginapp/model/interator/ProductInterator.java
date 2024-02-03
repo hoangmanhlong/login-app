@@ -1,7 +1,5 @@
 package com.example.loginapp.model.interator;
 
-import androidx.annotation.NonNull;
-
 import com.example.loginapp.data.Constant;
 import com.example.loginapp.data.remote.api.AppApiService;
 import com.example.loginapp.model.entity.CommentRespond;
@@ -9,10 +7,7 @@ import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.ProductListener;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,30 +27,34 @@ public class ProductInterator {
         this.listener = listener;
     }
 
-    public void getFavoriteProduct(Product product) {
-        favoriteProductRef.child(currentUser.getUid())
-                .child(String.valueOf(product.getId())).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) listener.enableFavorite(true);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+    public void isFavoriteProduct(Product product) {
+        favoriteProductRef
+                .child(currentUser.getUid())
+                .child(String.valueOf(product.getId()))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.isFavoriteProduct(task.getResult().getValue(Product.class) != null);
+                    } else {
+                        listener.onMessage("Get Favorite Fail");
+                    }
+                });
     }
 
     public void saveFavoriteProduct(Product product) {
         String productId = String.valueOf(product.getId());
         favoriteProductRef.child(currentUser.getUid()).child(productId).setValue(product)
-                .addOnCompleteListener(s -> listener.enableFavorite(true))
+                .addOnCompleteListener(s -> {
+                    listener.isFavoriteProduct(true);
+                    listener.hasNewFavoriteProduct();
+                })
                 .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
     }
 
     public void removeFavoriteProduct(int productID) {
         favoriteProductRef.child(currentUser.getUid()).child(String.valueOf(productID)).removeValue()
-                .addOnCompleteListener(task -> listener.removeSuccess());
+                .addOnCompleteListener(task -> listener.isFavoriteProduct(false))
+                .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
     }
 
     public void updateQuantity(FirebaseProduct product) {

@@ -165,7 +165,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                     <Button
                         android:id="@+id/expandRecommendProductsButton"
                         style="?attr/materialIconButtonStyle"
@@ -260,7 +259,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvDiscount"
+                    android:id="@+id/discountRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_138sdp"
                     android:clipToPadding="false"
