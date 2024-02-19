@@ -1,5 +1,7 @@
 package com.example.loginapp.presenter;
 
+import android.util.Log;
+
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInterator;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HomePresenter implements HomeListener {
+
+    private final String TAG = HomePresenter.class.getName();
 
     private final HomeView view;
 
@@ -34,11 +38,13 @@ public class HomePresenter implements HomeListener {
     }
 
     public void initData() {
-        if (products.size() == 0) getListProductFromNetwork();
+        if (products.isEmpty()) getListProductFromNetwork();
         else showProducts();
 
         if (currentUserData == null) getUserData();
-        else view.getUserData(currentUserData);
+        else {
+            checkUser(currentUserData);
+        }
 
         if (bestSellerProducts.isEmpty()) getBestsellerProducts();
         else view.getBestsellerProducts(bestSellerProducts);
@@ -69,9 +75,15 @@ public class HomePresenter implements HomeListener {
     @Override
     public void getUserData(UserData userData) {
         currentUserData = userData;
-        if (!userData.getUsername().isEmpty() && !userData.getPhotoUrl().isEmpty()) {
-            view.getUserData(userData);
-        }
+        checkUser(userData);
+    }
+
+    private void checkUser(UserData userData) {
+        view.isUserLoading(false);
+        Boolean check = !userData.getUsername().isEmpty() && !userData.getPhotoUrl().isEmpty();
+        Log.d(TAG, "checkUser: " + check);
+        view.setShowUserView(check);
+        if (check) view.getUserData(userData);
     }
 
     @Override

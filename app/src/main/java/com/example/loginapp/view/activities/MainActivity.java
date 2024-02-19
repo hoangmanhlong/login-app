@@ -1,7 +1,6 @@
 package com.example.loginapp.view.activities;
 
 import android.os.Bundle;
-import android.transition.TransitionManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -9,11 +8,9 @@ import android.widget.LinearLayout;
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
@@ -235,19 +232,17 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void hasUser(Boolean hasUser) {
+        int startDestination = navController.getGraph().getStartDestination();
         if (hasUser) {
             NavDestination navDestination = navController.getCurrentDestination();
             if (navDestination != null) {
-                if (navDestination.getId() != R.id.homeFragment) {
-                    int startDestination = navController.getGraph().getStartDestination();
-                    NavOptions navOptions = new NavOptions.Builder()
-                            .setPopUpTo(startDestination, true)
-                            .build();
-                    navController.navigate(startDestination, null, navOptions);
+                if (navDestination.getId() != startDestination) {
+                    navController.popBackStack(R.id.overviewFragment, true);
+                    navController.navigate(startDestination);
                 }
             }
         } else {
-            navController.popBackStack(navController.getGraph().getStartDestination(), true);
+            navController.popBackStack(startDestination, true);
             navController.navigate(R.id.overviewFragment);
         }
     }

@@ -39,7 +39,8 @@ public class CoinsRewardInterator {
         Constant.coinsRef.child(Constant.currentUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listener.getCalendar(snapshot.getValue(Coin.class));
+                if (snapshot.exists())
+                    listener.getCalendar(snapshot.getValue(Coin.class));
             }
 
             @Override

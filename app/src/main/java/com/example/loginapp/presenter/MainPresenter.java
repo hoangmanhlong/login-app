@@ -1,16 +1,14 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.App;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.data.local.AppSharedPreferences;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.activities.MainView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainPresenter {
 
-    private final String TAG = MainPresenter.class.getName();
+//    private final String TAG = MainPresenter.class.getName();
 
     private final MainView view;
 
@@ -44,9 +42,8 @@ public class MainPresenter {
     }
 
     public void currentUserState() {
-        FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
-            Log.d(TAG, "currentUserState: " + (firebaseAuth.getCurrentUser() != null));
-            view.hasUser(firebaseAuth.getCurrentUser() != null);
-        });
+        FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth ->
+                view.hasUser(firebaseAuth.getCurrentUser() != null)
+        );
     }
 }

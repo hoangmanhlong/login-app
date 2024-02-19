@@ -6,6 +6,7 @@ import com.example.loginapp.model.entity.UserData;
 import java.util.List;
 
 public interface HomeView {
+
     void getUserData(UserData userData);
 
     void onMessage(String message);
@@ -26,4 +27,5 @@ public interface HomeView {
 
     void getBestsellerProducts(List<Product> products);
 
+    void setShowUserView(Boolean show);
 }

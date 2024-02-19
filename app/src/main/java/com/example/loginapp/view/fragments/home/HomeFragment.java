@@ -188,6 +188,13 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void setShowUserView(Boolean show) {
+        if (show) binding.userView.setVisibility(View.VISIBLE);
+        else binding.userView.setVisibility(View.GONE);
+
+    }
+
     public void onExpandRecommendProductsButtonClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.recommendedProducts));
@@ -212,7 +219,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void getUserData(UserData userData) {
         binding.setUserData(userData);
-        isUserLoading(false);
     }
 
     @Override

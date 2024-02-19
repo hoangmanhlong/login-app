@@ -41,6 +41,7 @@ public class HomeInterator {
                     ProductResponse productResponse = response.body();
                     if (productResponse != null) {
                         listener.getProductsFromAPI(productResponse.getProducts());
+                        updateBestseller(productResponse.getProducts().subList(0, 3));
                     } else {
                         listener.onMessage("Load data fail");
                     }
@@ -87,20 +88,16 @@ public class HomeInterator {
                 }
             });
     }
-//
-//    public void updateBestseller(List<Product> products) {
-//        for (Product product : products)
-//            Constant.bestSellerRef.child(currentUser.getUid())
-//                .child(String.valueOf(product.getId()))
-//                    .setValue(product);
-//
-//
-//    }
+
+    public void updateBestseller(List<Product> products) {
+        for (Product product : products)
+            Constant.bestSellerRef.child(String.valueOf(product.getId()))
+                    .setValue(product);
+    }
 
     public void getBestsellerProducts() {
         List<Product> products = new ArrayList<>();
-        Constant.bestSellerRef.child(currentUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
+        Constant.bestSellerRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren())

@@ -108,6 +108,8 @@
                     android:layout_height="wrap_content"
                     android:text=" coin(s) expiring on " />
 
+                <!--                bindTextViewEndDate="@{coin.endDate}"-->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
