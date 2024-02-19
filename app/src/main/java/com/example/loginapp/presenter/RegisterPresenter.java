@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.example.loginapp.model.interator.RegisterInterator;
 import com.example.loginapp.model.listener.RegisterListener;
-import com.example.loginapp.view.fragment.register.RegisterView;
+import com.example.loginapp.view.fragments.register.RegisterView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

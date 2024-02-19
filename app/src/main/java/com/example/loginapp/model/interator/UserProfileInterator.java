@@ -2,7 +2,7 @@ package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.UserProfileListener;
 import com.google.firebase.database.DataSnapshot;

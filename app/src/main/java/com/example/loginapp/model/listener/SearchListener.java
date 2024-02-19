@@ -6,7 +6,8 @@ import com.example.loginapp.model.entity.SearchHistory;
 import java.util.List;
 
 public interface SearchListener {
-    void onLoadProducts(List<Product> products);
+
+    void getProducts(List<Product> products);
 
     void notifyItemAdded(SearchHistory history);
 
@@ -14,7 +15,6 @@ public interface SearchListener {
 
     void onLoadError(String message);
 
-    void showProcessBar(Boolean show);
+    void getCategories(List<String> categories);
 
-    void onListEmpty(Boolean show);
 }

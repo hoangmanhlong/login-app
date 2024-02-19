@@ -11,7 +11,7 @@
 
         <variable
             name="homeFragment"
-            type="com.example.loginapp.view.fragment.home.HomeFragment" />
+            type="com.example.loginapp.view.fragments.home.HomeFragment" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,17 +20,29 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-            android:overScrollMode="never"
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
+            android:overScrollMode="never"
             android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/userPlaceHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/_14sdp"
+                    android:paddingHorizontal="@dimen/_14sdp">
+
+                    <include layout="@layout/layout_user_placeholder" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/user_view"
@@ -81,52 +93,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/updateInfoBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/updateInfoLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_14sdp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:includeFontPadding="false"
-                        android:text="Update information"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/updateInfoButton"
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> homeFragment.onUpdateButtonClick()}"
-                        android:text="UPDATE"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
-                    <Button
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> homeFragment.onLaterButtonClick()}"
-                        android:text="LATER"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/updateInfoButton" />
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/discount_sliderView"
                     android:layout_width="match_parent"
@@ -148,129 +114,185 @@
                     app:sliderScrollTimeInSec="1"
                     app:sliderStartAutoCycle="true" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <Button
+                    android:id="@+id/expandRecommendedProductsView"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_14sdp">
+                    android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:text="@string/recommended"
+                    android:textAlignment="textStart"
+                    android:textSize="@dimen/_14ssp"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_arrow_forward_black"
+                    app:iconGravity="end" />
 
-                    <TextView
-                        android:id="@+id/recommendedLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/overpass_regular"
-                        android:text="@string/recommended"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/recommendedProductsPlaceHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_8sdp">
 
-                    <Button
-                        android:id="@+id/expandRecommendProductsButton"
-                        style="?attr/materialIconButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
-                        app:icon="@drawable/ic_arrow_forward_black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/layout_title_products_placeholder" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recommendedRecyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_138sdp"
+                    android:layout_height="@dimen/_145sdp"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/_8sdp"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <Button
+                    android:id="@+id/expandTopChartsProductsView"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_14sdp">
+                    android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:text="@string/top_charts"
+                    android:textAlignment="textStart"
+                    android:textSize="@dimen/_14ssp"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_arrow_forward_black"
+                    app:iconGravity="end" />
 
-                    <TextView
-                        android:id="@+id/tvTopCharts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/overpass_regular"
-                        android:text="@string/top_charts"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/topChartsProductsPlaceHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_8sdp">
 
-                    <Button
-                        android:id="@+id/expandTopChartProductsButton"
-                        style="?attr/materialIconButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
-                        app:icon="@drawable/ic_arrow_forward_black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/layout_title_products_placeholder" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topChartsRecyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_138sdp"
+                    android:layout_height="@dimen/_145sdp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/_8sdp"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <Button
+                    android:id="@+id/expandDiscountProductsView"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_14sdp">
+                    android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:text="@string/discount"
+                    android:textAlignment="textStart"
+                    android:textSize="@dimen/_14ssp"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_arrow_forward_black"
+                    app:iconGravity="end" />
 
-                    <TextView
-                        android:id="@+id/tvDiscount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/overpass_regular"
-                        android:text="@string/discount"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/discountProductsPlaceHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_8sdp">
 
-                    <Button
-                        android:id="@+id/expandDiscountProductsButton"
-                        style="?attr/materialIconButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
-                        app:icon="@drawable/ic_arrow_forward_black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/layout_title_products_placeholder" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+
+                            <include layout="@layout/layout_product_placeholder" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/discountRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_138sdp"
+                    android:layout_height="@dimen/_145sdp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/_8sdp"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_16sdp" />
 
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </layout>

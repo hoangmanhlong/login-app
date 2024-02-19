@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 public class LoginEmailButtonObserver implements TextWatcher {
 
-    private Button button;
+    private final Button button;
 
-    private EditText[] editTexts;
+    private final EditText[] editTexts;
 
-    private TextView textView;
+    private final TextView textView;
 
     public LoginEmailButtonObserver(Button button, TextView textView, EditText... editTexts) {
         this.button = button;
@@ -29,10 +29,9 @@ public class LoginEmailButtonObserver implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        String text = s.toString().trim();
         textView.setVisibility(View.GONE);
-        if (s.toString().trim().isEmpty()) {
-            button.setEnabled(false);
-        } else button.setEnabled(true);
+        button.setEnabled(!text.isEmpty() && !text.contains(" "));
     }
 
     @Override

@@ -3,6 +3,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:color="#808080"
-    android:width="1dp" /> <!-- Độ rộng của viền -->
+    android:width="0.5dp" /> <!-- Độ rộng của viền -->
     <corners android:radius="@dimen/_3sdp" /> <!-- Độ bo tròn góc của LinearLayout -->
 </shape>

@@ -3,7 +3,7 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.interator.FavoriteInterator;
 import com.example.loginapp.model.listener.FavoriteListener;
-import com.example.loginapp.view.fragment.favorite_product.FavoriteView;
+import com.example.loginapp.view.fragments.favorite_product.FavoriteView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,7 @@ public class FavoritePresenter implements FavoriteListener {
     }
 
     public void initData() {
-        wishlistState();
-        if (wishlist.size() == 0) getFavoriteProducts();
+        if (wishlist.isEmpty()) getFavoriteProducts();
         else view.onItemAdded(wishlist);
     }
 
@@ -39,7 +38,7 @@ public class FavoritePresenter implements FavoriteListener {
     }
 
     private void wishlistState() {
-        view.isWishlistEmpty(wishlist.size() == 0);
+        view.isWishlistEmpty(wishlist.isEmpty());
     }
 
     @Override
@@ -53,6 +52,11 @@ public class FavoritePresenter implements FavoriteListener {
         wishlist.remove(index);
         wishlistState();
         view.notifyItemRemoved(index);
+    }
+
+    @Override
+    public void isWishlistEmpty(boolean isEmpty) {
+        view.isWishlistEmpty(isEmpty);
     }
 
     public void deleteFavoriteProduct(int id) {

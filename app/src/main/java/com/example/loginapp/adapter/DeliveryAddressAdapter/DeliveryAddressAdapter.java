@@ -44,6 +44,7 @@ public class DeliveryAddressAdapter extends ListAdapter<DeliveryAddress, Deliver
 
         public void bind(DeliveryAddress deliveryAddress) {
             binding.setDeliveryAddress(deliveryAddress);
+            binding.executePendingBindings();
         }
     }
 

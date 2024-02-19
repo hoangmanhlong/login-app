@@ -6,7 +6,7 @@ import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.entity.VoucherType;
 import com.example.loginapp.model.interator.PaymentOptionInterator;
 import com.example.loginapp.model.listener.PaymentOptionListener;
-import com.example.loginapp.view.fragment.payment_option.PaymentOptionView;
+import com.example.loginapp.view.fragments.payment_option.PaymentOptionView;
 
 public class PaymentOptionPresenter implements PaymentOptionListener {
     private final PaymentOptionView view;

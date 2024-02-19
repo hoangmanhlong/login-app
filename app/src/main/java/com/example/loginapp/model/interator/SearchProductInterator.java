@@ -6,18 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.loginapp.data.remote.api.AppApiService;
-import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.data.remote.api.dto.ProductResponse;
-import com.example.loginapp.data.Constant;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.listener.SearchListener;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -26,13 +25,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchProductInterator {
+
     private final String TAG = this.toString();
+
     private final SearchListener listener;
 
-    private final DatabaseReference searchHistoriesRef =
-        FirebaseDatabase.getInstance().getReference().child(Constant.SEARCH_HISTORY_REF_KEY);
+    private final DatabaseReference searchHistoriesRef = Constant.searchHistoriesRef;
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseUser currentUser = Constant.currentUser;
+
+    private final Query searchSuggestionQuery = searchHistoriesRef.child(currentUser.getUid());
+
     public SearchProductInterator(SearchListener listener) {
         this.listener = listener;
     }
@@ -45,21 +48,9 @@ public class SearchProductInterator {
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
-                    if (productResponse != null) {
-                        Log.d(this.toString(), productResponse.getProducts().toString());
-                        List<Product> products = productResponse.getProducts();
-                        if (products.isEmpty()) {
-                            listener.showProcessBar(false);
-                            listener.onListEmpty(true);
-                        } else {
-                            listener.onListEmpty(false);
-                            listener.onLoadProducts(products);
-                            listener.showProcessBar(false);
-                        }
-
-                    } else {
-                        listener.onLoadError("Load data fail");
-                    }
+                    if (productResponse != null)
+                        listener.getProducts(productResponse.getProducts());
+                    else listener.onLoadError("Load data fail");
                 }
             }
 
@@ -75,7 +66,8 @@ public class SearchProductInterator {
     }
 
     public void getSearchHistories() {
-        searchHistoriesRef.child(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
+
+        searchSuggestionQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 listener.notifyItemAdded(snapshot.getValue(SearchHistory.class));
@@ -104,7 +96,23 @@ public class SearchProductInterator {
     }
 
     public void deleteSearchHistory(String id) {
-        Log.d(TAG, "deleteSearchHistory: ");
         searchHistoriesRef.child(currentUser.getUid()).child(id).removeValue();
+    }
+
+    public void getCategories() {
+        Call<List<String>> call = AppApiService.retrofit.getCategories();
+        call.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (response.isSuccessful()) {
+                    listener.getCategories(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+
+            }
+        });
     }
 }

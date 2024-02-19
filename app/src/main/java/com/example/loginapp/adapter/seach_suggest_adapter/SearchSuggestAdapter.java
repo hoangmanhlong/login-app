@@ -2,7 +2,6 @@ package com.example.loginapp.adapter.seach_suggest_adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,8 @@ import com.example.loginapp.databinding.LayoutSearchSuggestionBinding;
 import com.example.loginapp.model.entity.SearchHistory;
 
 public class SearchSuggestAdapter extends ListAdapter<SearchHistory, SearchSuggestAdapter.ItemViewHolder> {
-    private OnSearchSuggestionClickListener listener;
+
+    private final OnSearchSuggestionClickListener listener;
 
     public SearchSuggestAdapter(OnSearchSuggestionClickListener listener) {
         super(DiffCallback);
@@ -32,29 +32,20 @@ public class SearchSuggestAdapter extends ListAdapter<SearchHistory, SearchSugge
         holder.bind(getItem(position).getText());
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private LayoutSearchSuggestionBinding binding;
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
+        private final LayoutSearchSuggestionBinding binding;
         OnSearchSuggestionClickListener listener;
 
         public ItemViewHolder(OnSearchSuggestionClickListener listener, LayoutSearchSuggestionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.listener = listener;
-            binding.getRoot().setOnClickListener(this);
-            binding.searchHistory.setOnClickListener(this);
+            binding.searchHistory.setOnClickListener(c -> listener.onSearchSuggestClick(getItem(getAdapterPosition())));
             binding.searchHistory.setOnCloseIconClickListener(v -> listener.deleteSearchHistory(getItem(getAdapterPosition())));
         }
 
         public void bind(String str) {
             binding.searchHistory.setText(str);
-        }
-
-        @Override
-        public void onClick(View v) {
-            SearchHistory history = getItem(getAdapterPosition());
-            if (v.getId() == binding.searchHistory.getId()) {
-                listener.onSearchSuggestClick(history);
-            }
         }
     }
 

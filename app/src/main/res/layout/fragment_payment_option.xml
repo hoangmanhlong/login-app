@@ -17,7 +17,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.payment_option.PaymentOptionFragment" />
+            type="com.example.loginapp.view.fragments.payment_option.PaymentOptionFragment" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

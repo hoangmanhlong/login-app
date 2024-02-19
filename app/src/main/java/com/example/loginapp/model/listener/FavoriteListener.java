@@ -8,4 +8,6 @@ public interface FavoriteListener {
     void onMessage(String message);
 
     void notifyItemRemoved(Product product);
+
+    void isWishlistEmpty(boolean isEmpty);
 }

@@ -1,8 +1,11 @@
 package com.example.loginapp.adapter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.StringRes;
 
 import com.bumptech.glide.Glide;
 import com.example.loginapp.R;
@@ -29,6 +32,11 @@ public class BindingAdapter {
         }
     }
 
+    @androidx.databinding.BindingAdapter("bindTextView")
+    public static void bindTextView(TextView textView, @StringRes int res) {
+        textView.setText(res);
+    }
+
     @androidx.databinding.BindingAdapter("bindRatingRounded")
     public static void bindRatingRounded(TextView view, double value) {
         String formattedValue = String.format(Locale.getDefault(), "%.1f", value);
@@ -47,10 +55,11 @@ public class BindingAdapter {
         textView.setText(String.format(textView.getContext().getString(R.string.valid_till, timeFormat)));
     }
 
-//    @SuppressLint("StringFormatMatches")
-//    @androidx.databinding.BindingAdapter("bindTextViewEndDate")
-//    public static void bindTextViewEndDate(TextView textView, Long time) {
-//        String timeFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(time);
-//        textView.setText(timeFormat);
-//    }
+    @SuppressLint("StringFormatMatches")
+    @androidx.databinding.BindingAdapter("bindTextViewEndDate")
+    public static void bindTextViewEndDate(TextView textView, Long time) {
+        Log.d("BindingAdapter", "bindTextViewEndDate: " + time);
+        String timeFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(time);
+        textView.setText(timeFormat);
+    }
 }

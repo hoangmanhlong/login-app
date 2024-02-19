@@ -5,4 +5,6 @@ public interface MainView {
     void notifyCartChanged(Boolean show);
 
     void notifyFavoriteChanged(Boolean show);
+
+    void hasUser(Boolean hasUser);
 }

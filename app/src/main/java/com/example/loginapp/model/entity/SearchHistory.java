@@ -1,5 +1,7 @@
 package com.example.loginapp.model.entity;
 
+import androidx.annotation.NonNull;
+
 public class SearchHistory {
 
     private String text;
@@ -19,5 +21,13 @@ public class SearchHistory {
 
     public String getText() {
         return this.text;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchHistory{" +
+                "text='" + text + '\'' +
+                ", time=" + time +
+                '}';
     }
 }

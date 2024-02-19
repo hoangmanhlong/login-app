@@ -1,12 +1,15 @@
 package com.example.loginapp.model.interator;
 
-import com.example.loginapp.data.Constant;
+import com.airbnb.lottie.L;
+import com.example.loginapp.data.remote.api.dto.ProductResponse;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.data.remote.api.AppApiService;
 import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.ProductListener;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import retrofit2.Call;
@@ -34,7 +37,8 @@ public class ProductInterator {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        listener.isFavoriteProduct(task.getResult().getValue(Product.class) != null);
+                        DataSnapshot snapshot = task.getResult();
+                        listener.isFavoriteProduct(snapshot != null && snapshot.exists());
                     } else {
                         listener.onMessage("Get Favorite Fail");
                     }
@@ -96,6 +100,26 @@ public class ProductInterator {
             @Override
             public void onFailure(Call<CommentRespond> call, Throwable t) {
                 listener.onMessage(t.getMessage());
+            }
+        });
+    }
+
+    public void getSimilarProducts(String category) {
+        Call<ProductResponse> call = AppApiService.retrofit.getProductOfCategory(category);
+
+        call.enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                if (response.isSuccessful()) {
+                    ProductResponse productResponse = response.body();
+                    if (productResponse != null)
+                        listener.getSimilarProducts(productResponse.getProducts());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+
             }
         });
     }

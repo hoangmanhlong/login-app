@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="loginFragment"
-            type="com.example.loginapp.view.fragment.login.LoginFragment" />
+            type="com.example.loginapp.view.fragments.login.LoginFragment" />
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_bold"
-                android:text="Hello, welcome back to our account"
+                android:text="@string/login_welcome_text"
                 android:textColor="@color/gray"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -151,16 +151,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
-                        app:boxBackgroundColor="@color/gray_1000"
-                        app:boxStrokeColor="@color/cam"
                         android:textColorHint="#000"
+                        app:boxBackgroundColor="@color/gray_1000"
                         app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etPhoneNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Phone number"
+                            android:hint="@string/phone_number"
                             android:inputType="phone"
                             android:singleLine="true"
                             android:textColorHint="@color/gray"
@@ -171,45 +170,43 @@
                 </LinearLayout>
 
                 <Button
-                    android:onClick="@{() -> loginFragment.onLoginPhoneNumberClick()}"
-                    android:enabled="false"
                     android:id="@+id/requestOtpBtn"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="@dimen/_40ssp"
                     android:backgroundTint="@color/cam"
-                    android:text="Request OTP"
+                    android:enabled="false"
+                    android:onClick="@{() -> loginFragment.onLoginPhoneNumberClick()}"
+                    android:text="@string/request_otp"
                     android:textAllCaps="false"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/linear_input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_40sdp"
                 android:orientation="vertical"
-
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/login_option_view">
 
-
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/emailTextInputLayout"
                     style="?attr/textInputFilledStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
-                    app:boxBackgroundColor="@color/gray_1000"
-                    app:boxStrokeColor="@color/cam"
                     android:textColorHint="#000"
+                    app:boxBackgroundColor="@color/gray_1000"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/email">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/email_input"
+                        android:id="@+id/emailTextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Email"
+                        android:hint="@string/email"
                         android:singleLine="true"
                         android:textColorHint="@color/gray"
                         android:textSize="14sp" />
@@ -217,21 +214,21 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordTextInputLayout"
                     style="?attr/textInputFilledStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/_10sdp"
-                    app:boxBackgroundColor="@color/gray_1000"
-                    app:boxStrokeColor="@color/cam"
                     android:textColorHint="#000"
+                    app:boxBackgroundColor="@color/gray_1000"
                     app:endIconMode="password_toggle"
                     app:startIconDrawable="@drawable/lock">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/password_input"
+                        android:id="@+id/passwordTextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:singleLine="true"
@@ -245,11 +242,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
-                    android:text="Account or password is incorrect. Try Again!"
+                    android:text="@string/login_email_false_message"
                     android:textColor="#D70000"
                     android:visibility="gone"
                     tools:text="Invalid Username or Password. Try Again!" />
-
 
                 <Button
                     android:id="@+id/loginEmailBtn"
@@ -257,8 +253,9 @@
                     android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="@dimen/_24sdp"
                     android:backgroundTint="@color/cam"
+                    android:enabled="false"
                     android:onClick="@{() -> loginFragment.onLogin()}"
-                    android:text="Login"
+                    android:text="@string/login"
                     android:textAllCaps="false"
                     android:textSize="14sp" />
 
@@ -322,7 +319,7 @@
                     android:id="@+id/login_google_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Login with Google"
+                    android:text="@string/login_with_google"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -353,7 +350,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_bold"
                     android:onClick="@{() -> loginFragment.goRegisterScreen()}"
-                    android:text="Create an Account"
+                    android:text="@string/create_account"
                     android:textColor="@color/cam"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -361,6 +358,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
 
 </layout>

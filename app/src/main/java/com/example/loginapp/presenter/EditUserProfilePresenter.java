@@ -2,11 +2,11 @@ package com.example.loginapp.presenter;
 
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.loginapp.model.interator.EditUserProfileInterator;
 import com.example.loginapp.model.listener.EditUserProfileListener;
-import com.example.loginapp.view.fragment.edit_user_profile.EditUserProfileView;
+import com.example.loginapp.view.fragments.edit_user_profile.EditUserProfileView;
 
 public class EditUserProfilePresenter implements EditUserProfileListener {
 
@@ -14,27 +14,26 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
 
     private final EditUserProfileView view;
 
+    @Nullable private Uri photoUri = null;
+
     public EditUserProfilePresenter(EditUserProfileView view) {
         this.view = view;
     }
 
-    @Override
-    public void onMessage(String message) {
-        view.onMessage(message);
+    public void setPhotoUri(Uri photoUri) {
+        this.photoUri = photoUri;
+        view.bindPhotoSelected(photoUri);
     }
 
-    public void saveUserData(@NonNull Uri uri, String username, String phoneNumber, String address) {
-        interator.uploadImageToFirebase(uri, username, phoneNumber, address);
-    }
-
-    @Override
-    public void showProcessBar(Boolean show) {
-        view.showProcessBar(show);
+    public void saveUserData(String username, String phoneNumber, String address) {
+        view.showProcessBar(true);
+        interator.uploadImageToFirebase(photoUri, username, phoneNumber, address);
     }
 
     @Override
-    public void goUserProfile() {
-        view.onNavigateUp();
+    public void isUpdateSuccess(boolean success) {
+        view.showProcessBar(false);
+        if (success) view.onNavigateUp();
+        else view.onMessage("Error");
     }
-
 }

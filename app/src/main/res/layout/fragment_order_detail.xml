@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.fragment.order_detail.OrderDetailFragment">
+    tools:context=".view.fragments.order_detail.OrderDetailFragment">
 
     <data>
 
@@ -16,7 +16,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.order_detail.OrderDetailFragment" />
+            type="com.example.loginapp.view.fragments.order_detail.OrderDetailFragment" />
     </data>
 
     <LinearLayout
@@ -65,9 +65,10 @@
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/orderStatusView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    android:background="@color/orange"
+                    tools:background="@color/orange"
                     android:padding="@dimen/_8sdp">
 
                     <TextView
@@ -111,11 +112,11 @@
                         app:layout_constraintTop_toTopOf="@id/ivLocation" />
 
                     <Button
-                        android:textAlignment="textEnd"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/copy"
+                        android:textAlignment="textEnd"
                         android:textColor="@color/orange"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvDeliveryAddress"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -161,6 +162,7 @@
                     android:layout_height="@dimen/_10sdp" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:overScrollMode="never"
                     android:id="@+id/orderProductRecyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

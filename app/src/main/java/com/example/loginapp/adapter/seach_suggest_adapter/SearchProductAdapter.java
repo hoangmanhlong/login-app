@@ -39,11 +39,12 @@ public class SearchProductAdapter extends ListAdapter<Product, SearchProductAdap
         public ItemViewHolder(LayoutFavoriteBinding binding, OnSearchProductClickListener listener) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.getRoot().setOnClickListener(v -> listener.onSearchProductClick(getItem(getAdapterPosition())));
+            binding.getRoot().setOnClickListener(v -> listener.onProductClick(getItem(getAdapterPosition())));
         }
 
         public void bind(Product product) {
             binding.setProduct(product);
+            binding.executePendingBindings();
         }
     }
 

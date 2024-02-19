@@ -32,4 +32,13 @@ public class Coin {
     public Long getEndDate() {
         return endDate;
     }
+
+    @Override
+    public String toString() {
+        return "Coin{" +
+                "rollCalllist=" + rollCalllist +
+                ", numberOfCoins=" + numberOfCoins +
+                ", endDate=" + endDate +
+                '}';
+    }
 }

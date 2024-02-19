@@ -5,8 +5,8 @@ import android.annotation.SuppressLint;
 import com.example.loginapp.R;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Products;
-import com.example.loginapp.view.fragment.expand_products.ExpandProductsView;
-import com.example.loginapp.view.fragment.expand_products.SortStatus;
+import com.example.loginapp.view.fragments.expand_products.ExpandProductsView;
+import com.example.loginapp.view.fragments.expand_products.SortStatus;
 
 import java.util.Comparator;
 import java.util.List;

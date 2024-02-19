@@ -1,12 +1,16 @@
 package com.example.loginapp.presenter;
 
+import com.example.loginapp.model.entity.Comment;
 import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.ProductInterator;
 import com.example.loginapp.model.listener.ProductListener;
-import com.example.loginapp.view.fragment.product_detail.ProductView;
+import com.example.loginapp.view.fragments.product_detail.ProductView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductPresenter implements ProductListener {
 
@@ -20,8 +24,16 @@ public class ProductPresenter implements ProductListener {
 
     private final ProductInterator interator = new ProductInterator(this);
 
-    public void initData() {
+    private List<Comment> comments = new ArrayList<>();
 
+    private List<Product> similarProducts = new ArrayList<>();
+
+    public void initData() {
+        if (comments.isEmpty()) getComments();
+        else view.getComments(comments);
+
+        if (similarProducts.isEmpty()) getSimilarProducts();
+        else view.getSimilarProducts(similarProducts);
     }
 
     public Product getProduct() {
@@ -37,6 +49,7 @@ public class ProductPresenter implements ProductListener {
     public ProductPresenter(ProductView view) {
         this.view = view;
     }
+
 
     public void updateFavorite() {
         if (isFavorite) interator.removeFavoriteProduct(product.getId());
@@ -89,12 +102,24 @@ public class ProductPresenter implements ProductListener {
 
     @Override
     public void getCommentRespond(CommentRespond commentRespond) {
-        view.getComments(commentRespond.getComments());
+        comments = commentRespond.getComments();
+        view.getComments(comments);
         view.getCommentCount(String.valueOf(commentRespond.getLimit()));
     }
 
     @Override
     public void hasNewFavoriteProduct() {
         view.hasNewFavoriteProduct();
+    }
+
+    @Override
+    public void getSimilarProducts(List<Product> products) {
+        similarProducts = products;
+        similarProducts.remove(product);
+        view.getSimilarProducts(products);
+    }
+
+    public void getSimilarProducts() {
+        interator.getSimilarProducts(product.getCategory());
     }
 }

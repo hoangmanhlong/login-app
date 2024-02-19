@@ -4,14 +4,23 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.loginapp.databinding.LayoutDiscountItemBinding;
+import com.example.loginapp.model.entity.Product;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.List;
 
-public class DiscountAdapter extends
-    SliderViewAdapter<DiscountAdapter.DiscountSliderAdapterViewHolder> {
+public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountSliderAdapterViewHolder> {
 
-    private final List<DiscountItem> mSliderItems = DiscountDataSource.sliderItems;
+    private final List<Product> products;
+
+    public DiscountAdapter(List<Product> products) {
+        this.products = products;
+    }
+
+    public void setData(List<Product> products) {
+        this.products.clear();
+        this.products.addAll(products);
+    }
 
     @Override
     public DiscountSliderAdapterViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -26,24 +35,25 @@ public class DiscountAdapter extends
 
     @Override
     public void onBindViewHolder(DiscountSliderAdapterViewHolder viewHolder, final int position) {
-        viewHolder.bind(mSliderItems.get(position));
+        viewHolder.bind(products.get(position));
     }
 
     @Override
     public int getCount() {
-        return mSliderItems.size();
+        return products.size();
     }
 
     static class DiscountSliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
-        private LayoutDiscountItemBinding binding;
+
+        private final LayoutDiscountItemBinding binding;
 
         public DiscountSliderAdapterViewHolder(LayoutDiscountItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(DiscountItem discountItem) {
-            binding.setDiscountItem(discountItem);
+        public void bind(Product product) {
+            binding.setProduct(product);
         }
     }
 }

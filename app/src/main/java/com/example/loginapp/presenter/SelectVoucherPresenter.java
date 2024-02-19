@@ -3,7 +3,7 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.SelectVoucherInterator;
 import com.example.loginapp.model.listener.SelectVoucherListener;
-import com.example.loginapp.view.fragment.select_voucher_fragment.SelectVoucherView;
+import com.example.loginapp.view.fragments.select_voucher_fragment.SelectVoucherView;
 
 import java.util.List;
 

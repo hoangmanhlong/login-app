@@ -3,7 +3,7 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.interator.SelectDeliveryAddressInteractor;
 import com.example.loginapp.model.listener.SelectDeliveryAddressListener;
-import com.example.loginapp.view.fragment.select_delivery_address.SelectDeliveryAddressView;
+import com.example.loginapp.view.fragments.select_delivery_address.SelectDeliveryAddressView;
 
 import java.util.List;
 

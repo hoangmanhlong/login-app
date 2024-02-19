@@ -95,6 +95,38 @@ public class Order implements Serializable {
     public Voucher getVoucher() {
         return voucher;
     }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setOrderProducts(List<OrderProduct> orderProducts) {
+        this.orderProducts = orderProducts;
+    }
+
+    public void setOrderDate(Long orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setPaymentTotal(int paymentTotal) {
+        this.paymentTotal = paymentTotal;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
+    }
 }
 
 

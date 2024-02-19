@@ -6,9 +6,8 @@
     <data>
 
         <variable
-            name="discountItem"
-            type="com.example.loginapp.adapter.discount_adapter.DiscountItem" />
-
+            name="product"
+            type="com.example.loginapp.model.entity.Product" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -21,24 +20,25 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                imgRes="@{discountItem.image}"
+                imgUrl="@{product.thumbnail}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/shoes" />
 
             <TextView
-                android:includeFontPadding="false"
-                android:layout_margin="@dimen/_8sdp"
                 android:id="@+id/tvProductTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="@{discountItem.title}"
+                android:includeFontPadding="false"
+                android:text="@{product.title}"
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold"

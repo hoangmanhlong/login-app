@@ -4,7 +4,7 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInterator;
 import com.example.loginapp.model.listener.HomeListener;
-import com.example.loginapp.view.fragment.home.HomeView;
+import com.example.loginapp.view.fragments.home.HomeView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,26 +25,38 @@ public class HomePresenter implements HomeListener {
 
     public List<Product> discountProducts = new ArrayList<>();
 
+    private List<Product> bestSellerProducts = new ArrayList<>();
+
     public UserData currentUserData;
 
     public HomePresenter(HomeView view) {
         this.view = view;
     }
 
-    public void iniData() {
+    public void initData() {
         if (products.size() == 0) getListProductFromNetwork();
         else showProducts();
 
         if (currentUserData == null) getUserData();
         else view.getUserData(currentUserData);
+
+        if (bestSellerProducts.isEmpty()) getBestsellerProducts();
+        else view.getBestsellerProducts(bestSellerProducts);
+    }
+
+    public void getBestsellerProducts() {
+        interator.getBestsellerProducts();
     }
 
     public void getUserData() {
+        view.isUserLoading(true);
         interator.getUserData();
     }
 
     public void getListProductFromNetwork() {
-        view.showProcessBar(true);
+        view.isRecommendedProductsLoading(true);
+        view.isTopChartsProductsLoading(true);
+        view.isDiscountProductsLoading(true);
         interator.getListProductFromNetwork();
     }
 
@@ -56,8 +68,10 @@ public class HomePresenter implements HomeListener {
 
     @Override
     public void getUserData(UserData userData) {
-        view.getUserData(userData);
         currentUserData = userData;
+        if (!userData.getUsername().isEmpty() && !userData.getPhotoUrl().isEmpty()) {
+            view.getUserData(userData);
+        }
     }
 
     @Override
@@ -89,11 +103,6 @@ public class HomePresenter implements HomeListener {
     }
 
     @Override
-    public void showProcessBar(Boolean show) {
-        view.showProcessBar(show);
-    }
-
-    @Override
     public void getFavoriteProducts(List<Product> products) {
         if (!products.isEmpty()) {
             List<String> categories = products.stream().map(Product::getCategory).distinct().collect(Collectors.toList());
@@ -104,6 +113,11 @@ public class HomePresenter implements HomeListener {
             recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 20));
         }
         view.showRecommendedProducts(recommendedProducts);
-        view.showProcessBar(false);
+    }
+
+    @Override
+    public void getBestsellerProducts(List<Product> products) {
+        bestSellerProducts = products;
+        view.getBestsellerProducts(products);
     }
 }

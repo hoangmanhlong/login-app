@@ -12,7 +12,7 @@ public interface HomeListener {
 
     void onMessage(String message);
 
-    void showProcessBar(Boolean show);
-
     void getFavoriteProducts(List<Product> products);
+
+    void getBestsellerProducts(List<Product> products);
 }

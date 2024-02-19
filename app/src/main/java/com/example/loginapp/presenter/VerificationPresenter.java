@@ -1,11 +1,10 @@
 package com.example.loginapp.presenter;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.example.loginapp.model.interator.VerificationInterator;
 import com.example.loginapp.model.listener.VerificationListener;
-import com.example.loginapp.view.fragment.verification.VerificationView;
+import com.example.loginapp.view.fragments.verification.VerificationView;
 
 public class VerificationPresenter implements VerificationListener {
 

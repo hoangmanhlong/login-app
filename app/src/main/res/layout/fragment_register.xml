@@ -6,7 +6,7 @@
 
         <variable
             name="registerFragment"
-            type="com.example.loginapp.view.fragment.register.RegisterFragment" />
+            type="com.example.loginapp.view.fragments.register.RegisterFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

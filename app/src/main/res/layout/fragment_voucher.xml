@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,15 +11,14 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.voucher.VoucherFragment" />
+            type="com.example.loginapp.view.fragments.voucher.VoucherFragment" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.fragment.voucher.VoucherFragment">
+        tools:context=".view.fragments.voucher.VoucherFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -35,10 +36,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="20sp"
                 android:fontFamily="@font/montserrat_regular"
+                android:includeFontPadding="false"
                 android:text="@string/discount_code"
                 android:textColor="@color/black_100"
                 android:textSize="18sp"
@@ -49,6 +50,39 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/vouchersViewPlaceHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/_8sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+
+                <include layout="@layout/layout_voucher_placeholder" />
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/voucherRecyclerview"
             android:layout_width="match_parent"
@@ -57,6 +91,7 @@
             android:background="@color/gray_1000"
             android:clipToPadding="false"
             android:padding="@dimen/_8sdp"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/layout_voucher" />
 

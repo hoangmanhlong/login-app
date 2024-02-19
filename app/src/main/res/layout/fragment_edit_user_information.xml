@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.edit_user_profile.EditUserInformationFragment" />
+            type="com.example.loginapp.view.fragments.edit_user_profile.EditUserInformationFragment" />
 
         <variable
             name="userData"
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="@string/my_account"
+                android:text="@string/edit_information"
                 android:textColor="@color/black_100"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
@@ -57,15 +57,15 @@
             android:padding="@dimen/_16sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:layout_marginVertical="@dimen/_16sdp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/user_image"
                     imgUrl="@{userData.photoUrl}"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -87,15 +87,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/userNameLayout"
+                android:id="@+id/nameTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:hint="Username"
-                app:endIconMode="clear_text">
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:hint="Name *"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_user_gray">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/username_input"
+                    android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
@@ -106,34 +107,42 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phoneNumberLayout"
+                android:id="@+id/phoneNumberTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:hint="Phone number"
-                app:endIconMode="clear_text">
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:hint="Phone number *"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
+                app:prefixText="+84"
+                app:prefixTextColor="@color/red"
+                app:endIconMode="clear_text"
+                app:helperText="Includes 10 digits"
+                app:startIconDrawable="@drawable/ic_phone">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phoneNumber_input"
+                    android:id="@+id/etPhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:singleLine="true"
+                    android:maxLength="10"
                     android:text="@{userData.phoneNumber}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addressLayout"
+                android:id="@+id/addressTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
                 android:hint="Address"
-                app:endIconMode="clear_text">
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_location">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/address_input"
+                    android:id="@+id/etAddress"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionDone"

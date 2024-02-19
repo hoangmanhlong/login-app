@@ -35,9 +35,13 @@
     <style name="Theme.App.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#152B36</item>
         <item name="postSplashScreenTheme">@style/Base.Theme.LoginApp</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_app</item>
-<!--        <item name="windowSplashScreenAnimationDuration">200</item>-->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <!--        <item name="windowSplashScreenAnimationDuration">200</item>-->
     </style>
 
+    <style name="searchTextStyle">
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
 
 </resources>

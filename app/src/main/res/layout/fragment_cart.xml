@@ -5,7 +5,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.cart.CartFragment" />
+            type="com.example.loginapp.view.fragments.cart.CartFragment" />
 
         <variable
             name="quantity"
@@ -13,6 +13,10 @@
 
         <variable
             name="price"
+            type="String" />
+
+        <variable
+            name="total"
             type="String" />
 
     </data>
@@ -23,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.fragment.cart.CartFragment">
+        tools:context=".view.fragments.cart.CartFragment">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +38,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Basket"
                 android:textColor="@color/black_100"
@@ -47,55 +50,56 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/emptyCartView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_300sdp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/cart_empty_animation" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/averia_gruesa_libre_regular"
+                    android:includeFontPadding="false"
+                    android:text="Oops, your shopping cart is empty"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:fontFamily="@font/averia_gruesa_libre_regular"
+                    android:includeFontPadding="false"
+                    android:text="Brownse our awesome deals now!"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <LinearLayout
+            android:id="@+id/cartContentView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/emptyCartView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/animationView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_300sdp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/cart_empty_animation" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:fontFamily="@font/averia_gruesa_libre_regular"
-                        android:includeFontPadding="false"
-                        android:text="Oops, your shopping cart is empty"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:fontFamily="@font/averia_gruesa_libre_regular"
-                        android:includeFontPadding="false"
-                        android:text="Brownse our awesome deals now!"
-                        android:textSize="18sp" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,14 +117,13 @@
                     android:visibility="gone">
 
                     <CheckBox
-                        android:id="@+id/checkAll"
+                        android:id="@+id/checkAllCheckbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
                         android:gravity="center"
-                        android:onClick="@{() -> fragment.onCheckboxAllClick()}"
-                        app:buttonTint="#000" />
+                        android:onClick="@{() -> fragment.onCheckboxAllClick()}" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -144,130 +147,159 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/checkout_background"
-                android:orientation="horizontal"
-                android:padding="@dimen/_16sdp"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:elevation="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingTop="@dimen/_16sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:visibility="gone">
 
-                <TextView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/discountCodeView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:includeFontPadding="false"
-                    android:text="@string/discount_code"
-                    android:textColor="@color/gray_500"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/selectDiscountCodeView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:onClick="@{() -> fragment.onSelectCodeClick()}"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:id="@+id/tvDiscount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="Select code"
-                        android:textColor="@color/gray_500" />
-
-                    <ImageView
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_14sdp"
-                        android:src="@drawable/ic_arrow_forward" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/clearDiscountCodeView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/discountCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_8sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:textColor="@color/black_100"
-                        android:textStyle="bold" />
+                        android:text="@string/discount_code"
+                        android:textColor="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/clearDiscountCode"
+                    <Button
+                        android:id="@+id/selectDiscountCodeView"
+                        style="@style/Widget.Material3.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="@{() -> fragment.onClearDiscountCodeClick()}"
-                        android:src="@drawable/ic_clear"
+                        android:onClick="@{() -> fragment.onSelectCodeClick()}"
+                        android:orientation="horizontal"
+                        android:text="@string/select_code"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/gray_500"
+                        app:icon="@drawable/ic_arrow_forward"
+                        app:iconGravity="end"
+                        app:iconTint="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/productQuantity"
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/clearDiscountCodeView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/discountCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/clearDiscountCode"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{() -> fragment.onClearDiscountCodeClick()}"
+                            app:icon="@drawable/ic_cancel_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/subTotalView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:includeFontPadding="false"
-                    android:text="@{@string/quantity_item(quantity)}"
-                    android:textColor="@color/gray_500"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/discountCodeView"
-                    tools:text="2 item(s)" />
+                    android:layout_marginEnd="@dimen/_14sdp"
+                    app:layout_constraintTop_toBottomOf="@id/discountCodeView">
 
-                <TextView
-                    android:id="@+id/priceTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:includeFontPadding="false"
-                    android:text="@{@string/price_format(price)}"
-                    android:textColor="@color/black_100"
-                    android:textStyle="bold"
-                    app:layout_constraintBaseline_toBaselineOf="@id/productQuantity"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="1000$" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/quantity_item(quantity)}"
+                        android:textColor="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="2 item(s)" />
+
+                    <TextView
+                        android:id="@+id/priceTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/price_format(price)}"
+                        android:textColor="@color/black_100"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="1000$" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divide"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="@dimen/_8sdp"
-                    app:layout_constraintTop_toBottomOf="@id/priceTotal" />
+                    app:layout_constraintTop_toBottomOf="@id/subTotalView" />
 
-                <TextView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/totalPriceView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
-                    android:text="Total"
-                    android:textColor="@color/gray_500"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divide" />
+                    android:layout_marginEnd="@dimen/_14sdp"
+                    app:layout_constraintTop_toBottomOf="@id/divide">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBaseline_toBaselineOf="@id/totalPriceView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="$1.000.000.000" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total"
+                        android:textColor="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/price_format(total)}"
+                        android:textColor="@color/black_100"
+                        android:textStyle="bold"
+                        app:layout_constraintBaseline_toBaselineOf="@id/totalPriceView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="$1.000.000.000" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
                     android:id="@+id/buy"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="@dimen/_16sdp"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
                     android:onClick="@{() -> fragment.onCheckoutClick()}"
                     android:text="@string/checkout"

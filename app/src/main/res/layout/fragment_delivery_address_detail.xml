@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.fragments.delivery_address_detail.DeliveryAddressDetailFragment">
 
     <data>
 
@@ -8,17 +11,18 @@
             type="com.example.loginapp.model.entity.DeliveryAddress" />
 
         <variable
+            name="fragmentLabel"
+            type="Integer" />
+
+        <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.delivery_address_detail.DeliveryAddressDetailFragment" />
+            type="com.example.loginapp.view.fragments.delivery_address_detail.DeliveryAddressDetailFragment" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".view.fragment.delivery_address_detail.DeliveryAddressDetailFragment">
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,17 +41,18 @@
 
             <TextView
                 android:id="@+id/fragmentNameTextView"
+                bindTextView="@{fragmentLabel}"
                 android:layout_width="wrap_content"
                 android:layout_height="20sp"
                 android:fontFamily="@font/montserrat_regular"
                 android:includeFontPadding="false"
-                android:text="Edit Address"
                 android:textColor="@color/black_100"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/navigateUpButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Edit Address" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,18 +65,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/_14sdp">
+                android:padding="@dimen/_16sdp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/recipientNameLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_marginVertical="@dimen/_4sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     android:hint="Full name *"
-                    app:endIconMode="clear_text">
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ic_user_gray">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/recipientNameEditText"
+                        android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
@@ -81,21 +87,27 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phoneNumberLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_marginVertical="@dimen/_4sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     android:hint="Phone number *"
-                    app:endIconMode="clear_text">
+                    app:counterEnabled="true"
+                    app:counterMaxLength="10"
+                    app:prefixText="+84"
+                    app:prefixTextColor="@color/red"
+                    app:endIconMode="clear_text"
+                    app:helperText="Includes 10 digits"
+                    app:startIconDrawable="@drawable/ic_phone">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/phoneNumberEditText"
+                        android:id="@+id/etPhoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:singleLine="true"
                         android:text="@{deliveryAddress.phoneNumber}" />
 
@@ -104,13 +116,14 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/addressLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_marginVertical="@dimen/_4sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     android:hint="Address *"
-                    app:endIconMode="clear_text">
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ic_location">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/addressEditText"
+                        android:id="@+id/etAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
@@ -120,81 +133,91 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/provinceLayout"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:hint="Province *"
+                    app:startIconDrawable="@drawable/ic_location_city">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tvProvince"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:singleLine="true"
+                        tools:ignore="LabelFor" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_75sdp"
-                    android:layout_marginVertical="@dimen/_4sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/provinceLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Province *"
-                        app:endIconMode="clear_text">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/provinceEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:text="@{deliveryAddress.province}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/postalCodeLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_16sdp"
                         android:layout_weight="1"
                         android:hint="Postal Code * "
-                        app:endIconMode="clear_text">
+                        app:counterEnabled="true"
+                        app:counterMaxLength="4"
+                        app:endIconMode="clear_text"
+                        app:helperText="Include 4 digits"
+                        app:startIconDrawable="@drawable/ic_code_24">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/postalCodeEditText"
+                            android:id="@+id/etPostalCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionNext"
                             android:inputType="number"
+                            android:maxLength="4"
                             android:singleLine="true"
                             android:text="@{deliveryAddress.formatPostalCode}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/countryLayout"
+                        android:layout_width="@dimen/_105sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+
+                        android:enabled="false"
+                        android:hint="Country"
+                        app:endIconMode="clear_text"
+                        app:startIconDrawable="@drawable/ic_location_city_24">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:text="@string/vietnam" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/countryLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_marginVertical="@dimen/_4sdp"
-                    android:hint="Country *"
-                    app:endIconMode="clear_text">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/countryEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        android:text="@{deliveryAddress.country}" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/shippingOptionsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/_4sdp"
-                    android:hint="Shipping Options"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    app:startIconDrawable="@drawable/ic_options"
+                    android:hint="Shipping Options (optional)"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/shippingOptionsEditText"
+                        android:id="@+id/etShippingOptions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
@@ -230,10 +253,10 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
-                    android:id="@+id/deleteButton"
+                    android:id="@+id/btDeleteAddress"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_45sdp"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
@@ -244,9 +267,9 @@
                     app:strokeColor="#ff0000" />
 
                 <Button
-                    android:id="@+id/submitButton"
+                    android:id="@+id/btSubmit"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_45sdp"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"

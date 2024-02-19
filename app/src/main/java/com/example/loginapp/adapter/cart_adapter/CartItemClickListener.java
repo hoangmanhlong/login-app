@@ -10,5 +10,5 @@ public interface CartItemClickListener {
 
     void onItemChecked(FirebaseProduct product, boolean checked);
 
-    void onDeleteProduct(int id);
+    void onDeleteProduct(FirebaseProduct product);
 }

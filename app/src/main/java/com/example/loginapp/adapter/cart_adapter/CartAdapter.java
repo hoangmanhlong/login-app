@@ -23,7 +23,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
     }
 
     public void getProductByPosition(int pos) {
-        listener.onDeleteProduct(getItem(pos).getId());
+        listener.onDeleteProduct(getItem(pos));
     }
 
     @NonNull
@@ -62,6 +62,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
 
         public void bind(FirebaseProduct product) {
             binding.setProduct(product);
+            binding.executePendingBindings();
         }
 
         @Override
@@ -70,27 +71,27 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
             int quantity = Integer.parseInt(product.getQuantity());
             if (v.getId() == binding.minus.getId()) {
                 if (quantity > 1) listener.updateQuantity(product.getId(), quantity - 1);
-                else listener.onDeleteProduct(product.getId());
+                else listener.onDeleteProduct(product);
             }
-            if (v.getId() == binding.add.getId()) listener.updateQuantity(product.getId(), quantity + 1);
+            if (v.getId() == binding.add.getId())
+                listener.updateQuantity(product.getId(), quantity + 1);
             if (v.getId() == binding.getRoot().getId()) {
                 listener.onItemClick(product.toProduct());
             }
         }
     }
 
-    public static final DiffUtil.ItemCallback<FirebaseProduct> DiffCallback =
-            new DiffUtil.ItemCallback<FirebaseProduct>() {
+    public static final DiffUtil.ItemCallback<FirebaseProduct> DiffCallback = new DiffUtil.ItemCallback<FirebaseProduct>() {
 
-                @Override
-                public boolean areItemsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
-                    return oldItem.getId() == newItem.getId();
-                }
+        @Override
+        public boolean areItemsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
 
-                @SuppressLint("DiffUtilEquals")
-                @Override
-                public boolean areContentsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
-                    return oldItem.equals(newItem);
-                }
-            };
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull FirebaseProduct oldItem, @NonNull FirebaseProduct newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 }

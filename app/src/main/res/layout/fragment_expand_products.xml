@@ -9,7 +9,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.expand_products.ExpandProductsFragment" />
+            type="com.example.loginapp.view.fragments.expand_products.ExpandProductsFragment" />
 
     </data>
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.fragment.expand_products.ExpandProductsFragment">
+        tools:context=".view.fragments.expand_products.ExpandProductsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

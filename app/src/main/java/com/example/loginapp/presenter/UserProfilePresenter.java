@@ -3,7 +3,7 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.UserProfileInterator;
 import com.example.loginapp.model.listener.UserProfileListener;
-import com.example.loginapp.view.fragment.user_profile.UserProfileView;
+import com.example.loginapp.view.fragments.user_profile.UserProfileView;
 
 public class UserProfilePresenter implements UserProfileListener {
 
@@ -11,7 +11,11 @@ public class UserProfilePresenter implements UserProfileListener {
 
     private final UserProfileInterator interator = new UserProfileInterator(this);
 
-    public UserData userData;
+    private UserData currentUser;
+
+    public UserData getCurrentUser() {
+        return currentUser;
+    }
 
     public UserProfilePresenter(UserProfileView view) {
         this.view = view;
@@ -22,13 +26,13 @@ public class UserProfilePresenter implements UserProfileListener {
     }
 
     public void initData() {
-        if (userData == null) getUserData();
-        else view.getUserData(userData);
+        if (currentUser == null) getUserData();
+        else view.bindUserData(currentUser);
     }
 
     @Override
     public void getUserData(UserData userData) {
-        view.getUserData(userData);
-        this.userData = userData;
+        currentUser = userData;
+        view.bindUserData(currentUser);
     }
 }

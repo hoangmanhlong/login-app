@@ -2,12 +2,9 @@ package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.entity.Order;
-import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.interator.CheckoutInfoInterator;
 import com.example.loginapp.model.listener.CheckoutInfoListener;
-import com.example.loginapp.view.fragment.checkout.CheckoutInfoView;
-
-import java.util.List;
+import com.example.loginapp.view.fragments.checkout.CheckoutInfoView;
 
 public class CheckoutInfoPresenter implements CheckoutInfoListener {
     private final CheckoutInfoInterator interator = new CheckoutInfoInterator(this);

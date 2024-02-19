@@ -2,7 +2,7 @@ package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.listener.SelectDeliveryAddressListener;
 import com.google.firebase.database.DataSnapshot;

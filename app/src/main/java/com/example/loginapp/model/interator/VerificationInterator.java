@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.VerificationListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +18,6 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 

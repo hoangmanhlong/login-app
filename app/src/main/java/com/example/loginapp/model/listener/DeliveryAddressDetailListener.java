@@ -7,7 +7,5 @@ public interface DeliveryAddressDetailListener {
 
     void onMessage(String message);
 
-    void numberMax();
-
     void isUpdateSuccess(Boolean success);
 }

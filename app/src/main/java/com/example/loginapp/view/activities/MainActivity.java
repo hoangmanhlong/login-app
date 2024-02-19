@@ -1,25 +1,27 @@
 package com.example.loginapp.view.activities;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.transition.TransitionManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.presenter.MainPresenter;
-import com.example.loginapp.view.AppAnimationState;
-import com.example.loginapp.view.fragment.product_detail.NewProductInBasketMessage;
-import com.example.loginapp.view.fragment.product_detail.NewProductInWishlistMessage;
-import com.example.loginapp.view.fragment.select_voucher_fragment.MessageVoucherSelected;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.loginapp.view.commonUI.AppAnimationState;
+import com.example.loginapp.view.fragments.product_detail.NewProductInBasketMessage;
+import com.example.loginapp.view.fragments.product_detail.NewProductInWishlistMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,18 +29,22 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
+    private final String TAG = MainActivity.class.getName();
+
     private final MainPresenter presenter = new MainPresenter(this);
 
     private NavController navController;
 
     private ActivityMainBinding binding;
 
+    @DrawableRes
     private final int viewBackground = R.drawable.view_navigation_bar_background;
 
     private View[] views;
 
     private ImageView[] imageViews;
 
+    @DrawableRes
     private final int[] iconGray = {
             R.drawable.ic_home_gray,
             R.drawable.ic_search_gray,
@@ -53,17 +59,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        hasUser();
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         initView();
-        destinationChangedListener();
-    }
-
-    private void hasUser() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            MainActivity.this.finish();
-        }
     }
 
     private void destinationChangedListener() {
@@ -91,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 setDestinationUI(views[1], imageViews[1], parentViews[1], R.drawable.ic_search_dark);
             if (currentDestinationId == R.id.cartFragment) {
                 setDestinationUI(views[2], imageViews[2], parentViews[2], R.drawable.ic_cart_dark);
-                presenter.setViewedShoppingCart(this, true);
+                presenter.setViewedShoppingCart(true);
             }
             if (currentDestinationId == R.id.favoriteProductFragment) {
                 setDestinationUI(views[3], imageViews[3], parentViews[3], R.drawable.favorite);
-                presenter.setViewedFavoritesList(this, true);
+                presenter.setViewedFavoritesList(true);
             }
             if (currentDestinationId == R.id.userProfileFragment)
                 setDestinationUI(views[4], imageViews[4], parentViews[4], R.drawable.ic_user_dark);
@@ -116,12 +116,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void getBasketStatus(NewProductInBasketMessage message) {
-        presenter.setViewedShoppingCart(this, false);
+        presenter.setViewedShoppingCart(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void getWishlistStatus(NewProductInWishlistMessage message) {
-        presenter.setViewedFavoritesList(this, false);
+        presenter.setViewedFavoritesList(false);
     }
 
     private void setDestinationUI(View view, ImageView icon, ConstraintLayout navigationItemView, int iconResource) {
@@ -133,25 +133,23 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NewProductInWishlistMessage newProductInWishlistMessage = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
-        if (newProductInWishlistMessage != null)
-            EventBus.getDefault().removeStickyEvent(newProductInWishlistMessage);
-
-        NewProductInBasketMessage newProductInBasketMessage = EventBus.getDefault().getStickyEvent(NewProductInBasketMessage.class);
-        if (newProductInBasketMessage != null)
-            EventBus.getDefault().removeStickyEvent(newProductInBasketMessage);
+        Class<?>[] messageTypes = {NewProductInWishlistMessage.class, NewProductInBasketMessage.class};
+        for (Class<?> messageType : messageTypes) {
+            Object message = EventBus.getDefault().getStickyEvent(messageType);
+            if (message != null) {
+                EventBus.getDefault().removeStickyEvent(message);
+            }
+        }
     }
 
     private void initView() {
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        presenter.getStatus(this);
-        showPopupDialog();
-
-        binding.setActivity(MainActivity.this);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(binding.mainContainer.getId());
+        binding.setActivity(this);
+//        showPopupDialog();
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.container);
         navController = navHostFragment.getNavController();
-
+        presenter.currentUserState();
+        presenter.getStatus();
         views = new View[]{
                 binding.homeView,
                 binding.searchView,
@@ -183,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 R.id.favoriteProductFragment,
                 R.id.userProfileFragment
         };
+        destinationChangedListener();
     }
 
     public void onHomeClick() {
@@ -199,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public void onFavoriteClick() {
         navController.navigate(R.id.favoriteProductFragment);
-
     }
 
     public void onUserClick() {
@@ -214,19 +212,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     }
 
-    @Override
-    public boolean onNavigateUp() {
-        return navController.navigateUp() || super.onNavigateUp();
-    }
-
-    public void showPopupDialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.layout_popup);
-        dialog.setCancelable(false);
-        ImageView imageView = dialog.findViewById(R.id.ivClosePopup);
-        imageView.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
-    }
+//    public void showPopupDialog() {
+//        Dialog dialog = new Dialog(this);
+//        dialog.setContentView(R.layout.layout_popup);
+//        dialog.setCancelable(false);
+//        ImageView imageView = dialog.findViewById(R.id.ivClosePopup);
+//        imageView.setOnClickListener(v -> dialog.dismiss());
+//        dialog.show();
+//    }
 
     @Override
     public void notifyCartChanged(Boolean show) {
@@ -238,5 +231,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void notifyFavoriteChanged(Boolean show) {
         if (show) binding.favoriteStatusImageView.setVisibility(View.GONE);
         else binding.favoriteStatusImageView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hasUser(Boolean hasUser) {
+        if (hasUser) {
+            NavDestination navDestination = navController.getCurrentDestination();
+            if (navDestination != null) {
+                if (navDestination.getId() != R.id.homeFragment) {
+                    int startDestination = navController.getGraph().getStartDestination();
+                    NavOptions navOptions = new NavOptions.Builder()
+                            .setPopUpTo(startDestination, true)
+                            .build();
+                    navController.navigate(startDestination, null, navOptions);
+                }
+            }
+        } else {
+            navController.popBackStack(navController.getGraph().getStartDestination(), true);
+            navController.navigate(R.id.overviewFragment);
+        }
     }
 }

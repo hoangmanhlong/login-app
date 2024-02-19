@@ -11,14 +11,14 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.verification.VerificationFragment" />
+            type="com.example.loginapp.view.fragments.verification.VerificationFragment" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.fragment.verification.VerificationFragment">
+        tools:context=".view.fragments.verification.VerificationFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -51,6 +51,7 @@ public class FavoriteAdapter extends ListAdapter<Product, FavoriteAdapter.ItemVi
 
         public void bind(Product product) {
             binding.setProduct(product);
+            binding.executePendingBindings();
         }
     }
 

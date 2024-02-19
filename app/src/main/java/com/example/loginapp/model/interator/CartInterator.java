@@ -1,17 +1,17 @@
 package com.example.loginapp.model.interator;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.listener.CartListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class CartInterator {
 
@@ -27,29 +27,41 @@ public class CartInterator {
         this.listener = listener;
     }
 
-    public void getFavoriteProductFromFirebase() {
-        cartRef.child(uid).addChildEventListener(new ChildEventListener() {
+    public void getCartProductsFromFirebase() {
+        Query query = cartRef.child(uid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                FirebaseProduct product = snapshot.getValue(FirebaseProduct.class);
-                listener.notifyItemAdded(product, previousChildName);
-            }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    query.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            listener.notifyItemAdded(snapshot.getValue(FirebaseProduct.class));
+                        }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                FirebaseProduct product = snapshot.getValue(FirebaseProduct.class);
-                listener.notifyItemChanged(product, previousChildName);
-            }
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            listener.notifyItemChanged(snapshot.getValue(FirebaseProduct.class));
+                        }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                FirebaseProduct product = snapshot.getValue(FirebaseProduct.class);
-                listener.notifyItemRemoved(product);
-            }
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                            listener.notifyItemRemoved(snapshot.getValue(FirebaseProduct.class));
+                        }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                } else {
+                    listener.isCartEmpty(true);
+                }
             }
 
             @Override
@@ -57,6 +69,7 @@ public class CartInterator {
 
             }
         });
+
     }
 
     public void updateQuantity(int id, int quantity) {
@@ -67,7 +80,7 @@ public class CartInterator {
         cartRef.child(uid).child(String.valueOf(id)).child("checked").setValue(checked);
     }
 
-    public void deleteProductInFirebase(int id) {
-        cartRef.child(uid).child(String.valueOf(id)).removeValue();
+    public void deleteProductInFirebase(FirebaseProduct product) {
+        cartRef.child(uid).child(String.valueOf(product.getId())).removeValue();
     }
 }

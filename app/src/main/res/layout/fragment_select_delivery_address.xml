@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.select_delivery_address.SelectDeliveryAddressFragment" />
+            type="com.example.loginapp.view.fragments.select_delivery_address.SelectDeliveryAddressFragment" />
     </data>
 
     <LinearLayout

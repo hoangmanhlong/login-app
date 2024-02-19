@@ -1,6 +1,6 @@
 package com.example.loginapp.model.interator;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.entity.PaymentMethod;

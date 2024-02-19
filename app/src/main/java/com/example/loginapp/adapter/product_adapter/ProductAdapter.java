@@ -14,11 +14,11 @@ import com.example.loginapp.databinding.LayoutProductItemBinding;
 
 public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ItemViewHolder> {
 
-    private final OnItemClickListener onItemClickListener;
+    private final OnProductClickListener onProductClickListener;
 
-    public ProductAdapter(OnItemClickListener listener) {
+    public ProductAdapter(OnProductClickListener listener) {
         super(DiffCallback);
-        this.onItemClickListener = listener;
+        this.onProductClickListener = listener;
     }
 
     @Override
@@ -28,12 +28,12 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ItemView
                 LayoutInflater.from(parent.getContext()),
                 parent,
                 false
-            ), onItemClickListener
+            ), onProductClickListener
         );
 
         itemViewHolder.itemView.setOnClickListener(v -> {
             int position = itemViewHolder.getAdapterPosition();
-            onItemClickListener.onItemClick(getItem(position));
+            onProductClickListener.onItemClick(getItem(position));
         });
         return itemViewHolder;
     }
@@ -48,11 +48,11 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ItemView
         .OnClickListener {
         private final LayoutProductItemBinding binding;
 
-        private final OnItemClickListener onItemClickListener;
+        private final OnProductClickListener onProductClickListener;
 
-        public ItemViewHolder(LayoutProductItemBinding binding, OnItemClickListener onItemClickListener) {
+        public ItemViewHolder(LayoutProductItemBinding binding, OnProductClickListener onProductClickListener) {
             super(binding.getRoot());
-            this.onItemClickListener = onItemClickListener;
+            this.onProductClickListener = onProductClickListener;
             this.binding = binding;
             binding.getRoot().setOnClickListener(this);
         }
@@ -64,7 +64,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ItemView
         @Override
         public void onClick(View v) {
             if (v.getId() == binding.getRoot().getId())
-                onItemClickListener.onItemClick(getItem(getAdapterPosition()));
+                onProductClickListener.onItemClick(getItem(getAdapterPosition()));
         }
     }
 

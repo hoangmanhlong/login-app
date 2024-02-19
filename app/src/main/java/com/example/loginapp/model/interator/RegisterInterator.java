@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.RegisterListener;
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterInterator {

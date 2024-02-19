@@ -1,10 +1,8 @@
 package com.example.loginapp.model.interator;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.listener.SelectVoucherListener;
 import com.google.firebase.database.DataSnapshot;

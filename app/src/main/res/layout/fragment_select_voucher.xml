@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.select_voucher_fragment.SelectVoucherFragment" />
+            type="com.example.loginapp.view.fragments.select_voucher_fragment.SelectVoucherFragment" />
     </data>
 
     <LinearLayout

@@ -1,11 +1,10 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
+import com.example.loginapp.data.local.AssertReader;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.interator.DeliveryAddressDetailInteractor;
 import com.example.loginapp.model.listener.DeliveryAddressDetailListener;
-import com.example.loginapp.view.fragment.delivery_address_detail.DeliveryAddressDetailView;
+import com.example.loginapp.view.fragments.delivery_address_detail.DeliveryAddressDetailView;
 
 public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailListener {
 
@@ -19,12 +18,13 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
         this.view = view;
     }
 
-    public DeliveryAddress getCurrentDeliveryAddress() {
-        return currentDeliveryAddress;
+    public void setCurrentDeliveryAddress(DeliveryAddress deliveryAddress) {
+        currentDeliveryAddress = deliveryAddress;
+        view.bindAddress(currentDeliveryAddress);
     }
 
-    public void setCurrentDeliveryAddress(DeliveryAddress currentDeliveryAddress) {
-        this.currentDeliveryAddress = currentDeliveryAddress;
+    public void getProvince() {
+        view.bindProvinces(AssertReader.getProvinces());
     }
 
     public void deleteDeliveryAddress() {
@@ -32,19 +32,19 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
         interactor.deleteDeliveryAddress(currentDeliveryAddress.getDeliveryAddressId());
     }
 
-    private String TAG = this.toString();
-
     public void updateDeliveryAddress(String name, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions, Boolean isDefault) {
-        DeliveryAddress deliveryAddress;
-        Boolean isNewDeliveryAddress = null;
-        if (currentDeliveryAddress == null) {
-            isNewDeliveryAddress = true;
-            deliveryAddress = new DeliveryAddress(name, phoneNumber, address, province, Integer.parseInt(postalCode), country, shippingOptions.isEmpty() ? "" : shippingOptions, isDefault);
-        } else {
-            isNewDeliveryAddress = false;
-            deliveryAddress = new DeliveryAddress(currentDeliveryAddress.getDeliveryAddressId(), name, phoneNumber, address, province, Integer.parseInt(postalCode), country, shippingOptions.isEmpty() ? "" : shippingOptions, isDefault);
-        }
-        interactor.updateDeliveryAddress(isNewDeliveryAddress, deliveryAddress);
+        DeliveryAddress deliveryAddress = new DeliveryAddress(
+                currentDeliveryAddress != null ? currentDeliveryAddress.getDeliveryAddressId() : ("DA" + System.currentTimeMillis()),
+                name,
+                phoneNumber,
+                address,
+                province,
+                Integer.parseInt(postalCode),
+                country,
+                shippingOptions.isEmpty() ? "" : shippingOptions,
+                isDefault
+        );
+        interactor.updateDeliveryAddress(currentDeliveryAddress == null, deliveryAddress);
     }
 
     @Override
@@ -60,12 +60,7 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
 
     @Override
     public void onMessage(String message) {
-
-    }
-
-    @Override
-    public void numberMax() {
-
+        view.onMessage(message);
     }
 
     @Override

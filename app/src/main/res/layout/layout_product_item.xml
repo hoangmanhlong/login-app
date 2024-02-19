@@ -12,8 +12,9 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="@dimen/_128sdp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_98sdp"
+        android:layout_height="@dimen/_145sdp"
+        android:layout_margin="@dimen/_4sdp"
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
@@ -32,14 +33,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="@dimen/_16sdp"
-                app:cardElevation="@dimen/_2sdp"
+                app:cardElevation="2dp"
                 app:strokeWidth="0dp">
 
                 <ImageView
                     android:id="@+id/product_image"
                     imgUrl="@{product.thumbnail}"
-                    android:layout_width="@dimen/_120sdp"
-                    android:layout_height="@dimen/_100sdp"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_90sdp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
@@ -47,67 +48,64 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/productNameTextView"
+                    android:id="@+id/tvProductName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:fontFamily="@font/averia_gruesa_libre_regular"
                     android:includeFontPadding="false"
                     android:maxWidth="@dimen/_120sdp"
-                    android:singleLine="true"
+                    android:maxLines="2"
                     android:text="@{product.title}"
                     android:textStyle="bold"
-                    tools:text="Iphone 14 apple max" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Iphone 14 apple max Iphone 14 apple max" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/llRating"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/productNameTextView">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            bindRatingRounded="@{product.rating}"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_14sdp"
-                            android:fontFamily="@font/averia_gruesa_libre_regular"
-                            android:includeFontPadding="false"
-                            tools:text="4.5" />
-
-                        <ImageView
-                            android:layout_width="@dimen/_10sdp"
-                            android:layout_height="@dimen/_10sdp"
-                            android:src="@drawable/ic_star_rate" />
-                    </LinearLayout>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvProductName">
 
                     <TextView
-                        android:id="@+id/tvPrice"
+                        bindRatingRounded="@{product.rating}"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_14sdp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/averia_gruesa_libre_regular"
                         android:includeFontPadding="false"
-                        android:text="@{@string/price_format(product.intToString())}"
-                        tools:text="100$" />
+                        tools:text="4.5" />
 
+                    <ImageView
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:src="@drawable/ic_star_rate" />
                 </LinearLayout>
 
-
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_14sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/averia_gruesa_libre_regular"
+                    android:includeFontPadding="false"
+                    android:text="@{@string/price_format(product.intToString())}"
+                    app:layout_constraintBottom_toBottomOf="@id/llRating"
+                    app:layout_constraintStart_toEndOf="@id/llRating"
+                    app:layout_constraintTop_toTopOf="@id/llRating"
+                    tools:text="100$" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

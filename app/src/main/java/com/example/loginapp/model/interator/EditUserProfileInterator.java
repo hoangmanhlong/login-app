@@ -4,15 +4,19 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
-import com.example.loginapp.data.Constant;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.EditUserProfileListener;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EditUserProfileInterator {
 
@@ -31,12 +35,16 @@ public class EditUserProfileInterator {
     }
 
     public void uploadImageToFirebase(@Nullable Uri uri, String username, String phoneNumber, String address) {
-        listener.showProcessBar(true);
+        AtomicInteger successCount = new AtomicInteger(0);
         String uid = Constant.currentUser.getUid();
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(UserData.USERNAME, username);
+        updates.put(UserData.PHONE_NUMBER, phoneNumber);
+        updates.put(UserData.ADDRESS, address);
         if (uri == null) {
-            setInfo(uid, username, phoneNumber, address);
-            listener.showProcessBar(false);
-            listener.goUserProfile();
+            userRef.child(uid).updateChildren(updates)
+                    .addOnFailureListener(e -> listener.isUpdateSuccess(false))
+                    .addOnCompleteListener(s -> listener.isUpdateSuccess(s.isSuccessful()));
         } else {
             storageRef = storageRef.child(currentUser.getUid());
             UploadTask uploadTask = storageRef.putFile(uri);
@@ -45,21 +53,19 @@ public class EditUserProfileInterator {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
-                            setInfo(uid, username, phoneNumber, address);
-                            userRef.child(currentUser.getUid()).child(UserData.PHOTO_URL).setValue(downloadUri.toString());
-                            listener.showProcessBar(false);
-                            listener.goUserProfile();
-                        } else {
-                            listener.showProcessBar(false);
+                            userRef.child(uid).updateChildren(updates)
+                                    .addOnCompleteListener(s -> {
+                                        if (s.isSuccessful()) successCount.getAndIncrement();
+                                        if (successCount.get() == 2) listener.isUpdateSuccess(true);
+                                    });
+                            userRef.child(uid).child(UserData.PHOTO_URL).setValue(downloadUri.toString())
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) successCount.getAndIncrement();
+                                        if (successCount.get() == 2) listener.isUpdateSuccess(true);
+                                    })
+                                    .addOnFailureListener(e -> listener.isUpdateSuccess(false));
                         }
                     });
         }
-    }
-
-
-    public void setInfo(String uid, String username, String phoneNumber, String address) {
-        userRef.child(uid).child(UserData.USERNAME).setValue(username);
-        userRef.child(uid).child(UserData.PHONE_NUMBER).setValue(phoneNumber);
-        userRef.child(uid).child(UserData.ADDRESS).setValue(address);
     }
 }

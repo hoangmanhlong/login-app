@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,22 +11,21 @@
 
         <variable
             name="profileFragment"
-            type="com.example.loginapp.view.fragment.user_profile.UserProfileFragment" />
+            type="com.example.loginapp.view.fragments.user_profile.UserProfileFragment" />
 
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:context=".view.fragment.cart.CartFragment">
+            tools:context=".view.fragments.cart.CartFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -75,7 +76,8 @@
                         android:id="@+id/editAvatar"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:background="@drawable/edit_avatar_button"
+                        android:background="@drawable/bg_edit_user_button"
+                        android:contentDescription="@null"
                         android:onClick="@{() -> profileFragment.goEditUserScreen()}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -207,124 +209,149 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="@dimen/_16sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.goOrdersScreen()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
                     android:text="My order"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end"
+                    app:iconTint="@color/black" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    app:dividerInsetEnd="@dimen/_14sdp"
+                    app:dividerInsetStart="@dimen/_14sdp" />
 
 
                 <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"                    android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:layout_height="@dimen/_50sdp"
+                    android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.goVoucherScreen()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
                     android:text="Voucher"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    app:dividerInsetEnd="@dimen/_14sdp"
+                    app:dividerInsetStart="@dimen/_14sdp" />
 
                 <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.goCoinRewardScreen()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
                     android:text="Coins reward"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    app:dividerInsetEnd="@dimen/_14sdp"
+                    app:dividerInsetStart="@dimen/_14sdp" />
 
                 <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.goShippingAddressesScreen()}"
-                    android:text="Shipping address"
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:text="@string/shipping_address"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    app:dividerInsetEnd="@dimen/_14sdp"
+                    app:dividerInsetStart="@dimen/_14sdp" />
 
                 <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"                    android:fontFamily="@font/dm_sans_36pt_regular"
-                    android:text="FAQ"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
-
-                <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
-                    android:text="Customer service"
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:text="FAQ"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    app:dividerInsetEnd="@dimen/_14sdp"
+                    app:dividerInsetStart="@dimen/_14sdp" />
 
                 <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"                    android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:layout_height="@dimen/_50sdp"
+                    android:fontFamily="@font/dm_sans_36pt_regular"
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:text="Customer service"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    app:dividerInsetEnd="@dimen/_14sdp"
+                    app:dividerInsetStart="@dimen/_14sdp" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.logOut()}"
+                    android:paddingHorizontal="@dimen/_14sdp"
                     android:text="Log out"
                     android:textAlignment="viewStart"
+                    android:textAllCaps="false"
                     android:textColor="@color/design_default_color_error"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:iconGravity="end" />
             </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>

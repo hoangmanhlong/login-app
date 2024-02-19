@@ -15,7 +15,7 @@ public class AppApiService {
     public static AppApi retrofit = new Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
-//            .client(httpClient)
+            .client(httpClient)
             .build()
             .create(AppApi.class);
 }

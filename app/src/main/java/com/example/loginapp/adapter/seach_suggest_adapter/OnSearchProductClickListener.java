@@ -4,5 +4,5 @@ import com.example.loginapp.model.entity.Product;
 
 public interface OnSearchProductClickListener {
 
-    public void onSearchProductClick(Product product);
+    void onProductClick(Product product);
 }

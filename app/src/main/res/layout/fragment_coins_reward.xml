@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.fragment.coins.CoinsRewardFragment">
+    tools:context=".view.fragments.coins.CoinsRewardFragment">
 
     <data>
 
@@ -12,7 +12,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.coins.CoinsRewardFragment" />
+            type="com.example.loginapp.view.fragments.coins.CoinsRewardFragment" />
     </data>
 
     <LinearLayout
@@ -52,8 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.goVoucherScreen()}"
-                app:icon="@drawable/ic_voucher_white"
-                app:iconSize="@dimen/_25sdp"
+                app:icon="@drawable/ic_discount_24"
+                app:iconSize="@dimen/_20sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

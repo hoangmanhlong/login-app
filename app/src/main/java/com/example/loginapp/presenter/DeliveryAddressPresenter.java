@@ -3,7 +3,7 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.interator.DeliveryAddressInterator;
 import com.example.loginapp.model.listener.DeliveryAddressListener;
-import com.example.loginapp.view.fragment.shipping_address.DeliveryAddressView;
+import com.example.loginapp.view.fragments.shipping_address.DeliveryAddressView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,49 +16,53 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
     private final DeliveryAddressInterator interator = new DeliveryAddressInterator(this);
 
-    private final List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+    private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
 
     public DeliveryAddressPresenter(DeliveryAddressView view) {
         this.view = view;
     }
 
-    public void initData() {
-        if (deliveryAddresses.size() == 0) getDeliveryAddresses();
-        else {
-            view.getShippingAddresses(deliveryAddresses);
-            isAddNewAddressButtonEnabled();
-        }
-    }
-
     public void getDeliveryAddresses() {
-        view.isLoading(true);
         interator.getShippingAddresses();
     }
 
-    private void isAddNewAddressButtonEnabled() {
-        view.isAddNewAddressButtonEnabled(this.deliveryAddresses.size() < 3);
+    public void initData() {
+        if (deliveryAddresses.isEmpty()) getDeliveryAddresses();
+        else {
+            view.getShippingAddresses(deliveryAddresses);
+            buttonState();
+        }
     }
 
     @Override
-    public void getShippingAddress(DeliveryAddress deliveryAddress) {
-        this.deliveryAddresses.add(deliveryAddress);
-        isAddNewAddressButtonEnabled();
+    public void notifyItemAdded(DeliveryAddress deliveryAddress) {
+        deliveryAddresses.add(deliveryAddress);
         view.getShippingAddresses(deliveryAddresses);
+        buttonState();
+    }
+
+    @Override
+    public void isDeliveryAddressesEmpty(Boolean isEmpty) {
+        view.isListEmpty(isEmpty);
     }
 
     @Override
     public void notifyItemChanged(DeliveryAddress deliveryAddress) {
         int index = deliveryAddresses.indexOf(deliveryAddresses.stream().filter(p -> Objects.equals(p.getDeliveryAddressId(), deliveryAddress.getDeliveryAddressId())).collect(Collectors.toList()).get(0));
         deliveryAddresses.set(index, deliveryAddress);
-        isAddNewAddressButtonEnabled();
         view.notifyItemChanged(index);
+        buttonState();
+    }
+
+    private void buttonState() {
+        view.isAddNewAddressButtonEnabled(deliveryAddresses.size() < 3);
     }
 
     @Override
     public void notifyItemRemoved(DeliveryAddress deliveryAddress) {
         int index = deliveryAddresses.indexOf(deliveryAddresses.stream().filter(p -> Objects.equals(p.getDeliveryAddressId(), deliveryAddress.getDeliveryAddressId())).collect(Collectors.toList()).get(0));
         deliveryAddresses.remove(index);
-        isAddNewAddressButtonEnabled();
         view.notifyItemRemoved(index);
+        buttonState();
     }
 }

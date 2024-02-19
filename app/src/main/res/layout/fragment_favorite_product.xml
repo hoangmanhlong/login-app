@@ -5,7 +5,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragment.favorite_product.FavoriteProductFragment" />
+            type="com.example.loginapp.view.fragments.favorite_product.FavoriteProductFragment" />
     </data>
 
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.fragment.cart.CartFragment">
+        tools:context=".view.fragments.cart.CartFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

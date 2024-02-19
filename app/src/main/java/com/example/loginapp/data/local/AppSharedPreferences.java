@@ -4,7 +4,7 @@ package com.example.loginapp.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 
 public class AppSharedPreferences {
 

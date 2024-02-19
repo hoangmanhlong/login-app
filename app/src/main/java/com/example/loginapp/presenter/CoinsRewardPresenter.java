@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.loginapp.model.entity.Coin;
 import com.example.loginapp.model.interator.CoinsRewardInterator;
 import com.example.loginapp.model.listener.CoinsRewardListener;
-import com.example.loginapp.view.fragment.coins.CoinsRewardView;
+import com.example.loginapp.view.fragments.coins.CoinsRewardView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -16,7 +16,7 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     private final CoinsRewardView view;
 
-    private boolean isCurrentDatePresent;
+    private final Calendar calendar = Calendar.getInstance();
 
     public CoinsRewardPresenter(CoinsRewardView view) {
         this.view = view;
@@ -24,11 +24,10 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     @Override
     public void getCalendar(Coin coin) {
-        Log.d(this.toString(), "getCalendar: " + coin.getEndDate());
         view.setCoin(coin);
         List<Long> dates = coin.getRollCalllist();
         long currentDate = System.currentTimeMillis();
-        isCurrentDatePresent = dates.stream().anyMatch(date -> isSameDay(date, currentDate));
+//        isCurrentDatePresent = dates.stream().anyMatch(date -> isSameDay(date, currentDate));
     }
 
     public void getCalendar() {

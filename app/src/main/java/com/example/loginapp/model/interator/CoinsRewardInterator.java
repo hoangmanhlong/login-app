@@ -1,8 +1,10 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.data.Constant;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Coin;
 import com.example.loginapp.model.listener.CoinsRewardListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,17 +36,16 @@ public class CoinsRewardInterator {
     }
 
     public void getCalendar() {
-        Constant.coinsRef.child(Constant.currentUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        listener.getCalendar(snapshot.getValue(Coin.class));
-                    }
+        Constant.coinsRef.child(Constant.currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listener.getCalendar(snapshot.getValue(Coin.class));
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+            }
+        });
     }
 }

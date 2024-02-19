@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.loginapp.view.fragments.overview.OverviewFragment">
 
     <data>
 
         <variable
             name="overviewFragment"
-            type="com.example.loginapp.view.fragment.overview.OverviewFragment" />
+            type="com.example.loginapp.view.fragments.overview.OverviewFragment" />
     </data>
 
     <LinearLayout
