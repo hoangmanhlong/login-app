@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.utils.Constant;
@@ -56,11 +57,11 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
     }
 
     public void goVoucherScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_voucherFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_global_voucherFragment);
     }
 
     public void goOrdersScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userProfileFragment_to_ordersFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_userProfileFragment_to_ordersFragment);
     }
 
     @Override
@@ -69,10 +70,10 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
     }
 
     public void goShippingAddressesScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userProfileFragment_to_deliveryAddressFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_userProfileFragment_to_deliveryAddressFragment);
     }
 
     public void goCoinRewardScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userProfileFragment_to_coinsRewardFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_userProfileFragment_to_coinsRewardFragment);
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -230,6 +231,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_productFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
     }
 }

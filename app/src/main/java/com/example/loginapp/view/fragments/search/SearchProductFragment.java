@@ -46,6 +46,10 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private final SearchProductAdapter adapter = new SearchProductAdapter(this);
 
+    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+            App.getInstance().getApplicationContext(), android.R.layout.simple_list_item_1
+    );
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentSearchProductBinding.inflate(inflater, container, false);
@@ -92,28 +96,26 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
             return false;
         });
 
-            binding.etQuery.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        binding.etQuery.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().trim().length() != 0)
+                    binding.btClearQuery.setVisibility(View.VISIBLE);
+                else {
+                    binding.btClearQuery.setVisibility(View.GONE);
                 }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (s.toString().trim().length() != 0)
-                        binding.btClearQuery.setVisibility(View.VISIBLE);
-                    else {
-                        binding.btClearQuery.setVisibility(View.GONE);
-                    }
-                }
+            @Override
+            public void afterTextChanged(Editable s) {
 
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-        binding.etQuery.setOnClickListener(v -> binding.etQuery.showDropDown());
+            }
+        });
     }
 
     @Override
@@ -164,11 +166,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     @Override
     public void getCategories(List<String> categories) {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                categories
-        );
+        arrayAdapter.clear();
+        arrayAdapter.addAll(categories);
         binding.etQuery.setAdapter(arrayAdapter);
     }
 

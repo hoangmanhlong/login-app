@@ -123,7 +123,6 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     @Override
     public void saveToBasketSuccess() {
         binding.tvAddToCart.setVisibility(View.GONE);
-        EventBus.getDefault().postSticky(new NewProductInBasketMessage(true));
     }
 
     @Override
@@ -144,6 +143,7 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
 
     @Override
     public void hasNewFavoriteProduct() {
+
         EventBus.getDefault().postSticky(new NewProductInWishlistMessage(true));
     }
 

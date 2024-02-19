@@ -26,181 +26,41 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />
 
-        <LinearLayout
-            android:id="@+id/bottom_navigation"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/checkout_background"
-            android:elevation="@dimen/_10sdp"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:background="#fff"
+            android:elevation="10dp"
+            android:overScrollMode="never"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorGravity="top">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/home"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:onClick="@{() -> activity.onHomeClick()}"
-                android:orientation="vertical">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_home_gray" />
 
-                <View
-                    android:id="@+id/homeView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_3sdp"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_search_gray" />
 
-                <ImageView
-                    android:id="@+id/homeIcon"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_home_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_cart_gray" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/search"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:onClick="@{() -> activity.onSearchClick()}"
-                android:orientation="vertical">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_favorite_gray" />
 
-                <View
-                    android:id="@+id/searchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_3sdp"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/searchIcon"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_search_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:onClick="@{() -> activity.onCartClick()}"
-                android:orientation="vertical">
-
-                <View
-                    android:id="@+id/cartView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_3sdp"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/cartIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_cart_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/cartStatusImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_circle"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toEndOf="@id/cartIcon"
-                    app:layout_constraintTop_toTopOf="@id/cartIcon" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/favorite"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:onClick="@{() -> activity.onFavoriteClick()}"
-                android:orientation="vertical">
-
-                <View
-                    android:id="@+id/favoriteView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_3sdp"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/favoriteIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_favorite_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/favoriteStatusImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_circle"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toEndOf="@id/favoriteIcon"
-                    app:layout_constraintTop_toTopOf="@id/favoriteIcon" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/user"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:onClick="@{() -> activity.onUserClick()}"
-                android:orientation="vertical">
-
-                <View
-                    android:id="@+id/userView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_3sdp"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/userIcon"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_user_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_user_gray" />
+        </com.google.android.material.tabs.TabLayout>
 
     </LinearLayout>
 

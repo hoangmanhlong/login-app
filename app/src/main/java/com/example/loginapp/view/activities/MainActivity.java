@@ -1,13 +1,13 @@
 package com.example.loginapp.view.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -16,15 +16,21 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.presenter.MainPresenter;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
-import com.example.loginapp.view.fragments.product_detail.NewProductInBasketMessage;
 import com.example.loginapp.view.fragments.product_detail.NewProductInWishlistMessage;
+import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity implements MainView {
+
+    private boolean backPressedOnce = false;
 
     private final String TAG = MainActivity.class.getName();
 
@@ -34,25 +40,21 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private ActivityMainBinding binding;
 
-    @DrawableRes
-    private final int viewBackground = R.drawable.view_navigation_bar_background;
+    private final ArrayList<Integer> destinationsOfNavigationBar = new ArrayList<>(
+            Arrays.asList(
+                    R.id.homeFragment,
+                    R.id.searchProductFragment,
+                    R.id.cartFragment,
+                    R.id.favoriteProductFragment,
+                    R.id.userProfileFragment
+            )
+    );
 
-    private View[] views;
+    private TabLayout appNavigationBar;
 
-    private ImageView[] imageViews;
+    private int startDestinationId;
 
-    @DrawableRes
-    private final int[] iconGray = {
-            R.drawable.ic_home_gray,
-            R.drawable.ic_search_gray,
-            R.drawable.ic_cart_gray,
-            R.drawable.ic_favorite_gray,
-            R.drawable.ic_user_gray
-    };
-
-    private int[] destinations;
-
-    private ConstraintLayout[] parentViews;
+    private int currentDestinationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,39 +66,31 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     private void destinationChangedListener() {
-        LinearLayout bottomNavigationBar = binding.bottomNavigation;
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            int isBottomNavigationBarVisible = bottomNavigationBar.getVisibility();
-            resetView();
-            int currentDestinationId = destination.getId();
-            boolean isDestinationInList = false;
-            for (int i : destinations) {
-                if (currentDestinationId == i) {
-                    isDestinationInList = true;
-                    break;
-                }
-            }
+            Log.d(TAG, "onTabSelected: " + navController.getPreviousBackStackEntry());
+            currentDestinationId = destination.getId();
+            boolean isDestinationInList = destinationsOfNavigationBar.contains(currentDestinationId);
+            int isBottomNavigationBarVisible = appNavigationBar.getVisibility();
 
-            if (isDestinationInList && isBottomNavigationBarVisible == View.GONE) {
-                AppAnimationState.setBottomNavigationBarState(bottomNavigationBar, this, true);
-            } else if (!isDestinationInList && isBottomNavigationBarVisible == View.VISIBLE) {
-                AppAnimationState.setBottomNavigationBarState(bottomNavigationBar, this, false);
-            }
-            if (currentDestinationId == R.id.homeFragment)
-                setDestinationUI(views[0], imageViews[0], parentViews[0], R.drawable.ic_home_dark);
-            if (currentDestinationId == R.id.searchProductFragment)
-                setDestinationUI(views[1], imageViews[1], parentViews[1], R.drawable.ic_search_dark);
-            if (currentDestinationId == R.id.cartFragment) {
-                setDestinationUI(views[2], imageViews[2], parentViews[2], R.drawable.ic_cart_dark);
-                presenter.setViewedShoppingCart(true);
-            }
-            if (currentDestinationId == R.id.favoriteProductFragment) {
-                setDestinationUI(views[3], imageViews[3], parentViews[3], R.drawable.favorite);
-                presenter.setViewedFavoritesList(true);
-            }
-            if (currentDestinationId == R.id.userProfileFragment)
-                setDestinationUI(views[4], imageViews[4], parentViews[4], R.drawable.ic_user_dark);
+            if (isDestinationInList && isBottomNavigationBarVisible == View.GONE)
+                AppAnimationState.setBottomNavigationBarState(appNavigationBar, this, true);
+
+            if (!isDestinationInList && isBottomNavigationBarVisible == View.VISIBLE)
+                AppAnimationState.setBottomNavigationBarState(appNavigationBar, this, false);
+
+            int tabIndex = destinationsOfNavigationBar.indexOf(currentDestinationId);
+            if (tabIndex != -1) selectTab(tabIndex);
+
+            if (currentDestinationId == destinationsOfNavigationBar.get(3))
+                presenter.viewedFavoritesList(true);
         });
+    }
+
+    private void selectTab(int tabIndex) {
+        TabLayout.Tab tab = appNavigationBar.getTabAt(tabIndex);
+        if (tab != null) {
+            tab.select();
+        }
     }
 
     @Override
@@ -112,25 +106,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void getBasketStatus(NewProductInBasketMessage message) {
-        presenter.setViewedShoppingCart(false);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void getWishlistStatus(NewProductInWishlistMessage message) {
-        presenter.setViewedFavoritesList(false);
-    }
-
-    private void setDestinationUI(View view, ImageView icon, ConstraintLayout navigationItemView, int iconResource) {
-        view.setBackgroundResource(viewBackground);
-        icon.setImageResource(iconResource);
-        navigationItemView.setClickable(false);
+        presenter.viewedFavoritesList(false);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Class<?>[] messageTypes = {NewProductInWishlistMessage.class, NewProductInBasketMessage.class};
+        Class<?>[] messageTypes = {NewProductInWishlistMessage.class};
         for (Class<?> messageType : messageTypes) {
             Object message = EventBus.getDefault().getStickyEvent(messageType);
             if (message != null) {
@@ -139,74 +122,39 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initView() {
         binding.setActivity(this);
-//        showPopupDialog();
-        NavHostFragment navHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        appNavigationBar = binding.bottomNavigation;
+
+        // setup NavHostFragment
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(binding.container.getId());
         navController = navHostFragment.getNavController();
-        presenter.currentUserState();
-        presenter.getStatus();
-        views = new View[]{
-                binding.homeView,
-                binding.searchView,
-                binding.cartView,
-                binding.favoriteView,
-                binding.userView
-        };
 
-        imageViews = new ImageView[]{
-                binding.homeIcon,
-                binding.searchIcon,
-                binding.cartIcon,
-                binding.favoriteIcon,
-                binding.userIcon
-        };
+        startDestinationId = navController.getGraph().getStartDestinationId();
 
-        parentViews = new ConstraintLayout[]{
-                binding.home,
-                binding.search,
-                binding.cart,
-                binding.favorite,
-                binding.user
-        };
+        presenter.firebaseAuthState();
 
-        destinations = new int[]{
-                R.id.homeFragment,
-                R.id.searchProductFragment,
-                R.id.cartFragment,
-                R.id.favoriteProductFragment,
-                R.id.userProfileFragment
-        };
         destinationChangedListener();
-    }
 
-    public void onHomeClick() {
-        navController.navigate(R.id.homeFragment);
-    }
+        appNavigationBar.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                navController.popBackStack();
+                navController.navigate(destinationsOfNavigationBar.get(tab.getPosition()));
+            }
 
-    public void onSearchClick() {
-        navController.navigate(R.id.searchProductFragment);
-    }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-    public void onCartClick() {
-        navController.navigate(R.id.cartFragment);
-    }
+            }
 
-    public void onFavoriteClick() {
-        navController.navigate(R.id.favoriteProductFragment);
-    }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-    public void onUserClick() {
-        navController.navigate(R.id.userProfileFragment);
-    }
-
-    private void resetView() {
-        for (int i = 0; i < 5; i++) {
-            views[i].setBackgroundResource(android.R.color.transparent);
-            imageViews[i].setImageResource(iconGray[i]);
-            parentViews[i].setClickable(true);
-        }
+            }
+        });
     }
 
 //    public void showPopupDialog() {
@@ -219,31 +167,53 @@ public class MainActivity extends AppCompatActivity implements MainView {
 //    }
 
     @Override
-    public void notifyCartChanged(Boolean show) {
-        if (show) binding.cartStatusImageView.setVisibility(View.GONE);
-        else binding.cartStatusImageView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void notifyFavoriteChanged(Boolean show) {
-        if (show) binding.favoriteStatusImageView.setVisibility(View.GONE);
-        else binding.favoriteStatusImageView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void hasUser(Boolean hasUser) {
-        int startDestination = navController.getGraph().getStartDestination();
         if (hasUser) {
             NavDestination navDestination = navController.getCurrentDestination();
             if (navDestination != null) {
-                if (navDestination.getId() != startDestination) {
+                if (navDestination.getId() != startDestinationId) {
                     navController.popBackStack(R.id.overviewFragment, true);
-                    navController.navigate(startDestination);
+                    navController.navigate(startDestinationId);
                 }
             }
         } else {
-            navController.popBackStack(startDestination, true);
+            navController.popBackStack(startDestinationId, true);
             navController.navigate(R.id.overviewFragment);
         }
+    }
+
+    @Override
+    public void bindNumberOfProductInShoppingCart(int number, boolean isShoppingCartEmpty) {
+        TabLayout.Tab shoppingCartTab = appNavigationBar.getTabAt(2);
+        if (isShoppingCartEmpty) shoppingCartTab.removeBadge();
+        else shoppingCartTab.getOrCreateBadge().setNumber(number);
+    }
+
+    @Override
+    public void hasNewProductInFavoritesList(boolean hasNewProduct) {
+        TabLayout.Tab favoritesListTab = appNavigationBar.getTabAt(3);
+        if (hasNewProduct) favoritesListTab.getOrCreateBadge().setText("New");
+        else favoritesListTab.removeBadge();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navController.getPreviousBackStackEntry() == null) {
+            if (backPressedOnce) {
+                super.onBackPressed();
+            } else {
+                backPressedOnce = true;
+                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(() -> backPressedOnce = false, Constant.BACK_PRESS_INTERVAL);
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return super.onSupportNavigateUp() || navController.navigateUp();
     }
 }

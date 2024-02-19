@@ -7,9 +7,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public final class Constant {
 
-    public static final String VIEWED_STATUS_KEY = "viewed_status";
+    public static final int BACK_PRESS_INTERVAL = 2000;
 
-    public static final String IS_VIEWED_SHOPPING_CART_KEY = "isViewedShoppingCart";
+    public static final String VIEWED_STATUS_KEY = "viewed_status";
 
     public static final String IS_VIEWED_FAVORITES_LIST_KEY = "isViewedFavoritesList";
 

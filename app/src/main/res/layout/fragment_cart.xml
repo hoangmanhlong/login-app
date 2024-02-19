@@ -304,6 +304,7 @@
                     android:onClick="@{() -> fragment.onCheckoutClick()}"
                     android:text="@string/checkout"
                     android:textColor="#fff"
+                    android:textStyle="bold"
                     app:elevation="@dimen/_10sdp"
                     app:layout_constraintTop_toBottomOf="@id/totalPriceView" />
 

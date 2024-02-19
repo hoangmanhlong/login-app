@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.utils.Constant;
@@ -51,13 +53,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
         registerPresenter.register(email, password, confirmPassword, requireActivity());
     }
 
-    @Override
-    public void goLoginScreen(String email, String password) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.EMAIL_KEY, email);
-        bundle.putString(Constant.PASSWORD_KEY, password);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_registerFragment_to_loginFragment, bundle);
-    }
+
 
     @Override
     public void onMessage(String message) {

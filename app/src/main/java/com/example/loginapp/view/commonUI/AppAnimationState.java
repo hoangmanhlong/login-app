@@ -6,15 +6,17 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.loginapp.App;
 import com.example.loginapp.R;
+import com.google.android.material.tabs.TabLayout;
 
 public final class AppAnimationState {
 
-    public static void setBottomNavigationBarState(LinearLayout bottomNavigationBar, Activity activity, Boolean show) {
+    public static void setBottomNavigationBarState(TabLayout bottomNavigationBar, Activity activity, Boolean show) {
         if (show) {
             Animation animation = AnimationUtils.loadAnimation(activity, R.anim.anim_bottom_navigation_up);
             bottomNavigationBar.startAnimation(animation);

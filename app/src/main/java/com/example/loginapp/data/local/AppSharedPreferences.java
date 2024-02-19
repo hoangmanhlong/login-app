@@ -21,17 +21,13 @@ public class AppSharedPreferences {
         return instance;
     }
 
-    public void saveViewedStatus(String key, Boolean status) {
+    public void saveViewedFavoritesListStatus(Boolean viewed) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(key, status);
+        editor.putBoolean(Constant.IS_VIEWED_FAVORITES_LIST_KEY, viewed);
         editor.apply();
     }
 
-    public boolean getNumberOfProductInBasket() {
-        return preferences.getBoolean(Constant.IS_VIEWED_SHOPPING_CART_KEY, false);
-    }
-
-    public boolean getNumberOfProductInWishlist() {
+    public boolean getFavoritesListStatus() {
         return preferences.getBoolean(Constant.IS_VIEWED_FAVORITES_LIST_KEY, false);
     }
 }

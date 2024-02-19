@@ -25,7 +25,7 @@ public class RegisterPresenter implements RegisterListener {
 
     public void register(String email, String password, String confirmPassword, Activity activity) {
         if (!isValidEmail(email)) {
-            view.onMessage("Email format is wrong, Please re-enter");;
+            view.onMessage("Email format is wrong, Please re-enter");
         } else if (!isPasswordValid(password)) {
             view.onMessage("Password must be more than 6 characters");
         } else if (!password.equals(confirmPassword)) {
@@ -41,8 +41,6 @@ public class RegisterPresenter implements RegisterListener {
     @Override
     public void isSignupSuccess(Boolean isSuccess) {
         view.isLoading(false);
-        if (isSuccess) view.goLoginScreen(email, password);
-        else view.onMessage("Error");
     }
 
     private boolean isValidEmail(String email) {
