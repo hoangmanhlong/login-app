@@ -37,8 +37,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingTop="@dimen/_14sdp"
-                    android:paddingHorizontal="@dimen/_14sdp">
+                    android:paddingHorizontal="@dimen/_14sdp"
+                    android:paddingTop="@dimen/_14sdp">
 
                     <include layout="@layout/layout_user_placeholder" />
 
@@ -115,15 +115,19 @@
                     app:sliderStartAutoCycle="true" />
 
                 <Button
+                    android:includeFontPadding="false"
                     android:id="@+id/expandRecommendedProductsView"
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
                     android:text="@string/recommended"
                     android:textAlignment="textStart"
-                    android:textSize="@dimen/_14ssp"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:visibility="gone"
                     app:icon="@drawable/ic_arrow_forward_black"
                     app:iconGravity="end" />
@@ -163,7 +167,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recommendedRecyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_145sdp"
+                    android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
@@ -174,15 +178,19 @@
                     tools:listitem="@layout/layout_product_item" />
 
                 <Button
+                    android:includeFontPadding="false"
                     android:id="@+id/expandTopChartsProductsView"
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
                     android:text="@string/top_charts"
                     android:textAlignment="textStart"
-                    android:textSize="@dimen/_14ssp"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:visibility="gone"
                     app:icon="@drawable/ic_arrow_forward_black"
                     app:iconGravity="end" />
@@ -220,7 +228,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topChartsRecyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_145sdp"
+                    android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
@@ -230,15 +238,19 @@
                     tools:listitem="@layout/layout_product_item" />
 
                 <Button
+                    android:includeFontPadding="false"
                     android:id="@+id/expandDiscountProductsView"
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
                     android:text="@string/discount"
                     android:textAlignment="textStart"
-                    android:textSize="@dimen/_14ssp"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:visibility="gone"
                     app:icon="@drawable/ic_arrow_forward_black"
                     app:iconGravity="end" />
@@ -276,7 +288,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/discountRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_145sdp"
+                    android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"

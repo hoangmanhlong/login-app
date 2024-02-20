@@ -1,7 +1,6 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentUserProfileBinding;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.UserProfilePresenter;
+import com.example.loginapp.utils.Constant;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -42,11 +42,12 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
     }
 
     public void logOut() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle(R.string.logout).setMessage(R.string.logout_message)
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.logout)
+                .setMessage(R.string.logout_message)
                 .setPositiveButton(R.string.positive_button_title, (dialog, which) -> FirebaseAuth.getInstance().signOut())
                 .setNegativeButton(R.string.negative_button_title, null)
-                .setCancelable(true)
+                .setCancelable(false)
                 .show();
     }
 

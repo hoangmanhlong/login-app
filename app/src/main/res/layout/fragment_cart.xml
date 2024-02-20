@@ -29,7 +29,6 @@
         android:orientation="vertical"
         tools:context=".view.fragments.cart.CartFragment">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

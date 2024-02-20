@@ -47,7 +47,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/averia_gruesa_libre_regular"
                 android:includeFontPadding="false"
-                android:text="Oops, your wishlist is empty"
+                android:text="@string/favorites_list_empty"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:visibility="gone"
@@ -59,14 +59,13 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/favorite_recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:padding="@dimen/_8sdp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/layout_favorite" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </LinearLayout>
 

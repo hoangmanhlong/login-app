@@ -3,10 +3,8 @@ package com.example.loginapp.view.activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
@@ -50,6 +48,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
             )
     );
 
+//    private final ArrayList<Integer> navigationBarIconFilled = new ArrayList<>(
+//            Arrays.asList(
+//                    R.drawable.ic_home_dark,
+//                    R.drawable.ic_search_dark,
+//                    R.drawable.ic_cart_dark,
+//                    R.drawable.favorite,
+//                    R.drawable.ic_user_dark
+//            )
+//    );
+
     private TabLayout appNavigationBar;
 
     private int startDestinationId;
@@ -67,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void destinationChangedListener() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            Log.d(TAG, "onTabSelected: " + navController.getPreviousBackStackEntry());
             currentDestinationId = destination.getId();
             boolean isDestinationInList = destinationsOfNavigationBar.contains(currentDestinationId);
             int isBottomNavigationBarVisible = appNavigationBar.getVisibility();
@@ -141,8 +148,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         appNavigationBar.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
                 navController.popBackStack();
-                navController.navigate(destinationsOfNavigationBar.get(tab.getPosition()));
+                navController.navigate(destinationsOfNavigationBar.get(position));
             }
 
             @Override

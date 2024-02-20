@@ -75,6 +75,8 @@
     <string name="add_new_address">Add New Address</string>
     <string name="edit_address">Edit address</string>
     <string name="vietnam">Việt Nam</string>
+    <string name="my_orders">My Orders</string>
+    <string name="favorites_list_empty">Oops, your wishlist is empty</string>
     <string name="login_email_false_message">Account or password is incorrect. Try Again!</string>
     <string name="rating_des">Ratings and reviews are verified and are from people who use the same type of device that you use</string>
 </resources>

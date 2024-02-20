@@ -63,6 +63,7 @@
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="@dimen/_80sdp"
                         android:adjustViewBounds="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="@{() -> profileFragment.goEditUserScreen()}"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +77,7 @@
                         android:id="@+id/editAvatar"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:background="@drawable/bg_edit_user_button"
+                        android:background="@drawable/edit_avatar_button"
                         android:contentDescription="@null"
                         android:onClick="@{() -> profileFragment.goEditUserScreen()}"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -191,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Bought"
+                        android:text="Completed"
                         android:textAlignment="center"
                         android:textColor="@color/gray_500"
                         android:textSize="11sp" />
@@ -201,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Being transported"
+                        android:text="Cancel"
                         android:textAlignment="center"
                         android:textColor="@color/gray_500"
                         android:textSize="11sp" />
@@ -222,7 +223,7 @@
                     android:fontFamily="@font/dm_sans_36pt_regular"
                     android:onClick="@{() -> profileFragment.goOrdersScreen()}"
                     android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="My order"
+                    android:text="@string/my_orders"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
                     android:textStyle="bold"
@@ -236,10 +237,8 @@
                     app:dividerInsetEnd="@dimen/_14sdp"
                     app:dividerInsetStart="@dimen/_14sdp" />
 
-
                 <Button
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
                     android:fontFamily="@font/dm_sans_36pt_regular"
