@@ -19,15 +19,14 @@
     </data>
 
     <LinearLayout
+        style="@style/ThemeOverlay.App.BottomSheetDialog"
         android:id="@+id/bottom_sheet_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:backgroundTint="@android:color/transparent"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

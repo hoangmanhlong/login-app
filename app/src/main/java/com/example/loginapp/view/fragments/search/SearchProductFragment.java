@@ -33,6 +33,7 @@ import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private final SearchProductAdapter adapter = new SearchProductAdapter(this);
 
-    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+    private final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
             App.getInstance().getApplicationContext(), android.R.layout.simple_list_item_1
     );
 
@@ -59,13 +60,15 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        initView();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            initView();
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
+        binding.setFragment(this);
         RecyclerView recyclerView = binding.productRecyclerview;
 
         recyclerView.setAdapter(adapter);
@@ -78,6 +81,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         searchSuggestionRecyclerview.setAdapter(searchSuggestAdapter);
 
         presenter.initData();
+
         binding.etQuery.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 presenter.onSearchProduct(binding.etQuery.getText().toString());

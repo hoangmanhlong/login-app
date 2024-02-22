@@ -1,10 +1,10 @@
 package com.example.loginapp.view.activities;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
@@ -15,6 +15,7 @@ import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.presenter.MainPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.utils.NetworkChecker;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.fragments.product_detail.NewProductInWishlistMessage;
 import com.google.android.material.tabs.TabLayout;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements MainView {
+
+    private NetworkChecker networkChecker;
 
     private boolean backPressedOnce = false;
 
@@ -73,6 +76,27 @@ public class MainActivity extends AppCompatActivity implements MainView {
         initView();
     }
 
+    private void initView() {
+        setNetworkChecker();
+
+        appNavigationBar = binding.bottomNavigation.getRoot();
+
+        setupNavigation();
+
+        presenter.registerAuthStateListener();
+
+        destinationChangedListener();
+
+        tabSelectedListener();
+    }
+
+    private void setupNavigation() {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(binding.container.getId());
+        navController = navHostFragment.getNavController();
+        startDestinationId = navController.getGraph().getStartDestinationId();
+    }
+
     private void destinationChangedListener() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             currentDestinationId = destination.getId();
@@ -110,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        presenter.unregisterAuthStateListener();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -120,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (networkChecker != null) networkChecker.unregisterNetworkCallback();
+        presenter.unregisterAuthStateListener();
+
         Class<?>[] messageTypes = {NewProductInWishlistMessage.class};
         for (Class<?> messageType : messageTypes) {
             Object message = EventBus.getDefault().getStickyEvent(messageType);
@@ -127,42 +155,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 EventBus.getDefault().removeStickyEvent(message);
             }
         }
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private void initView() {
-        binding.setActivity(this);
-        appNavigationBar = binding.bottomNavigation;
-
-        // setup NavHostFragment
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(binding.container.getId());
-        navController = navHostFragment.getNavController();
-
-        startDestinationId = navController.getGraph().getStartDestinationId();
-
-        presenter.firebaseAuthState();
-
-        destinationChangedListener();
-
-        appNavigationBar.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                navController.popBackStack();
-                navController.navigate(destinationsOfNavigationBar.get(position));
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
 //    public void showPopupDialog() {
@@ -175,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 //    }
 
     @Override
-    public void hasUser(Boolean hasUser) {
+    public void hasUser(boolean hasUser) {
         if (hasUser) {
             NavDestination navDestination = navController.getCurrentDestination();
             if (navDestination != null) {
@@ -185,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 }
             }
         } else {
-            navController.popBackStack(startDestinationId, true);
+            navController.popBackStack(navController.getCurrentDestination().getId(), true);
             navController.navigate(R.id.overviewFragment);
         }
     }
@@ -212,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
             } else {
                 backPressedOnce = true;
                 Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
-
                 new Handler().postDelayed(() -> backPressedOnce = false, Constant.BACK_PRESS_INTERVAL);
             }
         } else {
@@ -223,5 +214,35 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public boolean onSupportNavigateUp() {
         return super.onSupportNavigateUp() || navController.navigateUp();
+    }
+
+    private void setNetworkChecker() {
+        networkChecker = NetworkChecker.getInstance(this);
+        networkChecker.networkState.observe(this, isConnected -> {
+                    binding.activityContent.setVisibility(isConnected ? View.VISIBLE : View.GONE);
+                    binding.networkConnectionErrorView.getRoot().setVisibility(isConnected ? View.GONE : View.VISIBLE);
+                }
+        );
+    }
+
+    private void tabSelectedListener() {
+        appNavigationBar.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                navController.popBackStack();
+                navController.navigate(destinationsOfNavigationBar.get(position));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

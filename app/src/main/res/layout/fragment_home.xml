@@ -32,17 +32,10 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.facebook.shimmer.ShimmerFrameLayout
+                <include
                     android:id="@+id/userPlaceHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_14sdp"
-                    android:paddingTop="@dimen/_14sdp">
+                    layout="@layout/layout_home_userview_placeholder" />
 
-                    <include layout="@layout/layout_user_placeholder" />
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/user_view"
@@ -115,12 +108,12 @@
                     app:sliderStartAutoCycle="true" />
 
                 <Button
-                    android:includeFontPadding="false"
                     android:id="@+id/expandRecommendedProductsView"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
                     android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
                     android:text="@string/recommended"
@@ -132,37 +125,9 @@
                     app:icon="@drawable/ic_arrow_forward_black"
                     app:iconGravity="end" />
 
-                <com.facebook.shimmer.ShimmerFrameLayout
+                <include
                     android:id="@+id/recommendedProductsPlaceHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <include layout="@layout/layout_title_products_placeholder" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
+                    layout="@layout/layout_home_product_placeholder" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recommendedRecyclerview"
@@ -178,12 +143,12 @@
                     tools:listitem="@layout/layout_product_item" />
 
                 <Button
-                    android:includeFontPadding="false"
                     android:id="@+id/expandTopChartsProductsView"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
                     android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
                     android:text="@string/top_charts"
@@ -195,35 +160,9 @@
                     app:icon="@drawable/ic_arrow_forward_black"
                     app:iconGravity="end" />
 
-                <com.facebook.shimmer.ShimmerFrameLayout
+                <include
                     android:id="@+id/topChartsProductsPlaceHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <include layout="@layout/layout_title_products_placeholder" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.facebook.shimmer.ShimmerFrameLayout>
+                    layout="@layout/layout_home_product_placeholder" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topChartsRecyclerview"
@@ -238,12 +177,12 @@
                     tools:listitem="@layout/layout_product_item" />
 
                 <Button
-                    android:includeFontPadding="false"
                     android:id="@+id/expandDiscountProductsView"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
                     android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
                     android:text="@string/discount"
@@ -255,35 +194,9 @@
                     app:icon="@drawable/ic_arrow_forward_black"
                     app:iconGravity="end" />
 
-                <com.facebook.shimmer.ShimmerFrameLayout
+                <include
                     android:id="@+id/discountProductsPlaceHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <include layout="@layout/layout_title_products_placeholder" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-
-                            <include layout="@layout/layout_product_placeholder" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.facebook.shimmer.ShimmerFrameLayout>
+                    layout="@layout/layout_home_product_placeholder" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/discountRecyclerView"

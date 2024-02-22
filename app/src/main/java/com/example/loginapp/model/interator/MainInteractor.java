@@ -20,8 +20,8 @@ public class MainInteractor {
         this.listener = listener;
     }
 
-    public void getNavigationState() {
-        Constant.cartRef.child(Constant.currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+    public void getNavigationState(String uid) {
+        Constant.cartRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     listener.getNumberOfProductInShoppingCart((int) snapshot.getChildrenCount(), !snapshot.exists());

@@ -1,13 +1,15 @@
 package com.example.loginapp.model.interator;
 
-import com.airbnb.lottie.L;
-import com.example.loginapp.data.remote.api.dto.ProductResponse;
-import com.example.loginapp.utils.Constant;
+import androidx.annotation.NonNull;
+
 import com.example.loginapp.data.remote.api.AppApiService;
+import com.example.loginapp.data.remote.api.dto.ProductResponse;
 import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.ProductListener;
+import com.example.loginapp.utils.Constant;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +24,7 @@ public class ProductInterator {
 
     private final DatabaseReference cartRef = Constant.cartRef;
 
-    private final FirebaseUser currentUser = Constant.currentUser;
+    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     private final ProductListener listener;
 
@@ -84,7 +86,7 @@ public class ProductInterator {
         Call<CommentRespond> call = AppApiService.retrofit.getComments(5);
         call.enqueue(new Callback<CommentRespond>() {
             @Override
-            public void onResponse(Call<CommentRespond> call, Response<CommentRespond> response) {
+            public void onResponse(@NonNull Call<CommentRespond> call, @NonNull Response<CommentRespond> response) {
                 if (response.isSuccessful()) {
                     CommentRespond commentRespond = response.body();
                     if (commentRespond != null) {

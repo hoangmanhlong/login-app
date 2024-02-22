@@ -45,13 +45,14 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private final ProductAdapter discountAdapter = new ProductAdapter(this);
 
-    private DiscountAdapter adapter;
+    private final DiscountAdapter adapter = new DiscountAdapter(new ArrayList<>());
 
     private ShimmerFrameLayout recommendedProductsPlaceHolder, topChartsProductsPlaceHolder, discountProductsPlaceHolder, userPlaceHolder;
 
     private RecyclerView recommendedRecyclerview, topChartsRecyclerview, discountRecyclerView;
 
     private Button expandRecommendedProductsView, expandTopChartsProductsView, expandDiscountProductsView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -67,10 +68,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     private void initView() {
         binding.setHomeFragment(this);
 
-        recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder;
-        topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder;
-        discountProductsPlaceHolder = binding.discountProductsPlaceHolder;
-        userPlaceHolder = binding.userPlaceHolder;
+        recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder.getRoot();
+        topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder.getRoot();
+        discountProductsPlaceHolder = binding.discountProductsPlaceHolder.getRoot();
+        userPlaceHolder = binding.userPlaceHolder.getRoot();
 
         expandRecommendedProductsView = binding.expandRecommendedProductsView;
         expandTopChartsProductsView = binding.expandTopChartsProductsView;
@@ -80,20 +81,18 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         topChartsRecyclerview = binding.topChartsRecyclerview;
         discountRecyclerView = binding.discountRecyclerView;
 
+        SliderView sliderView = binding.discountSliderView;
+
         recommendedRecyclerview.setAdapter(recommendedAdapter);
         topChartsRecyclerview.setAdapter(topChartsAdapter);
         discountRecyclerView.setAdapter(discountAdapter);
-
-        SliderView sliderView = binding.discountSliderView;
 
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         sliderView.setScrollTimeInSec(4);
         sliderView.startAutoCycle();
-
-        adapter = new DiscountAdapter(new ArrayList<>());
-        binding.discountSliderView.setSliderAdapter(adapter);
+        sliderView.setSliderAdapter(adapter);
 
         presenter.initData();
 
@@ -126,15 +125,14 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void isRecommendedProductsLoading(boolean isLoading) {
-        ShimmerFrameLayout placeHolder = binding.recommendedProductsPlaceHolder;
         if (isLoading) {
             recommendedProductsPlaceHolder.setVisibility(View.VISIBLE);
             recommendedProductsPlaceHolder.startShimmerAnimation();
             recommendedRecyclerview.setVisibility(View.GONE);
             expandRecommendedProductsView.setVisibility(View.GONE);
         } else {
-            placeHolder.stopShimmerAnimation();
-            placeHolder.setVisibility(View.GONE);
+            recommendedProductsPlaceHolder.stopShimmerAnimation();
+            recommendedProductsPlaceHolder.setVisibility(View.GONE);
             recommendedRecyclerview.setVisibility(View.VISIBLE);
             expandRecommendedProductsView.setVisibility(View.VISIBLE);
         }

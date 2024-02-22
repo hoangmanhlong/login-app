@@ -1,34 +1,32 @@
 package com.example.loginapp.presenter;
 
 import android.app.Activity;
+import android.util.Log;
 
-import com.example.loginapp.model.interator.LoginInteractor;
-import com.example.loginapp.model.listener.LoginListener;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.login.LoginView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginPresenter implements LoginListener {
+public class LoginPresenter {
 
     private final LoginView view;
-
-    private final LoginInteractor interactor = new LoginInteractor(this);
 
     public LoginPresenter(LoginView view) {
         this.view = view;
     }
 
-    @Override
-    public void loginStatus(Boolean success) {
-        view.isLoading(false);
-        view.isLoginSuccess(success);
-    }
-
     public void loginWithEmail(String email, String password, Activity activity) {
         if (isValidEmail(email) && password.length() >= 6) {
             view.isLoading(true);
-            interactor.loginWithEmail(email, password, activity);
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(activity, task -> {view.isLoginSuccess(task.isSuccessful());})
+                    .addOnFailureListener(e -> {
+                        view.onMessage(e.getMessage());
+                        Log.d(Constant.LOGIN_TAG, e.getMessage());
+                    });
         } else {
             view.isLoginSuccess(false);
         }

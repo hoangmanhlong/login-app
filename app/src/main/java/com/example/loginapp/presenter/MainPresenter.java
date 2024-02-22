@@ -6,6 +6,7 @@ import com.example.loginapp.model.interator.MainInteractor;
 import com.example.loginapp.model.listener.MainListener;
 import com.example.loginapp.view.activities.MainView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainPresenter implements MainListener {
 
@@ -13,13 +14,15 @@ public class MainPresenter implements MainListener {
 
     private final MainView view;
 
+    private FirebaseAuth.AuthStateListener authStateListener;
+
     private final MainInteractor interactor = new MainInteractor(this);
 
-    private final AppSharedPreferences sharedPreferences =
-            AppSharedPreferences.getInstance(App.getInstance());
+    private final AppSharedPreferences sharedPreferences;
 
     public MainPresenter(MainView view) {
         this.view = view;
+        sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }
 
     private void getWishlistStatus() {
@@ -31,15 +34,21 @@ public class MainPresenter implements MainListener {
         getWishlistStatus();
     }
 
-    public void firebaseAuthState() {
-        FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
-            boolean hasUser = firebaseAuth.getCurrentUser() != null;
-            if (hasUser) {
-                interactor.getNavigationState();
+    public void registerAuthStateListener() {
+        authStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            boolean isLogged = user != null;
+            if (isLogged) {
+                interactor.getNavigationState(user.getUid());
                 getWishlistStatus();
             }
-            view.hasUser(hasUser);
-        });
+            view.hasUser(isLogged);
+        };
+        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+    }
+
+    public void unregisterAuthStateListener() {
+        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
     }
 
     @Override

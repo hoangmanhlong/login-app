@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:background="@color/gray_1000"
             app:tabIndicatorFullWidth="true"
-            app:tabMode="fixed">
+            app:tabMode="auto">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
@@ -62,12 +62,21 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Processing" />
+                android:text="@string/processing" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Completed" />
+                android:text="@string/completed" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/_return" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager2.widget.ViewPager2

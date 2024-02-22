@@ -1,5 +1,7 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,6 +11,7 @@ import com.example.loginapp.data.remote.api.dto.ProductResponse;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.HomeListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,8 +26,10 @@ import retrofit2.Response;
 
 public class HomeInterator {
 
+    private final String TAG = this.toString();
+
     @Nullable
-    private final FirebaseUser currentUser = Constant.currentUser;
+    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     private final HomeListener listener;
 
@@ -41,7 +46,7 @@ public class HomeInterator {
                     ProductResponse productResponse = response.body();
                     if (productResponse != null) {
                         listener.getProductsFromAPI(productResponse.getProducts());
-                        updateBestseller(productResponse.getProducts().subList(0, 3));
+//                        updateBestseller(productResponse.getProducts().subList(0, 3));
                     } else {
                         listener.onMessage("Load data fail");
                     }
@@ -50,7 +55,7 @@ public class HomeInterator {
 
             @Override
             public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
-                listener.onMessage(t.getMessage());
+                Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
     }
@@ -89,11 +94,11 @@ public class HomeInterator {
             });
     }
 
-    public void updateBestseller(List<Product> products) {
-        for (Product product : products)
-            Constant.bestSellerRef.child(String.valueOf(product.getId()))
-                    .setValue(product);
-    }
+//    public void updateBestseller(List<Product> products) {
+//        for (Product product : products)
+//            Constant.bestSellerRef.child(String.valueOf(product.getId()))
+//                    .setValue(product);
+//    }
 
     public void getBestsellerProducts() {
         List<Product> products = new ArrayList<>();

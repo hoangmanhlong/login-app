@@ -44,4 +44,12 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="MaterialAlertDialog.Material3">
+        <item name="colorSurface">@color/gray_1000</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@color/gray_1000</item>
+    </style>
+
 </resources>

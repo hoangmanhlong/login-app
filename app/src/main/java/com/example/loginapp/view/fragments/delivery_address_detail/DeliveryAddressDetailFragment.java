@@ -55,7 +55,6 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
             presenter.setCurrentDeliveryAddress(deliveryAddress);
             fragmentLabel = R.string.edit_address;
         } else {
-//            binding.btSubmit.setEnabled(false);
             binding.btDeleteAddress.setVisibility(View.GONE);
             fragmentLabel = R.string.add_new_address;
         }
@@ -64,7 +63,7 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
 
     private void initView() {
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-        presenter.getProvince();
+//        presenter.getProvince();
         onInputState();
     }
 

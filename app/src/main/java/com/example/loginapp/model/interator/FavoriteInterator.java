@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.FavoriteListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,13 +18,14 @@ public class FavoriteInterator {
 
     private final FavoriteListener listener;
 
-    private final Query query = Constant.favoriteProductRef.child(Constant.currentUser.getUid());
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public FavoriteInterator(FavoriteListener listener) {
         this.listener = listener;
     }
 
     public void getFavoriteProductFromFirebase() {
+        Query query = Constant.favoriteProductRef.child(user.getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -67,7 +70,7 @@ public class FavoriteInterator {
     }
 
     public void deleteProduct(int id) {
-        Constant.favoriteProductRef.child(Constant.currentUser.getUid())
+        Constant.favoriteProductRef.child(user.getUid())
                 .child(String.valueOf(id))
                 .removeValue()
                 .addOnFailureListener(e -> listener.onMessage("Error"));

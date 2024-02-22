@@ -14,7 +14,4 @@ public interface SearchListener {
     void notifyItemRemoved(SearchHistory history);
 
     void onLoadError(String message);
-
-    void getCategories(List<String> categories);
-
 }

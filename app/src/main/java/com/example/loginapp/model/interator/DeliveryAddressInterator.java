@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.listener.DeliveryAddressListener;
 import com.example.loginapp.utils.Constant;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,7 +18,9 @@ public class DeliveryAddressInterator {
 
     private final DeliveryAddressListener listener;
 
-    private final Query query = Constant.deliveryAddressRef.child(Constant.currentUser.getUid());
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    private final Query query = user != null ? Constant.deliveryAddressRef.child(user.getUid()) : null;
 
     public DeliveryAddressInterator(DeliveryAddressListener listener) {
         this.listener = listener;

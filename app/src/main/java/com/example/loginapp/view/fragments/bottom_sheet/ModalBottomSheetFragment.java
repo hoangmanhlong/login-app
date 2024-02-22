@@ -10,13 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.loginapp.R;
-import com.example.loginapp.model.entity.VoucherType;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentBottomSheetBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Voucher;
+import com.example.loginapp.model.entity.VoucherType;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -24,7 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ModalBottomSheetFragment extends BottomSheetDialogFragment implements SheetView {
@@ -78,11 +78,8 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
 
     public void onBuyClick() {
         Bundle bundle = new Bundle();
-        List<OrderProduct> orderProducts = new ArrayList<>();
-        orderProducts.add(currentProduct.toOrderProduct(quantity));
-        Order order;
-        if (voucher != null) order = new Order(orderProducts, voucher);
-        else order = new Order(orderProducts);
+        List<OrderProduct> orderProducts = Collections.singletonList(currentProduct.toOrderProduct(quantity));
+        Order order = (voucher != null) ? new Order(orderProducts, voucher) : new Order(orderProducts);
         bundle.putSerializable(Constant.ORDER_KEY, order);
         bundle.putBoolean(Constant.IS_CART, false);
         Navigation.findNavController(requireParentFragment().requireView())

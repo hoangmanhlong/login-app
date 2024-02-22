@@ -59,7 +59,7 @@ public final class Constant {
 
     public static final int COINS_FOR_EACH_TIME = 100;
 
-    public static final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    public static final String LOGIN_TAG = "login_tag";
 
     public static final DatabaseReference userRef =
             FirebaseDatabase.getInstance().getReference().child(USER_REF_NAME);

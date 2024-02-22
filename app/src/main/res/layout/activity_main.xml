@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.activities.MainActivity">
 
-    <data>
-
-        <variable
-            name="activity"
-            type="com.example.loginapp.view.activities.MainActivity" />
-    </data>
+    <include
+        android:visibility="gone"
+        android:id="@+id/network_connection_error_view"
+        layout="@layout/layout_network_connection_error" />
 
     <LinearLayout
         android:id="@+id/activityContent"
@@ -26,43 +27,10 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />
 
-        <com.google.android.material.tabs.TabLayout
+        <include
             android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#fff"
-            android:elevation="10dp"
-            android:overScrollMode="never"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorGravity="top">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_home_gray" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_search_gray" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_cart_gray" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_favorite_gray" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_user_gray" />
-        </com.google.android.material.tabs.TabLayout>
+            layout="@layout/layout_navigation_bar" />
 
     </LinearLayout>
 
-</layout>
-
+</LinearLayout>

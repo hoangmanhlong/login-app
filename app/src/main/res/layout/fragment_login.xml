@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.graphics.Color" />
+
         <variable
             name="loginFragment"
             type="com.example.loginapp.view.fragments.login.LoginFragment" />
@@ -56,6 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@id/description">
 
                 <androidx.appcompat.widget.AppCompatButton
+
                     android:id="@+id/login_phone_number"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -69,6 +72,7 @@
                     android:textSize="14sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
+
                     android:id="@+id/login_email"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -253,7 +257,6 @@
                     android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="@dimen/_24sdp"
                     android:backgroundTint="@color/cam"
-                    android:enabled="false"
                     android:onClick="@{() -> loginFragment.onLogin()}"
                     android:text="@string/login"
                     android:textAllCaps="false"
@@ -292,6 +295,7 @@
                     android:background="?attr/dividerHorizontal" />
 
             </LinearLayout>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/view_login_google"
@@ -346,6 +350,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:background="?attr/selectableItemBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_bold"

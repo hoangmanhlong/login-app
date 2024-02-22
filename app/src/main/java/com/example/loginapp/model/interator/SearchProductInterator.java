@@ -1,7 +1,5 @@
 package com.example.loginapp.model.interator;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -10,15 +8,12 @@ import com.example.loginapp.data.remote.api.dto.ProductResponse;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.listener.SearchListener;
 import com.example.loginapp.utils.Constant;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,9 +27,7 @@ public class SearchProductInterator {
 
     private final DatabaseReference searchHistoriesRef = Constant.searchHistoriesRef;
 
-    private final FirebaseUser currentUser = Constant.currentUser;
-
-    private final Query searchSuggestionQuery = searchHistoriesRef.child(currentUser.getUid());
+    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public SearchProductInterator(SearchListener listener) {
         this.listener = listener;
@@ -45,7 +38,7 @@ public class SearchProductInterator {
 
         call.enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                 if (response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
                     if (productResponse != null)
@@ -67,7 +60,7 @@ public class SearchProductInterator {
 
     public void getSearchHistories() {
 
-        searchSuggestionQuery.addChildEventListener(new ChildEventListener() {
+        searchHistoriesRef.child(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 listener.notifyItemAdded(snapshot.getValue(SearchHistory.class));
@@ -97,22 +90,5 @@ public class SearchProductInterator {
 
     public void deleteSearchHistory(String id) {
         searchHistoriesRef.child(currentUser.getUid()).child(id).removeValue();
-    }
-
-    public void getCategories() {
-        Call<List<String>> call = AppApiService.retrofit.getCategories();
-        call.enqueue(new Callback<List<String>>() {
-            @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if (response.isSuccessful()) {
-                    listener.getCategories(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
-
-            }
-        });
     }
 }

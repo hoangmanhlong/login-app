@@ -5,4 +5,6 @@ public interface LoginView {
     void isLoading(Boolean loading);
 
     void isLoginSuccess(boolean isSuccess);
+
+    void onMessage(String message);
 }

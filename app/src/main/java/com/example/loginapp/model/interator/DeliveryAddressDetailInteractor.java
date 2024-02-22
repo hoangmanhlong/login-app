@@ -1,8 +1,12 @@
 package com.example.loginapp.model.interator;
 
+import androidx.annotation.Nullable;
+
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.listener.DeliveryAddressDetailListener;
 import com.example.loginapp.utils.Constant;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
@@ -10,7 +14,11 @@ public class DeliveryAddressDetailInteractor {
 
     private final DeliveryAddressDetailListener listener;
 
-    DatabaseReference ref = Constant.deliveryAddressRef.child(Constant.currentUser.getUid());
+    @Nullable
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    @Nullable
+    DatabaseReference ref = (user != null) ? Constant.deliveryAddressRef.child(user.getUid()) : null;
 
     public DeliveryAddressDetailInteractor(DeliveryAddressDetailListener listener) {
         this.listener = listener;

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
 import com.example.loginapp.adapter.cart_adapter.CartAdapter;
@@ -26,7 +27,9 @@ import com.example.loginapp.presenter.CartPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
+import com.example.loginapp.view.commonUI.LoginRemindDialog;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,7 +55,11 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            initView();
+        } else {
+            LoginRemindDialog.show(this, requireContext());
+        }
     }
 
     @Override

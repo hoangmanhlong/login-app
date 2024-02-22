@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.comment_adapter.CommentAdapter;
 import com.example.loginapp.adapter.product_adapter.OnProductClickListener;
@@ -26,7 +27,9 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.ProductPresenter;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
+import com.example.loginapp.view.commonUI.LoginRemindDialog;
 import com.example.loginapp.view.fragments.bottom_sheet.ModalBottomSheetFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -86,14 +89,18 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     }
 
     public void showBottomSheet() {
-        Product product = presenter.getProduct();
-        if (product != null) {
-            ModalBottomSheetFragment bottomSheet = new ModalBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(Constant.PRODUCT_KEY, product);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            Product product = presenter.getProduct();
+            if (product != null) {
+                ModalBottomSheetFragment bottomSheet = new ModalBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constant.PRODUCT_KEY, product);
 
-            bottomSheet.setArguments(bundle);
-            bottomSheet.show(getChildFragmentManager(), ModalBottomSheetFragment.TAG);
+                bottomSheet.setArguments(bundle);
+                bottomSheet.show(getChildFragmentManager(), ModalBottomSheetFragment.TAG);
+            }
+        } else {
+            LoginRemindDialog.show(this, requireContext());
         }
     }
 
@@ -102,12 +109,21 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     }
 
     public void onFavoriteButtonClick() {
-        presenter.updateFavorite();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            presenter.updateFavorite();
+        } else {
+            binding.favoriteBtn.setChecked(false);
+            LoginRemindDialog.show(this, requireContext());
+        }
     }
 
     public void onCartBtnClick() {
-        binding.tvAddToCart.setVisibility(View.VISIBLE);
-        presenter.addProductToCart();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            binding.tvAddToCart.setVisibility(View.VISIBLE);
+            presenter.addProductToCart();
+        } else {
+            LoginRemindDialog.show(this, requireContext());
+        }
     }
 
     @Override
@@ -143,7 +159,6 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
 
     @Override
     public void hasNewFavoriteProduct() {
-
         EventBus.getDefault().postSticky(new NewProductInWishlistMessage(true));
     }
 

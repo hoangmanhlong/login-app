@@ -26,7 +26,7 @@ public class FavoritePresenter implements FavoriteListener {
         else view.onItemAdded(wishlist);
     }
 
-    public void getFavoriteProducts() {
+    private void getFavoriteProducts() {
         interator.getFavoriteProductFromFirebase();
     }
 

@@ -1,10 +1,12 @@
 package com.example.loginapp.presenter;
 
+import com.example.loginapp.App;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.interator.SearchProductInterator;
 import com.example.loginapp.model.listener.SearchListener;
 import com.example.loginapp.view.fragments.search.SearchView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +28,17 @@ public class SearchPresenter implements SearchListener {
         this.view = view;
     }
 
-    private List<String> categories = new ArrayList<>();
-
     public void initData() {
-        if (histories.isEmpty()) getSearchHistories();
-        else view.notifyItemAdded(histories);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            if (histories.isEmpty()) getSearchHistories();
+            else view.notifyItemAdded(histories);
+        }
 
         if (!products.isEmpty() && isShowSearchResult) {
             view.onLoadProducts(products);
             view.showSearchResult(true);
             listStatus();
         }
-
-        if (categories.isEmpty()) getCategories();
-        else view.getCategories(categories);
     }
 
     public void onSearchProduct(String query) {
@@ -50,10 +49,6 @@ public class SearchPresenter implements SearchListener {
         } else {
             view.onMessage("Invalid information");
         }
-    }
-
-    private void getCategories() {
-        interator.getCategories();
     }
 
     private void getSearchHistories() {
@@ -99,12 +94,6 @@ public class SearchPresenter implements SearchListener {
     @Override
     public void onLoadError(String message) {
         view.onMessage(message);
-    }
-
-    @Override
-    public void getCategories(List<String> categories) {
-        this.categories = categories;
-        view.getCategories(categories);
     }
 
     public void deleteHistory(String text) {

@@ -5,21 +5,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.loginapp.App;
 import com.example.loginapp.R;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentLoginBinding;
 import com.example.loginapp.presenter.LoginPresenter;
+import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
-import com.example.loginapp.view.state.LoginEmailButtonObserver;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginFragment extends Fragment implements LoginView {
@@ -46,7 +45,6 @@ public class LoginFragment extends Fragment implements LoginView {
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
-        buttonState();
         getDataShared();
     }
 
@@ -58,13 +56,6 @@ public class LoginFragment extends Fragment implements LoginView {
             editTexts[1].setText(password);
             onEmailClick();
         }
-    }
-
-    private void buttonState() {
-        Button button = binding.loginEmailBtn;
-        TextView textView = binding.tvLoginFailed;
-        editTexts[0].addTextChangedListener(new LoginEmailButtonObserver(button, textView, editTexts));
-        editTexts[1].addTextChangedListener(new LoginEmailButtonObserver(button, textView, editTexts));
     }
 
     public void onNumberPhoneBtn() {
@@ -99,7 +90,15 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void isLoginSuccess(boolean isSuccess) {
-        if (!isSuccess) binding.tvLoginFailed.setVisibility(View.VISIBLE);
+        dialog.dismiss();
+        if (!isSuccess) {
+            binding.tvLoginFailed.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onMessage(String message) {
+        AppMessage.showMessage(requireContext(), message);
     }
 
     public void onLoginPhoneNumberClick() {

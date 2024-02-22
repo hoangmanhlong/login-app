@@ -76,6 +76,17 @@
     <string name="edit_address">Edit address</string>
     <string name="vietnam">Việt Nam</string>
     <string name="my_orders">My Orders</string>
+    <string name="processing">Processing</string>
+    <string name="completed">Completed</string>
+    <string name="_return">Return</string>
+    <string name="cancel">Cancel</string>
+    <string name="log_in">Log in</string>
+    <string name="later">Later</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in_description">Log in to experience the shopping service now</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="check_again">Please check again</string>
     <string name="favorites_list_empty">Oops, your wishlist is empty</string>
     <string name="login_email_false_message">Account or password is incorrect. Try Again!</string>
     <string name="rating_des">Ratings and reviews are verified and are from people who use the same type of device that you use</string>

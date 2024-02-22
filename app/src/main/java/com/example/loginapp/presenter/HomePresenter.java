@@ -7,6 +7,7 @@ import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInterator;
 import com.example.loginapp.model.listener.HomeListener;
 import com.example.loginapp.view.fragments.home.HomeView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,23 +39,26 @@ public class HomePresenter implements HomeListener {
     }
 
     public void initData() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            if (currentUserData == null) getUserData();
+            else checkUser(currentUserData);
+        } else {
+            view.isUserLoading(false);
+            view.setShowUserView(false);
+        }
+
         if (products.isEmpty()) getListProductFromNetwork();
         else showProducts();
-
-        if (currentUserData == null) getUserData();
-        else {
-            checkUser(currentUserData);
-        }
 
         if (bestSellerProducts.isEmpty()) getBestsellerProducts();
         else view.getBestsellerProducts(bestSellerProducts);
     }
 
-    public void getBestsellerProducts() {
+    private void getBestsellerProducts() {
         interator.getBestsellerProducts();
     }
 
-    public void getUserData() {
+    private void getUserData() {
         view.isUserLoading(true);
         interator.getUserData();
     }
@@ -94,7 +98,15 @@ public class HomePresenter implements HomeListener {
     }
 
     private void processProducts(List<Product> products) {
-        interator.getFavoriteProductFromFirebase();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            interator.getFavoriteProductFromFirebase();
+        else {
+            List<Product> tempProducts = new ArrayList<>(this.products);
+            Collections.shuffle(tempProducts);
+            recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 20));
+            view.isRecommendedProductsLoading(false);
+            view.showRecommendedProducts(recommendedProducts);
+        }
         getTopChartsProducts(products);
         getDiscountProducts(products);
     }

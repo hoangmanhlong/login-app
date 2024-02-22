@@ -36,7 +36,7 @@ public class EditUserProfileInterator {
 
     public void uploadImageToFirebase(@Nullable Uri uri, String username, String phoneNumber, String address) {
         AtomicInteger successCount = new AtomicInteger(0);
-        String uid = Constant.currentUser.getUid();
+        String uid = currentUser.getUid();
         Map<String, Object> updates = new HashMap<>();
         updates.put(UserData.USERNAME, username);
         updates.put(UserData.PHONE_NUMBER, phoneNumber);

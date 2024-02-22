@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
 import com.example.loginapp.adapter.favorite_adapter.FavoriteAdapter;
@@ -22,6 +23,8 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.FavoritePresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
+import com.example.loginapp.view.commonUI.LoginRemindDialog;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -45,7 +48,11 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+            initView();
+        } else {
+            LoginRemindDialog.show(this, requireContext());
+        }
     }
 
     private void initView() {
