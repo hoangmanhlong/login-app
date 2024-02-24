@@ -20,4 +20,6 @@ public interface SearchView {
     void isSearchEmpty(boolean isEmpty);
 
     void getCategories(List<String> categories);
+
+    void showDeleteAllButton(boolean show);
 }

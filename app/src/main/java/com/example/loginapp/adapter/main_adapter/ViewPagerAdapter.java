@@ -12,9 +12,9 @@ import com.example.loginapp.view.fragments.home.HomeFragment;
 import com.example.loginapp.view.fragments.search.SearchProductFragment;
 import com.example.loginapp.view.fragments.user_profile.UserProfileFragment;
 
-public class MainPagerAdapter extends FragmentStateAdapter {
+public class ViewPagerAdapter extends FragmentStateAdapter {
 
-    public MainPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 

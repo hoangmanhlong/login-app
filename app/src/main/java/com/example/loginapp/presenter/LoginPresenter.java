@@ -22,11 +22,8 @@ public class LoginPresenter {
         if (isValidEmail(email) && password.length() >= 6) {
             view.isLoading(true);
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(activity, task -> {view.isLoginSuccess(task.isSuccessful());})
-                    .addOnFailureListener(e -> {
-                        view.onMessage(e.getMessage());
-                        Log.d(Constant.LOGIN_TAG, e.getMessage());
-                    });
+                    .addOnCompleteListener(activity, task -> view.isLoginSuccess(task.isSuccessful()))
+                    .addOnFailureListener(e -> view.onMessage(e.getMessage()));
         } else {
             view.isLoginSuccess(false);
         }

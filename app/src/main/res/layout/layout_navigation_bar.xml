@@ -5,13 +5,15 @@
     android:layout_height="?attr/actionBarSize"
     android:elevation="10dp"
     android:background="#fff"
+    app:tabIndicatorHeight="3dp"
+    app:tabIconTint="@color/color_tablayout"
     app:tabIndicatorFullWidth="true"
     app:tabIndicatorGravity="top">
 
     <com.google.android.material.tabs.TabItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:icon="@drawable/ic_home_gray" />
+        android:icon="@drawable/ichome" />
 
     <com.google.android.material.tabs.TabItem
         android:layout_width="match_parent"

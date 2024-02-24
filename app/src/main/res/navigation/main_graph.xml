@@ -3,28 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/firstFragment">
+
+    <fragment
+        android:id="@+id/firstFragment"
+        android:name="com.example.loginapp.view.fragments.start_destination.FirstFragment"
+        android:label="FirstFragment"
+        tools:layout="@layout/fragment_first" />
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.loginapp.view.fragments.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-        <action
-            android:id="@+id/action_homeFragment_to_expandProductsFragment"
-            app:destination="@id/expandProductsFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-    </fragment>
+        tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/productFragment"
         android:name="com.example.loginapp.view.fragments.product_detail.ProductFragment"
@@ -79,38 +70,7 @@
         android:id="@+id/userProfileFragment"
         android:name="com.example.loginapp.view.fragments.user_profile.UserProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile">
-        <action
-            android:id="@+id/action_userProfileFragment_to_editUserInformationFragment"
-            app:destination="@id/editUserInformationFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-        <action
-            android:id="@+id/action_userProfileFragment_to_coinsRewardFragment"
-            app:destination="@id/coinsRewardFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-
-        <action
-            android:id="@+id/action_userProfileFragment_to_ordersFragment"
-            app:destination="@id/ordersFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-        <action
-            android:id="@+id/action_userProfileFragment_to_deliveryAddressFragment"
-            app:destination="@id/deliveryAddressFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-
-    </fragment>
+        tools:layout="@layout/fragment_user_profile"/>
     <fragment
         android:id="@+id/coinsRewardFragment"
         android:name="com.example.loginapp.view.fragments.coins.CoinsRewardFragment"

@@ -1,28 +1,26 @@
 package com.example.loginapp.view.fragments.coins;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentCoinsRewardBinding;
-import com.example.loginapp.model.entity.Coin;
 import com.example.loginapp.presenter.CoinsRewardPresenter;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.util.Calendar;
 
 
-public class CoinsRewardFragment extends Fragment implements CoinsRewardView  {
+public class CoinsRewardFragment extends Fragment implements CoinsRewardView {
 
     private final CoinsRewardPresenter presenter = new CoinsRewardPresenter(this);
 
@@ -32,7 +30,7 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView  {
 
     private FragmentCoinsRewardBinding binding;
 
-    private CalendarView calendarView;
+    private MaterialCalendarView calendarView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,44 +48,28 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-        initView();
-        presenter.getCalendar();
-
-        Calendar calendar = Calendar.getInstance();
-        long currentDate = calendar.getTimeInMillis();
-
-        binding.calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @SuppressLint("ResourceType")
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Calendar selectedCalendar = Calendar.getInstance();
-                selectedCalendar.set(year, month, dayOfMonth);
-                long selectedDate = selectedCalendar.getTimeInMillis();
-
-                // Nếu ngày được chọn là ngày hiện tại, thiết lập kiểu khác
-                if (selectedDate == currentDate) {
-                    view.setDateTextAppearance(Color.RED); // Đặt kiểu cho ngày hiện tại
-                } else {
-                    // Đặt kiểu mặc định cho các ngày khác
-                    view.setDateTextAppearance(android.R.style.TextAppearance_Medium);
-                }
-            }
-        });
+        binding.calendarView.setTopbarVisible(false);
+//
+//        // Lấy ngày đầu tiên của tháng hiện tại
+//        Calendar firstDayOfMonth = Calendar.getInstance();
+//        firstDayOfMonth.set(Calendar.DAY_OF_MONTH, 1);
+//        CalendarDay minDate = CalendarDay.from(firstDayOfMonth);
+//
+//// Lấy ngày cuối cùng của tháng hiện tại
+//        Calendar lastDayOfMonth = Calendar.getInstance();
+//        lastDayOfMonth.set(Calendar.DAY_OF_MONTH, lastDayOfMonth.getActualMaximum(Calendar.DAY_OF_MONTH));
+//        CalendarDay maxDate = CalendarDay.from(lastDayOfMonth);
+//
+//        calendarView.state().edit()
+//
+//                .setFirstDayOfWeek(Calendar.WEDNESDAY)
+//                .setMinimumDate(CalendarDay.from(2016, 4, Calendar.D))
+//                .setMaximumDate(CalendarDay.from(2016, 5, 12))
+//                .setCalendarDisplayMode(CalendarMode.WEEKS)
+//                .setSaveCurrentPosition(true)
+//                .commit();
     }
 
-    private void initView() {
-        setupCalendar();
-    }
-
-    private void setupCalendar() {
-        calendarView = binding.calendarView;
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        long minDate = calendar.getTimeInMillis();
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        long maxDate = calendar.getTimeInMillis();
-        calendarView.setMinDate(minDate);
-        calendarView.setMaxDate(maxDate);
-    }
 
     public void onNavigateUp() {
         Navigation.findNavController(binding.getRoot()).navigateUp();
@@ -97,13 +79,42 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView  {
         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_voucherFragment);
     }
 
-    @Override
-    public void setCoin(Coin coin) {
-        Log.d(TAG, "setCoin: " + coin.getEndDate());
-        binding.setCoin(coin);
-    }
-
     public void onAttendanceButtonClick() {
         presenter.attendance();
     }
+
+    @Override
+    public void bindNumberOfCoins(int numberOfCoins) {
+        binding.setNumberOfCoins(numberOfCoins);
+    }
+
+    @Override
+    public void getLastDayOfMonth(String lastDayOfMonth) {
+        binding.tvLastDayOfMonth.setText(lastDayOfMonth);
+    }
+
+//    private void updateUI(String date) {
+//        Calendar selectedCal = Calendar.getInstance();
+//        String[] parts = date.split("-");
+//        int year = Integer.parseInt(parts[0]);
+//        int month = Integer.parseInt(parts[1]) - 1; // Vì Calendar.MONTH bắt đầu từ 0
+//        int day = Integer.parseInt(parts[2]);
+//        selectedCal.set(year, month, day);
+//
+//        // Lấy ngày hiện tại
+//        Calendar currentCal = Calendar.getInstance();
+//        int currentYear = currentCal.get(Calendar.YEAR);
+//        int currentMonth = currentCal.get(Calendar.MONTH);
+//        int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
+//
+//        // Cập nhật màu sắc cho ngày đã điểm danh
+//        if (year == currentYear && month == currentMonth && day == currentDay) {
+//            // Nếu là ngày hiện tại
+//            calendarView.setDate(selectedCal.getTimeInMillis(), false, true);
+//        } else {
+//            // Nếu không phải là ngày hiện tại
+//            calendarView.setDate(selectedCal.getTimeInMillis(), false, false);
+//        }
+//        // Đặt màu nền cho ngày đã điểm danh
+//    }
 }

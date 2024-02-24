@@ -14,4 +14,8 @@ public interface SearchListener {
     void notifyItemRemoved(SearchHistory history);
 
     void onLoadError(String message);
+
+    void deleteSuccess(boolean isSuccess);
+
+    void isHistoriesEmpty(boolean isEmpty);
 }

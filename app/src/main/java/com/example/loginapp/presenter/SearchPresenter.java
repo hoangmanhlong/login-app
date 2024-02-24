@@ -1,6 +1,5 @@
 package com.example.loginapp.presenter;
 
-import com.example.loginapp.App;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.interator.SearchProductInterator;
@@ -31,7 +30,10 @@ public class SearchPresenter implements SearchListener {
     public void initData() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
             if (histories.isEmpty()) getSearchHistories();
-            else view.notifyItemAdded(histories);
+            else {
+                view.notifyItemAdded(histories);
+                deleteAllButtonState();
+            }
         }
 
         if (!products.isEmpty() && isShowSearchResult) {
@@ -79,6 +81,7 @@ public class SearchPresenter implements SearchListener {
     @Override
     public void notifyItemAdded(SearchHistory history) {
         histories.add(history);
+        deleteAllButtonState();
         if (histories.size() > 1)
             histories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
         view.notifyItemAdded(histories);
@@ -86,8 +89,9 @@ public class SearchPresenter implements SearchListener {
 
     @Override
     public void notifyItemRemoved(SearchHistory history) {
-        int index = histories.indexOf(histories.stream().filter(p -> p.getText().equals(history.getText())).collect(Collectors.toList()).get(0));
+        int index = histories.indexOf(histories.stream().filter(p -> p.getTime().equals(history.getTime())).collect(Collectors.toList()).get(0));
         histories.remove(index);
+        deleteAllButtonState();
         view.notifyItemRemoved(index);
     }
 
@@ -96,8 +100,26 @@ public class SearchPresenter implements SearchListener {
         view.onMessage(message);
     }
 
-    public void deleteHistory(String text) {
-        interator.deleteSearchHistory(text);
+    @Override
+    public void deleteSuccess(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void isHistoriesEmpty(boolean isEmpty) {
+        view.showDeleteAllButton(!isEmpty);
+    }
+
+    private void deleteAllButtonState() {
+        view.showDeleteAllButton(histories.size() != 0);
+    }
+
+    public void deleteHistory(Long time) {
+        interator.deleteSearchHistory(time);
+    }
+
+    public void deleteAllSearchHistories() {
+        interator.deleteAllSearchHistories();
     }
 
     private boolean isValidFirebasePath(String path) {

@@ -9,12 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.loginapp.R;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentRegisterBinding;
 import com.example.loginapp.presenter.RegisterPresenter;
 import com.example.loginapp.view.commonUI.AppMessage;

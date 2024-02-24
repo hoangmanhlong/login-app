@@ -34,13 +34,17 @@ public class MainPresenter implements MainListener {
         getWishlistStatus();
     }
 
+    public void getDataOnNavigationBar(FirebaseUser firebaseUser) {
+        interactor.getNavigationState(firebaseUser.getUid());
+        getWishlistStatus();
+    }
+
     public void registerAuthStateListener() {
         authStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             boolean isLogged = user != null;
             if (isLogged) {
-                interactor.getNavigationState(user.getUid());
-                getWishlistStatus();
+                getDataOnNavigationBar(user);
             }
             view.hasUser(isLogged);
         };

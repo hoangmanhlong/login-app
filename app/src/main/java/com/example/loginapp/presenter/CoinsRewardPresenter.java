@@ -1,14 +1,10 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
-import com.example.loginapp.model.entity.Coin;
 import com.example.loginapp.model.interator.CoinsRewardInterator;
 import com.example.loginapp.model.listener.CoinsRewardListener;
 import com.example.loginapp.view.fragments.coins.CoinsRewardView;
 
 import java.util.Calendar;
-import java.util.List;
 
 public class CoinsRewardPresenter implements CoinsRewardListener {
 
@@ -16,18 +12,12 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     private final CoinsRewardView view;
 
-    private final Calendar calendar = Calendar.getInstance();
-
     public CoinsRewardPresenter(CoinsRewardView view) {
         this.view = view;
     }
 
-    @Override
-    public void getCalendar(Coin coin) {
-        view.setCoin(coin);
-        List<Long> dates = coin.getRollCalllist();
-        long currentDate = System.currentTimeMillis();
-//        isCurrentDatePresent = dates.stream().anyMatch(date -> isSameDay(date, currentDate));
+    public void initData() {
+        getLastDayOfMonth();
     }
 
     public void getCalendar() {
@@ -48,5 +38,18 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
                 cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private void getLastDayOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+
+        // Thiết lập ngày là ngày cuối cùng của tháng hiện tại
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        // Lấy ngày cuối cùng của tháng hiện tại
+        int lastDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1; // Tháng bắt đầu từ 0, nên cần cộng thêm 1
+        int year = calendar.get(Calendar.YEAR);
+        view.getLastDayOfMonth(lastDayOfMonth + "-" + month + "-" + year);
     }
 }

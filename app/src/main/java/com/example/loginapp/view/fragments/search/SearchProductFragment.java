@@ -2,6 +2,7 @@ package com.example.loginapp.view.fragments.search;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,7 +15,7 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginapp.App;
@@ -33,6 +34,7 @@ import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -84,7 +86,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
         binding.etQuery.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                presenter.onSearchProduct(binding.etQuery.getText().toString());
+                presenter.onSearchProduct(binding.etQuery.getText().toString().trim());
                 View currentFocus = requireActivity().getCurrentFocus();
                 if (currentFocus != null) {
                     InputMethodManager inputMethodManager = (InputMethodManager) requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -176,10 +178,15 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
+    public void showDeleteAllButton(boolean show) {
+        binding.setIsVisibleDeleteALl(show);
+    }
+
+    @Override
     public void onProductClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_productFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
     }
 
     public void onClearQueryButtonClick() {
@@ -198,8 +205,17 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         binding.tvListEmpty.setVisibility(View.GONE);
     }
 
+    public void onDeleteAllSearchHistoriesButtonClick() {
+        new MaterialAlertDialogBuilder(requireActivity(), R.style.AlertDialogTheme)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.delete_all_search_histories)
+                .setPositiveButton(R.string.delete, (dialog, which) -> presenter.deleteAllSearchHistories())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     @Override
     public void deleteSearchHistory(SearchHistory history) {
-        presenter.deleteHistory(history.getText());
+        presenter.deleteHistory(history.getTime());
     }
 }

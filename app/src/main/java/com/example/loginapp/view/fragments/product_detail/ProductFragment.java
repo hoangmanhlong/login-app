@@ -13,7 +13,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.comment_adapter.CommentAdapter;
 import com.example.loginapp.adapter.product_adapter.OnProductClickListener;

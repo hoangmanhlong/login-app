@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.EditUserProfileInterator;
 import com.example.loginapp.model.listener.EditUserProfileListener;
 import com.example.loginapp.view.fragments.edit_user_profile.EditUserProfileView;
@@ -15,6 +16,17 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
     private final EditUserProfileView view;
 
     @Nullable private Uri photoUri = null;
+
+    private UserData userData;
+
+    public UserData getUserData() {
+        return userData;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+        view.bindUserData(userData);
+    }
 
     public EditUserProfilePresenter(EditUserProfileView view) {
         this.view = view;

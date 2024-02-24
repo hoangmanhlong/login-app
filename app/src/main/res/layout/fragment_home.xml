@@ -28,6 +28,7 @@
             android:scrollbars="none">
 
             <LinearLayout
+                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -89,7 +90,7 @@
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/discount_sliderView"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_110sdp"
+                    android:layout_height="@dimen/_140sdp"
                     android:layout_marginHorizontal="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:clipToPadding="false"

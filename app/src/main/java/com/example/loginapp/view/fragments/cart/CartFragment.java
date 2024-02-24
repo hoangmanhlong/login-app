@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginapp.App;
@@ -55,7 +57,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             initView();
         } else {
             LoginRemindDialog.show(this, requireContext());
@@ -65,13 +67,13 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -133,7 +135,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_productFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
     }
 
     @Override
@@ -211,11 +213,18 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         else order = new Order(presenter.listProduct());
         bundle.putSerializable(Constant.ORDER_KEY, order);
         bundle.putBoolean(Constant.IS_CART, true);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_cartFragment_to_checkoutInfoFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.checkoutInfoFragment, bundle);
     }
 
     public void onSelectCodeClick() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_cartFragment_to_selectVoucherFragment);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setEnterAnim(R.anim.from_right)
+                .setExitAnim(R.anim.to_left)
+                .setPopEnterAnim(R.anim.from_left)
+                .setPopExitAnim(R.anim.to_right)
+                .build();
+
+        NavHostFragment.findNavController(this).navigate(R.id.selectVoucherFragment, null, navOptions);
     }
 
     public void onClearDiscountCodeClick() {

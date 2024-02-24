@@ -1,9 +1,8 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
@@ -41,6 +39,7 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setProfileFragment(this);
+        Log.d("TAG", "onViewCreated: ");
         if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
             presenter.initData();
         } else {
@@ -54,7 +53,7 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
                 .setMessage(R.string.logout_message)
                 .setPositiveButton(R.string.positive_button_title, (dialog, which) -> FirebaseAuth.getInstance().signOut())
                 .setNegativeButton(R.string.negative_button_title, null)
-                .setCancelable(false)
+                .setCancelable(true)
                 .show();
     }
 
@@ -76,10 +75,10 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
         binding.tvNumberOfOrdersReturn.setText(String.valueOf(numberOfReturnOrder));
     }
 
-    public void goEditUserScreen() {
+    public void onImageAvatarClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.USER_KEY_NAME, presenter.getCurrentUser());
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_userProfileFragment_to_editUserInformationFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.editUserInformationFragment, bundle);
     }
 
     public void goVoucherScreen() {
@@ -87,22 +86,22 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
     }
 
     public void goOrdersScreen() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_userProfileFragment_to_ordersFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.ordersFragment);
     }
 
     public void onFAQButtonClick() {
-        String url = "https://developer.android.com/";
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        }
+//        String url = "https://developer.android.com/";
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+//            startActivity(intent);
+//        }
     }
 
     public void goShippingAddressesScreen() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_userProfileFragment_to_deliveryAddressFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.deliveryAddressFragment);
     }
 
     public void goCoinRewardScreen() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_userProfileFragment_to_coinsRewardFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.coinsRewardFragment);
     }
 }

@@ -2,6 +2,8 @@ package com.example.loginapp.view.fragments.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,8 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeView, OnProductClickListener {
 
+    private final String TAG = this.toString();
+
     private FragmentHomeBinding binding;
 
     private final HomePresenter presenter = new HomePresenter(this);
@@ -56,6 +60,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        Log.d(TAG, "onCreateView: ");
         return binding.getRoot();
     }
 
@@ -80,6 +85,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         recommendedRecyclerview = binding.recommendedRecyclerview;
         topChartsRecyclerview = binding.topChartsRecyclerview;
         discountRecyclerView = binding.discountRecyclerView;
+
+        recommendedRecyclerview.setNestedScrollingEnabled(true);
 
         SliderView sliderView = binding.discountSliderView;
 
@@ -189,8 +196,19 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void setShowUserView(Boolean show) {
-        if (show) binding.userView.setVisibility(View.VISIBLE);
-        else binding.userView.setVisibility(View.GONE);
+        if (show) {
+            binding.userView.setVisibility(View.VISIBLE);
+            new CountDownTimer(5000, 1000) { // Thời gian đếm ngược là 5 giây, cập nhật mỗi 1 giây
+                public void onTick(long millisUntilFinished) {
+                    // Không cần làm gì trong thời gian đếm ngược
+                }
+
+                public void onFinish() {
+                    binding.userView.setVisibility(View.GONE);
+                    this.cancel();
+                }
+            }.start();
+        } else binding.userView.setVisibility(View.GONE);
 
     }
 
@@ -198,21 +216,21 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.recommendedProducts));
         bundle.putString(Constant.EXPAND_LABEL_KEY, "Recommended for you");
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_expandProductsFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
     }
 
     public void onExpandDiscountProductsButtonClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.discountProducts));
         bundle.putString(Constant.EXPAND_LABEL_KEY, "Discount");
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_expandProductsFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
     }
 
     public void onExpandTopChartProductsButtonClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.topChartsProducts));
         bundle.putString(Constant.EXPAND_LABEL_KEY, "Top charts");
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_homeFragment_to_expandProductsFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
     }
 
     @Override

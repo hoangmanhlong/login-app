@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.expand_adapter.ExpandAdapter;
@@ -117,7 +118,7 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     public void onProductClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_productFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
     }
 
     public void onNavigateUp() {

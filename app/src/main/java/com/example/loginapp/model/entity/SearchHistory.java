@@ -1,18 +1,28 @@
 package com.example.loginapp.model.entity;
 
-import androidx.annotation.NonNull;
-
 public class SearchHistory {
 
     private String text;
 
     private Long time;
 
+    private boolean hasProductFound;
+
+    private String category;
+
     public SearchHistory() {}
 
     public SearchHistory(String text) {
         this.text = text;
         time = System.currentTimeMillis();
+    }
+
+    public boolean isHasProductFound() {
+        return hasProductFound;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public Long getTime() {
@@ -30,4 +40,6 @@ public class SearchHistory {
                 ", time=" + time +
                 '}';
     }
+
+    public static String CATEGORY_NAME = "category";
 }

@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
 import com.example.loginapp.adapter.favorite_adapter.FavoriteAdapter;

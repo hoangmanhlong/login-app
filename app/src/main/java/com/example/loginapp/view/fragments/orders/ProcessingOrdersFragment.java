@@ -63,7 +63,7 @@ public class ProcessingOrdersFragment extends Fragment implements OnOrderClickLi
 
     @Override
     public void isLoading(Boolean loading) {
-        if (loading) dialog.show();
-        else dialog.dismiss();
+//        if (loading) dialog.show();
+//        else dialog.dismiss();
     }
 }

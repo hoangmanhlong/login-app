@@ -1,36 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.activities.MainActivity">
 
-    <include
-        android:visibility="gone"
-        android:id="@+id/network_connection_error_view"
-        layout="@layout/layout_network_connection_error" />
+    <data>
+
+        <variable
+            name="isStartDestination"
+            type="Boolean" />
+
+        <variable
+            name="isConnected"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
 
     <LinearLayout
-        android:id="@+id/activityContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/container"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main_graph" />
-
         <include
-            android:id="@+id/bottomNavigation"
-            layout="@layout/layout_navigation_bar" />
+            android:id="@+id/network_connection_error_view"
+            layout="@layout/layout_network_connection_error"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/activityContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="@{isConnected ? View.VISIBLE : View.GONE}">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/container"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="@{isStartDestination ? View.GONE : View.VISIBLE}"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/main_graph" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="@{isStartDestination ? View.VISIBLE : View.GONE}" />
+
+            <include
+                android:id="@+id/bottomNavigation"
+                layout="@layout/layout_navigation_bar" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>
+

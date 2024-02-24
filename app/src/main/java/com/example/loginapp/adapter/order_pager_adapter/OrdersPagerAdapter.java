@@ -18,17 +18,21 @@ public class OrdersPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position) {
+            case 0:
+                return new AllOrdersFragment();
             case 1:
                 return new ProcessingOrdersFragment();
             case 2:
                 return new CompletedOrdersFragment();
+            case 3:
+            case 4:
             default:
-                return new AllOrdersFragment();
+                return new Fragment();
         }
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 5;
     }
 }

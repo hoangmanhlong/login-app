@@ -64,7 +64,7 @@ public class AllOrdersFragment extends Fragment implements OnOrderClickListener,
 
     @Override
     public void isLoading(Boolean loading) {
-        if (loading) dialog.show();
-        else dialog.dismiss();
+//        if (loading) dialog.show();
+//        else dialog.dismiss();
     }
 }

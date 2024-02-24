@@ -53,6 +53,8 @@
     <string name="order_id">Order ID</string>
     <string name="order_time">Order Time</string>
     <string name="buy_again">Buy Again</string>
+    <string name="press_to_exit">Press back again to exit</string>
+    <string name="delete_all_search_histories">Are you sure you want to delete all search history?</string>
     <string name="login_with_google">Login with Google</string>
     <string name="view_more_products">View more products</string>
     <string name="order_total_">Order Total: </string>

@@ -1,7 +1,10 @@
 package com.example.loginapp.view.activities;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -10,8 +13,10 @@ import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.loginapp.R;
+import com.example.loginapp.adapter.main_adapter.ViewPagerAdapter;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.presenter.MainPresenter;
 import com.example.loginapp.utils.Constant;
@@ -19,13 +24,11 @@ import com.example.loginapp.utils.NetworkChecker;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.fragments.product_detail.NewProductInWishlistMessage;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
@@ -37,19 +40,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private final MainPresenter presenter = new MainPresenter(this);
 
+    private ViewPagerAdapter viewPagerAdapter;
+
     private NavController navController;
 
     private ActivityMainBinding binding;
 
-    private final ArrayList<Integer> destinationsOfNavigationBar = new ArrayList<>(
-            Arrays.asList(
-                    R.id.homeFragment,
-                    R.id.searchProductFragment,
-                    R.id.cartFragment,
-                    R.id.favoriteProductFragment,
-                    R.id.userProfileFragment
-            )
-    );
+    private ViewPager2 viewPager;
 
 //    private final ArrayList<Integer> navigationBarIconFilled = new ArrayList<>(
 //            Arrays.asList(
@@ -76,15 +73,39 @@ public class MainActivity extends AppCompatActivity implements MainView {
         initView();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void initView() {
         setNetworkChecker();
 
         appNavigationBar = binding.bottomNavigation.getRoot();
+        viewPager = binding.viewPager;
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this.getLifecycle());
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setOffscreenPageLimit(5);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                appNavigationBar.getTabAt(position).select();
+            }
+        });
+
+        viewPager.setUserInputEnabled(false);
 
         setupNavigation();
 
-        presenter.registerAuthStateListener();
+//        presenter.registerAuthStateListener();
 
+        FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
+
+            boolean isLogged = firebaseAuth.getCurrentUser() != null;
+            Log.d(TAG, "initView: " + isLogged);
+            if (isLogged) {
+                viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this.getLifecycle());
+                presenter.getDataOnNavigationBar(firebaseAuth.getCurrentUser());
+            }
+            hasUser(isLogged);
+        });
         destinationChangedListener();
 
         tabSelectedListener();
@@ -100,28 +121,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void destinationChangedListener() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             currentDestinationId = destination.getId();
-            boolean isDestinationInList = destinationsOfNavigationBar.contains(currentDestinationId);
-            int isBottomNavigationBarVisible = appNavigationBar.getVisibility();
+            boolean isStartDestination = currentDestinationId == R.id.firstFragment;
 
-            if (isDestinationInList && isBottomNavigationBarVisible == View.GONE)
+            if (isStartDestination && appNavigationBar.getVisibility() == View.GONE)
                 AppAnimationState.setBottomNavigationBarState(appNavigationBar, this, true);
 
-            if (!isDestinationInList && isBottomNavigationBarVisible == View.VISIBLE)
+            if (!isStartDestination && appNavigationBar.getVisibility() == View.VISIBLE)
                 AppAnimationState.setBottomNavigationBarState(appNavigationBar, this, false);
 
-            int tabIndex = destinationsOfNavigationBar.indexOf(currentDestinationId);
-            if (tabIndex != -1) selectTab(tabIndex);
-
-            if (currentDestinationId == destinationsOfNavigationBar.get(3))
-                presenter.viewedFavoritesList(true);
+            binding.setIsStartDestination(isStartDestination);
         });
-    }
-
-    private void selectTab(int tabIndex) {
-        TabLayout.Tab tab = appNavigationBar.getTabAt(tabIndex);
-        if (tab != null) {
-            tab.select();
-        }
     }
 
     @Override
@@ -171,13 +180,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if (hasUser) {
             NavDestination navDestination = navController.getCurrentDestination();
             if (navDestination != null) {
-                if (navDestination.getId() != startDestinationId) {
-                    navController.popBackStack(R.id.overviewFragment, true);
+                if (currentDestinationId != startDestinationId) {
+                    Log.d(TAG, "hasUser: ");
+                    navController.popBackStack(currentDestinationId, true);
                     navController.navigate(startDestinationId);
                 }
             }
         } else {
-            navController.popBackStack(navController.getCurrentDestination().getId(), true);
+            navController.popBackStack(currentDestinationId, true);
             navController.navigate(R.id.overviewFragment);
         }
     }
@@ -203,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 super.onBackPressed();
             } else {
                 backPressedOnce = true;
-                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, this.getString(R.string.press_to_exit), Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(() -> backPressedOnce = false, Constant.BACK_PRESS_INTERVAL);
             }
         } else {
@@ -219,24 +229,68 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void setNetworkChecker() {
         networkChecker = NetworkChecker.getInstance(this);
         networkChecker.networkState.observe(this, isConnected -> {
-                    binding.activityContent.setVisibility(isConnected ? View.VISIBLE : View.GONE);
-                    binding.networkConnectionErrorView.getRoot().setVisibility(isConnected ? View.GONE : View.VISIBLE);
-                }
-        );
+            binding.setIsConnected(isConnected);
+            binding.networkConnectionErrorView.getRoot().setVisibility(isConnected ? View.GONE : View.VISIBLE);
+            if (isConnected) {
+                binding.networkConnectionErrorView.shimmerLayout.stopShimmerAnimation();
+            } else {
+                binding.networkConnectionErrorView.shimmerLayout.startShimmerAnimation();
+            }
+        });
     }
 
     private void tabSelectedListener() {
-        appNavigationBar.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        appNavigationBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-                navController.popBackStack();
-                navController.navigate(destinationsOfNavigationBar.get(position));
+                viewPager.setCurrentItem(position);
+                if (position == 3) {
+                    presenter.viewedFavoritesList(true);
+                }
+                int res = 0;
+                switch (position) {
+                    case 0:
+                        res = R.drawable.ichome;
+                        break;
+                    case 1:
+                        res = R.drawable.ic_search_dark;
+                        break;
+                    case 2:
+                        res = R.drawable.ic_cart_dark;
+                        break;
+                    case 3:
+                        res = R.drawable.favorite;
+                        break;
+                    case 4:
+                        res = R.drawable.ic_user_dark;
+                        break;
+                }
+                tab.setIcon(res);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                int position = tab.getPosition();
+                int res = 0;
+                switch (position) {
+                    case 0:
+                        res = R.drawable.ic_home_gray;
+                        break;
+                    case 1:
+                        res = R.drawable.ic_search_gray;
+                        break;
+                    case 2:
+                        res = R.drawable.ic_cart_gray;
+                        break;
+                    case 3:
+                        res = R.drawable.ic_favorite_gray;
+                        break;
+                    case 4:
+                        res = R.drawable.ic_user_gray;
+                        break;
+                }
+                tab.setIcon(res);
             }
 
             @Override
@@ -245,4 +299,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         });
     }
+
+    private void restartApp() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
 }
+

@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="coin"
-            type="com.example.loginapp.model.entity.Coin" />
+            name="numberOfCoins"
+            type="Integer" />
 
         <variable
             name="fragment"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:includeFontPadding="false"
-                android:text="@{String.valueOf(coin.numberOfCoins)}"
+                android:text="@{String.valueOf(numberOfCoins)}"
                 android:textSize="@dimen/_20sdp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/ivCoin"
@@ -99,7 +99,6 @@
                     android:id="@+id/coin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(coin.numberOfCoins)}"
                     android:textStyle="bold"
                     tools:text="200" />
 
@@ -111,6 +110,7 @@
                 <!--                bindTextViewEndDate="@{coin.endDate}"-->
 
                 <TextView
+                    android:id="@+id/tvLastDayOfMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -119,12 +119,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <CalendarView
-            android:id="@+id/calendarView"
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:dateTextAppearance="@android:style/TextAppearance.Medium"
-            android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:id="@+id/calendarView"
+            app:mcv_selectionColor="#000"
+            />
 
         <Button
             android:layout_width="match_parent"
@@ -134,5 +135,7 @@
             android:includeFontPadding="false"
             android:onClick="@{() -> fragment.onAttendanceButtonClick()}"
             android:text="Attendance" />
+
+
     </LinearLayout>
 </layout>
