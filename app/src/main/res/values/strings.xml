@@ -86,6 +86,7 @@
     <string name="later">Later</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
+    <string name="day">day %s</string>
     <string name="log_in_description">Log in to experience the shopping service now</string>
     <string name="no_internet">No internet connection</string>
     <string name="check_again">Please check again</string>

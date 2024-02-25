@@ -58,4 +58,10 @@
         <item name="fontFamily">@font/poppins_regular</item>
     </style>
 
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">#000</item>
+        <item name="colorPrimary">#000</item>
+        <item name="android:textColorPrimary">@color/red</item>
+    </style>
+
 </resources>

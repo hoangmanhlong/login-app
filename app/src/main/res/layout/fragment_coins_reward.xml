@@ -97,6 +97,7 @@
 
                 <TextView
                     android:id="@+id/coin"
+                    android:text="@{String.valueOf(numberOfCoins)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -119,22 +120,33 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/calendarView"
-            app:mcv_selectionColor="#000"
-            />
+        <com.google.android.material.card.MaterialCardView
+            app:cardElevation="@dimen/_2sdp"
+            app:strokeWidth="0dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendarRecyclerview"
+                android:padding="@dimen/_10sdp"
+                android:background="#fff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/layout_get_coin"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="7" />
+        </com.google.android.material.card.MaterialCardView>
 
         <Button
+            android:layout_marginTop="@dimen/_8sdp"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_46sdp"
-            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_32sdp"
             android:fontFamily="@font/poppins_bold"
             android:includeFontPadding="false"
             android:onClick="@{() -> fragment.onAttendanceButtonClick()}"
-            android:text="Attendance" />
+            android:text="Get 100 coins now" />
 
 
     </LinearLayout>

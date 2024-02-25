@@ -27,6 +27,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        multiDexEnabled true
     }
 
     buildTypes {
@@ -38,6 +40,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+//        coreLibraryDesugaringEnabled true
     }
 
     buildFeatures {
@@ -113,6 +116,10 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     implementation "com.facebook.shimmer:shimmer:0.1.0@aar"
+//
+//    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
+//
+//    implementation 'com.kizitonwose.calendar:view:2.0.4'
+//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
-    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
 }
