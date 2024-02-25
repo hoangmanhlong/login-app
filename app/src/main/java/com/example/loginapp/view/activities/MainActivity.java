@@ -299,12 +299,5 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         });
     }
-
-    private void restartApp() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-    }
 }
 

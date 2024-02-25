@@ -26,6 +26,7 @@ import com.example.loginapp.model.entity.Products;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.HomePresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -197,17 +198,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void setShowUserView(Boolean show) {
         if (show) {
-            binding.userView.setVisibility(View.VISIBLE);
-            new CountDownTimer(5000, 1000) { // Thời gian đếm ngược là 5 giây, cập nhật mỗi 1 giây
-                public void onTick(long millisUntilFinished) {
-                    // Không cần làm gì trong thời gian đếm ngược
-                }
+            AppAnimationState.setUserViewState(binding.userView, true);
 
-                public void onFinish() {
-                    binding.userView.setVisibility(View.GONE);
-                    this.cancel();
-                }
-            }.start();
         } else binding.userView.setVisibility(View.GONE);
 
     }

@@ -2,13 +2,13 @@ package com.example.loginapp.view.commonUI;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.loginapp.App;
 import com.example.loginapp.R;
@@ -17,26 +17,29 @@ import com.google.android.material.tabs.TabLayout;
 public final class AppAnimationState {
 
     public static void setBottomNavigationBarState(TabLayout bottomNavigationBar, Activity activity, Boolean show) {
-        if (show) {
-            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.anim_bottom_navigation_up);
-            bottomNavigationBar.startAnimation(animation);
-            bottomNavigationBar.setVisibility(View.VISIBLE);
-        } else {
-            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.anim_bottom_navigation_down);
-            bottomNavigationBar.startAnimation(animation);
-            bottomNavigationBar.setVisibility(View.GONE);
-        }
+        Animation animation = AnimationUtils.loadAnimation(activity, show ? R.anim.anim_bottom_navigation_up : R.anim.anim_bottom_navigation_down);
+        bottomNavigationBar.startAnimation(animation);
+        bottomNavigationBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    public static void setUserViewState(ConstraintLayout constraintLayout, Activity activity, Boolean show) {
+    public static void setUserViewState(ConstraintLayout constraintLayout, Boolean show) {
+        Context context = App.getInstance();
         if (show) {
-            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.anim_userview_down);
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_userview_down);
             constraintLayout.startAnimation(animation);
             constraintLayout.setVisibility(View.VISIBLE);
-        } else {
-            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.anim_userview_up);
-            constraintLayout.startAnimation(animation);
-            constraintLayout.setVisibility(View.GONE);
+            new CountDownTimer(5000, 1000) { // Thời gian đếm ngược là 5 giây, cập nhật mỗi 1 giây
+                public void onTick(long millisUntilFinished) {
+                    // Không cần làm gì trong thời gian đếm ngược
+                }
+
+                public void onFinish() {
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_userview_up);
+                    constraintLayout.startAnimation(animation);
+                    constraintLayout.setVisibility(View.GONE);
+                    this.cancel();
+                }
+            }.start();
         }
     }
 
