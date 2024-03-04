@@ -29,36 +29,34 @@ public class FavoriteInterator {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    query.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            listener.onItemAdded(snapshot.getValue(Product.class));
-                        }
+                if (!snapshot.exists()) listener.isWishlistEmpty();
+            }
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
+            }
+        });
 
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                            listener.notifyItemRemoved(snapshot.getValue(Product.class));
-                        }
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                listener.onItemAdded(snapshot.getValue(Product.class));
+            }
 
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                        }
+            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                listener.notifyItemRemoved(snapshot.getValue(Product.class));
+            }
 
-                        }
-                    });
-                } else {
-                    listener.isWishlistEmpty(true);
-                }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
@@ -71,8 +69,7 @@ public class FavoriteInterator {
 
     public void deleteProduct(int id) {
         Constant.favoriteProductRef.child(user.getUid())
-                .child(String.valueOf(id))
-                .removeValue()
+                .child(String.valueOf(id)).removeValue()
                 .addOnFailureListener(e -> listener.onMessage("Error"));
     }
 }

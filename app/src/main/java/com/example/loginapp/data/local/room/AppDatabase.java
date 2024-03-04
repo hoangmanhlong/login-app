@@ -1,25 +1,35 @@
 package com.example.loginapp.data.local.room;
 
+import android.content.Context;
+
+import androidx.room.Database;
+import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-//@Database(entities = {Product.class}, version = 1, exportSchema = false)
+import com.example.loginapp.model.entity.ProductName;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@Database(entities = {ProductName.class}, version = 1, exportSchema = false)
 abstract public class AppDatabase extends RoomDatabase {
-//    public abstract AppDao dao();
-//
-//    private static AppDatabase INSTANCE = null;
-//
-//    public static AppDatabase getInstance(Context context) {
-//        if (INSTANCE == null) {
-//            synchronized (AppDatabase.class) {
-//                AppDatabase instance = Room.databaseBuilder(
-//                    context.getApplicationContext(),
-//                    AppDatabase.class,
-//                    "app_db"
-//                ).build();
-//                INSTANCE = instance;
-//                return instance;
-//            }
-//        }
-//        return INSTANCE;
-//    }
+    public abstract AppDao dao();
+
+    private static volatile AppDatabase INSTANCE;
+    private static final int NUMBER_OF_THREADS = 4;
+    public static final ExecutorService databaseWriteExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
+    public static AppDatabase getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (AppDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                                    AppDatabase.class, "word_database")
+                            .build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }

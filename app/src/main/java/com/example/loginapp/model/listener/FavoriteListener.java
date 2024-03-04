@@ -9,5 +9,5 @@ public interface FavoriteListener {
 
     void notifyItemRemoved(Product product);
 
-    void isWishlistEmpty(boolean isEmpty);
+    void isWishlistEmpty();
 }

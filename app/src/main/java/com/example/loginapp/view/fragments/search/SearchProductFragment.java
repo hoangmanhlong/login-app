@@ -2,7 +2,6 @@ package com.example.loginapp.view.fragments.search;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -47,11 +47,12 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private final SearchSuggestAdapter searchSuggestAdapter = new SearchSuggestAdapter(this);
 
-    private final SearchProductAdapter adapter = new SearchProductAdapter(this);
+    private final SearchProductAdapter searchProductAdapter = new SearchProductAdapter(this);
 
-    private final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-            App.getInstance().getApplicationContext(), android.R.layout.simple_list_item_1
-    );
+    private AutoCompleteTextView etQueryBox;
+
+    private final ArrayAdapter<String> arrayAdapter =
+            new ArrayAdapter<>(App.getInstance().getApplicationContext(), android.R.layout.simple_list_item_1);
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
@@ -62,18 +63,20 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             initView();
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
-        binding.setFragment(this);
-        RecyclerView recyclerView = binding.productRecyclerview;
+        etQueryBox = binding.etQuery;
+        etQueryBox.setAdapter(arrayAdapter);
 
-        recyclerView.setAdapter(adapter);
+        RecyclerView recyclerView = binding.productRecyclerview;
+        recyclerView.setAdapter(searchProductAdapter);
 
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(requireContext());
         layoutManager.setFlexDirection(FlexDirection.ROW);
@@ -81,8 +84,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         RecyclerView searchSuggestionRecyclerview = binding.searchSuggestions;
         searchSuggestionRecyclerview.setLayoutManager(layoutManager);
         searchSuggestionRecyclerview.setAdapter(searchSuggestAdapter);
-
-        presenter.initData();
 
         binding.etQuery.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -110,9 +111,9 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length() != 0)
+                if (s.toString().trim().length() != 0) {
                     binding.btClearQuery.setVisibility(View.VISIBLE);
-                else {
+                } else {
                     binding.btClearQuery.setVisibility(View.GONE);
                 }
             }
@@ -122,11 +123,16 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
             }
         });
+
+        presenter.initData();
+
+        binding.etQuery.setOnClickListener(c -> etQueryBox.showDropDown());
+
     }
 
     @Override
     public void onLoadProducts(List<Product> products) {
-        adapter.submitList(products);
+        searchProductAdapter.submitList(products);
     }
 
     @Override
@@ -138,6 +144,13 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public void notifyItemAdded(List<SearchHistory> list) {
         searchSuggestAdapter.submitList(list);
+        searchSuggestAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void notifyItemChanged(int index) {
+        searchSuggestAdapter.notifyItemChanged(index);
         searchSuggestAdapter.notifyDataSetChanged();
     }
 
@@ -171,15 +184,18 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
-    public void getCategories(List<String> categories) {
-        arrayAdapter.clear();
-        arrayAdapter.addAll(categories);
-        binding.etQuery.setAdapter(arrayAdapter);
+    public void getSearchSuggestions(List<String> list) {
+        arrayAdapter.addAll(list);
     }
 
     @Override
-    public void showDeleteAllButton(boolean show) {
-        binding.setIsVisibleDeleteALl(show);
+    public void hideSearchSuggestionsDropdown() {
+        etQueryBox.dismissDropDown();
+    }
+
+    @Override
+    public void isSearchSuggestionViewVisible(boolean visible) {
+        binding.setIsSearchSuggestionsVisible(visible);
     }
 
     @Override
@@ -191,7 +207,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     public void onClearQueryButtonClick() {
         binding.etQuery.setText("");
-        binding.btClearQuery.setVisibility(View.GONE);
     }
 
     @Override
@@ -216,6 +231,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     @Override
     public void deleteSearchHistory(SearchHistory history) {
-        presenter.deleteHistory(history.getTime());
+        presenter.deleteHistory(history.getText());
     }
 }

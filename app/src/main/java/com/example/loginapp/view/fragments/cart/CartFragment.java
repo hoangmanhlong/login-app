@@ -1,8 +1,10 @@
 package com.example.loginapp.view.fragments.cart;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +12,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
 import com.example.loginapp.adapter.cart_adapter.CartAdapter;
@@ -29,9 +28,7 @@ import com.example.loginapp.presenter.CartPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
-import com.example.loginapp.view.commonUI.LoginRemindDialog;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,6 +37,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 public class CartFragment extends Fragment implements CartView, CartItemClickListener {
+
+    private final String TAG = getClass().getSimpleName();
 
     private final CartPresenter presenter = new CartPresenter(this);
 
@@ -57,23 +56,21 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            initView();
-        } else {
-            LoginRemindDialog.show(this, requireContext());
-        }
+        initView();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-//        EventBus.getDefault().register(this);
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().removeStickyEvent(MessageVoucherSelected.class);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -104,13 +101,6 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        MessageVoucherSelected stickyEvent = EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
-        if (stickyEvent != null) EventBus.getDefault().removeStickyEvent(stickyEvent);
-    }
-
-    @Override
     public void onMessage(String message) {
         AppMessage.showMessage(requireContext(), message);
     }
@@ -135,7 +125,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_global_productFragment, bundle);
     }
 
     @Override
@@ -169,13 +160,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     @Override
     public void isBasketEmpty(Boolean isEmpty) {
-        if (isEmpty) {
-            binding.cartContentView.setVisibility(View.GONE);
-            binding.emptyCartView.setVisibility(View.VISIBLE);
-        } else {
-            binding.cartContentView.setVisibility(View.VISIBLE);
-            binding.emptyCartView.setVisibility(View.GONE);
-        }
+        binding.setIsBasketEmpty(isEmpty);
     }
 
     @Override
@@ -192,9 +177,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage(R.string.dialog_message)
                 .setPositiveButton(R.string.positive_button_title, (dialog, which) -> presenter.deleteProductInFirebase(product))
-                .setNegativeButton(R.string.negative_button_title, (dialog, which) -> {
-                })
-                .setCancelable(false)
+                .setNegativeButton(R.string.negative_button_title, null)
                 .show();
     }
 
@@ -205,40 +188,27 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         binding.setTotal(total);
     }
 
+    @SuppressLint("ResourceAsColor")
     public void onCheckoutClick() {
         Bundle bundle = new Bundle();
         Voucher voucher = presenter.getSelectedVoucher();
-        Order order;
-        if (voucher != null) order = new Order(presenter.listProduct(), voucher);
-        else order = new Order(presenter.listProduct());
+        Order order = voucher == null ? new Order(presenter.listProduct()) : new Order(presenter.listProduct(), voucher);
         bundle.putSerializable(Constant.ORDER_KEY, order);
         bundle.putBoolean(Constant.IS_CART, true);
         NavHostFragment.findNavController(this).navigate(R.id.checkoutInfoFragment, bundle);
     }
 
     public void onSelectCodeClick() {
-        NavOptions navOptions = new NavOptions.Builder()
-                .setEnterAnim(R.anim.from_right)
-                .setExitAnim(R.anim.to_left)
-                .setPopEnterAnim(R.anim.from_left)
-                .setPopExitAnim(R.anim.to_right)
-                .build();
-
-        NavHostFragment.findNavController(this).navigate(R.id.selectVoucherFragment, null, navOptions);
+        NavHostFragment.findNavController(this).navigate(R.id.selectVoucherFragment);
     }
 
-    public void onClearDiscountCodeClick() {
+    public void clearDiscountCode() {
         presenter.setClearCode(true);
     }
 
     @Override
     public void clearDiscountCode(Boolean clear) {
-        if (clear) {
-            binding.clearDiscountCodeView.setVisibility(View.GONE);
-            binding.selectDiscountCodeView.setVisibility(View.VISIBLE);
-        } else {
-            binding.clearDiscountCodeView.setVisibility(View.VISIBLE);
-            binding.selectDiscountCodeView.setVisibility(View.GONE);
-        }
+        binding.clearDiscountCodeView.setVisibility(clear ? View.GONE : View.VISIBLE);
+        binding.selectDiscountCodeView.setVisibility(clear ? View.VISIBLE : View.GONE);
     }
 }

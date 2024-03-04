@@ -8,10 +8,6 @@
         <import type="android.view.View" />
 
         <variable
-            name="isLogged"
-            type="Boolean" />
-
-        <variable
             name="userData"
             type="com.example.loginapp.model.entity.UserData" />
 
@@ -51,22 +47,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    style="?attr/materialIconButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_settings"
-                    app:iconSize="@dimen/_20sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="@{isLogged ? View.VISIBLE : View.GONE}">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -360,7 +346,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp"
                         android:fontFamily="@font/dm_sans_36pt_regular"
-                        android:onClick="@{() -> profileFragment.onFAQButtonClick()}"
                         android:paddingHorizontal="@dimen/_14sdp"
                         android:text="FAQ"
                         android:textAlignment="viewStart"
@@ -376,7 +361,6 @@
 
                     <Button
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp"
                         android:fontFamily="@font/dm_sans_36pt_regular"

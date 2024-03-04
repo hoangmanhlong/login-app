@@ -1,42 +1,43 @@
 package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.entity.Order;
-import com.example.loginapp.model.interator.OrderInterator;
-import com.example.loginapp.model.listener.OrderListener;
-import com.example.loginapp.view.fragments.orders.OrderView;
+import com.example.loginapp.model.interator.OrdersInterator;
+import com.example.loginapp.model.listener.OrdersListener;
+import com.example.loginapp.view.fragments.orders.OrdersView;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class OrdersPresenter implements OrderListener {
+public class OrdersPresenter implements OrdersListener {
 
-    private final OrderView view;
+    private final OrdersInterator interator = new OrdersInterator(this);
 
-    private final OrderInterator interator = new OrderInterator(this);
+    private final OrdersView view;
 
-    private List<Order> orders = new ArrayList<>();
+//    private List<Order> orders = new ArrayList<>();
 
-    public OrdersPresenter(OrderView view) {
+
+    public OrdersPresenter(OrdersView view) {
         this.view = view;
     }
 
     public void initData() {
-        if (orders.isEmpty()) getOrders();
-        else view.getOrders(orders);
+        getOrders();
+//        else view.getOrders(orders);
     }
 
-    public void getOrders() {
-        view.isLoading(true);
+    private void getOrders() {
         interator.getOrders();
     }
 
     @Override
-    public void getOrders(List<Order> orders) {
-        this.orders = orders.stream().sorted(Comparator.comparing(Order::getOrderId).reversed())
-                .collect(Collectors.toList());
-        view.isLoading(false);
-        view.getOrders(this.orders);
+    public void getOrders(List<Order> order) {
+//        this.orders = order;
+        view.getOrders(order);
+    }
+
+    @Override
+    public void isOrdersEmpty() {
+        view.getOrders(new ArrayList<>());
     }
 }

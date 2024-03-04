@@ -44,11 +44,11 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        getArgument();
+        getDataShared();
         initView();
     }
 
-    private void getArgument() {
+    private void getDataShared() {
         @StringRes int fragmentLabel;
         if (getArguments() != null) {
             DeliveryAddress deliveryAddress = (DeliveryAddress) getArguments().getSerializable(Constant.DELIVERY_ADDRESS_KEY);
@@ -63,7 +63,6 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
 
     private void initView() {
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-//        presenter.getProvince();
         onInputState();
     }
 

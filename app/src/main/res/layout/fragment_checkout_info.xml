@@ -146,46 +146,23 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/selectAddressView"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/updateInfoButton"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_16sdp"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    app:cardBackgroundColor="#fff"
-                    app:strokeWidth="0.5dp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/updateInfoLabel"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_14sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="Use existing addresses"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <Button
-                            android:id="@+id/updateInfoButton"
-                            style="@style/Widget.Material3.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:onClick="@{() -> fragment.goSelectDeliveryAddressScreen()}"
-                            android:text="Select"
-                            android:textColor="#000"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </com.google.android.material.card.MaterialCardView>
+                    android:layout_gravity="end"
+                    android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
+                    android:onClick="@{() -> fragment.goSelectDeliveryAddressScreen()}"
+                    android:text="Choose another address"
+                    android:textColor="@color/gray_500"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end"
+                    app:iconTint="@color/gray_500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
 
                 <LinearLayout
@@ -233,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Phone number"
+                        android:text="@string/phone_number"
                         android:textColor="@color/gray_700"
                         android:textSize="12sp" />
 
@@ -345,7 +322,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
                                 android:includeFontPadding="false"
-                                android:text="Postal Code"
+                                android:text="Zip Code"
                                 android:textColor="@color/gray_500"
                                 android:textSize="12sp" />
 
@@ -478,12 +455,14 @@
                     <Button
                         android:id="@+id/buy"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
+                        android:layout_height="@dimen/_39sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:backgroundTint="@color/black"
-                        android:fontFamily="@font/poppins_bold"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:onClick="@{() -> fragment.onPaymentOptionScreen()}"
-                        android:text="Proceed to Payment"
+                        android:text="Select a payment method"
+                        android:textStyle="bold"
                         app:elevation="@dimen/_10sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

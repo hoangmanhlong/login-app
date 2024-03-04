@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.fragments.orders.CompletedOrdersFragment">
+<layout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ordersRecyclerView"
+    <data>
+
+        <variable
+            name="isOrdersListEmpty"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/layout_order" />
+        tools:context=".view.fragments.orders.CompletedOrdersFragment">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ordersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{isOrdersListEmpty ? View.GONE : View.VISIBLE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/layout_order" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{isOrdersListEmpty ? View.VISIBLE : View.GONE}"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/anim_order_empty" />
+
+    </FrameLayout>
+</layout>

@@ -13,8 +13,11 @@ import androidx.navigation.Navigation;
 import com.example.loginapp.adapter.select_address_adapter.OnSelectDeliveryAddressClickListener;
 import com.example.loginapp.adapter.select_address_adapter.SelectSelectDeliveryAddressAdapter;
 import com.example.loginapp.databinding.FragmentSelectDeliveryAddressBinding;
+import com.example.loginapp.model.entity.Date;
 import com.example.loginapp.model.entity.DeliveryAddress;
+import com.example.loginapp.model.entity.DeliveryAddresses;
 import com.example.loginapp.presenter.SelectDeliveryAddressPresenter;
+import com.example.loginapp.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,8 +43,15 @@ public class SelectDeliveryAddressFragment extends Fragment implements OnSelectD
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-        binding.deliveryAddressRecyclerview.setAdapter(adapter);
-        presenter.getDeliveryAddress();
+        getDataShared();
+    }
+
+    private void getDataShared() {
+        if (getArguments() != null) {
+            DeliveryAddresses deliveryAddresses = (DeliveryAddresses) getArguments().getSerializable(Constant.DELIVERY_ADDRESSES_KEY);
+            binding.deliveryAddressRecyclerview.setAdapter(adapter);
+            adapter.submitList(deliveryAddresses.deliveryAddresses);
+        }
     }
 
     public void onNavigateUp() {

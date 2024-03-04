@@ -1,6 +1,12 @@
 package com.example.loginapp.presenter;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
+
+import com.example.loginapp.App;
+import com.example.loginapp.data.local.room.AppDatabase;
 import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.ProductName;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.interator.SearchProductInterator;
 import com.example.loginapp.model.listener.SearchListener;
@@ -11,7 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SearchPresenter implements SearchListener {
+
+    private final String TAG = this.toString();
+
+    private final AppDatabase database = App.getDatabase();
 
     private final SearchProductInterator interator = new SearchProductInterator(this);
 
@@ -19,7 +32,9 @@ public class SearchPresenter implements SearchListener {
 
     public boolean isShowSearchResult = false;
 
-    public List<SearchHistory> histories = new ArrayList<>();
+    private static List<String> searchSuggestions = new ArrayList<>();
+
+    public List<SearchHistory> searchHistories = new ArrayList<>();
 
     public List<Product> products = new ArrayList<>();
 
@@ -28,11 +43,11 @@ public class SearchPresenter implements SearchListener {
     }
 
     public void initData() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
-            if (histories.isEmpty()) getSearchHistories();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            if (searchHistories.isEmpty()) getSearchHistories();
             else {
-                view.notifyItemAdded(histories);
-                deleteAllButtonState();
+                view.notifyItemAdded(searchHistories);
+                view.isSearchSuggestionViewVisible(true);
             }
         }
 
@@ -41,6 +56,34 @@ public class SearchPresenter implements SearchListener {
             view.showSearchResult(true);
             listStatus();
         }
+
+        if (searchSuggestions.isEmpty()) getSearchSuggestions();
+        else view.getSearchSuggestions(searchSuggestions);
+    }
+
+
+    @SuppressLint("CheckResult")
+    public void getSearchSuggestions() {
+        database.dao().getProductsName()
+                .map(productNames -> {
+                    List<String> names = new ArrayList<>();
+                    for (ProductName productName : productNames) {
+                        names.add(productName.productName);
+                    }
+                    return names;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(view::getSearchSuggestions);
+    }
+
+    private void getProductNames(List<ProductName> productNames) {
+        List<String> name = new ArrayList<>();
+        for (ProductName productName : productNames)
+            name.add(productName.productName);
+        searchSuggestions = name;
+        Log.d(TAG, "getProductNames: " + searchSuggestions.size());
+        view.getSearchSuggestions(searchSuggestions);
     }
 
     public void onSearchProduct(String query) {
@@ -48,6 +91,7 @@ public class SearchPresenter implements SearchListener {
             products.clear();
             interator.searchProduct(query);
             interator.saveSearchHistory(query);
+            view.hideSearchSuggestionsDropdown();
         } else {
             view.onMessage("Invalid information");
         }
@@ -80,18 +124,26 @@ public class SearchPresenter implements SearchListener {
 
     @Override
     public void notifyItemAdded(SearchHistory history) {
-        histories.add(history);
-        deleteAllButtonState();
-        if (histories.size() > 1)
-            histories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
-        view.notifyItemAdded(histories);
+        view.isSearchSuggestionViewVisible(true);
+        searchHistories.add(history);
+        if (searchHistories.size() > 1)
+            searchHistories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
+        view.notifyItemAdded(searchHistories);
+    }
+
+    @Override
+    public void notifyItemChanged(SearchHistory history) {
+        int index = searchHistories.indexOf(searchHistories.stream().filter(p -> p.getText().equals(history.getText())).collect(Collectors.toList()).get(0));
+        searchHistories.set(index, history);
+        searchHistories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
+        view.notifyItemChanged(index);
     }
 
     @Override
     public void notifyItemRemoved(SearchHistory history) {
-        int index = histories.indexOf(histories.stream().filter(p -> p.getTime().equals(history.getTime())).collect(Collectors.toList()).get(0));
-        histories.remove(index);
-        deleteAllButtonState();
+        int index = searchHistories.indexOf(searchHistories.stream().filter(p -> p.getTime().equals(history.getTime())).collect(Collectors.toList()).get(0));
+        searchHistories.remove(index);
+        view.isSearchSuggestionViewVisible(searchHistories.size() > 0);
         view.notifyItemRemoved(index);
     }
 
@@ -106,16 +158,12 @@ public class SearchPresenter implements SearchListener {
     }
 
     @Override
-    public void isHistoriesEmpty(boolean isEmpty) {
-        view.showDeleteAllButton(!isEmpty);
+    public void isSearchHistoriesEmpty() {
+        view.isSearchSuggestionViewVisible(false);
     }
 
-    private void deleteAllButtonState() {
-        view.showDeleteAllButton(histories.size() != 0);
-    }
-
-    public void deleteHistory(Long time) {
-        interator.deleteSearchHistory(time);
+    public void deleteHistory(String text) {
+        interator.deleteSearchHistory(text);
     }
 
     public void deleteAllSearchHistories() {
@@ -125,4 +173,28 @@ public class SearchPresenter implements SearchListener {
     private boolean isValidFirebasePath(String path) {
         return !path.contains(".") && !path.contains("#") && !path.contains("$") && !path.contains("[") && !path.contains("]");
     }
+
+//    @SuppressLint("StaticFieldLeak")
+//    public class GetProductNamesAsyncTask extends AsyncTask<Void, Void, List<ProductName>> {
+//
+//        private final AppDao dao;
+//
+//        public GetProductNamesAsyncTask(AppDao dao) {
+//            this.dao = dao;
+//        }
+//
+//        @Override
+//        protected List<ProductName> doInBackground(Void... voids) {
+//            return dao.getProductsName();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<ProductName> productNames) {
+//            List<String> name = new ArrayList<>();
+//            for (ProductName productName : productNames)
+//                name.add(productName.productName);
+//            searchSuggestions = name;
+//            view.getSearchSuggestions(searchSuggestions);
+//        }
+//    }
 }

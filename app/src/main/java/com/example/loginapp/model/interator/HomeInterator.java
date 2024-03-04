@@ -5,12 +5,15 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.loginapp.utils.Constant;
+import com.example.loginapp.App;
+import com.example.loginapp.data.local.room.AppDatabase;
 import com.example.loginapp.data.remote.api.AppApiService;
 import com.example.loginapp.data.remote.api.dto.ProductResponse;
 import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.ProductName;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.HomeListener;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +28,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeInterator {
+
+    private final AppDatabase database = App.getDatabase();
 
     private final String TAG = this.toString();
 
@@ -45,8 +50,9 @@ public class HomeInterator {
                 if (response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
                     if (productResponse != null) {
-                        listener.getProductsFromAPI(productResponse.getProducts());
-//                        updateBestseller(productResponse.getProducts().subList(0, 3));
+                        List<Product> products = productResponse.getProducts();
+                        listener.getProductsFromAPI(products);
+                        insertProductNames(products);
                     } else {
                         listener.onMessage("Load data fail");
                     }
@@ -115,5 +121,15 @@ public class HomeInterator {
 
                     }
                 });
+    }
+
+    private void insertProductNames(List<Product> products) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            List<ProductName> productNameList = new ArrayList<>();
+
+            for (Product product : products)
+                productNameList.add(new ProductName(product.getTitle()));
+            database.dao().insertProduct(productNameList);
+        });
     }
 }

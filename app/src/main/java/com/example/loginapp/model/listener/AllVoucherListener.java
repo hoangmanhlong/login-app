@@ -4,6 +4,8 @@ import com.example.loginapp.model.entity.Voucher;
 
 import java.util.List;
 
-public interface VoucherListener {
+public interface AllVoucherListener {
     void getVouchers(List<Voucher> voucher);
+
+    void isMyVoucherEmpty();
 }

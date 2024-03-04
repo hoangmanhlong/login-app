@@ -1,14 +1,13 @@
 package com.example.loginapp.presenter;
 
-import com.example.loginapp.App;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.UserProfileInterator;
 import com.example.loginapp.model.listener.UserProfileListener;
 import com.example.loginapp.view.fragments.user_profile.UserProfileView;
-import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserProfilePresenter implements UserProfileListener {
@@ -23,29 +22,26 @@ public class UserProfilePresenter implements UserProfileListener {
         return currentUser;
     }
 
-    private int numberOfProcessingOrder , numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder = -1;
+    private final List<Order> orders = new ArrayList<>();
 
     public UserProfilePresenter(UserProfileView view) {
         this.view = view;
     }
+
+    private boolean isChecked = false;
 
     private void getUserData() {
         interator.getUserData();
     }
 
     public void initData() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
-            view.isLogged(true);
-            if (currentUser == null) getUserData();
-            else view.bindUserData(currentUser);
-            if (numberOfCancelOrder == -1 || numberOfCompletedOrder == -1 || numberOfProcessingOrder == -1 || numberOfReturnOrder == -1)
-                getOrdersStatus();
-            else
-                view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
-        } else {
-            view.isLogged(false);
-        }
+        if (currentUser == null) getUserData();
+        else view.bindUserData(currentUser);
 
+        if (isChecked) {
+            if (orders.isEmpty()) view.bindNumberOfOrders(0, 0, 0, 0);
+            else getOrders(orders);
+        } else getOrdersStatus();
     }
 
     private void getOrdersStatus() {
@@ -60,25 +56,20 @@ public class UserProfilePresenter implements UserProfileListener {
 
     @Override
     public void getOrders(List<Order> orders) {
-        numberOfProcessingOrder = countOrdersWithStatus(orders, OrderStatus.Processing);
-        numberOfCompletedOrder = countOrdersWithStatus(orders, OrderStatus.Completed);
-        numberOfCancelOrder = countOrdersWithStatus(orders, OrderStatus.Cancel);
-        numberOfReturnOrder = countOrdersWithStatus(orders, OrderStatus.Return);
+        isChecked = true;
+        int numberOfProcessingOrder = countOrdersWithStatus(orders, OrderStatus.Processing);
+        int numberOfCompletedOrder = countOrdersWithStatus(orders, OrderStatus.Completed);
+        int numberOfCancelOrder = countOrdersWithStatus(orders, OrderStatus.Cancel);
+        int numberOfReturnOrder = countOrdersWithStatus(orders, OrderStatus.Return);
         view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
-    }
-
-    private int countOrdersWithStatus(List<Order> orders, OrderStatus status) {
-        return (int) orders.stream().filter(o -> o.getOrderStatus() == status).count();
     }
 
     @Override
-    public void isEmptyOrdersList(boolean isEmpty) {
-        if (isEmpty) {
-            numberOfProcessingOrder = 0;
-            numberOfCompletedOrder = 0;
-            numberOfCancelOrder = 0;
-            numberOfReturnOrder = 0;
-        }
-        view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
+    public void isOrdersListEmpty() {
+        view.bindNumberOfOrders(0, 0, 0, 0);
+    }
+
+    private int countOrdersWithStatus(List<Order> orders, OrderStatus status) {
+        return (int) orders.stream().filter(order -> order.getOrderStatus() == status).count();
     }
 }

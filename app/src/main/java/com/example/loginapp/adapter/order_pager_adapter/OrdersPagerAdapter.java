@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.loginapp.view.fragments.orders.AllOrdersFragment;
+import com.example.loginapp.view.fragments.orders.CancelOrdersFragment;
 import com.example.loginapp.view.fragments.orders.CompletedOrdersFragment;
 import com.example.loginapp.view.fragments.orders.ProcessingOrdersFragment;
+import com.example.loginapp.view.fragments.orders.ReturnOrdersFragment;
 
 public class OrdersPagerAdapter extends FragmentStateAdapter {
 
@@ -18,16 +20,16 @@ public class OrdersPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position) {
-            case 0:
-                return new AllOrdersFragment();
             case 1:
                 return new ProcessingOrdersFragment();
             case 2:
                 return new CompletedOrdersFragment();
             case 3:
+                return new ReturnOrdersFragment();
             case 4:
+                return new CancelOrdersFragment();
             default:
-                return new Fragment();
+                return new AllOrdersFragment();
         }
     }
 

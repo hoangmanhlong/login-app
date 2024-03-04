@@ -55,8 +55,8 @@ public class FavoritePresenter implements FavoriteListener {
     }
 
     @Override
-    public void isWishlistEmpty(boolean isEmpty) {
-        view.isWishlistEmpty(isEmpty);
+    public void isWishlistEmpty() {
+        view.isWishlistEmpty(true);
     }
 
     public void deleteFavoriteProduct(int id) {

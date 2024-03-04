@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Order;
-import com.example.loginapp.model.listener.OrderListener;
+import com.example.loginapp.model.listener.OrdersListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -15,25 +15,29 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderInterator {
+public class OrdersInterator {
 
-    private final OrderListener listener;
+    private final OrdersListener listener;
 
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
-    public OrderInterator(OrderListener listener) {
+    public OrdersInterator(OrdersListener listener) {
         this.listener = listener;
     }
 
     public void getOrders() {
-        List<Order> orders = new ArrayList<>();
         Constant.orderRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    orders.add(dataSnapshot.getValue(Order.class));
-                listener.getOrders(orders);
+                if (snapshot.exists()) {
+                    List<Order> orders = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        orders.add(dataSnapshot.getValue(Order.class));
+                    listener.getOrders(orders);
+                } else {
+                    listener.isOrdersEmpty();
+                }
             }
 
             @Override

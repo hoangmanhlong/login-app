@@ -54,9 +54,7 @@ public class OrdersAdapter extends ListAdapter<Order, OrdersAdapter.OrderViewHol
             List<OrderProduct> orderProducts = order.getOrderProducts();
             binding.setOrder(order);
             binding.setOrderProduct(order.getOrderProducts().get(0));
-            if (orderProducts.size() < 2) binding.viewMoreProduct.setVisibility(View.GONE);
-            if (order.getOrderStatus() == OrderStatus.Cancel) binding.tvOrderStatus.setTextColor(Color.RED);
-            if (order.getOrderStatus() == OrderStatus.Completed) binding.tvOrderStatus.setTextColor(R.color.free_shipping_color);
+            binding.viewMoreProduct.setVisibility(orderProducts.size() < 2 ? View.GONE : View.VISIBLE);
         }
     }
 

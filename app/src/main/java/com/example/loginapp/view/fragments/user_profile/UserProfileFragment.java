@@ -2,7 +2,6 @@ package com.example.loginapp.view.fragments.user_profile;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,13 @@ import com.example.loginapp.databinding.FragmentUserProfileBinding;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.UserProfilePresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.LoginRemindDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 
 public class UserProfileFragment extends Fragment implements UserProfileView {
 
-    UserProfilePresenter presenter = new UserProfilePresenter(this);
+    private UserProfilePresenter presenter = new UserProfilePresenter(this);
 
     private FragmentUserProfileBinding binding;
 
@@ -39,12 +37,7 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setProfileFragment(this);
-        Log.d("TAG", "onViewCreated: ");
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
-            presenter.initData();
-        } else {
-            LoginRemindDialog.show(this, requireContext());
-        }
+        presenter.initData();
     }
 
     public void logOut() {
@@ -53,13 +46,7 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
                 .setMessage(R.string.logout_message)
                 .setPositiveButton(R.string.positive_button_title, (dialog, which) -> FirebaseAuth.getInstance().signOut())
                 .setNegativeButton(R.string.negative_button_title, null)
-                .setCancelable(true)
                 .show();
-    }
-
-    @Override
-    public void isLogged(boolean isLogged) {
-        binding.setIsLogged(isLogged);
     }
 
     @Override
@@ -87,14 +74,6 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
 
     public void goOrdersScreen() {
         NavHostFragment.findNavController(this).navigate(R.id.ordersFragment);
-    }
-
-    public void onFAQButtonClick() {
-//        String url = "https://developer.android.com/";
-//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-//            startActivity(intent);
-//        }
     }
 
     public void goShippingAddressesScreen() {

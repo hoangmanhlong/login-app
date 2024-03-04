@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SelectVoucherListener {
     void getVouchers(List<Voucher> vouchers);
+
+    void isVouchersEmpty();
 }

@@ -81,12 +81,12 @@ public class CartPresenter implements CartListener {
     }
 
     @Override
-    public void isCartEmpty(boolean isEmpty) {
-        view.isBasketEmpty(isEmpty);
+    public void isCartEmpty() {
+        view.isBasketEmpty(true);
     }
 
     public void deleteProductInFirebase(FirebaseProduct product) {
-        interator.deleteProductInFirebase(product);
+        interator.removeProductFromShoppingCart(product);
     }
 
     public void updateQuantity(int id, int quantity) {
@@ -104,20 +104,20 @@ public class CartPresenter implements CartListener {
 
     private void updateUI() {
         if (basket.isEmpty()) {
-            isCartEmpty(true);
-        } else {
-            isCartEmpty(false);
-            List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
-            int subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * Integer.parseInt(product.getQuantity())).sum();
-            int total = subtotal;
-            if (selectedVoucher != null)
-                total = (int) (subtotal - (subtotal * selectedVoucher.getDiscountPercentage() / 100));
-            view.isCheckAllCheckboxChecked(selectedProduct.size() == basket.size());
-            view.showCheckoutView(!selectedProduct.isEmpty());
-            view.showCheckAllCheckbox(!basket.isEmpty());
-            view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
-            this.selectedProduct = selectedProduct;
+            view.isBasketEmpty(true);
+            return;
         }
+        view.isBasketEmpty(false);
+        List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
+        double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * Integer.parseInt(product.getQuantity())).sum();
+        double total = subtotal;
+        if (selectedVoucher != null)
+            total = subtotal - (subtotal * selectedVoucher.getDiscountPercentage() / 100);
+        view.isCheckAllCheckboxChecked(selectedProduct.size() == basket.size());
+        view.showCheckoutView(!selectedProduct.isEmpty());
+        view.showCheckAllCheckbox(!basket.isEmpty());
+        view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
+        this.selectedProduct = selectedProduct;
     }
 
     public void updateCheckboxAllSelected(Boolean checked) {

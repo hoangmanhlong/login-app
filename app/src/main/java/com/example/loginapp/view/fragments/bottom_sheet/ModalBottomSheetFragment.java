@@ -68,10 +68,10 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
     }
 
     private void updateUI() {
-        int total = currentProduct.getPrice() * quantity;
+        double total = currentProduct.getPrice() * quantity;
         if (voucher != null)
             if (voucher.getVoucherType() == VoucherType.Discount)
-                total = (int) (total - ((total * voucher.getDiscountPercentage()) / 100));
+                total = (total - ((total * voucher.getDiscountPercentage()) / 100));
         binding.quantity.setText(String.valueOf(quantity));
         binding.setTotal(String.valueOf(total));
     }
@@ -93,8 +93,8 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
     }
 
@@ -111,9 +111,7 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
     public void onDestroyView() {
         super.onDestroyView();
         MessageVoucherSelected stickyEvent = EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
-        if (stickyEvent != null) {
-            EventBus.getDefault().removeStickyEvent(stickyEvent);
-        }
+        if (stickyEvent != null) EventBus.getDefault().removeStickyEvent(stickyEvent);
     }
 
     public void onClearDiscountCodeClick() {

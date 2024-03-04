@@ -18,9 +18,9 @@
         tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.example.loginapp.view.fragments.product_detail.ProductFragment"
+        android:name="com.example.loginapp.view.fragments.product_detail.ProductDetailFragment"
         android:label="ProductFragment"
-        tools:layout="@layout/fragment_product">
+        tools:layout="@layout/fragment_product_detail">
         <action
             android:id="@+id/action_productFragment_to_checkoutInfoFragment"
             app:destination="@id/checkoutInfoFragment"
@@ -55,11 +55,7 @@
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_cartFragment_to_selectVoucherFragment"
-            app:destination="@id/selectVoucherFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
+            app:destination="@id/selectVoucherFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteProductFragment"
@@ -170,7 +166,11 @@
         android:id="@+id/orderDetailFragment"
         android:name="com.example.loginapp.view.fragments.order_detail.OrderDetailFragment"
         android:label="fragment_order_detail"
-        tools:layout="@layout/fragment_order_detail" />
+        tools:layout="@layout/fragment_order_detail" >
+        <action
+            android:id="@+id/action_orderDetailFragment_to_buyAgainFragment"
+            app:destination="@id/buyAgainFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/selectVoucherFragment"
@@ -233,6 +233,12 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/buyAgainFragment"
+        android:name="com.example.loginapp.view.fragments.buy_again.BuyAgainFragment"
+        android:label="BuyAgainFragment"
+        tools:layout="@layout/fragment_buy_again" />
     <fragment
         android:id="@+id/verificationFragment"
         android:name="com.example.loginapp.view.fragments.verification.VerificationFragment"
@@ -240,11 +246,7 @@
         tools:layout="@layout/fragment_verification" />
     <action
         android:id="@+id/action_global_voucherFragment"
-        app:destination="@id/voucherFragment"
-        app:enterAnim="@anim/from_right"
-        app:exitAnim="@anim/to_left"
-        app:popEnterAnim="@anim/from_left"
-        app:popExitAnim="@anim/to_right" />
+        app:destination="@id/voucherFragment" />
     <action
         android:id="@+id/action_global_productFragment"
         app:destination="@id/productFragment"

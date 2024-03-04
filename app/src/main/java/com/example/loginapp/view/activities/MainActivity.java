@@ -1,28 +1,37 @@
 package com.example.loginapp.view.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.loginapp.R;
-import com.example.loginapp.adapter.main_adapter.ViewPagerAdapter;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.presenter.MainPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.utils.NetworkChecker;
 import com.example.loginapp.view.commonUI.AppAnimationState;
+import com.example.loginapp.view.fragments.cart.CartFragment;
+import com.example.loginapp.view.fragments.favorite_product.FavoriteProductFragment;
+import com.example.loginapp.view.fragments.home.HomeFragment;
 import com.example.loginapp.view.fragments.product_detail.NewProductInWishlistMessage;
+import com.example.loginapp.view.fragments.search.SearchProductFragment;
+import com.example.loginapp.view.fragments.user_profile.UserProfileFragment;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -30,9 +39,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements MainView {
 
     private NetworkChecker networkChecker;
+
+    private final MutableLiveData<Boolean> _isLogged = new MutableLiveData<>();
+
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     private boolean backPressedOnce = false;
 
@@ -47,16 +64,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ActivityMainBinding binding;
 
     private ViewPager2 viewPager;
-
-//    private final ArrayList<Integer> navigationBarIconFilled = new ArrayList<>(
-//            Arrays.asList(
-//                    R.drawable.ic_home_dark,
-//                    R.drawable.ic_search_dark,
-//                    R.drawable.ic_cart_dark,
-//                    R.drawable.favorite,
-//                    R.drawable.ic_user_dark
-//            )
-//    );
 
     private TabLayout appNavigationBar;
 
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this.getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(5);
+
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -94,22 +102,28 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         setupNavigation();
 
-//        presenter.registerAuthStateListener();
+        authStateListener = firebaseAuth -> _isLogged.setValue(firebaseAuth.getCurrentUser() != null);
+        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
 
-        FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
-
-            boolean isLogged = firebaseAuth.getCurrentUser() != null;
-            Log.d(TAG, "initView: " + isLogged);
-            if (isLogged) {
-                viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this.getLifecycle());
-                presenter.getDataOnNavigationBar(firebaseAuth.getCurrentUser());
+        _isLogged.observe(this, _isLogged -> {
+            Log.d(TAG, "initView: " + _isLogged);
+            if (_isLogged && navController.getCurrentDestination().getId() != R.id.firstFragment) {
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++)
+                    navController.popBackStack();
+                navController.navigate(R.id.firstFragment);
             }
-            hasUser(isLogged);
+
+            if (!_isLogged) {
+                navController.popBackStack(navController.getCurrentDestination().getId(), true);
+                navController.navigate(R.id.overviewFragment);
+            }
         });
+
         destinationChangedListener();
 
         tabSelectedListener();
     }
+
 
     private void setupNavigation() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -120,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void destinationChangedListener() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            Log.d(TAG, "currentDestination: " + controller.getCurrentDestination().toString());
             currentDestinationId = destination.getId();
             boolean isStartDestination = currentDestinationId == R.id.firstFragment;
 
@@ -142,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onPause() {
         super.onPause();
+        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
         EventBus.getDefault().unregister(this);
-        presenter.unregisterAuthStateListener();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -155,15 +170,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onDestroy() {
         super.onDestroy();
         if (networkChecker != null) networkChecker.unregisterNetworkCallback();
-        presenter.unregisterAuthStateListener();
-
-        Class<?>[] messageTypes = {NewProductInWishlistMessage.class};
-        for (Class<?> messageType : messageTypes) {
-            Object message = EventBus.getDefault().getStickyEvent(messageType);
-            if (message != null) {
-                EventBus.getDefault().removeStickyEvent(message);
-            }
-        }
+        NewProductInWishlistMessage message = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
+        if (message != null) EventBus.getDefault().removeStickyEvent(message);
     }
 
 //    public void showPopupDialog() {
@@ -176,27 +184,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 //    }
 
     @Override
-    public void hasUser(boolean hasUser) {
-        if (hasUser) {
-            NavDestination navDestination = navController.getCurrentDestination();
-            if (navDestination != null) {
-                if (currentDestinationId != startDestinationId) {
-                    Log.d(TAG, "hasUser: ");
-                    navController.popBackStack(currentDestinationId, true);
-                    navController.navigate(startDestinationId);
-                }
-            }
-        } else {
-            navController.popBackStack(currentDestinationId, true);
-            navController.navigate(R.id.overviewFragment);
-        }
-    }
-
-    @Override
     public void bindNumberOfProductInShoppingCart(int number, boolean isShoppingCartEmpty) {
         TabLayout.Tab shoppingCartTab = appNavigationBar.getTabAt(2);
+        BadgeDrawable drawable = shoppingCartTab.getOrCreateBadge();
         if (isShoppingCartEmpty) shoppingCartTab.removeBadge();
-        else shoppingCartTab.getOrCreateBadge().setNumber(number);
+        else drawable.setNumber(number);
     }
 
     @Override
@@ -298,6 +290,34 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
             }
         });
+    }
+
+    public static class ViewPagerAdapter extends FragmentStateAdapter {
+
+
+        private final List<Fragment> fragments = new ArrayList<>(Arrays.asList(
+                new HomeFragment(),
+                new SearchProductFragment(),
+                new CartFragment(),
+                new FavoriteProductFragment(),
+                new UserProfileFragment()
+        ));
+
+        public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+            super(fragmentManager, lifecycle);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return fragments.size();
+        }
+
     }
 }
 

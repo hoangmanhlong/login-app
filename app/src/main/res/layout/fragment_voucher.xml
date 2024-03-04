@@ -50,50 +50,31 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/vouchersViewPlaceHolder"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/vouchersTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="@dimen/_8sdp">
+            android:layout_height="wrap_content"
+            android:background="@color/gray_1000"
+            app:tabIndicatorFullWidth="true">
 
-            <LinearLayout
+            <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:text="All" />
 
-                <include layout="@layout/layout_voucher_placeholder" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My vouchers" />
 
-                <include layout="@layout/layout_voucher_placeholder" />
+        </com.google.android.material.tabs.TabLayout>
 
-                <include layout="@layout/layout_voucher_placeholder" />
 
-                <include layout="@layout/layout_voucher_placeholder" />
-
-                <include layout="@layout/layout_voucher_placeholder" />
-
-                <include layout="@layout/layout_voucher_placeholder" />
-
-                <include layout="@layout/layout_voucher_placeholder" />
-
-                <include layout="@layout/layout_voucher_placeholder" />
-
-                <include layout="@layout/layout_voucher_placeholder" />
-            </LinearLayout>
-
-        </com.facebook.shimmer.ShimmerFrameLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/voucherRecyclerview"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/gray_1000"
-            android:clipToPadding="false"
-            android:padding="@dimen/_8sdp"
-            android:visibility="gone"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/layout_voucher" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 </layout>

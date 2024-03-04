@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentOrderSuccessBinding;
@@ -30,11 +30,7 @@ public class OrderSuccessFragment extends Fragment {
         binding.setFragment(this);
     }
 
-    public void onNavigateUp() {
-        onBackHomeScreen();
-    }
-
     public void onBackHomeScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_orderSuccessFragment_to_homeFragment);
+        NavHostFragment.findNavController(this).popBackStack(R.id.firstFragment, false);
     }
 }

@@ -13,5 +13,5 @@ public interface CartListener {
 
     void notifyItemRemoved(FirebaseProduct product);
 
-    void isCartEmpty(boolean isEmpty);
+    void isCartEmpty();
 }

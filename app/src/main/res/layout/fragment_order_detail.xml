@@ -68,8 +68,8 @@
                     android:id="@+id/orderStatusView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    tools:background="@color/orange"
-                    android:padding="@dimen/_8sdp">
+                    android:padding="@dimen/_8sdp"
+                    tools:background="@color/orange">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -100,6 +100,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:id="@+id/tvDeliveryAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -111,17 +112,8 @@
                         app:layout_constraintStart_toEndOf="@id/ivLocation"
                         app:layout_constraintTop_toTopOf="@id/ivLocation" />
 
-                    <Button
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/copy"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/orange"
-                        app:layout_constraintBaseline_toBaselineOf="@id/tvDeliveryAddress"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
                     <LinearLayout
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -133,15 +125,15 @@
                             android:id="@+id/tvRecipientName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{deliveryAddress.recipientName}"
+                            android:text="@{order.deliveryAddress.recipientName}"
                             android:textColor="@color/gray_500"
                             tools:text="Hoang Manh Long" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="@dimen/_2sdp"
-                            android:text="@{deliveryAddress.phoneNumber}"
+                            android:layout_marginVertical="@dimen/_4sdp"
+                            android:text="@{order.deliveryAddress.phoneNumber}"
                             android:textColor="@color/gray_500"
                             tools:text="0123456789" />
 
@@ -149,7 +141,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxWidth="@dimen/_250sdp"
-                            android:text="@{deliveryAddress.address}"
+                            android:text="@{order.deliveryAddress.address}"
                             android:textColor="@color/gray_500"
                             tools:text="Xom 3, Tu Hoang, Nam Tu Liem, Ha Noi" />
                     </LinearLayout>
@@ -162,11 +154,12 @@
                     android:layout_height="@dimen/_10sdp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:overScrollMode="never"
                     android:id="@+id/orderProductRecyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
                     tools:listitem="@layout/layout_order_product" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -219,7 +212,7 @@
                         android:id="@+id/tvPaymentMethod"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:text="@string/payment_method"
                         android:textColor="#000"
                         android:textSize="16sp"
@@ -231,7 +224,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:text="@{order.paymentMethod.toString()}"
                         android:textColor="@color/gray_500"
@@ -295,14 +288,32 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <Button
+        <LinearLayout
+            android:background="@android:color/transparent"
+            android:padding="@dimen/_8sdp"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_margin="@dimen/_4sdp"
-            android:backgroundTint="#000"
-            android:text="@string/buy_again"
-            app:icon="@drawable/ic_cart_gray"
-            app:iconGravity="textStart" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btMoreAction"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> fragment.onOrderActionClick()}"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/btBuyAgain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> fragment.onBuyAgainButtonClick()}"
+                android:text="@string/buy_again" />
+        </LinearLayout>
+
 
     </LinearLayout>
 </layout>

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.adapter.select_voucher_adapter.OnSelectVoucherClickListener;
 import com.example.loginapp.adapter.select_voucher_adapter.SelectVoucherAdapter;
@@ -54,12 +55,17 @@ public class SelectVoucherFragment extends Fragment implements SelectVoucherView
     }
 
     @Override
+    public void isVouchersEmpty() {
+        binding.setIsVouchersEmpty(true);
+    }
+
+    @Override
     public void onItemClick(Voucher voucher) {
         presenter.setSelectedVoucher(voucher);
     }
 
     public void onOKButtonClick() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        NavHostFragment.findNavController(this).navigateUp();
         EventBus.getDefault().postSticky(new MessageVoucherSelected(presenter.getSelectedVoucher()));
     }
 

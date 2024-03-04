@@ -52,7 +52,7 @@ public class SearchSuggestAdapter extends ListAdapter<SearchHistory, SearchSugge
     public static final DiffUtil.ItemCallback<SearchHistory> DiffCallback = new DiffUtil.ItemCallback<SearchHistory>() {
         @Override
         public boolean areItemsTheSame(@NonNull SearchHistory oldItem, @NonNull SearchHistory newItem) {
-            return oldItem.getTime().equals(newItem.getTime());
+            return oldItem.getText().equals(newItem.getText());
         }
 
         @SuppressLint("DiffUtilEquals")

@@ -86,11 +86,25 @@
     <string name="later">Later</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
-    <string name="day">day %s</string>
+    <string name="day">Day %s</string>
+    <string name="need_s_coins">Need %s coins</string>
+    <string name="date_decor">%s-%s-%s</string>
     <string name="log_in_description">Log in to experience the shopping service now</string>
     <string name="no_internet">No internet connection</string>
     <string name="check_again">Please check again</string>
     <string name="favorites_list_empty">Oops, your wishlist is empty</string>
     <string name="login_email_false_message">Account or password is incorrect. Try Again!</string>
     <string name="rating_des">Ratings and reviews are verified and are from people who use the same type of device that you use</string>
+    <string name="change_voucher_title">Are you sure you want to exchange %s coins for this voucher</string>
+    <string name="redeem">Redeem Voucher</string>
+
+    <!--Orders Screen-->
+    <string name="orders_empty_message">Oops, No Orders Yet...</string>
+
+    <!--Order Detail Screen-->
+    <string name="confirm_message">Are you sure you want to %s this order?</string>
+    <string name="return_text">Return</string>
+
+    <!--Coins Reward Screen -->
+    <string name="get_coin_button_text">Get 100 coins now</string>
 </resources>

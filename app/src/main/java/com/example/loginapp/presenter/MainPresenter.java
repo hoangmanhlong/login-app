@@ -35,20 +35,8 @@ public class MainPresenter implements MainListener {
     }
 
     public void getDataOnNavigationBar(FirebaseUser firebaseUser) {
-        interactor.getNavigationState(firebaseUser.getUid());
+        interactor.getNumberOfShoppingCart(firebaseUser.getUid());
         getWishlistStatus();
-    }
-
-    public void registerAuthStateListener() {
-        authStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            boolean isLogged = user != null;
-            if (isLogged) {
-                getDataOnNavigationBar(user);
-            }
-            view.hasUser(isLogged);
-        };
-        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
     }
 
     public void unregisterAuthStateListener() {

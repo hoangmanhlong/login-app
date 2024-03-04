@@ -7,8 +7,18 @@
     <data>
 
         <variable
+            name="isVouchersListEmpty"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="date"
+            type="com.example.loginapp.model.entity.Date" />
+
+        <variable
             name="numberOfCoins"
-            type="Integer" />
+            type="String" />
 
         <variable
             name="fragment"
@@ -59,95 +69,157 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_8sdp">
-
-            <ImageView
-                android:id="@+id/ivCoin"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_coin"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvNumberOfCoins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:includeFontPadding="false"
-                android:text="@{String.valueOf(numberOfCoins)}"
-                android:textSize="@dimen/_20sdp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/ivCoin"
-                app:layout_constraintStart_toEndOf="@id/ivCoin"
-                app:layout_constraintTop_toTopOf="@id/ivCoin"
-                tools:text="200" />
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivCoin">
+                android:id="@+id/llContentScreen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:padding="@dimen/_8sdp">
 
-                <TextView
-                    android:id="@+id/coin"
-                    android:text="@{String.valueOf(numberOfCoins)}"
-                    android:layout_width="wrap_content"
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/coinsPlaceHolder"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    tools:text="200" />
+                    android:clipToPadding="false">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <include layout="@layout/layout_coins_placeholder" />
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/llAttendance"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" coin(s) expiring on " />
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:visibility="gone">
 
-                <!--                bindTextViewEndDate="@{coin.endDate}"-->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tvLastDayOfMonth"
-                    android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/ivCoin"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/ic_coin"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvNumberOfCoins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:includeFontPadding="false"
+                            android:text="@{numberOfCoins}"
+                            android:textSize="@dimen/_20sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/ivCoin"
+                            app:layout_constraintStart_toEndOf="@id/ivCoin"
+                            app:layout_constraintTop_toTopOf="@id/ivCoin"
+                            tools:text="200" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ivCoin">
+
+                            <TextView
+                                android:id="@+id/coin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_bold"
+                                android:includeFontPadding="false"
+                                android:text="@{String.valueOf(numberOfCoins)}"
+                                android:textSize="12sp"
+                                tools:text="200" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:includeFontPadding="false"
+                                android:text=" coin(s) expiring on "
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvLastDayOfMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_bold"
+                                android:includeFontPadding="false"
+                                android:text="@{@string/date_decor(date.month, date.day, date.year)}"
+                                android:textSize="12sp"
+                                tools:text="26-11-2024" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:cardBackgroundColor="#fff"
+                        app:strokeWidth="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_4sdp">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/calendarRecyclerview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:background="#fff"
+                                android:orientation="horizontal"
+                                android:overScrollMode="never"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                tools:itemCount="7"
+                                tools:listitem="@layout/layout_get_coin" />
+
+                            <Button
+                                android:id="@+id/btAttendance"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/_32sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:fontFamily="@font/poppins_bold"
+                                android:includeFontPadding="false"
+                                android:onClick="@{() -> fragment.onAttendanceButtonClick()}"
+                                android:text="@string/get_coin_button_text" />
+                        </LinearLayout>
+
+
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/changeCoinsRecyclerView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    tools:text="26-11-2024" />
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/layout_voucher_coin_exchange" />
+
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            app:cardElevation="@dimen/_2sdp"
-            app:strokeWidth="0dp"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_height="wrap_content">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/calendarRecyclerview"
-                android:padding="@dimen/_10sdp"
-                android:background="#fff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/layout_get_coin"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="7" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <Button
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_32sdp"
-            android:fontFamily="@font/poppins_bold"
-            android:includeFontPadding="false"
-            android:onClick="@{() -> fragment.onAttendanceButtonClick()}"
-            android:text="Get 100 coins now" />
-
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 </layout>

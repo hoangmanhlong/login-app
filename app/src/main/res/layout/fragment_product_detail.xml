@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.example.loginapp.view.fragments.product_detail.ProductFragment" />
+            type="com.example.loginapp.view.fragments.product_detail.ProductDetailFragment" />
 
         <variable
             name="product"
@@ -95,7 +95,7 @@
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <ImageView
-                                    android:id="@+id/imThumbnail"
+                                    android:id="@+id/ivThumbnail"
                                     imgUrl="@{product.thumbnail}"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"

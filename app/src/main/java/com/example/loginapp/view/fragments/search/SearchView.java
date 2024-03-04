@@ -13,13 +13,17 @@ public interface SearchView {
 
     void notifyItemAdded(List<SearchHistory> list);
 
+    void notifyItemChanged(int index);
+
     void notifyItemRemoved(int index);
 
     void showSearchResult(Boolean show);
 
     void isSearchEmpty(boolean isEmpty);
 
-    void getCategories(List<String> categories);
+    void getSearchSuggestions(List<String> list);
 
-    void showDeleteAllButton(boolean show);
+    void hideSearchSuggestionsDropdown();
+
+    void isSearchSuggestionViewVisible(boolean visible);
 }

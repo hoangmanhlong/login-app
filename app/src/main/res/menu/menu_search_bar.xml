@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:icon="@drawable/ic_mic"
-        android:title="Microphone"
-        app:showAsAction="always"/>
-
-    <item
-        android:icon="@drawable/ic_photo_camera_24"
-        android:title="TODO"
-        app:showAsAction="always"/>
+    <item android:id="@+id/profile"
+        android:title=""
+        android:contentDescription="@null"
+        app:showAsAction="always"
+        app:actionLayout="@layout/layout_avatar"/>
 </menu>

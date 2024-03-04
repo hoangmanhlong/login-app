@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.fragments.buy_again.BuyAgainFragment">
+
+    <data>
+
+        <variable
+            name="quantity"
+            type="String" />
+
+        <variable
+            name="price"
+            type="String" />
+
+        <variable
+            name="total"
+            type="String" />
+
+        <variable
+            name="address"
+            type="com.example.loginapp.model.entity.DeliveryAddress" />
+
+        <variable
+            name="fragment"
+            type="com.example.loginapp.view.fragments.buy_again.BuyAgainFragment" />
+
+        <variable
+            name="order"
+            type="com.example.loginapp.model.entity.Order" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <Button
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> fragment.onNavigateUp()}"
+                app:icon="@drawable/ic_arrow_left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:fontFamily="@font/montserrat_regular"
+                android:includeFontPadding="false"
+                android:text="@string/checkout"
+                android:textColor="@color/black_100"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:checkable="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="@dimen/_8sdp"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:padding="@dimen/_8sdp">
+
+                        <ImageView
+                            android:id="@+id/ivLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_location"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvDeliveryAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:includeFontPadding="false"
+                            android:text="@string/delivery_address"
+                            android:textColor="#000"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/ivLocation"
+                            app:layout_constraintStart_toEndOf="@id/ivLocation"
+                            app:layout_constraintTop_toTopOf="@id/ivLocation" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:orientation="vertical"
+                            app:layout_constraintStart_toEndOf="@id/ivLocation"
+                            app:layout_constraintTop_toBottomOf="@id/tvDeliveryAddress">
+
+                            <TextView
+                                android:includeFontPadding="false"
+                                android:id="@+id/tvRecipientName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{address.recipientName}"
+                                android:textColor="@color/gray_500"
+                                tools:text="Hoang Manh Long" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="@dimen/_2sdp"
+                                android:includeFontPadding="false"
+                                android:text="@{address.phoneNumber}"
+                                android:textColor="@color/gray_500"
+                                tools:text="0123456789" />
+
+                            <TextView
+                                android:includeFontPadding="false"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxWidth="@dimen/_250sdp"
+                                android:text="@{address.address}"
+                                android:textColor="@color/gray_500"
+                                tools:text="Xom 3, Tu Hoang, Nam Tu Liem, Ha Noi" />
+                        </LinearLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/orderProductsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/layout_order_product" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/checkoutView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/checkout_background"
+            android:elevation="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            android:paddingTop="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_10sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/discountCodeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvDiscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/discount_code"
+                    android:textColor="@color/gray_500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/selectDiscountCodeView"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> fragment.onSelectCodeClick()}"
+                    android:orientation="horizontal"
+                    android:text="@string/select_code"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/gray_500"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:iconGravity="end"
+                    app:iconTint="@color/gray_500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/clearDiscountCodeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/discountCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/clearDiscountCode"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> fragment.onClearDiscountCodeClick()}"
+                        app:icon="@drawable/ic_cancel_24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/subTotalView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
+                app:layout_constraintTop_toBottomOf="@id/discountCodeView">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
+                    android:text="@{@string/quantity_item(quantity)}"
+                    android:textColor="@color/gray_500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="2 item(s)" />
+
+                <TextView
+                    android:id="@+id/priceTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:includeFontPadding="false"
+                    android:text="@{@string/price_format(price)}"
+                    android:textColor="@color/black_100"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="1000$" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divide"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/subTotalView" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/totalPriceView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
+                app:layout_constraintTop_toBottomOf="@id/divide">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textColor="@color/gray_500"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/price_format(total)}"
+                    android:textColor="@color/black_100"
+                    android:textStyle="bold"
+                    app:layout_constraintBaseline_toBaselineOf="@id/totalPriceView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="$1.000.000.000" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/buy"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_39sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> fragment.onCheckoutClick()}"
+                android:text="@string/checkout"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                app:elevation="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/totalPriceView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+</layout>

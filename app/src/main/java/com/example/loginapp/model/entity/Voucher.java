@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Voucher implements Serializable {
 
-    private String voucherCode = "VC" + System.currentTimeMillis();
+    private final String voucherCode = "VC" + System.currentTimeMillis();
 
     private String voucherDescription;
 
@@ -26,6 +26,8 @@ public class Voucher implements Serializable {
 
     private VoucherType voucherType;
 
+    private int numberOfCoinsNeededToExchange;
+
     public Voucher() {
     }
 
@@ -40,6 +42,10 @@ public class Voucher implements Serializable {
         this.voucherStatus = voucherStatus;
         this.paymentMethod = paymentMethod;
         this.voucherType = voucherType;
+    }
+
+    public int getNumberOfCoinsNeededToExchange() {
+        return numberOfCoinsNeededToExchange;
     }
 
     public String getVoucherCode() {

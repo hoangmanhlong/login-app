@@ -6,23 +6,12 @@ public class SearchHistory {
 
     private Long time;
 
-    private boolean hasProductFound;
-
-    private String category;
-
-    public SearchHistory() {}
+    public SearchHistory() {
+    }
 
     public SearchHistory(String text) {
         this.text = text;
         time = System.currentTimeMillis();
-    }
-
-    public boolean isHasProductFound() {
-        return hasProductFound;
-    }
-
-    public String getCategory() {
-        return category;
     }
 
     public Long getTime() {

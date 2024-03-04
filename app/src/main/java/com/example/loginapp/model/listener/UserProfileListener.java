@@ -10,5 +10,5 @@ public interface UserProfileListener {
 
     void getOrders(List<Order> orders);
 
-    void isEmptyOrdersList(boolean isEmpty);
+    void isOrdersListEmpty();
 }

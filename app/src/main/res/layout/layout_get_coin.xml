@@ -1,46 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
-            name="day"
-            type="String" />
+            name="dayWithCheck"
+            type="com.example.loginapp.model.entity.DayWithCheck" />
+
+        <import type="android.view.View" />
     </data>
-    <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_3sdp"
+
+
+    <LinearLayout
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_margin="@dimen/_2sdp"
+        android:clipToPadding="false"
         android:gravity="center_horizontal"
         android:orientation="vertical">
+
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_margin="@dimen/_2sdp"
+            app:cardElevation="@dimen/_2sdp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@color/gray_1000"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="@dimen/_5sdp">
+                android:padding="@dimen/_3sdp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="@{dayWithCheck.checked ? View.GONE : View.VISIBLE}">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/_25sdp"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="+100" />
+                            android:fontFamily="@font/poppins_bold"
+                            android:includeFontPadding="false"
+                            android:text="+100"
+                            android:textStyle="bold" />
 
                         <ImageView
                             android:layout_width="@dimen/_20sdp"
@@ -48,6 +63,14 @@
                             android:layout_marginTop="@dimen/_4sdp"
                             android:src="@drawable/ic_coin" />
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivChecked"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_check_green"
+                        android:visibility="@{dayWithCheck.checked ? View.VISIBLE : View.GONE}" />
+
 
                 </LinearLayout>
 
@@ -59,9 +82,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{@string/day(day)}"
+            android:fontFamily="@font/poppins_regular"
+            android:includeFontPadding="false"
+            android:text="@{@string/day(String.valueOf(dayWithCheck.day))}"
+            android:textColor="@color/gray_500"
+            android:textSize="12sp"
             tools:text="day 1" />
 
     </LinearLayout>
+
+
 </layout>
 

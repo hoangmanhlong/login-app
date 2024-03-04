@@ -11,7 +11,6 @@ import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import retrofit2.Call;
@@ -33,14 +32,12 @@ public class ProductInterator {
     }
 
     public void isFavoriteProduct(Product product) {
-        favoriteProductRef
-                .child(currentUser.getUid())
+        favoriteProductRef.child(currentUser.getUid())
                 .child(String.valueOf(product.getId()))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        DataSnapshot snapshot = task.getResult();
-                        listener.isFavoriteProduct(snapshot != null && snapshot.exists());
+                        listener.isFavoriteProduct(task.getResult().exists());
                     } else {
                         listener.onMessage("Get Favorite Fail");
                     }

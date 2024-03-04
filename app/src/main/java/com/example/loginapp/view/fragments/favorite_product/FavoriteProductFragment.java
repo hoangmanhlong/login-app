@@ -22,8 +22,6 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.FavoritePresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
-import com.example.loginapp.view.commonUI.LoginRemindDialog;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -47,11 +45,7 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
-            initView();
-        } else {
-            LoginRemindDialog.show(this, requireContext());
-        }
+        initView();
     }
 
     private void initView() {
@@ -89,13 +83,8 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
 
     @Override
     public void isWishlistEmpty(Boolean isEmpty) {
-        if (isEmpty) {
-            binding.listEmptyTextView.setVisibility(View.VISIBLE);
-            binding.favoriteRecyclerView.setVisibility(View.GONE);
-        } else {
-            binding.listEmptyTextView.setVisibility(View.GONE);
-            binding.favoriteRecyclerView.setVisibility(View.VISIBLE);
-        }
+        binding.listEmptyTextView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        binding.favoriteRecyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -110,9 +99,7 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage(R.string.dialog_message)
                 .setPositiveButton(R.string.positive_button_title, (dialog, which) -> presenter.deleteFavoriteProduct(productId))
-                .setNegativeButton(R.string.negative_button_title, (dialog, which) -> {
-                })
-                .setCancelable(false)
+                .setNegativeButton(R.string.negative_button_title,null)
                 .show();
     }
 }

@@ -6,7 +6,12 @@ import com.example.loginapp.model.interator.CheckoutInfoInterator;
 import com.example.loginapp.model.listener.CheckoutInfoListener;
 import com.example.loginapp.view.fragments.checkout.CheckoutInfoView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class CheckoutInfoPresenter implements CheckoutInfoListener {
+
     private final CheckoutInfoInterator interator = new CheckoutInfoInterator(this);
 
     private final CheckoutInfoView view;
@@ -15,8 +20,25 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     private DeliveryAddress selectedDeliveryAddress;
 
+    private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+
+
     public CheckoutInfoPresenter(CheckoutInfoView view) {
         this.view = view;
+    }
+
+    public void getDefaultDeliveryAddress() {
+        view.isLoading(true);
+        interator.getDeliveryAddresses();
+    }
+
+    public List<DeliveryAddress> getDeliveryAddresses() {
+        return deliveryAddresses;
+    }
+
+    public void initData() {
+        if (deliveryAddresses.isEmpty()) getDefaultDeliveryAddress();
+        else view.bindDefaultDeliveryAddress(selectedDeliveryAddress);
     }
 
     public Order getCurrentOrder() {
@@ -36,8 +58,8 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
     }
 
     public DeliveryAddress checkInput(String name, String phoneNumber, String address, String province, String postalCode, String country, String shippingOption) {
-        if (!name.isEmpty() && !address.isEmpty() && !province.isEmpty() && !postalCode.isEmpty() && !country.isEmpty() && !shippingOption.isEmpty()) {
-            return new DeliveryAddress(name,phoneNumber, address, province, Integer.parseInt(postalCode), country, shippingOption);
+        if (!name.isEmpty() && !address.isEmpty() && !province.isEmpty() && !postalCode.isEmpty() && !country.isEmpty()) {
+            return new DeliveryAddress(name, phoneNumber, address, province, Integer.parseInt(postalCode), country, shippingOption.isEmpty() ? "" : shippingOption);
         } else {
             return null;
         }
@@ -46,5 +68,19 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
     @Override
     public void onMessage(String message) {
 
+    }
+
+    @Override
+    public void getDeliveryAddresses(List<DeliveryAddress> deliveryAddresses) {
+        view.isLoading(false);
+        this.deliveryAddresses = deliveryAddresses;
+        selectedDeliveryAddress = deliveryAddresses.stream().filter(DeliveryAddress::getIsDefault).collect(Collectors.toList()).get(0);
+        view.bindDefaultDeliveryAddress(selectedDeliveryAddress);
+
+    }
+
+    @Override
+    public void isDeliveryAddressesEmpty() {
+        view.isLoading(false);
     }
 }

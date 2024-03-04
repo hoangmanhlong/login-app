@@ -1,13 +1,12 @@
 package com.example.loginapp.model.interator;
 
-import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.loginapp.data.remote.api.AppApiService;
 import com.example.loginapp.data.remote.api.dto.ProductResponse;
-import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.listener.SearchListener;
 import com.example.loginapp.utils.Constant;
@@ -19,11 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,10 +47,7 @@ public class SearchProductInterator {
                     ProductResponse productResponse = response.body();
                     if (productResponse != null) {
                         listener.getProducts(productResponse.getProducts());
-                    }
-
-
-                    else listener.onLoadError("Load data fail");
+                    } else listener.onLoadError("Load data fail");
                 }
             }
 
@@ -70,48 +61,46 @@ public class SearchProductInterator {
     public void saveSearchHistory(String text) {
         searchHistoriesRef
                 .child(currentUser.getUid())
-                .child(String.valueOf(System.currentTimeMillis()))
+                .child(text)
                 .setValue(new SearchHistory(text));
     }
 
     public void getSearchHistories() {
 
-        Query query =  searchHistoriesRef.child(currentUser.getUid());
+        Query query = searchHistoriesRef.child(currentUser.getUid());
 
-       query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listener.isHistoriesEmpty(false);
-                    query.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            listener.notifyItemAdded(snapshot.getValue(SearchHistory.class));
-                        }
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                query.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        Log.d(TAG, "onChildAdded: ");
+                        listener.notifyItemAdded(snapshot.getValue(SearchHistory.class));
+                    }
 
-                        }
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        listener.notifyItemChanged(snapshot.getValue(SearchHistory.class));
+                    }
 
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                            listener.notifyItemRemoved(snapshot.getValue(SearchHistory.class));
-                        }
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                        listener.notifyItemRemoved(snapshot.getValue(SearchHistory.class));
+                    }
 
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
-                } else {
-                    listener.isHistoriesEmpty(true);
-                }
+                    }
+                });
+                if (!snapshot.exists()) listener.isSearchHistoriesEmpty();
             }
 
             @Override
@@ -119,13 +108,10 @@ public class SearchProductInterator {
 
             }
         });
-
-
     }
 
-    public void deleteSearchHistory(Long time) {
-        searchHistoriesRef.child(currentUser.getUid())
-                .child(String.valueOf(time)).removeValue();
+    public void deleteSearchHistory(String key) {
+        searchHistoriesRef.child(currentUser.getUid()).child(key).removeValue();
     }
 
     public void deleteAllSearchHistories() {

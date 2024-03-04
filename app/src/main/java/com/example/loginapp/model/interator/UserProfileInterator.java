@@ -30,7 +30,7 @@ public class UserProfileInterator {
         Constant.userRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listener.getUserData(snapshot.getValue(UserData.class));
+                if (snapshot.exists()) listener.getUserData(snapshot.getValue(UserData.class));
             }
 
             @Override
@@ -49,12 +49,11 @@ public class UserProfileInterator {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     List<Order> orders = new ArrayList<>();
-                    listener.isEmptyOrdersList(false);
                     for (DataSnapshot dataSnapshot : snapshot.getChildren())
                         orders.add(dataSnapshot.getValue(Order.class));
                     listener.getOrders(orders);
                 } else {
-                    listener.isEmptyOrdersList(true);
+                    listener.isOrdersListEmpty();
                 }
 
             }

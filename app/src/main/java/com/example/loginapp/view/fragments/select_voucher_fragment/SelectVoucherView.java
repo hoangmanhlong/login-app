@@ -7,4 +7,6 @@ import java.util.List;
 public interface SelectVoucherView {
     void getVouchers(List<Voucher> vouchers);
 
+    void isVouchersEmpty();
+
 }

@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class CartInterator {
 
-    private final String TAG = this.toString();
+//    private final String TAG = this.toString();
 
     private final DatabaseReference cartRef = Constant.cartRef;
 
@@ -34,36 +34,34 @@ public class CartInterator {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    query.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            listener.notifyItemAdded(snapshot.getValue(FirebaseProduct.class));
-                        }
+                if (!snapshot.exists()) listener.isCartEmpty();
+            }
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            listener.notifyItemChanged(snapshot.getValue(FirebaseProduct.class));
-                        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                            listener.notifyItemRemoved(snapshot.getValue(FirebaseProduct.class));
-                        }
+            }
+        });
 
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                listener.notifyItemAdded(snapshot.getValue(FirebaseProduct.class));
+            }
 
-                        }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                listener.notifyItemChanged(snapshot.getValue(FirebaseProduct.class));
+            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                listener.notifyItemRemoved(snapshot.getValue(FirebaseProduct.class));
+            }
 
-                        }
-                    });
-                } else {
-                    listener.isCartEmpty(true);
-                }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
@@ -82,7 +80,7 @@ public class CartInterator {
         cartRef.child(user.getUid()).child(String.valueOf(id)).child("checked").setValue(checked);
     }
 
-    public void deleteProductInFirebase(FirebaseProduct product) {
+    public void removeProductFromShoppingCart(FirebaseProduct product) {
         cartRef.child(user.getUid()).child(String.valueOf(product.getId())).removeValue();
     }
 }

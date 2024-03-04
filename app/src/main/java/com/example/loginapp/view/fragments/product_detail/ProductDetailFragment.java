@@ -19,11 +19,11 @@ import com.example.loginapp.adapter.product_adapter.OnProductClickListener;
 import com.example.loginapp.adapter.product_adapter.ProductAdapter;
 import com.example.loginapp.adapter.product_images_adapter.OnImageClickListener;
 import com.example.loginapp.adapter.product_images_adapter.ProductImageAdapter;
-import com.example.loginapp.utils.Constant;
-import com.example.loginapp.databinding.FragmentProductBinding;
+import com.example.loginapp.databinding.FragmentProductDetailBinding;
 import com.example.loginapp.model.entity.Comment;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.ProductPresenter;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.LoginRemindDialog;
@@ -34,7 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class ProductFragment extends Fragment implements ProductView, OnImageClickListener, OnProductClickListener {
+public class ProductDetailFragment extends Fragment implements ProductView, OnImageClickListener, OnProductClickListener {
 
     private final ProductPresenter presenter = new ProductPresenter(this);
 
@@ -42,7 +42,7 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
 
     private final CommentAdapter commentAdapter = new CommentAdapter();
 
-    private FragmentProductBinding binding;
+    private FragmentProductDetailBinding binding;
 
     private CheckBox btFavorite;
 
@@ -51,7 +51,7 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentProductBinding.inflate(inflater, container, false);
+        binding = FragmentProductDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -63,8 +63,11 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
 
     private void initView() {
         binding.setFragment(this);
+
         AppAnimationState.setBottomActionView(binding.bottomActionView, true);
+
         getDataShared();
+
         RecyclerView recyclerView = binding.productImageRecyclerview;
         RecyclerView similarProductsRecyclerView = binding.similarProductRecyclerview;
         RecyclerView commentRecyclerView = binding.commentRecyclerView;
@@ -81,9 +84,7 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
     private void getDataShared() {
         if (getArguments() != null) {
             Product product = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
-            if (product != null) {
-                presenter.setProduct(product);
-            }
+            if (product != null) presenter.setProduct(product);
         }
     }
 
@@ -172,7 +173,7 @@ public class ProductFragment extends Fragment implements ProductView, OnImageCli
                 .load(url)
                 .placeholder(R.drawable.loading_animation)
                 .error(R.drawable.ic_broken_image)
-                .into(binding.imThumbnail);
+                .into(binding.ivThumbnail);
     }
 
     @Override

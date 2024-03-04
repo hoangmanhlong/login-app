@@ -8,7 +8,6 @@ import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.ProductInterator;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.view.fragments.product_detail.ProductView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class ProductPresenter implements ProductListener {
     public void setProduct(Product product) {
         this.product = product;
         view.bindProduct(product);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) interator.isFavoriteProduct(product);
+        interator.isFavoriteProduct(product);
     }
 
     public ProductPresenter(ProductView view) {

@@ -1,7 +1,5 @@
 package com.example.loginapp.utils;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,6 +33,8 @@ public final class Constant {
 
     private static final String CART_REF_KEY = "cart";
 
+    public static final String DELIVERY_ADDRESSES_KEY = "delivery_addresses";
+
     public static final String ORDER_KEY = "order";
 
     public static final String VOUCHER_KEY_NAME = "voucher";
@@ -57,9 +57,9 @@ public final class Constant {
 
     public static final String BESTSELLER_REF_NAME = "bestseller";
 
-    public static final int COINS_FOR_EACH_TIME = 100;
-
     public static final String LOGIN_TAG = "login_tag";
+
+    public static final String MY_VOUCHER_REF_NAME = "my_voucher";
 
     public static final DatabaseReference userRef =
             FirebaseDatabase.getInstance().getReference().child(USER_REF_NAME);
@@ -75,6 +75,9 @@ public final class Constant {
 
     public static final DatabaseReference orderRef =
             FirebaseDatabase.getInstance().getReference().child(ORDER_REF_NAME);
+
+    public static final DatabaseReference myVoucherRef =
+            FirebaseDatabase.getInstance().getReference().child(MY_VOUCHER_REF_NAME);
 
     public static final DatabaseReference voucherRef =
             FirebaseDatabase.getInstance().getReference().child(VOUCHER_REF_KEY);

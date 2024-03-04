@@ -1,5 +1,6 @@
 package com.example.loginapp.view.fragments.checkout;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
+import com.example.loginapp.model.entity.DeliveryAddresses;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentCheckoutInfoBinding;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.presenter.CheckoutInfoPresenter;
 import com.example.loginapp.view.commonUI.AppMessage;
+import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.example.loginapp.view.fragments.select_delivery_address.SelectedDeliveryAddressMessage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,6 +35,8 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     private final CheckoutInfoPresenter presenter = new CheckoutInfoPresenter(this);
 
     private FragmentCheckoutInfoBinding binding;
+
+    private Dialog dialog;
 
     @Nullable
     @Override
@@ -55,7 +61,9 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
+        dialog = LoadingDialog.getLoadingDialog(requireContext());
         presenter.setCurrentOrder((Order) getArguments().getSerializable(Constant.ORDER_KEY));
+        presenter.initData();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -108,11 +116,25 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     }
 
     @Override
+    public void isLoading(boolean isLoading) {
+        if (isLoading) dialog.show();
+        else dialog.dismiss();
+    }
+
+    @Override
     public void onMessage(String message) {
         AppMessage.showMessage(requireContext(), message);
     }
 
+    @Override
+    public void bindDefaultDeliveryAddress(DeliveryAddress deliveryAddress) {
+        updateUI(deliveryAddress);
+    }
+
     public void goSelectDeliveryAddressScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.DELIVERY_ADDRESSES_KEY, new DeliveryAddresses(presenter.getDeliveryAddresses()));
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment, bundle);
     }
 }

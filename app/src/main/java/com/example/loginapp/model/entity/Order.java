@@ -1,5 +1,7 @@
 package com.example.loginapp.model.entity;
 
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -59,6 +61,8 @@ public class Order implements Serializable {
         this.orderProducts = orderProducts;
         this.voucher = voucher;
     }
+
+
 
     public Order(List<OrderProduct> products) {
         this.orderProducts = products;
@@ -126,6 +130,22 @@ public class Order implements Serializable {
 
     public void setVoucher(Voucher voucher) {
         this.voucher = voucher;
+    }
+
+    public static final String ORDER_STATUS_NAME = "orderStatus";
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId='" + orderId + '\'' +
+                ", orderProducts=" + orderProducts +
+                ", orderDate=" + orderDate +
+                ", orderStatus=" + orderStatus +
+                ", deliveryAddress=" + deliveryAddress +
+                ", paymentMethod=" + paymentMethod +
+                ", paymentTotal=" + paymentTotal +
+                ", voucher=" + voucher +
+                '}';
     }
 }
 

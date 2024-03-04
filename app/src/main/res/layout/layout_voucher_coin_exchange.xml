@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="voucher"
+            type="com.example.loginapp.model.entity.Voucher" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_4sdp"
+        android:checkable="true"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff">
+
+            <ImageView
+                android:id="@+id/voucherImageView"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:src="@drawable/ic_voucher_white" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/tvDiscountCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/averia_gruesa_libre_regular"
+                    android:maxWidth="@dimen/_120sdp"
+                    android:text="@{@string/voucher_name(voucher.discountPercentage)}"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="20% of" />
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:fontFamily="@font/averia_gruesa_libre_regular"
+                    android:maxWidth="@dimen/_120sdp"
+                    android:maxLines="2"
+                    android:text="@{voucher.voucherDescription}"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDiscountCode"
+                    tools:text="Minimum order $0 Minimum order $0" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:src="@drawable/ic_clock" />
+
+                    <TextView
+                        layoutVoucherDateFormat="@{voucher.endDate}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:fontFamily="@font/averia_gruesa_libre_regular"
+                        android:textColor="@color/orange"
+                        android:textSize="12sp"
+                        tools:text="valid_till: 20-10-2005" />
+                </LinearLayout>
+
+                <TextView
+                    android:includeFontPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:padding="@dimen/_3sdp"
+                    android:text="@{@string/need_s_coins(String.valueOf(voucher.numberOfCoinsNeededToExchange))}"
+                    android:textColor="@color/red"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Need 1000 coins" />
+
+                <Button
+                    android:id="@+id/btChange"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Redeem"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
+

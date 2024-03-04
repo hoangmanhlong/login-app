@@ -2,7 +2,6 @@ package com.example.loginapp.view.fragments.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -197,31 +195,26 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void setShowUserView(Boolean show) {
-        if (show) {
-            AppAnimationState.setUserViewState(binding.userView, true);
-
-        } else binding.userView.setVisibility(View.GONE);
-
+        if (show) AppAnimationState.setUserViewState(binding.userView, true);
+        else binding.userView.setVisibility(View.GONE);
     }
 
     public void onExpandRecommendProductsButtonClick() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.recommendedProducts));
-        bundle.putString(Constant.EXPAND_LABEL_KEY, "Recommended for you");
-        NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
+        navigateToExpandedProductsFragment(presenter.recommendedProducts, "Recommended for you");
     }
 
     public void onExpandDiscountProductsButtonClick() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.discountProducts));
-        bundle.putString(Constant.EXPAND_LABEL_KEY, "Discount");
-        NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
+        navigateToExpandedProductsFragment(presenter.discountProducts, "Discount");
     }
 
     public void onExpandTopChartProductsButtonClick() {
+        navigateToExpandedProductsFragment(presenter.topChartsProducts, "Top charts");
+    }
+
+    private void navigateToExpandedProductsFragment(List<Product> products, String label) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(presenter.topChartsProducts));
-        bundle.putString(Constant.EXPAND_LABEL_KEY, "Top charts");
+        bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(products));
+        bundle.putString(Constant.EXPAND_LABEL_KEY, label);
         NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
     }
 

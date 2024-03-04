@@ -35,4 +35,9 @@ public class SelectVoucherPresenter implements SelectVoucherListener {
     public void getVouchers(List<Voucher> vouchers) {
         view.getVouchers(vouchers);
     }
+
+    @Override
+    public void isVouchersEmpty() {
+        view.isVouchersEmpty();
+    }
 }

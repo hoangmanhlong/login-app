@@ -1,9 +1,7 @@
 package com.example.loginapp.presenter;
 
 import android.app.Activity;
-import android.util.Log;
 
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.login.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 

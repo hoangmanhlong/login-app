@@ -12,12 +12,18 @@
             type="String" />
 
         <variable
+            name="isBasketEmpty"
+            type="Boolean" />
+
+        <variable
             name="price"
             type="String" />
 
         <variable
             name="total"
             type="String" />
+
+        <import type="android.view.View"/>
 
     </data>
 
@@ -53,7 +59,7 @@
             android:id="@+id/emptyCartView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="@{isBasketEmpty ? View.VISIBLE : View.GONE}">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -95,7 +101,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/cartContentView"
+            android:visibility="@{isBasketEmpty ? View.GONE : View.VISIBLE}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -212,7 +218,7 @@
                             style="?attr/materialIconButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:onClick="@{() -> fragment.onClearDiscountCodeClick()}"
+                            android:onClick="@{() -> fragment.clearDiscountCode()}"
                             app:icon="@drawable/ic_cancel_24"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -296,7 +302,7 @@
                 <Button
                     android:id="@+id/buy"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_46sdp"
+                    android:layout_height="@dimen/_39sdp"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"

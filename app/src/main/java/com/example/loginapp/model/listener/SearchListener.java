@@ -11,11 +11,13 @@ public interface SearchListener {
 
     void notifyItemAdded(SearchHistory history);
 
+    void notifyItemChanged(SearchHistory history);
+
     void notifyItemRemoved(SearchHistory history);
 
     void onLoadError(String message);
 
     void deleteSuccess(boolean isSuccess);
 
-    void isHistoriesEmpty(boolean isEmpty);
+    void isSearchHistoriesEmpty();
 }
