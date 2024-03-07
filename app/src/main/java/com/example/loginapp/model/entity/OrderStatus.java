@@ -1,8 +1,5 @@
 package com.example.loginapp.model.entity;
 
-public enum OrderStatus {
-    Processing,
-    Completed,
-    Return,
-    Cancel
-}
+import java.io.Serializable;
+
+public enum OrderStatus implements Serializable {Processing, Completed, Return, Cancel}

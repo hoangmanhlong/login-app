@@ -1,7 +1,5 @@
 package com.example.loginapp.model.interator;
 
-import android.util.Log;
-
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.listener.OrderDetailListener;
 import com.example.loginapp.utils.Constant;
@@ -20,7 +18,7 @@ public class OrderDetailInteractor {
         this.listener = listener;
     }
 
-    public void updateOrder(Order order) {
+    public void cancelOrder(Order order) {
         orderRefOfCurrentUser.child(order.getOrderId())
                 .setValue(order)
                 .addOnCompleteListener(task -> listener.isProcessSuccess(task.isSuccessful()))

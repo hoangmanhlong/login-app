@@ -49,12 +49,12 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
 
     public void onCancelOrderButtonClick() {
         new AlertDialog.Builder(requireContext())
-                .setMessage(R.string.buy_again)
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.processOrder())
+                .setMessage(R.string.confirm_message)
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.cancelOrder())
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
-    
+
     public void onBuyAgainButtonClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.ORDER_KEY, presenter.getOrder());
@@ -70,23 +70,23 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
     public void bindOrder(Order order) {
         binding.setOrder(order);
         binding.setDeliveryAddress(order.getDeliveryAddress());
-        int actionTextResId;
+        boolean cancelOrderButtonVisible = true;
         int statusColorResId;
         switch (order.getOrderStatus()) {
             case Processing:
-                actionTextResId = R.string.cancel;
                 statusColorResId = R.color.orange;
                 break;
             case Completed:
-                actionTextResId = R.string.return_text;
+                cancelOrderButtonVisible = false;
                 statusColorResId = R.color.free_shipping_color;
                 break;
             default:
-                actionTextResId = R.string.buy_again;
+                cancelOrderButtonVisible = false;
                 statusColorResId = android.R.color.holo_red_dark;
                 break;
         }
-//        binding.btCancelOrder.setText(actionTextResId);
+
+        binding.btCancelOrder.setVisibility(cancelOrderButtonVisible ? View.VISIBLE : View.GONE);
         binding.orderStatusView.setBackgroundResource(statusColorResId);
         binding.orderProductRecyclerview.setAdapter(new OrderProductAdapter(order.getOrderProducts()));
     }

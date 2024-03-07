@@ -1,8 +1,9 @@
 package com.example.loginapp.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderProduct {
+public class OrderProduct implements Serializable {
     private int id;
     private String title;
     private String description;

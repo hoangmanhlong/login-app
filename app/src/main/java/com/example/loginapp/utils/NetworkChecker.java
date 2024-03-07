@@ -6,13 +6,10 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
-import com.example.loginapp.view.activities.MainActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -21,12 +18,9 @@ public class NetworkChecker {
     private static NetworkChecker instance;
 
     private final MutableLiveData<Boolean> _networkState = new MutableLiveData<>();
-
     public final LiveData<Boolean> networkState = _networkState;
 
-    private final WeakReference<MainActivity> activityRef;
-
-    private final String TAG = this.toString();
+    private final WeakReference<Context> contextRef;
 
     private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -44,16 +38,16 @@ public class NetworkChecker {
         @Override
         public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities);
-//            final boolean unmetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+            // Không làm gì trong phương thức này hiện tại
         }
     };
 
-    public NetworkChecker(MainActivity activity) {
-        this.activityRef = new WeakReference<>(activity);
+    private NetworkChecker(Context context) {
+        this.contextRef = new WeakReference<>(context.getApplicationContext());
 
-        ConnectivityManager connectivityManager = activity.getSystemService(ConnectivityManager.class);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // check unAvailable when app first run
+        // Kiểm tra tính khả dụng của mạng khi ứng dụng được khởi chạy
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         _networkState.postValue(activeNetwork != null);
 
@@ -63,20 +57,24 @@ public class NetworkChecker {
                 .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
                 .build();
 
-        connectivityManager.requestNetwork(networkRequest, networkCallback);
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
     }
 
-    public static synchronized NetworkChecker getInstance(MainActivity activity) {
-        if (instance == null || instance.activityRef.get() == null) {
-            instance = new NetworkChecker(activity);
+    public static synchronized NetworkChecker getInstance(Context context) {
+        if (instance == null) {
+            instance = new NetworkChecker(context);
         }
         return instance;
     }
 
     public void unregisterNetworkCallback() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) activityRef.get().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
-            connectivityManager.unregisterNetworkCallback(networkCallback);
+        Context context = contextRef.get();
+        if (context != null) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager != null) {
+                connectivityManager.unregisterNetworkCallback(networkCallback);
+            }
         }
     }
 }
+

@@ -1,3 +1,5 @@
 package com.example.loginapp.model.entity;
 
-public enum PaymentMethod {PayPal, FPX, CreditDebitCard}
+import java.io.Serializable;
+
+public enum PaymentMethod implements Serializable {PayPal, FPX, CreditDebitCard}

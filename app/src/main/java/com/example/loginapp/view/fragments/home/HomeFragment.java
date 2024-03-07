@@ -2,6 +2,8 @@ package com.example.loginapp.view.fragments.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +26,6 @@ import com.example.loginapp.model.entity.Products;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.HomePresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -195,9 +196,34 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void setShowUserView(Boolean show) {
-        if (show) AppAnimationState.setUserViewState(binding.userView, true);
-        else binding.userView.setVisibility(View.GONE);
+        if (show) {
+            binding.userView.setVisibility(View.VISIBLE);
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    new CountDownTimer(5000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            // Không cần làm gì trong thời gian đếm ngược
+                        }
+
+                        public void onFinish() {
+                            binding.userView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.userView.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                    }.start();
+                }
+            });
+        } else {
+            binding.userView.setVisibility(View.GONE);
+        }
     }
+
+
 
     public void onExpandRecommendProductsButtonClick() {
         navigateToExpandedProductsFragment(presenter.recommendedProducts, "Recommended for you");

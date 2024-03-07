@@ -12,7 +12,6 @@ import androidx.navigation.Navigation;
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentBottomSheetBinding;
 import com.example.loginapp.model.entity.Order;
-import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.entity.VoucherType;
@@ -25,7 +24,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Collections;
-import java.util.List;
 
 public class ModalBottomSheetFragment extends BottomSheetDialogFragment implements SheetView {
 
@@ -51,10 +49,16 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         binding.setSelectVoucherVisible(true);
-        currentProduct = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
+        getSharedData();
         binding.setProduct(currentProduct);
-        order.setOrderProducts(Collections.singletonList(currentProduct.toOrderProduct(quantity)));
         updateUI();
+    }
+
+    private void getSharedData() {
+        if (getArguments() != null) {
+            Product product = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
+            if (product != null) currentProduct = product;
+        }
     }
 
     public void onPlusBtnClick() {
@@ -80,6 +84,7 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
 
     public void onBuyClick() {
         Bundle bundle = new Bundle();
+        order.setOrderProducts(Collections.singletonList(currentProduct.toOrderProduct(quantity)));
         bundle.putSerializable(Constant.ORDER_KEY, order);
         bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, false);
         Navigation.findNavController(requireParentFragment().requireView())

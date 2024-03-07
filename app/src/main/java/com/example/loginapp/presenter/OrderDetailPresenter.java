@@ -27,18 +27,9 @@ public class OrderDetailPresenter implements OrderDetailListener {
         return order;
     }
 
-    public void processOrder() {
-        Order newOrder = order;
-        if (order.getOrderStatus() == OrderStatus.Processing || order.getOrderStatus() == OrderStatus.Completed) {
-            OrderStatus newOrderStatus = order.getOrderStatus() == OrderStatus.Processing ? OrderStatus.Cancel : OrderStatus.Return;
-            newOrder.setOrderStatus(newOrderStatus);
-            interactor.updateOrder(newOrder);
-        } else {
-            newOrder.setOrderStatus(OrderStatus.Processing);
-            newOrder.setOrderId("SA" + System.currentTimeMillis());
-            newOrder.setOrderDate(System.currentTimeMillis());
-            interactor.buyAgain(newOrder);
-        }
+    public void cancelOrder() {
+        order.setOrderStatus(OrderStatus.Cancel);
+        interactor.cancelOrder(order);
     }
 
     @Override

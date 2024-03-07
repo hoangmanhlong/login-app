@@ -27,6 +27,7 @@
                 android:src="@drawable/ic_connection_error" />
 
             <TextView
+                android:includeFontPadding="false"
                 android:fontFamily="@font/poppins_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:includeFontPadding="false"
                 android:fontFamily="@font/poppins_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
