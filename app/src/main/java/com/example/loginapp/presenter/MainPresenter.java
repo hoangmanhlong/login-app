@@ -14,8 +14,6 @@ public class MainPresenter implements MainListener {
 
     private final MainView view;
 
-    private FirebaseAuth.AuthStateListener authStateListener;
-
     private final MainInteractor interactor = new MainInteractor(this);
 
     private final AppSharedPreferences sharedPreferences;
@@ -34,13 +32,9 @@ public class MainPresenter implements MainListener {
         getWishlistStatus();
     }
 
-    public void getDataOnNavigationBar(FirebaseUser firebaseUser) {
-        interactor.getNumberOfShoppingCart(firebaseUser.getUid());
+    public void getDataOnNavigationBar() {
+        interactor.getNumberOfShoppingCart();
         getWishlistStatus();
-    }
-
-    public void unregisterAuthStateListener() {
-        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
     }
 
     @Override

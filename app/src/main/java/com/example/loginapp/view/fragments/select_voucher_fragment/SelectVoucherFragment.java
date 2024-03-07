@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -16,6 +17,7 @@ import com.example.loginapp.adapter.select_voucher_adapter.SelectVoucherAdapter;
 import com.example.loginapp.databinding.FragmentSelectVoucherBinding;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.presenter.SelectVoucherPresenter;
+import com.example.loginapp.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -30,6 +32,8 @@ public class SelectVoucherFragment extends Fragment implements SelectVoucherView
 
     private final SelectVoucherAdapter adapter = new SelectVoucherAdapter(this);
 
+    private NavController navController;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,12 +45,13 @@ public class SelectVoucherFragment extends Fragment implements SelectVoucherView
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
+        navController = NavHostFragment.findNavController(this);
         binding.voucherRecyclerview.setAdapter(adapter);
         presenter.getVoucher();
     }
 
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        navController.navigateUp();
     }
 
     @Override
@@ -65,8 +70,10 @@ public class SelectVoucherFragment extends Fragment implements SelectVoucherView
     }
 
     public void onOKButtonClick() {
-        NavHostFragment.findNavController(this).navigateUp();
+        navController.getPreviousBackStackEntry()
+                        .getSavedStateHandle().set(Constant.VOUCHER_KEY_NAME, presenter.getSelectedVoucher());
         EventBus.getDefault().postSticky(new MessageVoucherSelected(presenter.getSelectedVoucher()));
+        onNavigateUp();
     }
 
     @Override

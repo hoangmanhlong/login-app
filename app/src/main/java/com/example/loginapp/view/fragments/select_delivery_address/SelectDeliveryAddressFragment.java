@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.select_delivery_address;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.adapter.select_address_adapter.OnSelectDeliveryAddressClickListener;
 import com.example.loginapp.adapter.select_address_adapter.SelectSelectDeliveryAddressAdapter;
@@ -28,7 +31,11 @@ public class SelectDeliveryAddressFragment extends Fragment implements OnSelectD
 
     private final SelectDeliveryAddressPresenter presenter = new SelectDeliveryAddressPresenter(this);
 
+    private NavController navController;
+
     private FragmentSelectDeliveryAddressBinding binding;
+
+    private final String TAG = this.toString();
 
     private final SelectSelectDeliveryAddressAdapter adapter = new SelectSelectDeliveryAddressAdapter(this);
 
@@ -43,29 +50,42 @@ public class SelectDeliveryAddressFragment extends Fragment implements OnSelectD
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-        getDataShared();
+        navController = NavHostFragment.findNavController(this);
+        binding.deliveryAddressRecyclerview.setAdapter(adapter);
+        presenter.initData();
     }
 
-    private void getDataShared() {
+    @Override
+    public void getDataShared() {
         if (getArguments() != null) {
             DeliveryAddresses deliveryAddresses = (DeliveryAddresses) getArguments().getSerializable(Constant.DELIVERY_ADDRESSES_KEY);
-            binding.deliveryAddressRecyclerview.setAdapter(adapter);
-            adapter.submitList(deliveryAddresses.deliveryAddresses);
+            if (deliveryAddresses != null) {
+                presenter.setDeliveryAddresses(deliveryAddresses.deliveryAddresses);
+                Log.d(TAG, "getDataShared: " + deliveryAddresses.deliveryAddresses.size());
+            } else {
+                Log.d(TAG, "getDataShared: deliveryAddresses" + "null");
+            }
+
+        } else {
+            Log.d(TAG, "getDataShared: arg == null");
+            presenter.getDeliveryAddresses();
         }
     }
 
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        navController.navigateUp();
     }
 
     public void onOKButtonClick() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
-        EventBus.getDefault().postSticky(new SelectedDeliveryAddressMessage(presenter.selectedAddress));
+        navController.getPreviousBackStackEntry()
+                .getSavedStateHandle().set(Constant.DELIVERY_ADDRESS_KEY, presenter.getSelectedAddress());
+        EventBus.getDefault().postSticky(new SelectedDeliveryAddressMessage(presenter.getSelectedAddress()));
+        navController.navigateUp();
     }
 
     @Override
     public void onDeliveryAddressClick(DeliveryAddress deliveryAddress) {
-        presenter.selectedAddress = deliveryAddress;
+        presenter.setSelectedAddress(deliveryAddress);
     }
 
     @Override

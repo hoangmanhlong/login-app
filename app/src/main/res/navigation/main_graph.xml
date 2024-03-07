@@ -238,7 +238,44 @@
         android:id="@+id/buyAgainFragment"
         android:name="com.example.loginapp.view.fragments.buy_again.BuyAgainFragment"
         android:label="BuyAgainFragment"
-        tools:layout="@layout/fragment_buy_again" />
+        tools:layout="@layout/fragment_buy_again" >
+        <action
+            android:id="@+id/action_buyAgainFragment_to_selectDeliveryAddressFragment"
+            app:destination="@id/selectDeliveryAddressFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_buyAgainFragment_to_selectVoucherFragment"
+            app:destination="@id/selectVoucherFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_buyAgainFragment_to_selectPaymentMethodFragment"
+            app:destination="@id/selectPaymentMethodFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_buyAgainFragment_to_orderSuccessFragment"
+            app:destination="@id/orderSuccessFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/selectPaymentMethodFragment"
+        android:name="com.example.loginapp.view.fragments.select_payment_method.SelectPaymentMethodFragment"
+        android:label="selectPaymentMethodFragment"
+        tools:layout="@layout/fragment_select_payment_method">
+
+    </fragment>
     <fragment
         android:id="@+id/verificationFragment"
         android:name="com.example.loginapp.view.fragments.verification.VerificationFragment"

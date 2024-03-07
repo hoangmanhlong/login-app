@@ -29,6 +29,8 @@ public final class Constant {
 
     private static final String FAVORITE_PRODUCT_REF_KEY = "favorite_product";
 
+    public static final String PAYMENT_METHOD_KEY = "payment_method";
+
     public static final String SEARCH_HISTORY_REF_KEY = "search_history";
 
     private static final String CART_REF_KEY = "cart";
@@ -43,7 +45,7 @@ public final class Constant {
 
     public static final String PRODUCT_KEY = "products";
 
-    public static final String IS_CART = "is_cart";
+    public static final String IS_PRODUCTS_FROM_CART = "is_cart";
 
     private static final String COINS_REF_NAME = "coins";
 
@@ -60,6 +62,8 @@ public final class Constant {
     public static final String LOGIN_TAG = "login_tag";
 
     public static final String MY_VOUCHER_REF_NAME = "my_voucher";
+
+    public static final int ShippingCost = 200;
 
     public static final DatabaseReference userRef =
             FirebaseDatabase.getInstance().getReference().child(USER_REF_NAME);

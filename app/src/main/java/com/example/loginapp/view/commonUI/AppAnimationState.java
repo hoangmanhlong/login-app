@@ -34,8 +34,8 @@ public final class AppAnimationState {
                 }
 
                 public void onFinish() {
-                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_userview_up);
-                    constraintLayout.startAnimation(animation);
+//                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_userview_up);
+//                    constraintLayout.startAnimation(animation);
                     constraintLayout.setVisibility(View.GONE);
                     this.cancel();
                 }

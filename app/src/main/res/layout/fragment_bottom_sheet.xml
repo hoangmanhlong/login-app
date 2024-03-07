@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="selectVoucherVisible"
+            type="Boolean" />
+
+        <variable
             name="product"
             type="com.example.loginapp.model.entity.Product" />
 
@@ -16,11 +20,13 @@
         <variable
             name="total"
             type="String" />
+
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
-        style="@style/ThemeOverlay.App.BottomSheetDialog"
         android:id="@+id/bottom_sheet_layout"
+        style="@style/ThemeOverlay.App.BottomSheetDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -99,23 +105,23 @@
                 app:layout_constraintTop_toBottomOf="@id/divide">
 
                 <TextView
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
                     android:text="@string/discount_code"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/clearDiscountCodeView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="gone"
+                    android:visibility="@{selectVoucherVisible ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -149,11 +155,12 @@
                     android:text="@string/select_code"
                     android:textAlignment="textStart"
                     android:textColor="@color/gray_500"
+                    android:visibility="@{selectVoucherVisible ? View.VISIBLE : View.GONE}"
                     app:icon="@drawable/ic_arrow_forward"
                     app:iconGravity="end"
                     app:iconTint="@color/gray_500"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -161,7 +168,6 @@
                 android:id="@+id/quantityView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/discountView">
 
@@ -226,11 +232,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/subtotalView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/quantityView">
 
                 <TextView
@@ -246,14 +252,14 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:text="@{@string/price_format(total)}"
-                    android:textColor="@color/black_100"
                     android:id="@+id/priceTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
+                    android:text="@{@string/price_format(total)}"
+                    android:textColor="@color/black_100"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -274,7 +280,7 @@
                 android:id="@+id/buy"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_46sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:fontFamily="@font/poppins_bold"
                 android:onClick="@{() -> fragment.onBuyClick()}"

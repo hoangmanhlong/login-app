@@ -167,7 +167,7 @@
         <Button
             android:id="@+id/buy"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_25sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_30sdp"

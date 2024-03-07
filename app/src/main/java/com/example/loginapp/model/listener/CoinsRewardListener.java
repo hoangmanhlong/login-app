@@ -21,7 +21,7 @@ public interface CoinsRewardListener {
 
    void isMyVoucherEmpty();
 
-   void isVouchersListEmpty(boolean isEmpty);
+   void isVouchersListEmpty();
 
    void isRedeemSuccess(boolean isSuccess);
 }

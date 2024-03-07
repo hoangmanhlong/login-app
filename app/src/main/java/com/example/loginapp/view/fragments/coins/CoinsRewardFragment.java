@@ -43,6 +43,10 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
 
     private ShimmerFrameLayout coinsPlaceHolder;
 
+    private ShimmerFrameLayout vouchersLoadingView;
+
+    private RecyclerView changeCoinsRecyclerView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,9 +59,11 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         coinsPlaceHolder = binding.coinsPlaceHolder;
+        vouchersLoadingView = binding.voucherLoadingView;
+        changeCoinsRecyclerView = binding.changeCoinsRecyclerView;
 
         binding.calendarRecyclerview.setAdapter(calendarAdapter);
-        binding.changeCoinsRecyclerView.setAdapter(changeCoinsAdapter);
+        changeCoinsRecyclerView.setAdapter(changeCoinsAdapter);
 
         presenter.initData();
     }
@@ -86,6 +92,8 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
             binding.llAttendance.setVisibility(View.VISIBLE);
         }
     }
+
+
 
     @Override
     public void bindNumberOfCoins(int numberOfCoins) {
@@ -125,6 +133,19 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
     @Override
     public void onMessage(String message) {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void isVouchersLoading(boolean isLoading) {
+        if (isLoading) {
+            changeCoinsRecyclerView.setVisibility(View.GONE);
+            vouchersLoadingView.setVisibility(View.VISIBLE);
+            vouchersLoadingView.startShimmerAnimation();
+        } else {
+            vouchersLoadingView.stopShimmerAnimation();
+            vouchersLoadingView.setVisibility(View.GONE);
+            changeCoinsRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

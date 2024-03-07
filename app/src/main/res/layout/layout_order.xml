@@ -15,16 +15,17 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_margin="@dimen/_4sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@color/md_theme_light_background"
         app:cardCornerRadius="@dimen/_8sdp"
         app:strokeWidth="0dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,8 +40,8 @@
                     android:id="@+id/tvOrderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_8sdp"
                     android:fontFamily="@font/montserrat_bold"
+                    android:padding="@dimen/_8sdp"
                     android:text="@{order.orderStatus.toString()}"
                     android:textColor="@color/orange"
                     android:textSize="16sp"
@@ -52,8 +53,8 @@
                     android:id="@+id/productView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp"
                     android:clipToPadding="false"
+                    android:padding="@dimen/_10sdp"
                     app:layout_constraintTop_toBottomOf="@id/tvOrderStatus">
 
                     <com.google.android.material.card.MaterialCardView
@@ -108,7 +109,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"                            android:text="@{@string/x_quantity(orderProduct.quantity)}"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@{@string/x_quantity(orderProduct.quantity)}"
                             app:layout_constraintBaseline_toBaselineOf="@id/tvProductDescription"
                             app:layout_constraintEnd_toEndOf="parent"
                             tools:text="X1" />
@@ -167,10 +169,10 @@
                     app:layout_constraintTop_toBottomOf="@id/viewMoreProduct">
 
                     <TextView
-                        android:includeFontPadding="false"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@{@string/quantity_item(order.orderProducts.size())}"
                         android:textColor="@color/gray_500"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -179,29 +181,33 @@
                         tools:text="1 item" />
 
                     <TextView
-                        android:textStyle="bold"
-                        android:includeFontPadding="false"
                         android:id="@+id/tvTotalPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"                        android:text="@{@string/format_price(order.paymentTotal)}"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/format_price(order.paymentTotal)}"
                         android:textColor="@color/orange"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="$3.000.000.000" />
 
                     <TextView
-                        android:includeFontPadding="false"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"                        android:text="Order Total: "
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="Order Total: "
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/tvTotalPrice"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

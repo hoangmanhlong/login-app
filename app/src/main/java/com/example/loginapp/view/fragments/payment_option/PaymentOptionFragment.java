@@ -40,10 +40,19 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
+        getSharedData();
         onFpxClick();
-        presenter.getOrder((Order) getArguments().getSerializable(Constant.ORDER_KEY));
-        presenter.updateSaveDeliveryAddressState(getArguments().getBoolean(Constant.SAVE_ADDRESS_KEY));
-        presenter.setCart(getArguments().getBoolean(Constant.IS_CART));
+    }
+
+    private void getSharedData() {
+        if (getArguments() != null) {
+            Order order = (Order) getArguments().getSerializable(Constant.ORDER_KEY);
+            boolean isSaveDeliveryAddress = getArguments().getBoolean(Constant.SAVE_ADDRESS_KEY);
+            boolean isProductsFroShoppingCart = getArguments().getBoolean(Constant.IS_PRODUCTS_FROM_CART);
+            if (order != null) presenter.setOrder(order);
+            presenter.setProductsFroShoppingCart(isProductsFroShoppingCart);
+            presenter.setSaveDeliveryAddress(isSaveDeliveryAddress);
+        }
     }
 
     public void onNavigateUp() {

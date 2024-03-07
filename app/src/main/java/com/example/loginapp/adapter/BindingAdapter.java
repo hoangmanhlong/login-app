@@ -48,6 +48,12 @@ public class BindingAdapter {
         textView.setText(new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault()).format(time));
     }
 
+//    @androidx.databinding.BindingAdapter("bindRoundedPrice")
+//    public static void bindRoundedPrice(TextView textView, double price) {
+//        price = Math.round(price * 100.0) / 100.0;
+//
+//    }
+
     @SuppressLint("StringFormatMatches")
     @androidx.databinding.BindingAdapter("layoutVoucherDateFormat")
     public static void layoutVoucherDateFormat(TextView textView, Long time) {

@@ -336,32 +336,19 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_31sdp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_login_google">
-
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="Not Registered yet? "
-                    android:textColor="#979797"
-                    android:textSize="13sp" />
-
-                <TextView
+                    android:layout_marginTop="@dimen/_31sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_login_google"
                     android:background="?attr/selectableItemBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_bold"
                     android:onClick="@{() -> loginFragment.goRegisterScreen()}"
-                    android:text="@string/create_account"
+                    android:text="@string/create_account_label"
                     android:textColor="@color/cam"
                     android:textSize="13sp" />
-            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

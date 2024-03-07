@@ -6,6 +6,12 @@
     <string name="loopr">LOOPR</string>
     <string name="login">Login</string>
     <string name="create_account">Create an account</string>
+
+    <string name="create_account_label">
+        <font color="#595959">Not Registered yet? </font>
+        <font color="#fb5607">Create an account</font>
+    </string>
+
     <string name="best_prices">Best Prices &amp; Deals</string>
     <string name="find_your_f">Find your favorite Meals at the best prices with exclusive deals only on aliments app.</string>
     <string name="track_your_">Track your Orders</string>
@@ -16,6 +22,8 @@
     <string name="email">Email</string>
     <string name="register">Register</string>
     <string name="price_format">%s$</string>
+    <string name="dollar_price">$%s</string>
+    <string name="dollar_discount_price">- $%s</string>
     <string name="brand">Brand: %s</string>
     <string name="welcome">Hi %s</string>
     <string name="recommended">Recommended for you</string>
@@ -104,7 +112,20 @@
     <!--Order Detail Screen-->
     <string name="confirm_message">Are you sure you want to %s this order?</string>
     <string name="return_text">Return</string>
+    <string name="thank">Thank you for shopping with Smarteshop!</string>
+    <string name="cancel_order">Cancel order</string>
 
     <!--Coins Reward Screen -->
     <string name="get_coin_button_text">Get 100 coins now</string>
+
+    <!--Buy Again Screen-->
+    <string name="voucher_label">PlatForm Voucher</string>
+    <string name="payment_details">Payment Details</string>
+    <string name="merchandise_subtotal">Merchandise Subtotal</string>
+    <string name="shipping_subtotal">Shipping Subtotal</string>
+    <string name="voucher_discount">Voucher Discount</string>
+    <string name="confirm_payment">By click "check out", you are agreeing to
+        <font color="#FF0000">Smarteshop\'s General Transaction Term</font>
+    </string>
+    <string name="total_payment">Total Payment</string>
 </resources>

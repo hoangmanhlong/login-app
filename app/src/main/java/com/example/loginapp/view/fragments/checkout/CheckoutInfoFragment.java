@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -29,6 +30,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
+
+    private NavController navController;
 
     private final String TAG = this.toString();
 
@@ -52,26 +55,25 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-        presenter.setCurrentOrder((Order) getArguments().getSerializable(Constant.ORDER_KEY));
         presenter.initData();
     }
+
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getDeliveryAddress(SelectedDeliveryAddressMessage message) {
         DeliveryAddress deliveryAddress = message.getDeliveryAddress();
-        presenter.setSelectedDeliveryAddress(deliveryAddress);
-        Log.d(TAG, "getDeliveryAddress: " + deliveryAddress);
-        updateUI(deliveryAddress);
+        presenter.setDeliveryAddress(deliveryAddress);
     }
 
     private void updateUI(DeliveryAddress deliveryAddress) {
@@ -99,19 +101,15 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         String country = binding.etCountry.getText().toString().trim();
         String shoppingOption = binding.etShoppingOption.getText().toString().trim();
         String phoneNumber = binding.etPhoneNumber.getText().toString().trim();
-        DeliveryAddress deliveryAddress = presenter.checkInput(name,phoneNumber, address, province, postalCode, country, shoppingOption);
+        DeliveryAddress deliveryAddress = presenter.checkInput(name, phoneNumber, address, province, postalCode, country, shoppingOption);
         if (deliveryAddress == null) {
             onMessage("Please enter complete information");
         } else {
             Bundle bundle = new Bundle();
-            Order order1;
-            Order order = presenter.getCurrentOrder();
-            if (order.getVoucher() != null) order1 = new Order(order.getOrderProducts(), deliveryAddress, order.getVoucher());
-            else order1 = new Order(order.getOrderProducts(), deliveryAddress);
-            bundle.putSerializable(Constant.ORDER_KEY, order1);
+            bundle.putSerializable(Constant.ORDER_KEY, presenter.getCurrentOrder());
             bundle.putBoolean(Constant.SAVE_ADDRESS_KEY, binding.saveAddressCheckBox.isChecked());
-            bundle.putBoolean(Constant.IS_CART, getArguments().getBoolean(Constant.IS_CART));
-            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_checkoutInfoFragment_to_paymentOptionFragment, bundle);
+            bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, getArguments().getBoolean(Constant.IS_PRODUCTS_FROM_CART));
+            navController.navigate(R.id.action_checkoutInfoFragment_to_paymentOptionFragment, bundle);
         }
     }
 
@@ -129,6 +127,14 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     @Override
     public void bindDefaultDeliveryAddress(DeliveryAddress deliveryAddress) {
         updateUI(deliveryAddress);
+    }
+
+    @Override
+    public void getSharedData() {
+        if (getArguments() != null) {
+            Order order = (Order) getArguments().getSerializable(Constant.ORDER_KEY);
+            if (order != null) presenter.setCurrentOrder(order);
+        }
     }
 
     public void goSelectDeliveryAddressScreen() {

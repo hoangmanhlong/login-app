@@ -66,7 +66,7 @@ public class CoinsRewardInterator {
                     listener.getVouchers(vouchers);
                 } else {
                     // Handle case when there are no all vouchers
-                    listener.isVouchersListEmpty(true);
+                    listener.isVouchersListEmpty();
                 }
             }
 

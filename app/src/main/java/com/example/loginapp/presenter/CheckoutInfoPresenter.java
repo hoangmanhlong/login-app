@@ -18,8 +18,6 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     private Order currentOrder;
 
-    private DeliveryAddress selectedDeliveryAddress;
-
     private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
 
 
@@ -36,9 +34,18 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
         return deliveryAddresses;
     }
 
+
+
     public void initData() {
+        if (currentOrder == null) view.getSharedData();
+        else view.bindDefaultDeliveryAddress(currentOrder.getDeliveryAddress());
+
         if (deliveryAddresses.isEmpty()) getDefaultDeliveryAddress();
-        else view.bindDefaultDeliveryAddress(selectedDeliveryAddress);
+    }
+
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+        currentOrder.setDeliveryAddress(deliveryAddress);
+        view.bindDefaultDeliveryAddress(deliveryAddress);
     }
 
     public Order getCurrentOrder() {
@@ -47,14 +54,6 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     public void setCurrentOrder(Order currentOrder) {
         this.currentOrder = currentOrder;
-    }
-
-    public DeliveryAddress getSelectedDeliveryaddress() {
-        return selectedDeliveryAddress;
-    }
-
-    public void setSelectedDeliveryAddress(DeliveryAddress selectedDeliveryAddress) {
-        this.selectedDeliveryAddress = selectedDeliveryAddress;
     }
 
     public DeliveryAddress checkInput(String name, String phoneNumber, String address, String province, String postalCode, String country, String shippingOption) {
@@ -74,8 +73,9 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
     public void getDeliveryAddresses(List<DeliveryAddress> deliveryAddresses) {
         view.isLoading(false);
         this.deliveryAddresses = deliveryAddresses;
-        selectedDeliveryAddress = deliveryAddresses.stream().filter(DeliveryAddress::getIsDefault).collect(Collectors.toList()).get(0);
-        view.bindDefaultDeliveryAddress(selectedDeliveryAddress);
+        DeliveryAddress defaultDeliveryAddress = deliveryAddresses.stream().filter(DeliveryAddress::getIsDefault).collect(Collectors.toList()).get(0);
+        currentOrder.setDeliveryAddress(defaultDeliveryAddress);
+        view.bindDefaultDeliveryAddress(defaultDeliveryAddress);
 
     }
 

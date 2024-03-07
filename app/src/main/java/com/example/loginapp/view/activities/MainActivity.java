@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
 
         _isLogged.observe(this, _isLogged -> {
-            Log.d(TAG, "initView: " + _isLogged);
+            if (_isLogged) presenter.getDataOnNavigationBar();
             if (_isLogged && navController.getCurrentDestination().getId() != R.id.firstFragment) {
                 for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++)
                     navController.popBackStack();

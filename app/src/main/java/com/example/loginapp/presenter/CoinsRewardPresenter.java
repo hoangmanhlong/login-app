@@ -76,7 +76,10 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
             view.bindCheckedDates(checkedDays);
         }
         if (showedVouchers.isEmpty()) getVouchers();
-        else view.bindVouchersList(showedVouchers);
+        else {
+            view.isVouchersLoading(false);
+            view.bindVouchersList(showedVouchers);
+        }
     }
 
     public void redeemVoucher(Voucher voucher) {
@@ -110,6 +113,7 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
     }
 
     private void getVouchers() {
+        view.isVouchersLoading(true);
         interator.getAllVouchers();
     }
 
@@ -165,7 +169,6 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     @Override
     public void getVouchers(List<Voucher> vouchers) {
-        Log.d(TAG, "allVouchers: " + vouchers.size());
         this.allVouchers = vouchers;
         interator.getMyVouchers();
     }
@@ -188,18 +191,20 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
             }
         }
         showedVouchers = newVouchersTemp;
+        view.isVouchersLoading(false);
         view.bindVouchersList(newVouchersTemp);
     }
 
     @Override
     public void isMyVoucherEmpty() {
+        view.isVouchersLoading(false);
         showedVouchers = allVouchers;
         view.bindVouchersList(showedVouchers);
     }
 
     @Override
-    public void isVouchersListEmpty(boolean isEmpty) {
-//        view.isVouchersListEmpty(isEmpty);
+    public void isVouchersListEmpty() {
+        view.isVouchersLoading(false);
     }
 
     @Override

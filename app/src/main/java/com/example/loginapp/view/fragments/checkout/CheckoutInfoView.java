@@ -10,4 +10,6 @@ public interface CheckoutInfoView {
 
     void bindDefaultDeliveryAddress(DeliveryAddress deliveryAddress);
 
+    void getSharedData();
+
 }

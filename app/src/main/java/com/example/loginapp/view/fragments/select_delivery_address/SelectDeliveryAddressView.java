@@ -7,4 +7,6 @@ import java.util.List;
 public interface SelectDeliveryAddressView {
     void getDeliveryAddresses(List<DeliveryAddress> deliveryAddresses);
 
+    void getDataShared();
+
 }

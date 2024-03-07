@@ -1,6 +1,5 @@
 package com.example.loginapp.view.fragments.cart;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,9 +21,7 @@ import com.example.loginapp.adapter.cart_adapter.CartAdapter;
 import com.example.loginapp.adapter.cart_adapter.CartItemClickListener;
 import com.example.loginapp.databinding.FragmentCartBinding;
 import com.example.loginapp.model.entity.FirebaseProduct;
-import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.presenter.CartPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
@@ -37,6 +35,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 public class CartFragment extends Fragment implements CartView, CartItemClickListener {
+
+    private NavController navController;
 
     private final String TAG = getClass().getSimpleName();
 
@@ -56,6 +56,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         initView();
     }
 
@@ -70,7 +71,9 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-        EventBus.getDefault().removeStickyEvent(MessageVoucherSelected.class);
+        MessageVoucherSelected messageVoucherSelected =
+                EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
+        if (messageVoucherSelected != null) EventBus.getDefault().removeStickyEvent(messageVoucherSelected);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -125,8 +128,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_global_productFragment, bundle);
+        navController.navigate(R.id.action_global_productFragment, bundle);
     }
 
     @Override
@@ -188,18 +190,15 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         binding.setTotal(total);
     }
 
-    @SuppressLint("ResourceAsColor")
     public void onCheckoutClick() {
         Bundle bundle = new Bundle();
-        Voucher voucher = presenter.getSelectedVoucher();
-        Order order = voucher == null ? new Order(presenter.listProduct()) : new Order(presenter.listProduct(), voucher);
-        bundle.putSerializable(Constant.ORDER_KEY, order);
-        bundle.putBoolean(Constant.IS_CART, true);
-        NavHostFragment.findNavController(this).navigate(R.id.checkoutInfoFragment, bundle);
+        bundle.putSerializable(Constant.ORDER_KEY, presenter.getOrder());
+        bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, true);
+        navController.navigate(R.id.checkoutInfoFragment, bundle);
     }
 
     public void onSelectCodeClick() {
-        NavHostFragment.findNavController(this).navigate(R.id.selectVoucherFragment);
+        navController.navigate(R.id.selectVoucherFragment);
     }
 
     public void clearDiscountCode() {

@@ -6,6 +6,7 @@ import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.entity.VoucherType;
 import com.example.loginapp.model.interator.PaymentOptionInterator;
 import com.example.loginapp.model.listener.PaymentOptionListener;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionView;
 
 public class PaymentOptionPresenter implements PaymentOptionListener {
@@ -13,56 +14,51 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
 
     private final PaymentOptionInterator interator = new PaymentOptionInterator(this);
 
-    private Boolean isCart;
+    private boolean isSaveDeliveryAddress;
 
-    private int total = 0;
+    private boolean isProductsFroShoppingCart;
 
-    private Boolean isSave;
-
-    private int shippingCost = 200;
-
-    private PaymentMethod paymentMethod;
+    private final int shippingCost = Constant.ShippingCost;
 
     private Order order;
 
-    private Voucher voucher;
-
-    public void setCart(Boolean cart) {
-        isCart = cart;
-    }
-
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
+        order.setPaymentMethod(paymentMethod);
     }
 
     public PaymentOptionPresenter(PaymentOptionView view) {
         this.view = view;
     }
 
-    public void getOrder(Order order) {
+    public void setSaveDeliveryAddress(boolean saveDeliveryAddress) {
+        isSaveDeliveryAddress = saveDeliveryAddress;
+    }
+
+    public void setProductsFroShoppingCart(boolean productsFroShoppingCart) {
+        isProductsFroShoppingCart = productsFroShoppingCart;
+    }
+
+    public void setOrder(Order order) {
         this.order = order;
-        int subTotal = order.getOrderProducts().stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
-        voucher = order.getVoucher();
+        double subTotal = order.getOrderProducts().stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
+        Voucher voucher = order.getVoucher();
         if (voucher != null) {
             if (voucher.getVoucherType() == VoucherType.Discount) {
                 subTotal = (int) (subTotal - ((subTotal * voucher.getDiscountPercentage()) / 100));
-            } else if (voucher.getVoucherType() == VoucherType.FreeShipping) {
-                shippingCost = 0;
             }
-            total = subTotal + shippingCost;
-        } else {
-            total = subTotal + shippingCost;
+            if (voucher.getVoucherType() == VoucherType.FreeShipping) {
+                subTotal -= shippingCost;
+            }
         }
+        double total = subTotal + shippingCost;
+        total = Math.round(total * 100.00) / 100.00;
         view.setView(String.valueOf(subTotal), String.valueOf(shippingCost), String.valueOf(total));
+        order.setPaymentTotal(total);
     }
 
     public void createOrder() {
         view.isLoading(true);
-        interator.createOrder(isSave, order, total, paymentMethod, isCart, voucher);
-    }
-
-    public void updateSaveDeliveryAddressState(Boolean save) {
-        isSave = save;
+        interator.createOrder(order, isSaveDeliveryAddress, isProductsFroShoppingCart);
     }
 
     @Override

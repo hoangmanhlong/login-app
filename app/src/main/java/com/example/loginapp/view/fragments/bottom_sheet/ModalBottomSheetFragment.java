@@ -33,13 +33,11 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
 
     private int quantity = 1;
 
-    private Boolean isClearCode = false;
-
     private Product currentProduct;
 
-    private FragmentBottomSheetBinding binding;
+    private Order order = new Order();
 
-    private Voucher voucher;
+    private FragmentBottomSheetBinding binding;
 
     @Nullable
     @Override
@@ -52,8 +50,10 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
+        binding.setSelectVoucherVisible(true);
         currentProduct = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
         binding.setProduct(currentProduct);
+        order.setOrderProducts(Collections.singletonList(currentProduct.toOrderProduct(quantity)));
         updateUI();
     }
 
@@ -69,19 +69,19 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
 
     private void updateUI() {
         double total = currentProduct.getPrice() * quantity;
+        Voucher voucher = order.getVoucher();
         if (voucher != null)
             if (voucher.getVoucherType() == VoucherType.Discount)
                 total = (total - ((total * voucher.getDiscountPercentage()) / 100));
+        total = Math.round(total * 100.00) / 100.00;
         binding.quantity.setText(String.valueOf(quantity));
         binding.setTotal(String.valueOf(total));
     }
 
     public void onBuyClick() {
         Bundle bundle = new Bundle();
-        List<OrderProduct> orderProducts = Collections.singletonList(currentProduct.toOrderProduct(quantity));
-        Order order = (voucher != null) ? new Order(orderProducts, voucher) : new Order(orderProducts);
         bundle.putSerializable(Constant.ORDER_KEY, order);
-        bundle.putBoolean(Constant.IS_CART, false);
+        bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, false);
         Navigation.findNavController(requireParentFragment().requireView())
                 .navigate(R.id.action_productFragment_to_checkoutInfoFragment, bundle);
     }
@@ -100,11 +100,11 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getSelectedVoucher(MessageVoucherSelected messageVoucherSelected) {
-        voucher = messageVoucherSelected.getVoucher();
-        binding.discountCode.setText(messageVoucherSelected.getVoucher().getVoucherCode());
+        Voucher voucher1 = messageVoucherSelected.getVoucher();
+        order.setVoucher(voucher1);
+        binding.setSelectVoucherVisible(false);
+        binding.discountCode.setText(voucher1.getVoucherCode());
         updateUI();
-        binding.clearDiscountCodeView.setVisibility(View.VISIBLE);
-        binding.selectDiscountCodeView.setVisibility(View.GONE);
     }
 
     @Override
@@ -115,15 +115,8 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
     }
 
     public void onClearDiscountCodeClick() {
-        isClearCode = !isClearCode;
-        if (isClearCode) {
-            voucher = null;
-            binding.clearDiscountCodeView.setVisibility(View.GONE);
-            binding.selectDiscountCodeView.setVisibility(View.VISIBLE);
-        } else {
-            binding.clearDiscountCodeView.setVisibility(View.VISIBLE);
-            binding.selectDiscountCodeView.setVisibility(View.GONE);
-        }
+        binding.setSelectVoucherVisible(true);
+        order.setVoucher(null);
         updateUI();
     }
 

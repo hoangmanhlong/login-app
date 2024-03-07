@@ -1,6 +1,7 @@
 package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.entity.FirebaseProduct;
+import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.CartInterator;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 
 public class CartPresenter implements CartListener {
 
+    private final String TAG = this.toString();
+
     private final CartInterator interator = new CartInterator(this);
 
     private final CartView view;
@@ -21,7 +24,7 @@ public class CartPresenter implements CartListener {
 
     public List<FirebaseProduct> selectedProduct = new ArrayList<>();
 
-    private Voucher selectedVoucher;
+    private final Order order = new Order();
 
     public CartPresenter(CartView view) {
         this.view = view;
@@ -35,19 +38,19 @@ public class CartPresenter implements CartListener {
         }
     }
 
-    public Voucher getSelectedVoucher() {
-        return selectedVoucher;
+    public Order getOrder() {
+        return order;
     }
 
     public void setSelectedVoucher(Voucher selectedVoucher) {
-        this.selectedVoucher = selectedVoucher;
+        order.setVoucher(selectedVoucher);
         view.bindDiscountCode(selectedVoucher.getVoucherCode());
-        updateUI();
         view.clearDiscountCode(false);
+        updateUI();
     }
 
     public void setClearCode(Boolean clear) {
-        selectedVoucher = null;
+        order.setVoucher(null);
         view.clearDiscountCode(clear);
         updateUI();
     }
@@ -107,28 +110,31 @@ public class CartPresenter implements CartListener {
             view.isBasketEmpty(true);
             return;
         }
+
         view.isBasketEmpty(false);
-        List<FirebaseProduct> selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
-        double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * Integer.parseInt(product.getQuantity())).sum();
-        double total = subtotal;
-        if (selectedVoucher != null)
-            total = subtotal - (subtotal * selectedVoucher.getDiscountPercentage() / 100);
+        selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
+        if (!selectedProduct.isEmpty()) {
+            order.setOrderProducts(toOrdersProductList(selectedProduct));
+
+            double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * Integer.parseInt(product.getQuantity())).sum();
+            double total = subtotal;
+
+            Voucher voucher = order.getVoucher();
+            if (voucher != null) total = subtotal - (subtotal * voucher.getDiscountPercentage() / 100);
+            view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
+        }
         view.isCheckAllCheckboxChecked(selectedProduct.size() == basket.size());
         view.showCheckoutView(!selectedProduct.isEmpty());
         view.showCheckAllCheckbox(!basket.isEmpty());
-        view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
-        this.selectedProduct = selectedProduct;
     }
 
     public void updateCheckboxAllSelected(Boolean checked) {
-        for (FirebaseProduct product : basket) {
-            interator.updateChecked(product.getId(), checked);
-        }
+        for (FirebaseProduct product : basket) interator.updateChecked(product.getId(), checked);
     }
 
-    public List<OrderProduct> listProduct() {
+    private List<OrderProduct> toOrdersProductList(List<FirebaseProduct> firebaseProducts) {
         List<OrderProduct> list = new ArrayList<>();
-        for (FirebaseProduct product : selectedProduct) list.add(product.toOrderProduct());
+        for (FirebaseProduct product : firebaseProducts) list.add(product.toOrderProduct());
         return list;
     }
 }

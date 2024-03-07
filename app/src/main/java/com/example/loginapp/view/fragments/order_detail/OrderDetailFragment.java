@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
@@ -24,6 +25,8 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
 
     private final OrderDetailPresenter presenter = new OrderDetailPresenter(this);
 
+    private NavController navController;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
         getSharedOrder();
     }
@@ -43,7 +47,7 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
         if (order != null) presenter.setOrder(order);
     }
 
-    public void onOrderActionClick() {
+    public void onCancelOrderButtonClick() {
         new AlertDialog.Builder(requireContext())
                 .setMessage(R.string.buy_again)
                 .setPositiveButton(R.string.ok, (dialog, which) -> presenter.processOrder())
@@ -54,17 +58,18 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
     public void onBuyAgainButtonClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.ORDER_KEY, presenter.getOrder());
-        NavHostFragment.findNavController(this)
+        navController
                 .navigate(R.id.action_orderDetailFragment_to_buyAgainFragment, bundle);
     }
 
     public void onNavigateUp() {
-        NavHostFragment.findNavController(this).navigateUp();
+        navController.navigateUp();
     }
 
     @Override
     public void bindOrder(Order order) {
         binding.setOrder(order);
+        binding.setDeliveryAddress(order.getDeliveryAddress());
         int actionTextResId;
         int statusColorResId;
         switch (order.getOrderStatus()) {
@@ -81,7 +86,7 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
                 statusColorResId = android.R.color.holo_red_dark;
                 break;
         }
-        binding.btMoreAction.setText(actionTextResId);
+//        binding.btCancelOrder.setText(actionTextResId);
         binding.orderStatusView.setBackgroundResource(statusColorResId);
         binding.orderProductRecyclerview.setAdapter(new OrderProductAdapter(order.getOrderProducts()));
     }

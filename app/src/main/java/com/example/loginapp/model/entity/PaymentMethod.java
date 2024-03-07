@@ -1,8 +1,3 @@
 package com.example.loginapp.model.entity;
 
-public enum PaymentMethod {
-    PayPal,
-    FPX,
-    CreditDebitCard
-
-}
+public enum PaymentMethod {PayPal, FPX, CreditDebitCard}

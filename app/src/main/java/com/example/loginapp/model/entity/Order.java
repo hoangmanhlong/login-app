@@ -1,7 +1,5 @@
 package com.example.loginapp.model.entity;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class Order implements Serializable {
 
     private PaymentMethod paymentMethod;
 
-    private int paymentTotal;
+    private double paymentTotal;
 
     private Voucher voucher;
 
@@ -35,37 +33,9 @@ public class Order implements Serializable {
         this.paymentTotal = paymentTotal;
     }
 
-    public Order(List<OrderProduct> orderProducts, DeliveryAddress deliveryAddress, PaymentMethod paymentMethod, int paymentTotal, Voucher voucher) {
-        this.orderId =  "SA" + System.currentTimeMillis();
-        this.orderProducts = orderProducts;
-        this.orderDate = System.currentTimeMillis();
-        this.orderStatus = OrderStatus.Processing;
-        this.deliveryAddress = deliveryAddress;
-        this.paymentMethod = paymentMethod;
-        this.paymentTotal = paymentTotal;
-        this.voucher = voucher;
-    }
-
-    public Order(List<OrderProduct> orderProducts, DeliveryAddress deliveryAddress) {
-        this.orderProducts = orderProducts;
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public Order(List<OrderProduct> orderProducts, DeliveryAddress deliveryAddress, Voucher voucher) {
-        this.orderProducts = orderProducts;
-        this.deliveryAddress = deliveryAddress;
-        this.voucher = voucher;
-    }
-
     public Order(List<OrderProduct> orderProducts, Voucher voucher) {
         this.orderProducts = orderProducts;
         this.voucher = voucher;
-    }
-
-
-
-    public Order(List<OrderProduct> products) {
-        this.orderProducts = products;
     }
 
     public String getOrderId() {
@@ -92,7 +62,7 @@ public class Order implements Serializable {
         return paymentMethod;
     }
 
-    public int getPaymentTotal() {
+    public double getPaymentTotal() {
         return paymentTotal;
     }
 
@@ -124,28 +94,12 @@ public class Order implements Serializable {
         this.paymentMethod = paymentMethod;
     }
 
-    public void setPaymentTotal(int paymentTotal) {
+    public void setPaymentTotal(double paymentTotal) {
         this.paymentTotal = paymentTotal;
     }
 
     public void setVoucher(Voucher voucher) {
         this.voucher = voucher;
-    }
-
-    public static final String ORDER_STATUS_NAME = "orderStatus";
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId='" + orderId + '\'' +
-                ", orderProducts=" + orderProducts +
-                ", orderDate=" + orderDate +
-                ", orderStatus=" + orderStatus +
-                ", deliveryAddress=" + deliveryAddress +
-                ", paymentMethod=" + paymentMethod +
-                ", paymentTotal=" + paymentTotal +
-                ", voucher=" + voucher +
-                '}';
     }
 }
 

@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Order Detail"
+                android:text="Order Details"
                 android:textColor="@color/black_100"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
@@ -67,13 +67,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/orderStatusView"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
                     tools:background="@color/orange">
 
                     <TextView
+                        android:id="@+id/tvOrderStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
                         android:text="@{order.orderStatus.toString()}"
                         android:textColor="#fff"
@@ -82,6 +84,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="Order Processing" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/thank"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvOrderStatus" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,58 +115,91 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:layout_marginStart="@dimen/_8sdp"
                         android:id="@+id/tvDeliveryAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@string/delivery_address"
                         android:textColor="#000"
-                        android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@id/ivLocation"
                         app:layout_constraintStart_toEndOf="@id/ivLocation"
                         app:layout_constraintTop_toTopOf="@id/ivLocation" />
 
                     <LinearLayout
-                        android:layout_marginStart="@dimen/_8sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginTop="@dimen/_8sdp"
+                        android:background="#fff"
                         android:orientation="vertical"
                         app:layout_constraintStart_toEndOf="@id/ivLocation"
-                        app:layout_constraintTop_toBottomOf="@id/tvDeliveryAddress">
+                        app:layout_constraintTop_toBottomOf="@id/tvDeliveryAddress"
+                        tools:layout_editor_absoluteX="0dp">
 
-                        <TextView
-                            android:id="@+id/tvRecipientName"
+                        <LinearLayout
+                            android:id="@+id/informationView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{order.deliveryAddress.recipientName}"
-                            android:textColor="@color/gray_500"
-                            tools:text="Hoang Manh Long" />
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:includeFontPadding="false"
+                                android:text="@{deliveryAddress.recipientName}"
+                                tools:text="Hoang Manh Long" />
+
+                            <com.google.android.material.divider.MaterialDivider
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginHorizontal="@dimen/_6sdp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:includeFontPadding="false"
+                                android:text="@{deliveryAddress.phoneNumber}"
+                                android:textColor="@color/gray_500"
+                                tools:text="(+84) 12345678" />
+                        </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tvAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="@dimen/_4sdp"
-                            android:text="@{order.deliveryAddress.phoneNumber}"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="@{deliveryAddress.address}"
                             android:textColor="@color/gray_500"
-                            tools:text="0123456789" />
+                            tools:text="15 phuong phuong canh" />
 
                         <TextView
+                            android:id="@+id/tvProvinceCountty"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:maxWidth="@dimen/_250sdp"
-                            android:text="@{order.deliveryAddress.address}"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="@{@string/address(deliveryAddress.province, deliveryAddress.country)}"
                             android:textColor="@color/gray_500"
-                            tools:text="Xom 3, Tu Hoang, Nam Tu Liem, Ha Noi" />
+                            tools:text="Nam tu Liem, Ha Noi" />
+
                     </LinearLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_10sdp" />
+                    android:layout_height="0.5dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/orderProductRecyclerview"
@@ -171,6 +219,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="@string/order_total"
                         android:textColor="#000"
                         android:textStyle="bold"
@@ -180,18 +229,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
+                        android:includeFontPadding="false"
                         android:text="@{@string/format_price(order.paymentTotal)}"
-                        android:textColor="#000"
-                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="$100.000.000" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_10sdp" />
+                    android:layout_height="0.5dp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -213,15 +264,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@string/payment_method"
                         android:textColor="#000"
-                        android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@id/tvPayment"
                         app:layout_constraintStart_toEndOf="@id/tvPayment"
                         app:layout_constraintTop_toTopOf="@id/tvPayment" />
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
@@ -234,9 +287,9 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_10sdp" />
+                    android:layout_height="0.5dp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -248,6 +301,8 @@
                         android:id="@+id/tvOrderId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@string/order_id"
                         android:textColor="#000"
                         android:textStyle="bold"
@@ -258,6 +313,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@string/order_time"
                         android:textColor="@color/gray_500"
                         app:layout_constraintStart_toStartOf="parent"
@@ -266,6 +323,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@{order.orderId}"
                         android:textColor="#000"
                         android:textStyle="bold"
@@ -277,6 +336,8 @@
                         timeFormat="@{order.orderDate}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:textColor="@color/gray_500"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -289,29 +350,36 @@
         </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
-            android:background="@android:color/transparent"
-            android:padding="@dimen/_8sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:orientation="horizontal"
+            android:padding="@dimen/_8sdp">
 
             <Button
-                android:id="@+id/btMoreAction"
-                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:id="@+id/btCancelOrder"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_weight="1"
-                android:onClick="@{() -> fragment.onOrderActionClick()}"
-                android:text="@string/cancel" />
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> fragment.onCancelOrderButtonClick()}"
+                android:text="@string/cancel_order"
+                android:textStyle="bold" />
 
             <Button
+                style="@style/Widget.Material3.Button"
                 android:id="@+id/btBuyAgain"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
                 android:onClick="@{() -> fragment.onBuyAgainButtonClick()}"
-                android:text="@string/buy_again" />
+                android:text="@string/buy_again"
+                android:textStyle="bold" />
         </LinearLayout>
 
 

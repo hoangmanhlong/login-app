@@ -6,7 +6,7 @@
     android:elevation="10dp"
     android:background="#fff"
     app:tabIndicatorHeight="3dp"
-    app:tabIconTint="@color/color_tablayout"
+    app:tabIconTint="@color/color_tab_layout"
     app:tabIndicatorFullWidth="true"
     app:tabIndicatorGravity="top">
 

@@ -23,4 +23,6 @@ public interface CoinsRewardView {
     void isVouchersListEmpty(boolean isEmpty);
 
     void onMessage(String message);
+
+    void isVouchersLoading(boolean isLoading);
 }
