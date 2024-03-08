@@ -36,47 +36,79 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/iphone9" />
         </com.google.android.material.card.MaterialCardView>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_marginStart="@dimen/_8sdp"
+        <LinearLayout
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_10sdp"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
+
             <TextView
-                android:text="@{product.title}"
+                android:textSize="16sp"
+                android:id="@+id/productNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:fontFamily="@font/averia_gruesa_libre_regular"
-                android:maxLines="2"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hoang Long" />
+                android:includeFontPadding="false"
+                android:maxWidth="@dimen/_240sdp"
+                android:singleLine="true"
+                android:text="@{product.title}"
+                android:textStyle="bold"
+                tools:text="Iphone 14 apple" />
 
             <TextView
-                android:id="@+id/priceView"
-                android:text="@{@string/price_format(product.intToString())}"
+                android:id="@+id/categoryTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_8sdp"
                 android:fontFamily="@font/averia_gruesa_libre_regular"
-                android:maxLines="2"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="@dimen/_10sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="1000$" />
+                android:includeFontPadding="false"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@{product.description}"
+                tools:text="Iphone" />
 
-            <Button
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_32sdp"
-                app:layout_constraintBottom_toBottomOf="@id/priceView"
-                app:layout_constraintTop_toTopOf="@id/priceView"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Buy now"
-                android:textSize="10sp"
-                android:fontFamily="@font/montserrat_regular"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <TextView
+                        bindRatingRounded="@{product.rating}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/averia_gruesa_libre_regular"
+                        android:includeFontPadding="false"
+                        tools:text="4.5" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_star_rate" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_14sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/averia_gruesa_libre_regular"
+                    android:includeFontPadding="false"
+                    android:text="@{@string/price_format(product.intToString())}"
+                    tools:text="100$" />
+
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </layout>

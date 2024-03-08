@@ -512,10 +512,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:orientation="horizontal"
                     android:padding="@dimen/_8sdp">
 
                     <ImageView
@@ -528,7 +529,7 @@
 
                     <TextView
                         android:id="@+id/tvconfirm_payment"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:fontFamily="@font/poppins_regular"
@@ -538,7 +539,7 @@
                         app:layout_constraintStart_toEndOf="@id/ivAsk"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

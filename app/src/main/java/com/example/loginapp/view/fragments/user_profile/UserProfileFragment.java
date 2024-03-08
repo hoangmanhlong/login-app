@@ -1,13 +1,25 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
+import static android.content.Intent.getIntent;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
+import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -18,6 +30,8 @@ import com.example.loginapp.presenter.UserProfilePresenter;
 import com.example.loginapp.utils.Constant;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 
 public class UserProfileFragment extends Fragment implements UserProfileView {
@@ -66,6 +80,12 @@ public class UserProfileFragment extends Fragment implements UserProfileView {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.USER_KEY_NAME, presenter.getCurrentUser());
         NavHostFragment.findNavController(this).navigate(R.id.editUserInformationFragment, bundle);
+    }
+
+    public void onChangeLanguageClick() {
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags("vi");
+// Call this on the main thread as it may require Activity.restart()
+        AppCompatDelegate.setApplicationLocales(appLocale);
     }
 
     public void goVoucherScreen() {

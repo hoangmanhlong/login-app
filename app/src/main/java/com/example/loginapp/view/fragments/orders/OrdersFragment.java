@@ -81,6 +81,12 @@ public class OrdersFragment extends Fragment implements OrdersView {
         presenter.initData();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
     public void onNavigateUp() {
         NavHostFragment.findNavController(this).navigateUp();
     }
@@ -97,6 +103,8 @@ public class OrdersFragment extends Fragment implements OrdersView {
         OrdersMessage message = EventBus.getDefault().getStickyEvent(OrdersMessage.class);
         if (message != null) EventBus.getDefault().removeStickyEvent(message);
     }
+
+
 
     @Override
     public void isLoading(Boolean loading) {

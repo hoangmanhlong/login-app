@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.home;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -57,10 +58,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private Button expandRecommendedProductsView, expandTopChartsProductsView, expandDiscountProductsView;
 
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        Log.d(TAG, "onCreateView: ");
         return binding.getRoot();
     }
 
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         initView();
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initView() {
         binding.setHomeFragment(this);
 
@@ -86,14 +88,11 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         topChartsRecyclerview = binding.topChartsRecyclerview;
         discountRecyclerView = binding.discountRecyclerView;
 
-        recommendedRecyclerview.setNestedScrollingEnabled(true);
-
-        SliderView sliderView = binding.discountSliderView;
-
         recommendedRecyclerview.setAdapter(recommendedAdapter);
         topChartsRecyclerview.setAdapter(topChartsAdapter);
         discountRecyclerView.setAdapter(discountAdapter);
 
+        SliderView sliderView = binding.discountSliderView;
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
@@ -103,10 +102,9 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
         presenter.initData();
 
-        SwipeRefreshLayout refreshLayout = binding.homeSwipe;
-        refreshLayout.setOnRefreshListener(() -> {
-            presenter.getListProductFromNetwork();
-            refreshLayout.setRefreshing(false);
+        swipeRefreshLayout = binding.homeSwipe;
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (swipeRefreshLayout.isRefreshing()) presenter.getListProductFromNetwork();
         });
     }
 
@@ -224,7 +222,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     }
 
 
-
     public void onExpandRecommendProductsButtonClick() {
         navigateToExpandedProductsFragment(presenter.recommendedProducts, "Recommended for you");
     }
@@ -247,6 +244,11 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void getUserData(UserData userData) {
         binding.setUserData(userData);
+    }
+
+    @Override
+    public void refreshInvisible() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

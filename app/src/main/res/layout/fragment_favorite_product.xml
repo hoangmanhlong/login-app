@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.fragments.cart.CartFragment">
 
     <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isWishlistEmpty"
+            type="Boolean" />
 
         <variable
             name="fragment"
             type="com.example.loginapp.view.fragments.favorite_product.FavoriteProductFragment" />
     </data>
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".view.fragments.cart.CartFragment">
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,7 +55,7 @@
                 android:text="@string/favorites_list_empty"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="@{isWishlistEmpty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:padding="@dimen/_8sdp"
+                android:visibility="@{isWishlistEmpty ? View.GONE : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/layout_favorite" />

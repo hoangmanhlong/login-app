@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Smarteshop</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="aliments">Aliments</string>
     <string name="food_delive">Food Delivery Services</string>
     <string name="loopr">LOOPR</string>
@@ -66,7 +65,7 @@
     <string name="login_with_google">Login with Google</string>
     <string name="view_more_products">View more products</string>
     <string name="order_total_">Order Total: </string>
-    <string name="checkout">Checkout</string>
+    <string name="checkout" translatable="true">Checkout</string>
     <string name="discount_code">Discount code</string>
     <string name="payment_option">Payment Option</string>
     <string name="online_banking">Online Banking</string>
@@ -94,7 +93,7 @@
     <string name="later">Later</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
-    <string name="day">Day %s</string>
+    <string name="day">%sth</string>
     <string name="need_s_coins">Need %s coins</string>
     <string name="date_decor">%s-%s-%s</string>
     <string name="log_in_description">Log in to experience the shopping service now</string>
@@ -110,7 +109,7 @@
     <string name="orders_empty_message">Oops, No Orders Yet…</string>
 
     <!--Order Detail Screen-->
-    <string name="confirm_message">Are you sure you want to %s this order?</string>
+    <string name="confirm_message">Are you sure you want to cancel this order?</string>
     <string name="return_text">Return</string>
     <string name="thank">Thank you for shopping with Smarteshop!</string>
     <string name="cancel_order">Cancel order</string>

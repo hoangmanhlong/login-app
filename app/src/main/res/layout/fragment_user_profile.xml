@@ -379,6 +379,26 @@
                         app:dividerInsetStart="@dimen/_14sdp" />
 
                     <Button
+                        android:onClick="@{() -> profileFragment.onChangeLanguageClick()}"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_50sdp"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:paddingHorizontal="@dimen/_14sdp"
+                        android:text="Language"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_arrow_forward"
+                        app:iconGravity="end" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <Button
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp"

@@ -85,7 +85,6 @@ public class HomePresenter implements HomeListener {
     private void checkUser(UserData userData) {
         view.isUserLoading(false);
         Boolean check = !userData.getUsername().isEmpty() && !userData.getPhotoUrl().isEmpty();
-        Log.d(TAG, "checkUser: " + check);
         view.setShowUserView(check);
         if (check) view.getUserData(userData);
     }
@@ -137,6 +136,7 @@ public class HomePresenter implements HomeListener {
             recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 20));
         }
         view.showRecommendedProducts(recommendedProducts);
+        view.refreshInvisible();
     }
 
     @Override

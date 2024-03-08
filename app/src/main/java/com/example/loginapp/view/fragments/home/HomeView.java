@@ -9,6 +9,8 @@ public interface HomeView {
 
     void getUserData(UserData userData);
 
+    void refreshInvisible();
+
     void onMessage(String message);
 
     void showRecommendedProducts(List<Product> products);
