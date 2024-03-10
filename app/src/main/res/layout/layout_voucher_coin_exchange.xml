@@ -88,23 +88,24 @@
                 </LinearLayout>
 
                 <TextView
-                    android:includeFontPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
-                    android:padding="@dimen/_3sdp"
+                    android:includeFontPadding="false"
+
                     android:text="@{@string/need_s_coins(String.valueOf(voucher.numberOfCoinsNeededToExchange))}"
                     android:textColor="@color/red"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Need 1000 coins" />
 
-                <Button
+                <com.google.android.material.chip.Chip
                     android:id="@+id/btChange"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Redeem"
+                    android:text="@string/redeem"
+                    app:chipBackgroundColor="@android:color/transparent"
+                    app:chipStrokeColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 

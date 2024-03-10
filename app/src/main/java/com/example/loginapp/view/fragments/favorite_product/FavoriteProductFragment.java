@@ -1,5 +1,6 @@
 package com.example.loginapp.view.fragments.favorite_product;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -95,10 +96,10 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
 
     @Override
     public void getProductByPosition(int productId) {
-        new MaterialAlertDialogBuilder(requireContext())
+        new AlertDialog.Builder(requireContext())
                 .setMessage(R.string.dialog_message)
-                .setPositiveButton(R.string.positive_button_title, (dialog, which) -> presenter.deleteFavoriteProduct(productId))
-                .setNegativeButton(R.string.negative_button_title,null)
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteFavoriteProduct(productId))
+                .setNegativeButton(R.string.cancel,null)
                 .show();
     }
 }

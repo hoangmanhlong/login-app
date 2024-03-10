@@ -336,7 +336,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="Sub-total"
+                            android:text="@string/merchandise_subtotal"
                             android:textColor="@color/gray_500" />
 
                         <View
@@ -366,7 +366,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="Shipping costs"
+                            android:text="@string/shipping_subtotal"
                             android:textColor="@color/gray_500" />
 
                         <View
@@ -400,7 +400,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="Total payment"
+                            android:text="@string/total_payment"
                             android:textColor="@color/black_100"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -431,7 +431,7 @@
                         android:backgroundTint="@android:color/background_dark"
                         android:fontFamily="@font/poppins_bold"
                         android:onClick="@{() -> fragment.onPayButtonClick()}"
-                        android:text="Pay"
+                        android:text="@string/pay"
                         android:includeFontPadding="false"
                         app:elevation="@dimen/_10sdp"
                         app:layout_constraintBottom_toBottomOf="parent"

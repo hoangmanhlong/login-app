@@ -44,7 +44,7 @@ public class OrdersFragment extends Fragment implements OrdersView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated: ");
+        Log.d(TAG, "OrdersFragment onViewCreated: ");
         binding.setFragment(this);
         viewPager2 = binding.pager;
         OrdersPagerAdapter adapter = new OrdersPagerAdapter(this);

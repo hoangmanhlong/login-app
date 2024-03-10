@@ -22,25 +22,25 @@
             android:paddingHorizontal="@dimen/_20sdp">
 
             <TextView
-                android:includeFontPadding="false"
                 android:id="@+id/title_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_45sdp"
                 android:fontFamily="@font/inter_bold"
-                android:text="Login Account"
+                android:includeFontPadding="false"
+                android:text="@string/login_account"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:includeFontPadding="false"
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_bold"
+                android:includeFontPadding="false"
                 android:text="@string/login_welcome_text"
                 android:textColor="@color/gray"
                 android:textSize="14sp"
@@ -60,13 +60,13 @@
                 app:layout_constraintTop_toBottomOf="@id/description">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:includeFontPadding="false"
                     android:id="@+id/login_phone_number"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/background_login_select"
                     android:fontFamily="@font/inter_bold"
+                    android:includeFontPadding="false"
                     android:onClick='@{() -> loginFragment.onNumberPhoneBtn()}'
                     android:text="@string/phone_number"
                     android:textAllCaps="false"
@@ -103,48 +103,10 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/flag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/flag_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/frag_2"
-                            app:layout_constraintBottom_toTopOf="@id/frag_2"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="MissingConstraints" />
-
-                        <ImageView
-                            android:id="@+id/frag_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/frag_5"
-                            app:layout_constraintBottom_toTopOf="@id/flag_3"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/flag_1" />
-
-                        <ImageView
-                            android:id="@+id/flag_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/fra"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/frag_2" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/flag_1"
-                            app:layout_constraintBottom_toBottomOf="@id/frag_2"
-                            app:layout_constraintEnd_toEndOf="@id/frag_2"
-                            app:layout_constraintStart_toStartOf="@id/frag_2"
-                            app:layout_constraintTop_toTopOf="@id/frag_2"
-                            app:layout_constraintVertical_bias="1.0" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/vietnam" />
 
                     <ImageView
                         android:layout_width="@dimen/_8sdp"
@@ -178,9 +140,8 @@
                 <Button
                     android:id="@+id/requestOtpBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_46sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_40ssp"
-                    android:backgroundTint="@color/cam"
                     android:enabled="false"
                     android:onClick="@{() -> loginFragment.onLoginPhoneNumberClick()}"
                     android:text="@string/request_otp"
@@ -256,10 +217,9 @@
                 <Button
                     android:id="@+id/loginEmailBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_46sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_24sdp"
-                    android:backgroundTint="@color/cam"
-                    android:onClick="@{() -> loginFragment.onLogin()}"
+                    android:onClick="@{() -> loginFragment.onLoginWithEmailClick()}"
                     android:text="@string/login"
                     android:textAllCaps="false"
                     android:textSize="14sp" />
@@ -285,7 +245,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OR"
+                    android:text="@string/or"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -325,10 +285,10 @@
                     android:id="@+id/login_google_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/login_with_google"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:includeFontPadding="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -336,18 +296,19 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:layout_marginTop="@dimen/_31sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view_login_google"
-                    android:background="?attr/selectableItemBackground"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
-                    android:onClick="@{() -> loginFragment.goRegisterScreen()}"
-                    android:text="@string/create_account_label"
-                    android:textColor="@color/cam"
-                    android:textSize="13sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/inter_bold"
+                android:onClick="@{() -> loginFragment.goRegisterScreen()}"
+                android:padding="@dimen/_8sdp"
+                android:text="@string/create_account_label"
+                android:textColor="@color/cam"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_login_google" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

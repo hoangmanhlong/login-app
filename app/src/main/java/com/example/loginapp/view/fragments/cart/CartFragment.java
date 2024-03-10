@@ -178,8 +178,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onDeleteProduct(FirebaseProduct product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage(R.string.dialog_message)
-                .setPositiveButton(R.string.positive_button_title, (dialog, which) -> presenter.deleteProductInFirebase(product))
-                .setNegativeButton(R.string.negative_button_title, null)
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteProductInFirebase(product))
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

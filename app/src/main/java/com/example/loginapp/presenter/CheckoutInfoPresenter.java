@@ -34,11 +34,12 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
         return deliveryAddresses;
     }
 
-
-
     public void initData() {
         if (currentOrder == null) view.getSharedData();
-        else view.bindDefaultDeliveryAddress(currentOrder.getDeliveryAddress());
+        else {
+            view.isLoading(false);
+            view.bindDefaultDeliveryAddress(currentOrder.getDeliveryAddress());
+        }
 
         if (deliveryAddresses.isEmpty()) getDefaultDeliveryAddress();
     }

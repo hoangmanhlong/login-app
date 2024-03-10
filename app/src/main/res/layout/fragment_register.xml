@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_4sdp"
-                android:hint="Email"
+                android:hint="@string/email"
                 app:boxCornerRadiusBottomEnd="30dp"
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_4sdp"
-                android:hint="Password"
+                android:hint="@string/password"
                 app:boxCornerRadiusBottomEnd="30dp"
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_4sdp"
-                android:hint="Confirm password"
+                android:hint="@string/confirm_password"
                 app:boxCornerRadiusBottomEnd="30dp"
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
@@ -130,14 +130,11 @@
             <Button
                 android:id="@+id/registerButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_46sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_8sdp"
-                android:backgroundTint="#FF621F"
-                android:enabled="false"
                 android:onClick="@{() -> registerFragment.onRegisterButtonClick()}"
                 android:text="@string/register"
                 android:textAllCaps="false" />
-
 
         </LinearLayout>
 

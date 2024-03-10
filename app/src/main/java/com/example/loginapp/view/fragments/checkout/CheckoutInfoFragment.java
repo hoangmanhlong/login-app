@@ -39,8 +39,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
 
     private FragmentCheckoutInfoBinding binding;
 
-    private Dialog dialog;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,7 +63,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
-        dialog = LoadingDialog.getLoadingDialog(requireContext());
         presenter.initData();
     }
 
@@ -115,8 +112,8 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
 
     @Override
     public void isLoading(boolean isLoading) {
-        if (isLoading) dialog.show();
-        else dialog.dismiss();
+        if (isLoading) binding.processIndicator.show();
+        else binding.processIndicator.hide();
     }
 
     @Override

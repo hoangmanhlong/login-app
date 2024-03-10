@@ -20,7 +20,7 @@ public class LoginRemindDialog {
     private static void setupDialog(Context context, LoginDialogListener listener) {
         new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.log_in)
-                .setMessage(R.string.log_in_description)
+                .setMessage(R.string.app_name)
                 .setPositiveButton(R.string.sign_in, (dialog, which) -> listener.onLoginClicked())
                 .setNegativeButton(R.string.sign_up, (dialog, which) -> listener.onSignUpClicked())
                 .setNeutralButton(R.string.later, null)

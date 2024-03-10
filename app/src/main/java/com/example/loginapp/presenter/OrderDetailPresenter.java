@@ -18,6 +18,11 @@ public class OrderDetailPresenter implements OrderDetailListener {
         this.view = view;
     }
 
+    public void initData() {
+        if (order == null) view.getSharedOrder();
+        else view.bindOrder(order);
+    }
+
     public void setOrder(Order order) {
         this.order = order;
         view.bindOrder(order);

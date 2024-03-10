@@ -49,6 +49,12 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/processIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -155,7 +161,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
                     android:onClick="@{() -> fragment.goSelectDeliveryAddressScreen()}"
-                    android:text="Choose another address"
+                    android:text="@string/choose_another_address"
                     android:textColor="@color/gray_500"
                     android:textStyle="bold"
                     app:icon="@drawable/ic_arrow_forward"
@@ -176,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:includeFontPadding="false"
-                        android:text="Billing address"
+                        android:text="@string/billing_address"
                         android:textColor="@color/black_100"
                         android:textSize="@dimen/_14ssp" />
 
@@ -186,7 +192,7 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="Full name"
+                        android:text="@string/full_name"
                         android:textColor="@color/gray_700"
                         android:textSize="12sp" />
 
@@ -210,6 +216,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@string/phone_number"
                         android:textColor="@color/gray_700"
                         android:textSize="12sp" />
@@ -235,7 +242,7 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="Address"
+                        android:text="@string/address"
                         android:textColor="@color/gray_500"
                         android:textSize="12sp" />
 
@@ -271,7 +278,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
                                 android:includeFontPadding="false"
-                                android:text="Province"
+                                android:text="@string/province"
                                 android:textColor="@color/gray_700"
                                 android:textSize="12sp" />
 
@@ -322,7 +329,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
                                 android:includeFontPadding="false"
-                                android:text="Zip Code"
+                                android:text="@string/postal_code"
                                 android:textColor="@color/gray_500"
                                 android:textSize="12sp" />
 
@@ -351,7 +358,7 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="Country"
+                        android:text="@string/country"
                         android:textColor="@color/gray_700"
                         android:textSize="12sp" />
 
@@ -392,7 +399,7 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="Shipping Options"
+                        android:text="@string/shipping_options"
                         android:textColor="@color/gray_700"
                         android:textSize="12sp" />
 
@@ -445,7 +452,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="Save details for future billing addresses"
+                            android:text="@string/save_address_label"
                             android:textColor="@color/gray_700"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@id/saveAddressCheckBox"
@@ -461,7 +468,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
                         android:onClick="@{() -> fragment.onPaymentOptionScreen()}"
-                        android:text="Select a payment method"
+                        android:text="@string/select_payment_method"
                         android:textStyle="bold"
                         app:elevation="@dimen/_10sdp"
                         app:layout_constraintBottom_toBottomOf="parent"

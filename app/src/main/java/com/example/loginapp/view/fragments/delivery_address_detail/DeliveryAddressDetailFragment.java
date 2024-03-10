@@ -70,7 +70,7 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.delete).setMessage(R.string.delete_delivery_address)
                 .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteDeliveryAddress())
-                .setNegativeButton(R.string.negative_button_title, (dialog, which) -> {
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(false)
                 .show();

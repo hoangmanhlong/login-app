@@ -34,7 +34,8 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
 
     public void setPhotoUri(Uri photoUri) {
         this.photoUri = photoUri;
-        view.bindPhotoSelected(photoUri);
+        if (photoUri != null) view.bindPhotoSelected(photoUri);
+        else view.onMessage("No file selected");
     }
 
     public void saveUserData(String username, String phoneNumber, String address) {

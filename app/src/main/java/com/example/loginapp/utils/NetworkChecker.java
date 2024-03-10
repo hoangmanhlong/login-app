@@ -38,7 +38,6 @@ public class NetworkChecker {
         @Override
         public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities);
-            // Không làm gì trong phương thức này hiện tại
         }
     };
 

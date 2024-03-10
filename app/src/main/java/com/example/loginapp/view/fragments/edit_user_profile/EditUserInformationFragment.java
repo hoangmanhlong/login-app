@@ -77,21 +77,23 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
 
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-        presenter.setUserData((UserData) getArguments().getSerializable(Constant.USER_KEY_NAME));
+        getSharedData();
         onInputState();
 
         // Retrieve and cache the system's default "short" animation time.
-        shortAnimationDuration = getResources().getInteger(
-                android.R.integer.config_shortAnimTime);
+        shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
+    private void getSharedData() {
+        if (getArguments() != null) {
+            UserData userData = (UserData) getArguments().getSerializable(Constant.USER_KEY_NAME);
+            if (userData != null) presenter.setUserData(userData);
+        }
+    }
+
+
     private final ActivityResultLauncher<String[]> openDocument =
-            registerForActivityResult(new MyOpenDocumentContract(),
-            uri -> {
-                if (uri != null) presenter.setPhotoUri(uri);
-                else onMessage("No file selected");
-            }
-    );
+            registerForActivityResult(new MyOpenDocumentContract(), presenter::setPhotoUri);
 
     public void onImageClick() {
         String imageUrl = presenter.getUserData().getPhotoUrl();
@@ -99,7 +101,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
             zoomImageFromThumb(binding.tvUserAvatar, presenter.getUserData().getPhotoUrl());
     }
 
-    public void onEditImage() {
+    public void onEditImageButtonClick() {
         openDocument.launch(new String[]{"image/*"});
     }
 
@@ -167,11 +169,11 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
 //        binding.expandedImage.setImageResource(imageResId);
 
         Glide.with(requireContext())
-                    .load(imageUrl)
-                    .placeholder(R.drawable.loading_animation)
-                    .error(R.drawable.ic_broken_image)
-                    .override(Target.SIZE_ORIGINAL)
-                    .into(binding.expandedImage);
+                .load(imageUrl)
+                .placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_broken_image)
+                .override(Target.SIZE_ORIGINAL)
+                .into(binding.expandedImage);
 
 
         // Calculate the starting and ending bounds for the zoomed-in image.
@@ -279,7 +281,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
                                 .ofFloat(binding.expandedImage, View.X, startBounds.left))
                         .with(ObjectAnimator
                                 .ofFloat(binding.expandedImage,
-                                        View.Y,startBounds.top))
+                                        View.Y, startBounds.top))
                         .with(ObjectAnimator
                                 .ofFloat(binding.expandedImage,
                                         View.SCALE_X, startScaleFinal))

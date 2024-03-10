@@ -7,4 +7,6 @@ public interface OrderDetailView {
     void bindOrder(Order order);
 
     void backPreviousScreen();
+
+    void getSharedOrder();
 }

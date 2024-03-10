@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.orders;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class AllOrdersFragment extends Fragment implements OnOrderClickListener 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(this.toString(), "AllOrdersFragment onViewCreated: ");
         RecyclerView orderRecyclerview = binding.ordersRecyclerView;
         orderRecyclerview.setAdapter(ordersAdapter);
     }

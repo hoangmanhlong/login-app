@@ -1,59 +1,81 @@
 <resources>
-    <string name="app_name">Smarteshop</string>
-    <string name="aliments">Aliments</string>
-    <string name="food_delive">Food Delivery Services</string>
-    <string name="loopr">LOOPR</string>
+    <string name="app_name" translatable="false">Smarteshop</string>
     <string name="login">Login</string>
     <string name="create_account">Create an account</string>
+    <string name="or">Or</string>
+    <string name="login_account">Login Account</string>
+
+    <string name="confirm_password">Confirm password</string>
 
     <string name="create_account_label">
         <font color="#595959">Not Registered yet? </font>
         <font color="#fb5607">Create an account</font>
     </string>
-
-    <string name="best_prices">Best Prices &amp; Deals</string>
-    <string name="find_your_f">Find your favorite Meals at the best prices with exclusive deals only on aliments app.</string>
-    <string name="track_your_">Track your Orders</string>
-    <string name="track_your">Track your orders in realtime from the app</string>
-    <string name="free_and_fa_">Free and Fast Delivery</string>
-    <string name="free_and_fa">Free and fast delivery for all meals above ₹100.</string>
+    <string name="language">Language</string>
+    <string name="customer_service">Customer service</string>
+    <string name="coins_reward">Coins reward</string>
+    <string name="best_prices_and_deals">Best Prices &amp; Deals</string>
+    <string name="best_prices_and_deals_des">Find your favorite Meals at the best prices with exclusive deals only on aliments app.</string>
+    <string name="track_your_orders_title">Track your Orders</string>
+    <string name="track_your_orders_description">Track your orders in realtime from the app</string>
+    <string name="free_and_fast_title">Free and Fast Delivery</string>
+    <string name="free_and_fast_description">Free and fast delivery for all meals above ₹100.</string>
     <string name="phone_number">Phone number</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="register">Register</string>
     <string name="price_format">%s$</string>
     <string name="dollar_price">$%s</string>
     <string name="dollar_discount_price">- $%s</string>
-    <string name="brand">Brand: %s</string>
-    <string name="welcome">Hi %s</string>
-    <string name="recommended">Recommended for you</string>
-    <string name="discount">Discount</string>
-    <string name="top_charts">Top charts</string>
+    <string name="hello_user">Hi %s</string>
+    <string name="welcome_back">Welcome back</string>
+
+    <string name="save">Save</string>
+<!--    Home Screen-->
+    <string name="discounted_products_label">Discounted over 10%</string>
+    <string name="recommended_for_you">Recommended for you</string>
+    <string name="bestseller">Best selling</string>
+
+<!--    Bottom Sheet Screen-->
+    <string name="quantity">Quantity</string>
+    
+<!--    Product Details-->
+    <string name="related_products">Related products</string>
+
+<!--    Checkout Info-->
+    <string name="choose_another_address">Choose another address</string>
+    <string name="billing_address">Billing address</string>
+    <string name="full_name">Full name</string>
+    <string name="address">Address</string>
+    <string name="province">Province</string>
+    <string name="postal_code">Postal code</string>
+    <string name="country">Country</string>
+    <string name="shipping_options">Shipping Options</string>
+    <string name="save_address_label">Save details for future billing addresses</string>
+    <string name="select_payment_method">Select a payment method</string>
+
+
+
+
     <string name="description_label">Description</string>
-    <string name="searchbar_hint">Search</string>
     <string name="dialog_message">Are you sure you want to delete the product?</string>
     <string name="logout_message">Are you sure you want to logout?</string>
     <string name="delete_delivery_address">Are you sure you want to delete the delivery address?</string>
     <string name="logout">Log out</string>
     <string name="select_code">Select code</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="buy_now">Buy now</string>
     <string name="try_again">Try again</string>
-    <string name="network_error_message">No Internet connection</string>
-    <string name="positive_button_title">OK</string>
-    <string name="negative_button_title">Cancel</string>
     <string name="quantity_item">%s item(s)</string>
     <string name="valid_till">Valid Till: %s</string>
     <string name="voucher_number">All(%s)</string>
     <string name="otp_description">An 6 digit code has been sent to</string>
-    <string name="coins_description"> %s coin(s) expiring on %s</string>
-    <string name="address">%s, %s</string>
+    <string name="coins_description"> coin(s) expiring on </string>
+    <string name="province_country" translatable="false">%s, %s</string>
     <string name="delete">Delete</string>
-    <string name="x_quantity">x%s</string>
+    <string name="x_quantity" translatable="false">x%s</string>
     <string name="format_price">$%s</string>
-    <string name="order_status">Order %s</string>
     <string name="voucher_name">%s%% off </string>
     <string name="delivery_address">Delivery Address</string>
-    <string name="copy">COPY</string>
     <string name="password">Password</string>
     <string name="order_total">Order Total</string>
     <string name="payment_method">Payment Method</string>
@@ -67,10 +89,12 @@
     <string name="order_total_">Order Total: </string>
     <string name="checkout" translatable="true">Checkout</string>
     <string name="discount_code">Discount code</string>
+
     <string name="payment_option">Payment Option</string>
-    <string name="online_banking">Online Banking</string>
-    <string name="visa">Credit / Debit Card</string>
-    <string name="paypal">Paypal</string>
+    <string name="online_banking" translatable="false">Online Banking</string>
+    <string name="visa" translatable="false">Credit / Debit Card</string>
+    <string name="paypal" translatable="false">Paypal</string>
+
     <string name="request_otp">Request OTP</string>
     <string name="my_account">My Account</string>
     <string name="edit_information">Edit Information</string>
@@ -83,11 +107,10 @@
     <string name="rate_high_to_low">Rate: High to Low</string>
     <string name="add_new_address">Add New Address</string>
     <string name="edit_address">Edit address</string>
-    <string name="vietnam">Việt Nam</string>
+    <string name="vietnam" translatable="false">Việt Nam</string>
     <string name="my_orders">My Orders</string>
     <string name="processing">Processing</string>
     <string name="completed">Completed</string>
-    <string name="_return">Return</string>
     <string name="cancel">Cancel</string>
     <string name="log_in">Log in</string>
     <string name="later">Later</string>
@@ -95,15 +118,12 @@
     <string name="sign_up">Sign Up</string>
     <string name="day">%sth</string>
     <string name="need_s_coins">Need %s coins</string>
-    <string name="date_decor">%s-%s-%s</string>
-    <string name="log_in_description">Log in to experience the shopping service now</string>
     <string name="no_internet">No Internet connection</string>
     <string name="check_again">Please check your connection again</string>
     <string name="favorites_list_empty">Oops, your wishlist is empty</string>
     <string name="login_email_false_message">Account or password is incorrect. Try Again!</string>
     <string name="rating_des">Ratings and reviews are verified and are from people who use the same type of device that you use</string>
     <string name="change_voucher_title">Are you sure you want to exchange %s coins for this voucher</string>
-    <string name="redeem">Redeem Voucher</string>
 
     <!--Orders Screen-->
     <string name="orders_empty_message">Oops, No Orders Yet…</string>
@@ -111,20 +131,56 @@
     <!--Order Detail Screen-->
     <string name="confirm_message">Are you sure you want to cancel this order?</string>
     <string name="return_text">Return</string>
-    <string name="thank">Thank you for shopping with Smarteshop!</string>
     <string name="cancel_order">Cancel order</string>
 
     <!--Coins Reward Screen -->
     <string name="get_coin_button_text">Get 100 coins now</string>
+    <string name="redeem">Redeem</string>
 
     <!--Buy Again Screen-->
     <string name="voucher_label">PlatForm Voucher</string>
     <string name="payment_details">Payment Details</string>
     <string name="merchandise_subtotal">Merchandise Subtotal</string>
-    <string name="shipping_subtotal">Shipping Subtotal</string>
+    <string name="shipping_subtotal">Shipping cost</string>
     <string name="voucher_discount">Voucher Discount</string>
     <string name="confirm_payment">By click "check out", you are agreeing to
         <font color="#FF0000">Smarteshop\'s General Transaction Term</font>
     </string>
-    <string name="total_payment">Total Payment</string>
+    <string name="total_payment">Payment Total</string>
+    <string name="food_delive">Food Delivery Services</string>
+    <string name="thank">Thank you for shopping with Smarteshop!</string>
+    <string name="date_decor" translatable="false">%s-%s-%s</string>
+    <string name="faq">Frequently asked question</string>
+
+
+<!--    Payment method-->
+    <string name="pay">Pay</string>
+
+<!--    Select delivery address-->
+    <string name="select_delivery_address">Select Delivery Address</string>
+    <string name="voucher_empty">There are no discount codes available!</string>
+
+<!--    SElect Voucher-->
+    <string name="select_voucher">Select voucher</string>
+    <string name="all">All</string>
+    <string name="my_voucher">My Voucher</string>
+
+
+    <string name="english" translatable="false">English</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="wishlist">Wishlist</string>
+
+    <string name="basket">Basket</string>
+    <string name="shopping_cart_empty">Oops, your shopping cart is empty</string>
+    <string name="total">Total</string>
+    <string name="select_all">Select all</string>
+
+<!--    Search Screen-->
+    <string name="delete_all">Delete All</string>
+    <string name="searchbar_hint">Search</string>
+
+    <!--    Order Success-->
+    <string name="order_success">Order Success</string>
+    <string name="thanks_order">Thank you for purchasing. Your order will be shipped within 3–5 business days</string>
+    <string name="back_to_shopping">Back to Shopping</string>
 </resources>

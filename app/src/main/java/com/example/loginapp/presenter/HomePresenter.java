@@ -22,7 +22,7 @@ public class HomePresenter implements HomeListener {
 
     private final HomeInterator interator = new HomeInterator(this);
 
-    private final List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     public List<Product> recommendedProducts = new ArrayList<>();
 
@@ -91,8 +91,7 @@ public class HomePresenter implements HomeListener {
 
     @Override
     public void getProductsFromAPI(List<Product> products) {
-        this.products.clear();
-        this.products.addAll(products);
+        this.products = products;
         processProducts(products);
     }
 

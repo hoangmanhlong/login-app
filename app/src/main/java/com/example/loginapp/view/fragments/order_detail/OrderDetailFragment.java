@@ -39,9 +39,10 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
-        getSharedOrder();
+        presenter.initData();
     }
 
+    @Override
     public void getSharedOrder() {
         Order order = getArguments() != null ? (Order) getArguments().getSerializable(Constant.ORDER_KEY) : null;
         if (order != null) presenter.setOrder(order);
@@ -58,8 +59,7 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
     public void onBuyAgainButtonClick() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.ORDER_KEY, presenter.getOrder());
-        navController
-                .navigate(R.id.action_orderDetailFragment_to_buyAgainFragment, bundle);
+        navController.navigate(R.id.action_orderDetailFragment_to_buyAgainFragment, bundle);
     }
 
     public void onNavigateUp() {
@@ -85,7 +85,6 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
                 statusColorResId = android.R.color.holo_red_dark;
                 break;
         }
-
         binding.btCancelOrder.setVisibility(cancelOrderButtonVisible ? View.VISIBLE : View.GONE);
         binding.orderStatusView.setBackgroundResource(statusColorResId);
         binding.orderProductRecyclerview.setAdapter(new OrderProductAdapter(order.getOrderProducts()));

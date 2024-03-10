@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.UserData;
-import com.example.loginapp.model.listener.UserProfileListener;
+import com.example.loginapp.model.listener.UserProfileDetailListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,11 +18,11 @@ import java.util.List;
 
 public class UserProfileInterator {
 
-    private final UserProfileListener listener;
+    private final UserProfileDetailListener listener;
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    public UserProfileInterator(UserProfileListener listener) {
+    public UserProfileInterator(UserProfileDetailListener listener) {
         this.listener = listener;
     }
 

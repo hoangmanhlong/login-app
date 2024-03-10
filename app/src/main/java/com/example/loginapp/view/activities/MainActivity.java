@@ -30,7 +30,7 @@ import com.example.loginapp.view.fragments.favorite_product.FavoriteProductFragm
 import com.example.loginapp.view.fragments.home.HomeFragment;
 import com.example.loginapp.view.fragments.product_detail.NewProductInWishlistMessage;
 import com.example.loginapp.view.fragments.search.SearchProductFragment;
-import com.example.loginapp.view.fragments.user_profile.UserProfileFragment;
+import com.example.loginapp.view.fragments.user_profile.UserProfileDetailFragment;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.installSplashScreen(this);
+//        EdgeToEdge.enable(this); // Display content edge-to-edge
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void destinationChangedListener() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            Log.d(TAG, "currentDestination: " + controller.getCurrentDestination().toString());
             currentDestinationId = destination.getId();
             boolean isStartDestination = currentDestinationId == R.id.firstFragment;
 
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 new SearchProductFragment(),
                 new CartFragment(),
                 new FavoriteProductFragment(),
-                new UserProfileFragment()
+                new UserProfileDetailFragment()
         ));
 
         public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {

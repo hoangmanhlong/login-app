@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isVietnamese"
+            type="Boolean" />
+
+        <variable
+            name="userData"
+            type="com.example.loginapp.model.entity.UserData" />
+
+        <variable
+            name="profileFragment"
+            type="com.example.loginapp.view.fragments.user_profile.UserProfileDetailFragment" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".view.fragments.cart.CartFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/my_account"
+                    android:textColor="@color/black_100"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginVertical="@dimen/_16sdp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:cardCornerRadius="@dimen/_40sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                imgUrl="@{userData.photoUrl}"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_80sdp"
+                                android:contentDescription="@null"
+                                android:onClick="@{() -> profileFragment.onImageAvatarClick()}"
+                                android:scaleType="centerCrop"
+                                tools:src="@drawable/dog" />
+                        </com.google.android.material.card.MaterialCardView>
+
+
+                        <ImageButton
+                            android:id="@+id/editAvatar"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/edit_avatar_button"
+                            android:contentDescription="@null"
+                            android:onClick="@{() -> profileFragment.onImageAvatarClick()}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{userData.username}"
+                        android:textColor="@color/black_100"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="Hoang long" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvNumberOfOrdersProcessing"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="10" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="@string/processing"
+                            android:textAlignment="center"
+                            android:textColor="@color/gray_500"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvNumberOfOrdersProcessing" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvNumberOfOrdersCompleted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="10" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="@string/completed"
+                            android:textAlignment="center"
+                            android:textColor="@color/gray_500"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvNumberOfOrdersCompleted" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvNumberOfOrdersReturn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="10" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="@string/return_text"
+                            android:textAlignment="center"
+                            android:textColor="@color/gray_500"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvNumberOfOrdersReturn" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvNumberOfOrdersCancel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="10" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            android:text="@string/cancel"
+                            android:textAlignment="center"
+                            android:textColor="@color/gray_500"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvNumberOfOrdersCancel" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> profileFragment.goOrdersScreen()}"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_order" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/my_orders"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> profileFragment.goVoucherScreen()}"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_voucher_black" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/discount_code"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> profileFragment.goCoinRewardScreen()}"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_coin" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/coins_reward"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> profileFragment.goShippingAddressesScreen()}"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_location" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/shipping_address"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_question" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/faq"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_customer_care" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/customer_service"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> profileFragment.onChangeLanguageClick()}"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_language" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/language"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivArrowRight"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_4sdp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:visibility="@{isVietnamese ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ivArrowRight"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_16sdp"
+                                android:src="@drawable/vietnam" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_2sdp"
+                                android:fontFamily="@font/montserrat_bold"
+                                android:text="@string/vietnam"
+                                android:textSize="12sp"
+                                tools:text="Vietnamese" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_4sdp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:visibility="@{isVietnamese ? View.GONE : View.VISIBLE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ivArrowRight"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_11sdp"
+                                android:src="@drawable/flag_of_the_united_kingdom" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_2sdp"
+                                android:fontFamily="@font/montserrat_bold"
+                                android:text="@string/english"
+                                android:textSize="12sp"
+                                tools:text="Vietnamese" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerInsetEnd="@dimen/_14sdp"
+                        app:dividerInsetStart="@dimen/_14sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{() -> profileFragment.logOut()}"
+                        android:padding="@dimen/_16sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/ic_logout" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:fontFamily="@font/dm_sans_36pt_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/logout"
+                                android:textColor="@color/design_default_color_error"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>

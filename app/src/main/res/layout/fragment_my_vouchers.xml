@@ -53,7 +53,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/averia_gruesa_libre_regular"
                 android:includeFontPadding="false"
-                android:text="Oops, You don't have any vouchers"
+                android:text="@string/voucher_empty"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>

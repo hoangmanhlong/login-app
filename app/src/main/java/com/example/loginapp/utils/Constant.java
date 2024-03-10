@@ -2,8 +2,12 @@ package com.example.loginapp.utils;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public final class Constant {
+
+    public static final String IS_VIETNAMESE_LANGUAGE = "is_vietnamese_language";
 
     public static final int BACK_PRESS_INTERVAL = 2000;
 
@@ -25,7 +29,9 @@ public final class Constant {
 
     private static final String USER_REF_NAME = "users";
 
-    public static final String IMAGE_STORAGE_URL = "avatar_user_image";
+    public static final String STORAGE_USER_AVATAR_REF_NAME = "avatar";
+
+    public static final String STORAGE_USER_DATA_REF_NAME = "user_data";
 
     private static final String FAVORITE_PRODUCT_REF_KEY = "favorite_product";
 
@@ -58,8 +64,6 @@ public final class Constant {
     public static final String USER_KEY_NAME = "userdata";
 
     public static final String BESTSELLER_REF_NAME = "bestseller";
-
-    public static final String LOGIN_TAG = "login_tag";
 
     public static final String MY_VOUCHER_REF_NAME = "my_voucher";
 
@@ -94,4 +98,9 @@ public final class Constant {
 
     public static final DatabaseReference bestSellerRef =
             FirebaseDatabase.getInstance().getReference().child(BESTSELLER_REF_NAME);
+
+    public static final StorageReference avatarUserRef =
+            FirebaseStorage.getInstance().getReference()
+                    .child(STORAGE_USER_DATA_REF_NAME)
+                    .child(STORAGE_USER_AVATAR_REF_NAME);
 }

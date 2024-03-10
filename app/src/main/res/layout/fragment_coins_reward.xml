@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Coins Reward Page"
+                android:text="@string/coins_reward"
                 android:textColor="@color/black_100"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
@@ -155,7 +155,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
                                 android:includeFontPadding="false"
-                                android:text=" coin(s) expiring on "
+                                android:text="@string/coins_description"
                                 android:textSize="12sp" />
 
                             <TextView

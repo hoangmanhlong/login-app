@@ -5,7 +5,7 @@ import com.example.loginapp.model.entity.UserData;
 
 import java.util.List;
 
-public interface UserProfileListener {
+public interface UserProfileDetailListener {
     void getUserData(UserData userData);
 
     void getOrders(List<Order> orders);

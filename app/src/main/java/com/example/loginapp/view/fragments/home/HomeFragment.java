@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,6 +69,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
         initView();
     }
 
@@ -223,21 +225,21 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
 
     public void onExpandRecommendProductsButtonClick() {
-        navigateToExpandedProductsFragment(presenter.recommendedProducts, "Recommended for you");
+        navigateToExpandedProductsFragment(presenter.recommendedProducts, R.string.recommended_for_you);
     }
 
     public void onExpandDiscountProductsButtonClick() {
-        navigateToExpandedProductsFragment(presenter.discountProducts, "Discount");
+        navigateToExpandedProductsFragment(presenter.discountProducts, R.string.discounted_products_label);
     }
 
     public void onExpandTopChartProductsButtonClick() {
-        navigateToExpandedProductsFragment(presenter.topChartsProducts, "Top charts");
+        navigateToExpandedProductsFragment(presenter.topChartsProducts, R.string.bestseller);
     }
 
-    private void navigateToExpandedProductsFragment(List<Product> products, String label) {
+    private void navigateToExpandedProductsFragment(List<Product> products, @StringRes int label) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(products));
-        bundle.putString(Constant.EXPAND_LABEL_KEY, label);
+        bundle.putInt(Constant.EXPAND_LABEL_KEY, label);
         NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
     }
 

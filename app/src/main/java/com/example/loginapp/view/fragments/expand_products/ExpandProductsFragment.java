@@ -2,8 +2,6 @@ package com.example.loginapp.view.fragments.expand_products;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +18,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.expand_adapter.ExpandAdapter;
 import com.example.loginapp.adapter.expand_adapter.ExpandProductClickListener;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentExpandProductsBinding;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Products;
 import com.example.loginapp.presenter.ExpandProductsPresenter;
+import com.example.loginapp.utils.Constant;
 
 import java.util.List;
 
@@ -57,17 +55,14 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
 
     private void getDataShared() {
         if (getArguments() != null) {
-            Log.d(this.toString(), "getDataShared: true");
-            String label = getArguments().getString(Constant.EXPAND_LABEL_KEY);
-            if (label != null) binding.fragmentLabelTextView.setText(label);
+            @StringRes int label = getArguments().getInt(Constant.EXPAND_LABEL_KEY);
+            binding.fragmentLabelTextView.setText(label);
 
             Products products = (Products) getArguments().getSerializable(Constant.EXPAND_PRODUCTS_KEY);
             if (products != null) {
                 if (presenter.getProducts() == null) presenter.setProducts(products);
                 else presenter.initData();
             }
-        } else {
-            Log.d(this.toString(), "getDataShared: ");
         }
     }
 

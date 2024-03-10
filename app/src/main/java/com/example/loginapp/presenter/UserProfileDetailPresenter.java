@@ -1,22 +1,35 @@
 package com.example.loginapp.presenter;
 
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
+
+import com.example.loginapp.App;
+import com.example.loginapp.data.local.AppSharedPreferences;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.UserProfileInterator;
-import com.example.loginapp.model.listener.UserProfileListener;
-import com.example.loginapp.view.fragments.user_profile.UserProfileView;
+import com.example.loginapp.model.listener.UserProfileDetailListener;
+import com.example.loginapp.view.fragments.user_profile.UserProfileDetailView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfilePresenter implements UserProfileListener {
+public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
-    private final UserProfileView view;
+    private final String TAG = this.toString();
+
+    private final UserProfileDetailView view;
 
     private final UserProfileInterator interator = new UserProfileInterator(this);
 
+    private final AppSharedPreferences sharedPreferences;
+
     private UserData currentUser;
+
+    private boolean isVietnamese;
 
     public UserData getCurrentUser() {
         return currentUser;
@@ -24,8 +37,9 @@ public class UserProfilePresenter implements UserProfileListener {
 
     private final List<Order> orders = new ArrayList<>();
 
-    public UserProfilePresenter(UserProfileView view) {
+    public UserProfileDetailPresenter(UserProfileDetailView view) {
         this.view = view;
+        sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }
 
     private boolean isChecked = false;
@@ -34,7 +48,16 @@ public class UserProfilePresenter implements UserProfileListener {
         interator.getUserData();
     }
 
+
+    public void changeLanguage() {
+        sharedPreferences.setLanguage(!isVietnamese);
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(isVietnamese ? "en-US" : "vi");
+        AppCompatDelegate.setApplicationLocales(appLocale);
+    }
+
     public void initData() {
+        isVietnamese = sharedPreferences.getLanguage();
+        view.bindLanguageState(isVietnamese);
         if (currentUser == null) getUserData();
         else view.bindUserData(currentUser);
 

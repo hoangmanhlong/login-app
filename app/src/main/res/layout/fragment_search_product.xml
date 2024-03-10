@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:onClick="@{() -> fragment.onDeleteAllSearchHistoriesButtonClick()}"
-                    android:text="Delete All"
+                    android:text="@string/delete_all"
                     android:textColor="@color/red"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

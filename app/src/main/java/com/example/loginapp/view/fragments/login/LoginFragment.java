@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
+import com.example.loginapp.view.state.LoginEmailButtonObserver;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginFragment extends Fragment implements LoginView {
@@ -29,6 +32,10 @@ public class LoginFragment extends Fragment implements LoginView {
     private Dialog dialog;
 
     private TextInputEditText[] editTexts;
+
+    private Button loginWithEmailButton;
+
+    private TextView loginEmailFailTextView;
 
     @Nullable
     @Override
@@ -43,19 +50,24 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.setLoginFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
+        loginWithEmailButton = binding.loginEmailBtn;
+        loginEmailFailTextView = binding.tvLoginFailed;
         editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
-        getDataShared();
+        loginWithEmailButton.setEnabled(!editTexts[0].getText().toString().isEmpty() && !editTexts[1].getText().toString().isEmpty());
+        loginWithEmailButtonObserver();
+//        getDataShared();
     }
 
-    private void getDataShared() {
-        if (getArguments() != null) {
-            String email = getArguments().getString(Constant.EMAIL_KEY);
-            String password = getArguments().getString(Constant.PASSWORD_KEY);
-            editTexts[0].setText(email);
-            editTexts[1].setText(password);
-            onEmailClick();
-        }
-    }
+//    private void getDataShared() {
+//        if (getArguments() != null) {
+//            String email = getArguments().getString(Constant.EMAIL_KEY);
+//            String password = getArguments().getString(Constant.PASSWORD_KEY);
+//            editTexts[0].setText(email);
+//            editTexts[1].setText(password);
+//            onEmailClick();
+//        }
+//    }
+
 
     public void onNumberPhoneBtn() {
         binding.numberPhoneInput.setVisibility(View.VISIBLE);
@@ -71,7 +83,7 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.loginEmail.setBackgroundResource(R.drawable.background_login_select);
     }
 
-    public void onLogin() {
+    public void onLoginWithEmailClick() {
         String email = binding.emailTextInputEditText.getText().toString().trim();
         String password = binding.passwordTextInputEditText.getText().toString().trim();
         presenter.loginWithEmail(email, password, requireActivity());
@@ -79,6 +91,20 @@ public class LoginFragment extends Fragment implements LoginView {
 
     public void goRegisterScreen() {
         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_registerFragment);
+    }
+
+    private void loginWithEmailButtonObserver() {
+        editTexts[0].addTextChangedListener(new LoginEmailButtonObserver(
+                loginWithEmailButton,
+                loginEmailFailTextView,
+                editTexts
+        ));
+
+        editTexts[1].addTextChangedListener(new LoginEmailButtonObserver(
+                loginWithEmailButton,
+                loginEmailFailTextView,
+                editTexts
+        ));
     }
 
     @Override
@@ -90,9 +116,7 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void isLoginSuccess(boolean isSuccess) {
         dialog.dismiss();
-        if (!isSuccess) {
-            binding.tvLoginFailed.setVisibility(View.VISIBLE);
-        }
+        if (!isSuccess) binding.tvLoginFailed.setVisibility(View.VISIBLE);
     }
 
     @Override

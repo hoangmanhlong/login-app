@@ -105,12 +105,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="#fff"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sl_normal_view"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="@{() -> fragment.onDeliveryAddressClick()}"
                     android:padding="@dimen/_8sdp">
 
@@ -196,7 +197,7 @@
                             android:layout_marginTop="@dimen/_4sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="@{@string/address(deliveryAddress.province, deliveryAddress.country)}"
+                            android:text="@{@string/province_country(deliveryAddress.province, deliveryAddress.country)}"
                             android:textColor="@color/gray_500"
                             tools:text="Nam tu Liem, Ha Noi" />
 
@@ -234,7 +235,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sl_normal_view"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="@{() -> fragment.onSelectVoucherViewClick()}"
                     android:padding="@dimen/_8sdp">
 
@@ -305,7 +306,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/sl_normal_view"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="@{() -> fragment.onPaymentMethodClick()}"
                     android:padding="@dimen/_8sdp">
 
@@ -373,7 +374,6 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:padding="@dimen/_8sdp">
 
                     <ImageView
@@ -402,6 +402,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
+                        android:animateLayoutChanges="true"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@id/ivOrder">
 
@@ -457,7 +458,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="@{hasVoucher ? View.VISIBLE : View.GONE}">
 
                             <TextView
                                 android:layout_width="0dp"

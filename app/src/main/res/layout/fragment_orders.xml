@@ -57,7 +57,7 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All" />
+                android:text="@string/all" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/_return" />
+                android:text="@string/return_text" />
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -28,10 +28,11 @@
             android:scrollbars="none">
 
             <LinearLayout
-                android:animateLayoutChanges="true"
-                android:clipToPadding="false"
+                android:id="@+id/homeScreenContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:clipToPadding="false"
                 android:orientation="vertical">
 
                 <include
@@ -55,7 +56,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="@{@string/welcome(userData.username)}"
+                        android:text="@{@string/hello_user(userData.username)}"
                         android:textSize="@dimen/_16ssp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:paddingTop="@dimen/_2sdp"
-                        android:text="Welcome back"
+                        android:text="@string/welcome_back"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/hello_user" />
@@ -118,7 +119,7 @@
                     android:includeFontPadding="false"
                     android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="@string/recommended"
+                    android:text="@string/recommended_for_you"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
                     android:textSize="16sp"
@@ -153,7 +154,7 @@
                     android:includeFontPadding="false"
                     android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="@string/top_charts"
+                    android:text="@string/bestseller"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
                     android:textSize="16sp"
@@ -187,7 +188,7 @@
                     android:includeFontPadding="false"
                     android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
                     android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="@string/discount"
+                    android:text="@string/discounted_products_label"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
                     android:textSize="16sp"

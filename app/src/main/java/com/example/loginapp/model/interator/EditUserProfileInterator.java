@@ -10,7 +10,6 @@ import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -22,12 +21,6 @@ public class EditUserProfileInterator {
 
     private final DatabaseReference userRef = Constant.userRef;
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-    private final FirebaseStorage storage = FirebaseStorage.getInstance();
-
-    private StorageReference storageRef = storage.getReference();
-
     private final EditUserProfileListener listener;
 
     public EditUserProfileInterator(EditUserProfileListener listener) {
@@ -35,6 +28,8 @@ public class EditUserProfileInterator {
     }
 
     public void uploadImageToFirebase(@Nullable Uri uri, String username, String phoneNumber, String address) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference currentUserAvatarRef = Constant.avatarUserRef.child(currentUser.getUid());
         AtomicInteger successCount = new AtomicInteger(0);
         String uid = currentUser.getUid();
         Map<String, Object> updates = new HashMap<>();
@@ -46,10 +41,9 @@ public class EditUserProfileInterator {
                     .addOnFailureListener(e -> listener.isUpdateSuccess(false))
                     .addOnCompleteListener(s -> listener.isUpdateSuccess(s.isSuccessful()));
         } else {
-            storageRef = storageRef.child(currentUser.getUid());
-            UploadTask uploadTask = storageRef.putFile(uri);
+            UploadTask uploadTask = currentUserAvatarRef.putFile(uri);
             uploadTask
-                    .continueWithTask(task -> storageRef.getDownloadUrl())
+                    .continueWithTask(task -> currentUserAvatarRef.getDownloadUrl())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
