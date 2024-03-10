@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/fragmentLabelTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="20sp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:includeFontPadding="false"
                 android:textColor="@color/black_100"
@@ -69,6 +69,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:text="@{context.getString(sortName)}"
             app:chipBackgroundColor="@color/gray_1000"
+            app:chipStrokeColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

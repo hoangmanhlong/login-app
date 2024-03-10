@@ -43,7 +43,7 @@
                 android:id="@+id/fragmentNameTextView"
                 bindTextView="@{fragmentLabel}"
                 android:layout_width="wrap_content"
-                android:layout_height="20sp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:includeFontPadding="false"
                 android:textColor="@color/black_100"
@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:hint="Full name *"
+                    android:hint="@string/full_name"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/ic_user_gray">
 
@@ -92,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:hint="Phone number *"
+                    android:hint="@string/phone_number_star"
                     app:counterEnabled="true"
                     app:counterMaxLength="10"
                     app:prefixText="+84"
@@ -118,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:hint="Address *"
+                    android:hint="@string/address"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/ic_location">
 
@@ -163,7 +163,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Postal Code * "
+                        android:hint="@string/postal_code"
                         app:counterEnabled="true"
                         app:counterMaxLength="4"
                         app:endIconMode="clear_text"
@@ -188,7 +188,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_16sdp"
                         android:enabled="false"
-                        android:hint="Country"
+                        android:hint="@string/country"
                         app:endIconMode="clear_text"
                         app:startIconDrawable="@drawable/ic_location_city_24">
 
@@ -212,7 +212,7 @@
                     android:layout_marginVertical="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_8sdp"
                     app:startIconDrawable="@drawable/ic_options"
-                    android:hint="Shipping Options (optional)"
+                    android:hint="@string/shipping_options"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -235,7 +235,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Set as Default Address"
+                        android:text="@string/set_default_address"
                         android:includeFontPadding="false"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -257,7 +257,7 @@
                     android:id="@+id/btDeleteAddress"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
@@ -270,12 +270,12 @@
                 <Button
                     android:id="@+id/btSubmit"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
                     android:onClick="@{() -> fragment.onSubmitButtonClick()}"
-                    android:text="Submit"
+                    android:text="@string/save"
                     android:textStyle="bold" />
             </LinearLayout>
 

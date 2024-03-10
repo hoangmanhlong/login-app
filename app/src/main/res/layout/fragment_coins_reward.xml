@@ -62,11 +62,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
+                android:id="@+id/btVoucher"
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.goVoucherScreen()}"
-                app:icon="@drawable/ic_discount_24"
+                app:icon="@drawable/ic_voucher"
                 app:iconSize="@dimen/_20sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

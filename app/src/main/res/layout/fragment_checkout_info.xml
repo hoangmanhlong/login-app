@@ -217,7 +217,7 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="@string/phone_number"
+                        android:text="@string/phone_number_star"
                         android:textColor="@color/gray_700"
                         android:textSize="12sp" />
 

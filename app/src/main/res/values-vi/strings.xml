@@ -105,14 +105,15 @@
     <!--    Checkout Info-->
     <string name="choose_another_address">Chọn địa chỉ khác</string>
     <string name="billing_address">Địa chỉ thanh toán</string>
-    <string name="full_name">Tên đầy đủ</string>
-    <string name="address">Địa chỉ</string>
-    <string name="province">Tỉnh</string>
-    <string name="postal_code">Mã bưu điện</string>
-    <string name="country">Quốc gia</string>
-    <string name="shipping_options">Tùy chọn vận chuyển</string>
+    <string name="full_name">Tên đầy đủ *</string>
+    <string name="address">Địa chỉ *</string>
+    <string name="province">Tỉnh *</string>
+    <string name="postal_code">Mã bưu điện *</string>
+    <string name="country">Quốc gia *</string>
+    <string name="shipping_options">Tùy chọn vận chuyển(Tùy chọn)</string>
     <string name="save_address_label">Lưu chi tiết cho địa chỉ thanh toán</string>
     <string name="select_payment_method">Chọn một Phương thức thanh toán</string>
+    <string name="phone_number_star">Số điện thoại *</string>
 
     <string name="voucher_name">%s%% giảm giá</string>
     <string name="order_total_">"Tổng đơn hàng: "</string>
@@ -172,5 +173,11 @@
     <string name="order_success">Đặt hàng thành công</string>
     <string name="thanks_order">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn sẽ được giao trong vòng 3–5 ngày làm việc</string>
     <string name="back_to_shopping">Quay lại</string>
+
+    <!--    My address-->
+    <string name="my_address">Địa chỉ giao hàng của tôi</string>
+
+    <!--    Address Details-->
+    <string name="set_default_address">Đặt là địa chỉ mặc định</string>
 
 </resources>

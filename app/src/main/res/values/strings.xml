@@ -44,17 +44,15 @@
 <!--    Checkout Info-->
     <string name="choose_another_address">Choose another address</string>
     <string name="billing_address">Billing address</string>
-    <string name="full_name">Full name</string>
-    <string name="address">Address</string>
-    <string name="province">Province</string>
-    <string name="postal_code">Postal code</string>
-    <string name="country">Country</string>
-    <string name="shipping_options">Shipping Options</string>
+    <string name="full_name">Full name *</string>
+    <string name="address">Address *</string>
+    <string name="province">Province *</string>
+    <string name="postal_code">Postal code *</string>
+    <string name="phone_number_star">Phone number *</string>
+    <string name="country">Country *</string>
+    <string name="shipping_options">Shipping Options (Optional)</string>
     <string name="save_address_label">Save details for future billing addresses</string>
     <string name="select_payment_method">Select a payment method</string>
-
-
-
 
     <string name="description_label">Description</string>
     <string name="dialog_message">Are you sure you want to delete the product?</string>
@@ -183,4 +181,10 @@
     <string name="order_success">Order Success</string>
     <string name="thanks_order">Thank you for purchasing. Your order will be shipped within 3–5 business days</string>
     <string name="back_to_shopping">Back to Shopping</string>
+
+<!--    My address-->
+    <string name="my_address">My Address</string>
+
+<!--    Address Details-->
+    <string name="set_default_address">Set as Default Address</string>
 </resources>

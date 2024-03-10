@@ -7,4 +7,6 @@ public interface LoginView {
     void isLoginSuccess(boolean isSuccess);
 
     void onMessage(String message);
+
+    void requestOTPButtonEnabled(boolean enabled);
 }

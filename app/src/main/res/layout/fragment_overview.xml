@@ -57,7 +57,6 @@
                 android:text="@string/login"
                 android:textAllCaps="false"
                 android:textColor="#000"
-                android:textSize="14sp"
                 android:textStyle="bold"
                 app:rippleColor="@color/gray_500" />
 
@@ -69,7 +68,6 @@
                 android:onClick="@{() -> overviewFragment.onCreateAccountBtn()}"
                 android:text="@string/create_account"
                 android:textAllCaps="false"
-                android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

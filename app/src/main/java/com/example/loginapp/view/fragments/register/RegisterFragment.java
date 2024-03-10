@@ -49,8 +49,6 @@ public class RegisterFragment extends Fragment implements RegisterView {
         registerPresenter.register(email, password, confirmPassword, requireActivity());
     }
 
-
-
     @Override
     public void onMessage(String message) {
         AppMessage.showMessage(requireContext(), message);

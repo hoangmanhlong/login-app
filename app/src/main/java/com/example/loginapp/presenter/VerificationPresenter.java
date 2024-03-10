@@ -10,10 +10,21 @@ public class VerificationPresenter implements VerificationListener {
 
     private final VerificationInterator interator = new VerificationInterator(this);
 
+    private String phoneNumber;
+
     private final VerificationView view;
 
     public VerificationPresenter(VerificationView view) {
         this.view = view;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        view.bindPhoneNumber(formatPhoneNumber(phoneNumber));
     }
 
     public void startPhoneNumberVerification(String phoneNumber, Activity activity) {

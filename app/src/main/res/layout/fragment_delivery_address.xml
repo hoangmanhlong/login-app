@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="My addresses"
+                android:text="@string/my_address"
                 android:textColor="@color/black_100"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"

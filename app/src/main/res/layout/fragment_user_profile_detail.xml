@@ -285,7 +285,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_20sdp"
                                 android:layout_height="@dimen/_20sdp"
-                                android:src="@drawable/ic_order" />
+                                android:src="@drawable/ic_order_list" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -335,7 +335,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_20sdp"
                                 android:layout_height="@dimen/_20sdp"
-                                android:src="@drawable/ic_voucher_black" />
+                                android:src="@drawable/ic_voucher" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -385,7 +385,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_20sdp"
                                 android:layout_height="@dimen/_20sdp"
-                                android:src="@drawable/ic_coin" />
+                                android:src="@drawable/coin" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -533,7 +533,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_20sdp"
                                 android:layout_height="@dimen/_20sdp"
-                                android:src="@drawable/ic_customer_care" />
+                                android:src="@drawable/ic_customer_service" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -645,8 +645,8 @@
 
                             <ImageView
                                 android:layout_width="@dimen/_22sdp"
-                                android:layout_height="@dimen/_11sdp"
-                                android:src="@drawable/flag_of_the_united_kingdom" />
+                                android:layout_height="@dimen/_22sdp"
+                                android:src="@drawable/united_kingdom" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -695,7 +695,7 @@
                                 android:fontFamily="@font/dm_sans_36pt_regular"
                                 android:includeFontPadding="false"
                                 android:text="@string/logout"
-                                android:textColor="@color/design_default_color_error"
+                                android:textColor="@color/red"
                                 android:textStyle="bold" />
                         </LinearLayout>
 

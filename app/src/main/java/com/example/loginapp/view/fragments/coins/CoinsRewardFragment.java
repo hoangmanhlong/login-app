@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,9 @@ import com.example.loginapp.model.entity.DayWithCheck;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.presenter.CoinsRewardPresenter;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
@@ -54,6 +58,7 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         return binding.getRoot();
     }
 
+    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

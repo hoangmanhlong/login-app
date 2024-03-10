@@ -12,6 +12,8 @@ public class LoginPresenter {
 
     private final LoginView view;
 
+    private String phoneNumber;
+
     public LoginPresenter(LoginView view) {
         this.view = view;
     }
@@ -25,6 +27,15 @@ public class LoginPresenter {
         } else {
             view.isLoginSuccess(false);
         }
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        view.requestOTPButtonEnabled(phoneNumber.length() == 10);
     }
 
     private boolean isValidEmail(String email) {

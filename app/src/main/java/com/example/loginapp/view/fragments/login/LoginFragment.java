@@ -2,10 +2,13 @@ package com.example.loginapp.view.fragments.login;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +40,10 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private TextView loginEmailFailTextView;
 
+    private Button btRequestOtp;
+
+    private EditText etPhoneNumber;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,10 +59,33 @@ public class LoginFragment extends Fragment implements LoginView {
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         loginWithEmailButton = binding.loginEmailBtn;
         loginEmailFailTextView = binding.tvLoginFailed;
+        btRequestOtp = binding.btRequestOtp;
+        etPhoneNumber = binding.etPhoneNumber;
         editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
-        loginWithEmailButton.setEnabled(!editTexts[0].getText().toString().isEmpty() && !editTexts[1].getText().toString().isEmpty());
+        loginWithEmailButton.setEnabled(!editTexts[0].getText().toString().trim().isEmpty() && !editTexts[1].getText().toString().trim().isEmpty());
+        btRequestOtp.setEnabled(!etPhoneNumber.getText().toString().trim().isEmpty());
         loginWithEmailButtonObserver();
+        phoneNumberTextViewListener();
 //        getDataShared();
+    }
+
+    private void phoneNumberTextViewListener() {
+        etPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setPhoneNumber(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
 //    private void getDataShared() {
@@ -122,6 +152,11 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onMessage(String message) {
         AppMessage.showMessage(requireContext(), message);
+    }
+
+    @Override
+    public void requestOTPButtonEnabled(boolean enabled) {
+        btRequestOtp.setEnabled(enabled);
     }
 
     public void onLoginPhoneNumberClick() {

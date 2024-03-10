@@ -6,4 +6,6 @@ public interface VerificationView {
     void isLoading(Boolean check);
 
     void goHomeScreen();
+
+    void bindPhoneNumber(String phoneNumber);
 }

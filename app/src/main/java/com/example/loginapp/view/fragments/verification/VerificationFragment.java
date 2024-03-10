@@ -51,18 +51,23 @@ public class VerificationFragment extends Fragment implements VerificationView {
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         autoFocus();
         dialog = LoadingDialog.getLoadingDialog(requireContext());
+        getSharedData();
 
-        String phoneNumber = getArguments().getString(Constant.PHONE_NUMBER_KEY);
-        String formatPhoneNumber = presenter.formatPhoneNumber(phoneNumber);
-        binding.setPhoneNumber(formatPhoneNumber);
-        presenter.startPhoneNumberVerification(formatPhoneNumber, requireActivity());
+//        presenter.startPhoneNumberVerification(formatPhoneNumber, requireActivity());
+    }
+
+    private void getSharedData() {
+        if (getArguments() != null) {
+            String phoneNumber = getArguments().getString(Constant.PHONE_NUMBER_KEY);
+            presenter.setPhoneNumber(phoneNumber);
+        }
     }
 
     public void onNavigateUp() {
         Navigation.findNavController(binding.getRoot()).navigateUp();
     }
 
-    public void onVerifyClick() {
+    public void onVerifyButtonClick() {
         String code = binding.number1.getText().toString() + binding.number2.getText().toString() +
             binding.number3.getText().toString() + binding.number4.getText().toString() +
             binding.number5.getText().toString() + binding.number6.getText().toString();
@@ -209,8 +214,17 @@ public class VerificationFragment extends Fragment implements VerificationView {
         else dialog.dismiss();
     }
 
+    public void onResendOTPButtonClick() {
+
+    }
+
     @Override
     public void goHomeScreen() {
         startActivity(new Intent(requireActivity(), MainActivity.class));
+    }
+
+    @Override
+    public void bindPhoneNumber(String phoneNumber) {
+        binding.setPhoneNumber(phoneNumber);
     }
 }

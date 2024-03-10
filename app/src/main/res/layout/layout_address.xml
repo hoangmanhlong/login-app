@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/averia_gruesa_libre_regular"
-                    android:text="@{@string/address(deliveryAddress.province, deliveryAddress.country)}"
+                    android:text="@{@string/province_country(deliveryAddress.province, deliveryAddress.country)}"
                     android:textColor="@color/gray_500"
                     tools:text="Nam tu Liem, Ha Noi" />
 
