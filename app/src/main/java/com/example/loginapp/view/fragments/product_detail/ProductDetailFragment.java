@@ -90,7 +90,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     }
 
     public void showBottomSheet() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             Product product = presenter.getProduct();
             if (product != null) {
                 ModalBottomSheetFragment bottomSheet = new ModalBottomSheetFragment();
@@ -110,16 +110,12 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     }
 
     public void onFavoriteButtonClick() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
-            presenter.updateFavorite();
-        } else {
-            binding.favoriteBtn.setChecked(false);
-            LoginRemindDialog.show(this, requireContext());
-        }
+        presenter.updateFavorite();
+
     }
 
     public void onCartBtnClick() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             binding.tvAddToCart.setVisibility(View.VISIBLE);
             presenter.addProductToCart();
         } else {

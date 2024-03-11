@@ -285,7 +285,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_20sdp"
                                 android:layout_height="@dimen/_20sdp"
-                                android:src="@drawable/ic_order_list" />
+                                android:src="@drawable/order" />
 
                             <TextView
                                 android:layout_width="wrap_content"

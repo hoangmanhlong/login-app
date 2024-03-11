@@ -315,7 +315,7 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:contentDescription="@null"
-                        android:src="@drawable/visa_card"
+                        android:src="@drawable/card"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -380,7 +380,7 @@
                         android:id="@+id/ivOrder"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/ic_order_list"
+                        android:src="@drawable/order"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

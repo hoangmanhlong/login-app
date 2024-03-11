@@ -54,35 +54,44 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private final MutableLiveData<Boolean> isConnected = new MutableLiveData<>();
 
+    private final MutableLiveData<Boolean> isLogged = new MutableLiveData<>();
+
     private final NetworkRequest networkRequest = new NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build();
 
+    private final ConnectivityManager.NetworkCallback networkCallback =
+            new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    super.onAvailable(network);
+                    isConnected.postValue(true);
+                }
 
-    private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(@NonNull Network network) {
-            super.onAvailable(network);
-            isConnected.postValue(true);
-        }
+                @Override
+                public void onLost(@NonNull Network network) {
+                    super.onLost(network);
+                    isConnected.postValue(false);
+                }
+            };
 
-        @Override
-        public void onLost(@NonNull Network network) {
-            super.onLost(network);
-            isConnected.postValue(false);
-        }
+    private final List<Fragment> listOfVerifiedDestinations = new ArrayList<>(Arrays.asList(
+            new HomeFragment(),
+            new SearchProductFragment(),
+            new CartFragment(),
+            new FavoriteProductFragment(),
+            new UserProfileDetailFragment()
+    ));
 
-        @Override
-        public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
-            super.onCapabilitiesChanged(network, networkCapabilities);
-        }
-    };
+    private final List<Fragment> listOfUnconfirmedDestinations = new ArrayList<>(Arrays.asList(
+            new HomeFragment(),
+            new SearchProductFragment()
+    ));
 
-    private final MutableLiveData<Boolean> _isLogged = new MutableLiveData<>();
-
-    private FirebaseAuth.AuthStateListener authStateListener;
+    private final FirebaseAuth.AuthStateListener authStateListener
+            = firebaseAuth -> isLogged.setValue(firebaseAuth.getCurrentUser() != null);;
 
     private boolean backPressedOnce = false;
 
@@ -95,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ActivityMainBinding binding;
 
     private ViewPager2 viewPager;
+
+    private ViewPagerAdapter viewPagerAdapter;
 
     private TabLayout navigationBar;
 
@@ -111,6 +122,52 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @SuppressLint("NotifyDataSetChanged")
     private void initView() {
+        setupNetworkListener();
+
+        isLogged.observe(this, _isLogged -> {
+            if (_isLogged) {
+                viewPagerAdapter = new ViewPagerAdapter(
+                        getSupportFragmentManager(),
+                        getLifecycle(),
+                        listOfVerifiedDestinations
+                );
+                viewPager.setAdapter(viewPagerAdapter);
+                viewPagerAdapter.notifyDataSetChanged();
+                viewPager.setOffscreenPageLimit(listOfVerifiedDestinations.size());
+                presenter.addValueEventListener();
+                viewPager.setUserInputEnabled(false);
+            } else {
+                viewPagerAdapter = new ViewPagerAdapter(
+                        getSupportFragmentManager(),
+                        getLifecycle(),
+                        listOfUnconfirmedDestinations
+                );
+                viewPager.setAdapter(viewPagerAdapter);
+                viewPagerAdapter.notifyDataSetChanged();
+                viewPager.setOffscreenPageLimit(listOfUnconfirmedDestinations.size());
+                viewPager.setUserInputEnabled(false);
+            }
+        });
+
+        navigationBar = binding.bottomNavigation.getRoot();
+        viewPager = binding.viewPager;
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                navigationBar.getTabAt(position).select();
+            }
+        });
+
+        setupNavigation();
+
+        destinationChangedListener();
+
+        tabSelectedListener();
+    }
+
+    private void setupNetworkListener() {
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Kiểm tra tính khả dụng của mạng khi ứng dụng được khởi chạy
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
@@ -124,44 +181,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 binding.networkConnectionErrorView.shimmerLayout.startShimmerAnimation();
             }
         });
-
-        navigationBar = binding.bottomNavigation.getRoot();
-        viewPager = binding.viewPager;
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this.getLifecycle());
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setOffscreenPageLimit(5);
-
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                navigationBar.getTabAt(position).select();
-            }
-        });
-
-        viewPager.setUserInputEnabled(false);
-
-        setupNavigation();
-
-        authStateListener = firebaseAuth -> _isLogged.setValue(firebaseAuth.getCurrentUser() != null);
-
-        _isLogged.observe(this, _isLogged -> {
-            if (_isLogged) presenter.getDataOnNavigationBar();
-            if (_isLogged && navController.getCurrentDestination().getId() != R.id.firstFragment) {
-                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++)
-                    navController.popBackStack();
-                navController.navigate(R.id.firstFragment);
-            }
-
-            if (!_isLogged) {
-                navController.popBackStack(navController.getCurrentDestination().getId(), true);
-                navController.navigate(R.id.overviewFragment);
-            }
-        });
-
-        destinationChangedListener();
-
-        tabSelectedListener();
     }
 
     private void setupNavigation() {
@@ -173,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void destinationChangedListener() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             currentDestinationId = destination.getId();
-            boolean isStartDestination = currentDestinationId == navController.getGraph().getStartDestinationId();
+            boolean isStartDestination = currentDestinationId == controller.getGraph().getStartDestinationId();
 
             if (isStartDestination && navigationBar.getVisibility() == View.GONE)
                 AppAnimationState.setBottomNavigationBarState(navigationBar, this, true);
@@ -190,16 +209,29 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onStart();
         Log.d(TAG, "onStart: ");
         connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
-        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: ");
-        if (connectivityManager != null) connectivityManager.unregisterNetworkCallback(networkCallback);
-        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
+        connectivityManager.unregisterNetworkCallback(networkCallback);
+
         EventBus.getDefault().unregister(this);
     }
 
@@ -265,9 +297,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 viewPager.setCurrentItem(position);
-                if (position == 3) {
-                    presenter.viewedFavoritesList(true);
-                }
+                if (position == 3) presenter.viewedFavoritesList(true);
                 int res = 0;
                 switch (position) {
                     case 0:
@@ -322,16 +352,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public static class ViewPagerAdapter extends FragmentStateAdapter {
 
-        private final List<Fragment> fragments = new ArrayList<>(Arrays.asList(
-                new HomeFragment(),
-                new SearchProductFragment(),
-                new CartFragment(),
-                new FavoriteProductFragment(),
-                new UserProfileDetailFragment()
-        ));
+        private final List<Fragment> fragments;
 
-        public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+        public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<Fragment> fragments) {
             super(fragmentManager, lifecycle);
+            this.fragments = fragments;
         }
 
         @NonNull

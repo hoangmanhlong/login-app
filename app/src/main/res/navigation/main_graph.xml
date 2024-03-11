@@ -15,7 +15,8 @@
         android:id="@+id/homeFragment"
         android:name="com.example.loginapp.view.fragments.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+    </fragment>
     <fragment
         android:id="@+id/productFragment"
         android:name="com.example.loginapp.view.fragments.product_detail.ProductDetailFragment"

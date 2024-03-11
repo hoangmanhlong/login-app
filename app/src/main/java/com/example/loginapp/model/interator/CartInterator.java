@@ -30,7 +30,7 @@ public class CartInterator {
     }
 
     public void getCartProductsFromFirebase() {
-        Query query = cartRef.child(user.getUid());
+        Query query = cartRef.child(FirebaseAuth.getInstance().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -12,6 +12,11 @@
         <variable
             name="homeFragment"
             type="com.example.loginapp.view.fragments.home.HomeFragment" />
+
+        <variable
+            name="isAskLoginVisible"
+            type="Boolean" />
+        <import type="android.view.View" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -34,6 +39,33 @@
                 android:animateLayoutChanges="true"
                 android:clipToPadding="false"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:visibility="@{isAskLoginVisible ? View.VISIBLE : View.GONE}"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_marginStart="@dimen/_14sdp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:text="@string/prompt_to_log_in" />
+
+                    <Button
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:onClick="@{() -> homeFragment.onLoginButtonClick()}"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/log_in"
+                        android:textColor="@android:color/holo_blue_light" />
+
+
+                </LinearLayout>
 
                 <include
                     android:id="@+id/userPlaceHolder"

@@ -1,11 +1,9 @@
 package com.example.loginapp.view.fragments.home;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -43,6 +42,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private FragmentHomeBinding binding;
 
+    private NavController navController;
+
     private final HomePresenter presenter = new HomePresenter(this);
 
     private final ProductAdapter recommendedAdapter = new ProductAdapter(this);
@@ -61,6 +62,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     SwipeRefreshLayout swipeRefreshLayout;
 
+    private boolean isRefreshing = false;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -69,6 +72,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
         initView();
     }
@@ -106,7 +110,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
         swipeRefreshLayout = binding.homeSwipe;
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (swipeRefreshLayout.isRefreshing()) presenter.getListProductFromNetwork();
+            if (!isRefreshing) {
+                isRefreshing = true;
+                presenter.getListProductFromNetwork();
+            }
         });
     }
 
@@ -128,6 +135,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void showDiscountProducts(List<Product> products) {
         discountAdapter.submitList(products);
         isDiscountProductsLoading(false);
+    }
+
+    public void onLoginButtonClick() {
+        navController.navigate(R.id.loginFragment);
     }
 
     @Override
@@ -223,6 +234,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         }
     }
 
+    @Override
+    public void showAskLogin(boolean visible) {
+        binding.setIsAskLoginVisible(visible);
+    }
 
     public void onExpandRecommendProductsButtonClick() {
         navigateToExpandedProductsFragment(presenter.recommendedProducts, R.string.recommended_for_you);
@@ -250,6 +265,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void refreshInvisible() {
+        isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
     }
 

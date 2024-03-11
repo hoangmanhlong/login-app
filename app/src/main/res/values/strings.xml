@@ -34,6 +34,7 @@
     <string name="discounted_products_label">Discounted over 10%</string>
     <string name="recommended_for_you">Recommended for you</string>
     <string name="bestseller">Best selling</string>
+    <string name="prompt_to_log_in">Log in to use smarteshop\'s services now</string>
 
 <!--    Bottom Sheet Screen-->
     <string name="quantity">Quantity</string>

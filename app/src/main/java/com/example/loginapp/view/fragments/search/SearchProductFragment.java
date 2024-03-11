@@ -65,9 +65,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            initView();
-        }
+        initView();
     }
 
     @SuppressLint("ClickableViewAccessibility")

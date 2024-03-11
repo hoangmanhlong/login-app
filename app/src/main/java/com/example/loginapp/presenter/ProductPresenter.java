@@ -8,6 +8,7 @@ import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.ProductInterator;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.view.fragments.product_detail.ProductView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class ProductPresenter implements ProductListener {
 
     private List<Product> similarProducts = new ArrayList<>();
 
+    private final boolean authenticated;
+
     public void initData() {
         if (comments.isEmpty()) getComments();
         else view.getComments(comments);
@@ -43,17 +46,20 @@ public class ProductPresenter implements ProductListener {
     public void setProduct(Product product) {
         this.product = product;
         view.bindProduct(product);
-        interator.isFavoriteProduct(product);
+        if (authenticated) interator.isFavoriteProduct(product);
     }
 
     public ProductPresenter(ProductView view) {
         this.view = view;
+        authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
 
     public void updateFavorite() {
-        if (isFavorite) interator.removeFavoriteProduct(product.getId());
-        else interator.saveFavoriteProduct(product);
+        if (authenticated) {
+            if (isFavorite) interator.removeFavoriteProduct(product.getId());
+            else interator.saveFavoriteProduct(product);
+        }
     }
 
     public void addProductToCart() {

@@ -30,4 +30,6 @@ public interface HomeView {
     void getBestsellerProducts(List<Product> products);
 
     void setShowUserView(Boolean show);
+
+    void showAskLogin(boolean visible);
 }

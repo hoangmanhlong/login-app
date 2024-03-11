@@ -7,28 +7,36 @@ import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainInteractor {
 
     private final MainListener listener;
 
+    private final ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            listener.getNumberOfProductInShoppingCart((int) snapshot.getChildrenCount(), !snapshot.exists());
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+    private final DatabaseReference cartRef = Constant.cartRef;
+
     public MainInteractor(MainListener listener) {
         this.listener = listener;
     }
 
-    public void getNumberOfShoppingCart() {
-        Constant.cartRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        listener.getNumberOfProductInShoppingCart((int) snapshot.getChildrenCount(), !snapshot.exists());
-                    }
+    public void addValueEventListener() {
+        cartRef.addValueEventListener(valueEventListener);
+    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+    public void removeValueEventListener() {
+        cartRef.removeEventListener(valueEventListener);
     }
 }

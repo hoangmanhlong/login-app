@@ -38,12 +38,15 @@ public class SearchPresenter implements SearchListener {
 
     public List<Product> products = new ArrayList<>();
 
+    private final boolean authenticated;
+
     public SearchPresenter(SearchView view) {
         this.view = view;
+        authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     public void initData() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (authenticated) {
             if (searchHistories.isEmpty()) getSearchHistories();
             else {
                 view.notifyItemAdded(searchHistories);

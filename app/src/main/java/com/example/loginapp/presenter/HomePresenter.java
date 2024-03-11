@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInterator;
@@ -34,12 +32,16 @@ public class HomePresenter implements HomeListener {
 
     public UserData currentUserData;
 
+    private final boolean authenticated;
+
     public HomePresenter(HomeView view) {
         this.view = view;
+        authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     public void initData() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)  {
+        view.showAskLogin(!authenticated);
+        if (authenticated) {
             if (currentUserData == null) getUserData();
             else checkUser(currentUserData);
         } else {
@@ -92,17 +94,15 @@ public class HomePresenter implements HomeListener {
     @Override
     public void getProductsFromAPI(List<Product> products) {
         this.products = products;
-        processProducts(products);
+        productClassification(products);
     }
 
-    private void processProducts(List<Product> products) {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)
-            interator.getFavoriteProductFromFirebase();
+    private void productClassification(List<Product> products) {
+        if (authenticated) interator.getFavoriteProductFromFirebase();
         else {
             List<Product> tempProducts = new ArrayList<>(this.products);
             Collections.shuffle(tempProducts);
-            recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 20));
-            view.isRecommendedProductsLoading(false);
+            recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 30));
             view.showRecommendedProducts(recommendedProducts);
         }
         getTopChartsProducts(products);
@@ -117,6 +117,7 @@ public class HomePresenter implements HomeListener {
     private void getDiscountProducts(List<Product> products) {
         discountProducts = products.stream().filter(v -> v.getDiscountPercentage() > 12.00).collect(Collectors.toList());
         view.showDiscountProducts(discountProducts);
+        view.refreshInvisible();
     }
 
     @Override

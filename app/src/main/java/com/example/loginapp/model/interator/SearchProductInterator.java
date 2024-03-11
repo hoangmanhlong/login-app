@@ -67,6 +67,7 @@ public class SearchProductInterator {
 
     public void getSearchHistories() {
 
+        assert currentUser != null;
         Query query = searchHistoriesRef.child(currentUser.getUid());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {

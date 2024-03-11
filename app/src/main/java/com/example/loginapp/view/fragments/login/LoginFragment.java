@@ -14,7 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentLoginBinding;
@@ -31,6 +33,8 @@ public class LoginFragment extends Fragment implements LoginView {
     private FragmentLoginBinding binding;
 
     private final LoginPresenter presenter = new LoginPresenter(this);
+
+    private NavController navController;
 
     private Dialog dialog;
 
@@ -54,6 +58,7 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.setLoginFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
@@ -120,7 +125,7 @@ public class LoginFragment extends Fragment implements LoginView {
     }
 
     public void goRegisterScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_registerFragment);
+        navController.navigate(R.id.action_global_registerFragment);
     }
 
     private void loginWithEmailButtonObserver() {
@@ -146,7 +151,12 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void isLoginSuccess(boolean isSuccess) {
         dialog.dismiss();
-        if (!isSuccess) binding.tvLoginFailed.setVisibility(View.VISIBLE);
+        if (isSuccess) {
+            navController.popBackStack();
+            navController.navigate(R.id.firstFragment);
+        } else {
+            binding.tvLoginFailed.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

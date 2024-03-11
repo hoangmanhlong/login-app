@@ -95,6 +95,8 @@
     <string name="discounted_products_label">Giảm giá trên 10%</string>
     <string name="recommended_for_you">Đề xuất cho bạn</string>
     <string name="bestseller">Bán chạy nhất</string>
+    <string name="prompt_to_log_in">Đăng nhập để sử dụng dịch vụ của smarteshop ngay</string>
+
 
     <!--    Bottom Sheet Screen-->
     <string name="quantity">Số lượng</string>

@@ -32,9 +32,13 @@ public class MainPresenter implements MainListener {
         getWishlistStatus();
     }
 
-    public void getDataOnNavigationBar() {
-        interactor.getNumberOfShoppingCart();
+    public void addValueEventListener() {
         getWishlistStatus();
+        interactor.addValueEventListener();
+    }
+
+    public void removeValueEventListener() {
+        interactor.removeValueEventListener();
     }
 
     @Override

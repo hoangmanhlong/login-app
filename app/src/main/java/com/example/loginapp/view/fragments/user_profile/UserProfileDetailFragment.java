@@ -50,7 +50,11 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
         new MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
                 .setTitle(R.string.logout)
                 .setMessage(R.string.logout_message)
-                .setPositiveButton(R.string.ok, (dialog, which) -> FirebaseAuth.getInstance().signOut())
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut();
+                    navController.popBackStack(navController.getCurrentDestination().getId(), true);
+                    navController.navigate(R.id.loginFragment);
+                })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
