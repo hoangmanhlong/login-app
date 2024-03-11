@@ -3,20 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/firstFragment">
+    app:startDestination="@id/mainFragment">
 
-    <fragment
-        android:id="@+id/firstFragment"
-        android:name="com.example.loginapp.view.fragments.start_destination.FirstFragment"
-        android:label="FirstFragment"
-        tools:layout="@layout/fragment_first" />
-
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.loginapp.view.fragments.home.HomeFragment"
-        android:label="HomeFragment"
-        tools:layout="@layout/fragment_home">
-    </fragment>
     <fragment
         android:id="@+id/productFragment"
         android:name="com.example.loginapp.view.fragments.product_detail.ProductDetailFragment"
@@ -37,38 +25,7 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
-    <fragment
-        android:id="@+id/searchProductFragment"
-        android:name="com.example.loginapp.view.fragments.search.SearchProductFragment"
-        android:label="SearchProductFragment"
-        tools:layout="@layout/fragment_search_product" />
-    <fragment
-        android:id="@+id/cartFragment"
-        android:name="com.example.loginapp.view.fragments.cart.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart">
-        <action
-            android:id="@+id/action_cartFragment_to_checkoutInfoFragment"
-            app:destination="@id/checkoutInfoFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-        <action
-            android:id="@+id/action_cartFragment_to_selectVoucherFragment"
-            app:destination="@id/selectVoucherFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/favoriteProductFragment"
-        android:name="com.example.loginapp.view.fragments.favorite_product.FavoriteProductFragment"
-        android:label="fragment_favorite_product"
-        tools:layout="@layout/fragment_favorite_product" />
-    <fragment
-        android:id="@+id/userProfileFragment"
-        android:name="com.example.loginapp.view.fragments.user_profile.UserProfileDetailFragment"
-        android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile_detail">
-    </fragment>
+
     <fragment
         android:id="@+id/coinsRewardFragment"
         android:name="com.example.loginapp.view.fragments.coins.CoinsRewardFragment"
@@ -121,17 +78,7 @@
         android:id="@+id/orderSuccessFragment"
         android:name="com.example.loginapp.view.fragments.checkout.OrderSuccessFragment"
         android:label="OrderSuccessFragment"
-        tools:layout="@layout/fragment_order_success">
-        <action
-            android:id="@+id/action_orderSuccessFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_order_success"/>
     <fragment
         android:id="@+id/voucherFragment"
         android:name="com.example.loginapp.view.fragments.voucher.VoucherFragment"
@@ -207,21 +154,19 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.loginapp.view.fragments.register.RegisterFragment"
         android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register">
-        <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            app:popUpTo="@id/loginFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_register"/>
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.example.loginapp.view.fragments.overview.OverviewFragment"
@@ -234,6 +179,13 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_overviewFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
     </fragment>
 
     <fragment
@@ -293,12 +245,23 @@
         app:exitAnim="@anim/to_left"
         app:popEnterAnim="@anim/from_left"
         app:popExitAnim="@anim/to_right" />
-    <action
-        android:id="@+id/action_global_registerFragment"
-        app:destination="@id/registerFragment"
-        app:enterAnim="@anim/from_right"
-        app:exitAnim="@anim/to_left"
-        app:popEnterAnim="@anim/from_left"
-        app:popExitAnim="@anim/to_right" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.loginapp.view.fragments.main_fragment.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_productFragment"
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/selectLanguageFragment"
+        android:name="com.example.loginapp.view.fragments.select_language.SelectLanguageFragment"
+        android:label="fragment_select_language"
+        tools:layout="@layout/fragment_select_language" />
 
 </navigation>

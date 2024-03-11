@@ -48,6 +48,6 @@ public class OverviewFragment extends Fragment {
     }
 
     public void onCreateAccountBtn() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_global_registerFragment);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_overviewFragment_to_registerFragment);
     }
 }

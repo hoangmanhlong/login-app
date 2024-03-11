@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +85,9 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     public void onChangeLanguageClick() {
-        presenter.changeLanguage();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constant.IS_VIETNAMESE_LANGUAGE, presenter.isVietnamese());
+        navController.navigate(R.id.selectLanguageFragment, bundle);
     }
 
     public void goVoucherScreen() {
@@ -94,6 +97,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     public void goOrdersScreen() {
         navController.navigate(R.id.ordersFragment);
     }
+
 
     public void goShippingAddressesScreen() {
         navController.navigate(R.id.deliveryAddressFragment);

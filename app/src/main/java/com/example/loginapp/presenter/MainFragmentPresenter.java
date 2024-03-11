@@ -4,21 +4,16 @@ import com.example.loginapp.App;
 import com.example.loginapp.data.local.AppSharedPreferences;
 import com.example.loginapp.model.interator.MainInteractor;
 import com.example.loginapp.model.listener.MainListener;
-import com.example.loginapp.view.activities.MainView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.loginapp.view.fragments.main_fragment.MainFragmentView;
 
-public class MainPresenter implements MainListener {
-
-//    private final String TAG = MainPresenter.class.getName();
-
-    private final MainView view;
+public class MainFragmentPresenter implements MainListener {
+    private final MainFragmentView view;
 
     private final MainInteractor interactor = new MainInteractor(this);
 
     private final AppSharedPreferences sharedPreferences;
 
-    public MainPresenter(MainView view) {
+    public MainFragmentPresenter(MainFragmentView view) {
         this.view = view;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }

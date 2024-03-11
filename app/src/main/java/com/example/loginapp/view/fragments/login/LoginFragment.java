@@ -125,7 +125,7 @@ public class LoginFragment extends Fragment implements LoginView {
     }
 
     public void goRegisterScreen() {
-        navController.navigate(R.id.action_global_registerFragment);
+        navController.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 
     private void loginWithEmailButtonObserver() {
@@ -153,7 +153,7 @@ public class LoginFragment extends Fragment implements LoginView {
         dialog.dismiss();
         if (isSuccess) {
             navController.popBackStack();
-            navController.navigate(R.id.firstFragment);
+            navController.navigate(R.id.mainFragment);
         } else {
             binding.tvLoginFailed.setVisibility(View.VISIBLE);
         }

@@ -1,9 +1,12 @@
 package com.example.loginapp.model.entity;
 
+import androidx.annotation.Keep;
+
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.List;
 
+@Keep
 public class Product implements Serializable {
 
     private int id;

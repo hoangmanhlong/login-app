@@ -48,11 +48,8 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         interator.getUserData();
     }
 
-
-    public void changeLanguage() {
-        sharedPreferences.setLanguage(!isVietnamese);
-        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(isVietnamese ? "en-US" : "vi");
-        AppCompatDelegate.setApplicationLocales(appLocale);
+    public boolean isVietnamese() {
+        return isVietnamese;
     }
 
     public void initData() {

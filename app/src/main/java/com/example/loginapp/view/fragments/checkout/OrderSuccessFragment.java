@@ -8,14 +8,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentOrderSuccessBinding;
 
 public class OrderSuccessFragment extends Fragment {
 
     private FragmentOrderSuccessBinding binding;
+
+    private NavController navController;
 
     @Nullable
     @Override
@@ -27,10 +29,11 @@ public class OrderSuccessFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
     }
 
     public void onBackHomeScreen() {
-        NavHostFragment.findNavController(this).popBackStack(R.id.firstFragment, false);
+        navController.popBackStack(navController.getGraph().getStartDestinationId(), false);
     }
 }

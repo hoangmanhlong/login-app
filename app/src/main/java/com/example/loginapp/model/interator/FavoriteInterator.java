@@ -25,7 +25,7 @@ public class FavoriteInterator {
     }
 
     public void getFavoriteProductFromFirebase() {
-        Query query = Constant.favoriteProductRef.child(user.getUid());
+        Query query = Constant.favoriteProductRef.child(FirebaseAuth.getInstance().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

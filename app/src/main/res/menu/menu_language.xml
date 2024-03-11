@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_vietnam"
+        android:icon="@drawable/vietnam"
+
+        android:title="@string/vietnam" />
+
+    <item
+        android:id="@+id/menu_english"
+        android:icon="@drawable/united_kingdom"
+        android:title="@string/english" />
+</menu>
