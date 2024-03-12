@@ -3,6 +3,7 @@ package com.example.loginapp.view.fragments.user_profile;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
         navController = NavHostFragment.findNavController(this);
         binding.setProfileFragment(this);
         presenter.initData();
+        Log.d(TAG, "onViewCreated: ");
     }
 
     public void logOut() {

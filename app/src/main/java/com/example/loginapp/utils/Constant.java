@@ -67,6 +67,8 @@ public final class Constant {
 
     public static final String MY_VOUCHER_REF_NAME = "my_voucher";
 
+    public static final String IS_FIRST_TIME = "is_first_time";
+
     public static final int ShippingCost = 200;
 
     public static final DatabaseReference userRef =

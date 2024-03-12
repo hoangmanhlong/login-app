@@ -1,11 +1,9 @@
 package com.example.loginapp.presenter;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.example.loginapp.view.fragments.login.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,17 +25,10 @@ public class LoginPresenter {
             view.isLoading(true);
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(activity, task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            if (user != null) {
-                                view.isLoginSuccess(true); // Truyền userId khi đăng nhập thành công
-                            } else {
-                                view.isLoginSuccess(false);
-                            }
-                            Log.d(TAG, "loginWithEmail: " +  (user != null));
-                        } else {
-                            view.isLoginSuccess(false); // Truyền null khi đăng nhập thất bại
-                        }
+                        if (task.isSuccessful())
+                            view.isLoginSuccess(FirebaseAuth.getInstance().getCurrentUser() != null);
+                        else
+                            view.isLoginSuccess(false);
                     })
                     .addOnFailureListener(e -> view.onMessage(e.getMessage()));
         } else {

@@ -184,4 +184,11 @@
 
     <string name="select_language">Chọn ngôn ngữ</string>
 
+    <!--    Sign up screen-->
+    <string name="password_text_helper">Mật khẩu phải có độ dài lớn hơn 6 ký tự</string>
+    <string name="server_error">Lỗi máy chủ</string>
+    <string name="account_already_exists">Tài khoản đã tồn tại</string>
+    <string name="database_error">Lỗi máy chủ</string>
+    <string name="loading___">Đang tải…</string>
+
 </resources>

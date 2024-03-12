@@ -6,7 +6,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -77,7 +76,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         navController = NavHostFragment.findNavController(this);
         binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
         initView();
-        Log.d(TAG, "HomeFragment onViewCreated: ");
+        Log.d(TAG, "onViewCreated: ");
     }
 
     @SuppressLint("ResourceAsColor")
@@ -118,38 +117,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
                 presenter.getListProductFromNetwork();
             }
         });
-
-        RecyclerView.OnItemTouchListener listener = new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                int action = e.getAction();
-                if (rv.canScrollHorizontally(RecyclerView.FOCUS_FORWARD)) {
-                    switch (action) {
-                        case MotionEvent.ACTION_MOVE:
-                            rv.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-                    }
-                    return false;
-                } else {
-                    switch (action) {
-                        case MotionEvent.ACTION_MOVE:
-                            rv.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-                    rv.removeOnItemTouchListener(this);
-                    return true;
-                }
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
-        };
-
-        recommendedRecyclerview.addOnItemTouchListener(listener);
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -313,6 +280,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(requireParentFragment()).navigate(R.id.action_mainFragment_to_productFragment, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
     }
 }

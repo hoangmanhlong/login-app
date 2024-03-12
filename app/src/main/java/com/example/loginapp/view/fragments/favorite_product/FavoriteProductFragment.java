@@ -3,6 +3,7 @@ package com.example.loginapp.view.fragments.favorite_product;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import java.util.List;
 
 public class FavoriteProductFragment extends Fragment implements FavoriteView, FavoriteItemClickListener {
 
+    private final String TAG = getClass().getSimpleName();
+
     private final FavoritePresenter presenter = new FavoritePresenter(this);
 
     private FragmentFavoriteProductBinding binding;
@@ -47,6 +50,7 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        Log.d(TAG, "onViewCreated: ");
     }
 
     private void initView() {

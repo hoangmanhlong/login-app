@@ -23,7 +23,6 @@ import com.example.loginapp.view.fragments.search.SearchProductFragment;
 import com.example.loginapp.view.fragments.user_profile.UserProfileDetailFragment;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,15 +66,20 @@ public class MainFragment extends Fragment implements MainFragmentView {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d(TAG, "onHiddenChanged: ");
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated: ");
+        Log.d("viewpager", this + "onViewCreated: ");
         viewPager = binding.viewPager;
         tabLayout = binding.tabLayout;
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)
-            viewPager.setAdapter(new ViewPagerAdapter(this, listOfVerifiedDestinations));
-        else viewPager.setAdapter(new ViewPagerAdapter(this, listOfUnconfirmedDestinations));
+        presenter.initData();
         viewPager.setOffscreenPageLimit(5);
+        viewPager.setUserInputEnabled(false);
         tabSelectedListener();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -182,6 +186,12 @@ public class MainFragment extends Fragment implements MainFragmentView {
         TabLayout.Tab favoritesListTab = tabLayout.getTabAt(3);
         if (hasNewProduct) favoritesListTab.getOrCreateBadge();
         else favoritesListTab.removeBadge();
+    }
+
+    @Override
+    public void setAdapter(boolean logged) {
+        if (logged) viewPager.setAdapter(new ViewPagerAdapter(this, listOfVerifiedDestinations));
+        else viewPager.setAdapter(new ViewPagerAdapter(this, listOfUnconfirmedDestinations));
     }
 
     public static class ViewPagerAdapter extends FragmentStateAdapter {

@@ -1,6 +1,5 @@
 package com.example.loginapp.view.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -9,6 +8,7 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setupNetworkListener();
         setupNavigation();
+        destinationChangedListener();
     }
 
     private void setupNetworkListener() {
@@ -97,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
     }
 
-//    private void destinationChangedListener() {
-//        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-//            currentDestinationId = destination.getId();
-//            boolean isStartDestination = currentDestinationId == controller.getGraph().getStartDestinationId();
-//
+    private void destinationChangedListener() {
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            Log.d(TAG, "getPreviousBackStackEntry: " + navController.getPreviousBackStackEntry());
+            Log.d(TAG, "getCurrentDestination: " + controller.getCurrentDestination());
+
 //            if (isStartDestination && navigationBar.getVisibility() == View.GONE)
 //                AppAnimationState.setBottomNavigationBarState(navigationBar, this, true);
 //
@@ -109,33 +110,22 @@ public class MainActivity extends AppCompatActivity {
 //                AppAnimationState.setBottomNavigationBarState(navigationBar, this, false);
 //
 //            binding.setIsStartDestination(isStartDestination);
-//        });
-//    }
+        });
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
         connectivityManager.unregisterNetworkCallback(networkCallback);
     }
-
 
 //    public void showPopupDialog() {
 //        Dialog dialog = new Dialog(this);

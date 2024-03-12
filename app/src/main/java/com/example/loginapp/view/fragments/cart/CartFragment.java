@@ -58,6 +58,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
         initView();
+        Log.d(TAG, "onViewCreated: ");
     }
 
     @Override
@@ -73,7 +74,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         EventBus.getDefault().unregister(this);
         MessageVoucherSelected messageVoucherSelected =
                 EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
-        if (messageVoucherSelected != null) EventBus.getDefault().removeStickyEvent(messageVoucherSelected);
+        if (messageVoucherSelected != null)
+            EventBus.getDefault().removeStickyEvent(messageVoucherSelected);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -143,7 +145,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     @Override
     public void setCheckAllChecked(boolean isChecked) {
-        binding.checkAllCheckbox.setChecked(isChecked);
+        binding.selectAllCheckbox.setChecked(isChecked);
     }
 
     @Override
@@ -167,11 +169,11 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     @Override
     public void isCheckAllCheckboxChecked(Boolean checked) {
-        binding.checkAllCheckbox.setChecked(checked);
+        binding.selectAllCheckbox.setChecked(checked);
     }
 
     public void onCheckboxAllClick() {
-        presenter.updateCheckboxAllSelected(binding.checkAllCheckbox.isChecked());
+        presenter.updateCheckboxAllSelected(binding.selectAllCheckbox.isChecked());
     }
 
     @Override

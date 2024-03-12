@@ -5,4 +5,6 @@ public interface MainFragmentView {
     void bindNumberOfProductInShoppingCart(int number, boolean isShoppingCartEmpty);
 
     void hasNewProductInFavoritesList(boolean hasNewProduct);
+
+    void setAdapter(boolean logged);
 }

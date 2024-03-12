@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
@@ -67,11 +66,16 @@ public class LoginFragment extends Fragment implements LoginView {
         btRequestOtp = binding.btRequestOtp;
         etPhoneNumber = binding.etPhoneNumber;
         editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
-        loginWithEmailButton.setEnabled(!editTexts[0].getText().toString().trim().isEmpty() && !editTexts[1].getText().toString().trim().isEmpty());
+        loginWithEmailButton.setEnabled(hasValidEmailAndPassword());
         btRequestOtp.setEnabled(!etPhoneNumber.getText().toString().trim().isEmpty());
         loginWithEmailButtonObserver();
         phoneNumberTextViewListener();
 //        getDataShared();
+    }
+
+    private boolean hasValidEmailAndPassword() {
+        return !binding.emailTextInputEditText.getText().toString().trim().isEmpty() &&
+                !binding.passwordTextInputEditText.getText().toString().trim().isEmpty();
     }
 
     private void phoneNumberTextViewListener() {
@@ -170,9 +174,8 @@ public class LoginFragment extends Fragment implements LoginView {
     }
 
     public void onLoginPhoneNumberClick() {
-        String phoneNumber = binding.etPhoneNumber.getText().toString();
         Bundle bundle = new Bundle();
-        bundle.putString(Constant.PHONE_NUMBER_KEY, phoneNumber);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_loginFragment_to_verificationFragment, bundle);
+        bundle.putString(Constant.PHONE_NUMBER_KEY, presenter.getPhoneNumber());
+        navController.navigate(R.id.action_loginFragment_to_verificationFragment, bundle);
     }
 }

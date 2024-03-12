@@ -1,11 +1,10 @@
 package com.example.loginapp.presenter;
 
-import android.app.Activity;
-
 import com.example.loginapp.model.interator.RegisterInterator;
 import com.example.loginapp.model.listener.RegisterListener;
 import com.example.loginapp.view.fragments.register.RegisterView;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,28 +18,54 @@ public class RegisterPresenter implements RegisterListener {
 
     private String password;
 
+    private boolean isEmailValid = false;
+
+    private boolean isPasswordValid = false;
+
+    private boolean isConfirmPassword = false;
+
     public RegisterPresenter(RegisterView view) {
         this.view = view;
     }
 
-    public void register(String email, String password, String confirmPassword, Activity activity) {
-        if (!isValidEmail(email)) {
-            view.onMessage("Email format is wrong, Please re-enter");
-        } else if (!isPasswordValid(password)) {
-            view.onMessage("Password must be more than 6 characters");
-        } else if (!password.equals(confirmPassword)) {
-            view.onMessage("Passwords are not duplicates");
-        } else {
-            view.isLoading(true);
-            interator.register(email, password, activity);
-            this.email = email;
-            this.password = password;
-        }
+    public void register() {
+        view.isLoading(true);
+        interator.register(email, password);
+    }
+
+    public void setEmail(String email) {
+        isEmailValid = isValidEmail(email);
+        this.email = email;
+        view.isValidEmail(isEmailValid);
+        view.isRegisterButtonVisible(isRegisterButtonVisible());
+    }
+
+    public void setPassword(String password) {
+        isPasswordValid = password.length() >= 6;
+        this.password = password;
+        view.isValidPassword(isPasswordValid);
+        view.isRegisterButtonVisible(isRegisterButtonVisible());
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        isConfirmPassword = Objects.equals(confirmPassword, password) && confirmPassword.length() >= 6;
+        view.isValidConfirmPassword(isPasswordValid);
+        view.isRegisterButtonVisible(isRegisterButtonVisible());
+    }
+
+    private boolean isRegisterButtonVisible() {
+        return isEmailValid && isPasswordValid && isConfirmPassword;
     }
 
     @Override
-    public void isSignupSuccess(Boolean isSuccess) {
+    public void isSignupSuccess() {
         view.isLoading(false);
+    }
+
+    @Override
+    public void onMessage(int message) {
+        view.isLoading(false);
+        view.onMessage(message);
     }
 
     private boolean isValidEmail(String email) {
@@ -51,9 +76,5 @@ public class RegisterPresenter implements RegisterListener {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() >= 6;
     }
 }

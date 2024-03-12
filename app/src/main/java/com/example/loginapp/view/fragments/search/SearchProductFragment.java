@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private final SearchPresenter presenter = new SearchPresenter(this);
 
+    private final String TAG = this.toString();
+
     private FragmentSearchProductBinding binding;
 
     private final SearchSuggestAdapter searchSuggestAdapter = new SearchSuggestAdapter(this);
@@ -66,6 +69,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         initView();
+        Log.d(TAG, "onViewCreated: ");
     }
 
     @SuppressLint("ClickableViewAccessibility")

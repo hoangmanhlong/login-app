@@ -40,4 +40,14 @@ public class AppSharedPreferences {
     public boolean getLanguage() {
         return preferences.getBoolean(Constant.IS_VIETNAMESE_LANGUAGE, false);
     }
+
+//    public void usedForTheFirstTime() {
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean(Constant.IS_FIRST_TIME, true);
+//        editor.apply();
+//    }
+//
+//    public boolean usedForTheFirstTime() {
+//
+//    }
 }

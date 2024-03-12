@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="message"
+            type="String" />
+
+        <variable
+            name="isSignUpStateMessageVisible"
+            type="Boolean" />
 
         <variable
             name="registerFragment"
@@ -10,10 +20,10 @@
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_1000">
+        android:background="@color/gray_1000"
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,15 +59,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:src="@drawable/image_sign_up" />
+            android:src="@drawable/image_sign_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:animateLayoutChanges="true"
             android:id="@+id/linear_input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,6 +81,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -77,11 +89,12 @@
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
                 app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeColor="@android:color/holo_blue_light"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/email">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_input"
+                    android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
@@ -91,6 +104,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_16sdp"
@@ -99,11 +113,13 @@
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
                 app:boxCornerRadiusTopStart="30dp"
+                app:helperText="@string/password_text_helper"
+                app:boxStrokeColor="@android:color/holo_blue_light"
                 app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/lock">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password_input"
+                    android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionNext"
@@ -113,6 +129,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirmTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
@@ -120,11 +137,12 @@
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
                 app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeColor="@android:color/holo_blue_light"
                 app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/ic_key">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/confirm_password_input"
+                    android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="actionDone"
@@ -133,13 +151,24 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:fontFamily="@font/inter_regular"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:id="@+id/registerButton"
+            <TextView
+                android:padding="@dimen/_8sdp"
+                android:text="@{message}"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="@string/database_error"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:visibility="@{isSignUpStateMessageVisible ? View.VISIBLE : View.GONE}" />
+
+
+            <Button
+                android:id="@+id/btRegister"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:enabled="false"
-                android:layout_height="@dimen/_48sdp"
                 android:onClick="@{() -> registerFragment.onRegisterButtonClick()}"
                 android:text="@string/register" />
 

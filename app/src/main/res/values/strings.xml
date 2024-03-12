@@ -191,5 +191,12 @@
 
     <string name="select_language">Select language</string>
 
+<!--    Sign up screen-->
+    <string name="password_text_helper">Password must be longer than 6 characters</string>
+    <string name="server_error">Server Error</string>
+    <string name="account_already_exists">Account already exists</string>
+    <string name="database_error">Realtime database error</string>
+    <string name="loading___">Loading…</string>
+
 
 </resources>

@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.overview_slider_adapter.SliderAdapter;
@@ -22,6 +23,8 @@ public class OverviewFragment extends Fragment {
 
     private FragmentOverviewBinding binding;
 
+    private NavController navController;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class OverviewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setOverviewFragment(this);
+        navController = NavHostFragment.findNavController(this);
         SliderView sliderView = binding.sliderView;
         SliderAdapter adapter = new SliderAdapter();
         binding.sliderView.setSliderAdapter(adapter);
@@ -44,10 +48,10 @@ public class OverviewFragment extends Fragment {
     }
 
     public void goLoginScreen() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_overviewFragment_to_loginFragment);
+        navController.navigate(R.id.action_overviewFragment_to_loginFragment);
     }
 
     public void onCreateAccountBtn() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_overviewFragment_to_registerFragment);
+        navController.navigate(R.id.action_overviewFragment_to_registerFragment);
     }
 }

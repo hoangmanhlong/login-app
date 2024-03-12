@@ -1,5 +1,7 @@
 package com.example.loginapp.presenter;
 
+import android.util.Log;
+
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderProduct;
@@ -57,9 +59,18 @@ public class CartPresenter implements CartListener {
 
     @Override
     public void notifyItemAdded(FirebaseProduct product) {
-        basket.add(product);
-        updateUI();
-        view.bindProducts(basket);
+        boolean isDuplicate = false;
+        for (FirebaseProduct item : basket) {
+            if (item.getId() == product.getId()) {
+                isDuplicate = true;
+                break;
+            }
+        }
+        if (!isDuplicate) {
+            basket.add(product);
+            updateUI();
+            view.bindProducts(basket);
+        }
     }
 
     @Override
@@ -85,6 +96,7 @@ public class CartPresenter implements CartListener {
 
     @Override
     public void isCartEmpty() {
+        view.isCheckAllCheckboxChecked(false);
         view.isBasketEmpty(true);
     }
 
@@ -108,11 +120,17 @@ public class CartPresenter implements CartListener {
     private void updateUI() {
         if (basket.isEmpty()) {
             view.isBasketEmpty(true);
+            view.isCheckAllCheckboxChecked(false);
             return;
         }
 
         view.isBasketEmpty(false);
         selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
+        Log.d(TAG, "selectedProduct: " + selectedProduct.size());
+        Log.d(TAG, "basket: " + basket.size());
+        view.isCheckAllCheckboxChecked(selectedProduct.size() == basket.size());
+        view.showCheckoutView(!selectedProduct.isEmpty());
+        view.showCheckAllCheckbox(!basket.isEmpty());
         if (!selectedProduct.isEmpty()) {
             order.setOrderProducts(toOrdersProductList(selectedProduct));
 
@@ -123,9 +141,6 @@ public class CartPresenter implements CartListener {
             if (voucher != null) total = subtotal - (subtotal * voucher.getDiscountPercentage() / 100);
             view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
         }
-        view.isCheckAllCheckboxChecked(selectedProduct.size() == basket.size());
-        view.showCheckoutView(!selectedProduct.isEmpty());
-        view.showCheckAllCheckbox(!basket.isEmpty());
     }
 
     public void updateCheckboxAllSelected(Boolean checked) {
