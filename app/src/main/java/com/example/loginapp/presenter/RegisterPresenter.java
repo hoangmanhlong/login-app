@@ -1,16 +1,17 @@
 package com.example.loginapp.presenter;
 
+import androidx.annotation.StringRes;
+
 import com.example.loginapp.model.interator.RegisterInterator;
 import com.example.loginapp.model.listener.RegisterListener;
 import com.example.loginapp.view.fragments.register.RegisterView;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterPresenter implements RegisterListener {
 
-    private final RegisterInterator interator = new RegisterInterator(this);
+    private final RegisterInterator interator;
 
     private final RegisterView view;
 
@@ -22,10 +23,9 @@ public class RegisterPresenter implements RegisterListener {
 
     private boolean isPasswordValid = false;
 
-    private boolean isConfirmPassword = false;
-
     public RegisterPresenter(RegisterView view) {
         this.view = view;
+        interator = new RegisterInterator(this);
     }
 
     public void register() {
@@ -47,30 +47,24 @@ public class RegisterPresenter implements RegisterListener {
         view.isRegisterButtonVisible(isRegisterButtonVisible());
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        isConfirmPassword = Objects.equals(confirmPassword, password) && confirmPassword.length() >= 6;
-        view.isValidConfirmPassword(isPasswordValid);
-        view.isRegisterButtonVisible(isRegisterButtonVisible());
-    }
-
     private boolean isRegisterButtonVisible() {
-        return isEmailValid && isPasswordValid && isConfirmPassword;
+        return isEmailValid && isPasswordValid;
     }
 
     @Override
-    public void isSignupSuccess() {
+    public void onSignupSuccess() {
         view.isLoading(false);
+        view.signupSuccess();
     }
 
     @Override
-    public void onMessage(int message) {
+    public void onSignupError(@StringRes int message) {
         view.isLoading(false);
         view.onMessage(message);
     }
 
     private boolean isValidEmail(String email) {
         String emailRegex =
-//            "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
                 "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                         + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(emailRegex);

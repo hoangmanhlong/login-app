@@ -32,13 +32,15 @@ public class SearchPresenter implements SearchListener {
 
     public boolean isShowSearchResult = false;
 
+    private final boolean authenticated;
+
     private static List<String> searchSuggestions = new ArrayList<>();
 
     public List<SearchHistory> searchHistories = new ArrayList<>();
 
     public List<Product> products = new ArrayList<>();
 
-    private final boolean authenticated;
+    private String query;
 
     public SearchPresenter(SearchView view) {
         this.view = view;
@@ -64,6 +66,10 @@ public class SearchPresenter implements SearchListener {
         else view.getSearchSuggestions(searchSuggestions);
     }
 
+    public void setQuery(String query) {
+        this.query = query;
+        view.clearQueryButtonVisible(!query.isEmpty());
+    }
 
     @SuppressLint("CheckResult")
     public void getSearchSuggestions() {
@@ -80,20 +86,11 @@ public class SearchPresenter implements SearchListener {
                 .subscribe(view::getSearchSuggestions);
     }
 
-    private void getProductNames(List<ProductName> productNames) {
-        List<String> name = new ArrayList<>();
-        for (ProductName productName : productNames)
-            name.add(productName.productName);
-        searchSuggestions = name;
-        Log.d(TAG, "getProductNames: " + searchSuggestions.size());
-        view.getSearchSuggestions(searchSuggestions);
-    }
-
     public void onSearchProduct(String query) {
         if (!query.isEmpty() && isValidFirebasePath(query)) {
             products.clear();
             interator.searchProduct(query);
-            interator.saveSearchHistory(query);
+            if (authenticated) interator.saveSearchHistory(query);
             view.hideSearchSuggestionsDropdown();
         } else {
             view.onMessage("Invalid information");

@@ -3,7 +3,7 @@ package com.example.loginapp.model.listener;
 import androidx.annotation.StringRes;
 
 public interface RegisterListener {
-    void isSignupSuccess();
+    void onSignupSuccess();
 
-    void onMessage(@StringRes int message);
+    void onSignupError(@StringRes int message);
 }

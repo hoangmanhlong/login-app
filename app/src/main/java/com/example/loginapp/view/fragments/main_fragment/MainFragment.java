@@ -66,15 +66,8 @@ public class MainFragment extends Fragment implements MainFragmentView {
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        Log.d(TAG, "onHiddenChanged: ");
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("viewpager", this + "onViewCreated: ");
         viewPager = binding.viewPager;
         tabLayout = binding.tabLayout;
         presenter.initData();
@@ -96,21 +89,25 @@ public class MainFragment extends Fragment implements MainFragmentView {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         NewProductInWishlistMessage message = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
         if (message != null) EventBus.getDefault().removeStickyEvent(message);
+        Log.d(TAG, "onDestroyView: ");
+        binding = null;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        presenter.addValueEventListener();
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        presenter.removeValueEventListener();
         EventBus.getDefault().unregister(this);
     }
 
@@ -202,7 +199,6 @@ public class MainFragment extends Fragment implements MainFragmentView {
             super(fragment);
             this.fragments = fragments;
         }
-
 
         @NonNull
         @Override

@@ -27,7 +27,7 @@ public final class Constant {
 
     public static final String DELIVERY_ADDRESS_KEY = "delivery_address_key";
 
-    private static final String USER_REF_NAME = "users";
+    private static final String USER_REF_NAME = "user_personal_information";
 
     public static final String STORAGE_USER_AVATAR_REF_NAME = "avatar";
 

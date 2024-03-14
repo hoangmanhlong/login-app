@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_bold"
-                android:text="OTP Verification"
+                android:text="@string/otp_verification"
                 android:textColor="@color/black_100"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_50sdp"
                     android:fontFamily="@font/inter_bold"
-                    android:text="Enter OTP"
+                    android:text="@string/enter_otp"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivOtp" />
@@ -99,10 +99,10 @@
                     tools:text="An 6 digit code has been sent to" />
 
                 <TextView
-                    android:layout_marginTop="@dimen/_4sdp"
                     android:id="@+id/tvPhoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/inter_regular"
                     android:includeFontPadding="false"
                     android:text="@{phoneNumber}"
@@ -286,28 +286,28 @@
                     app:layout_constraintTop_toBottomOf="@id/llNumberInput" />
 
                 <Button
-                    android:textSize="16sp"
                     android:id="@+id/btVerify"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_48sdp"
+                    android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="68dp"
                     android:onClick="@{() -> fragment.onVerifyButtonClick()}"
-                    android:text="Verify"
+                    android:text="@string/verify"
                     android:textAllCaps="false"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/llNumberInput" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_26sdp"
-                    android:background="?attr/selectableItemBackground"
+                <Button
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_46sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/inter_regular"
                     android:onClick="@{() -> fragment.onResendOTPButtonClick()}"
                     android:padding="@dimen/_8sdp"
-                    android:text="Resend OTP"
+                    android:text="@string/resend_otp"
                     android:textColor="@color/black_100"
                     android:textSize="16sp"
                     android:textStyle="bold"

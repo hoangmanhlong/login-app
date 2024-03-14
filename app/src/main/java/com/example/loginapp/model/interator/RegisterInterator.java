@@ -1,6 +1,7 @@
 package com.example.loginapp.model.interator;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -12,7 +13,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
+import java.util.HashMap;
+
 public class RegisterInterator {
+
+    private final String TAG = this.toString();
 
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -25,20 +30,23 @@ public class RegisterInterator {
     public void register(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
-                    // Successful registration logic (move database saving logic here)
                     String uid = mAuth.getUid();
-                    Constant.userRef.child(uid).setValue(new UserData(uid, email, password))
-                            .addOnCompleteListener(s -> listener.isSignupSuccess())
-                            .addOnFailureListener(e -> listener.onMessage(R.string.database_error)); // Use specific error message for database failures
+                    HashMap<String, Object> updates = new HashMap<>();
+                    updates.put(UserData.USERID, uid);
+                    updates.put(UserData.EMAIL, email);
+                    Constant.userRef.child(uid)
+                                    .updateChildren(updates);
+                    listener.onSignupSuccess();  // Clearer method name
+                    Log.d(TAG, "User registration successful.");  // Informative log message
                 })
                 .addOnFailureListener(e -> {
                     if (e instanceof FirebaseAuthUserCollisionException) {
-                        listener.onMessage(R.string.account_already_exists);
+                        listener.onSignupError(R.string.account_already_exists);  // Dedicated error handling
                     } else {
-                        listener.onMessage(R.string.server_error);
+                        listener.onSignupError(R.string.server_error);  // Dedicated error handling
                     }
+                    Log.e(TAG, "User registration failed: " + e.getMessage(), e);  // Detailed error logging
                 });
     }
-
 }
 

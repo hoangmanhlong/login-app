@@ -191,4 +191,16 @@
     <string name="database_error">Lỗi máy chủ</string>
     <string name="loading___">Đang tải…</string>
 
+    <!--    Verification Screen-->
+    <string name="resend_otp">Gửi lại OTP</string>
+    <string name="verify">Xác thực</string>
+    <string name="enter_otp">Nhập OTP</string>
+    <string name="otp_verification">Xác thực OTP</string>
+
+    <string name="edit">chỉnh sửa</string>
+
+<!--    Search Screen-->
+    <string name="recent_search">Tìm kiếm gần đây</string>
+
+
 </resources>

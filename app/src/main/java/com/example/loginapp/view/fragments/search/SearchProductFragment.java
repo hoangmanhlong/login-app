@@ -1,7 +1,10 @@
 package com.example.loginapp.view.fragments.search;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,14 +51,18 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private FragmentSearchProductBinding binding;
 
+    private InputMethodManager imm;
+
     private final SearchSuggestAdapter searchSuggestAdapter = new SearchSuggestAdapter(this);
 
     private final SearchProductAdapter searchProductAdapter = new SearchProductAdapter(this);
 
     private AutoCompleteTextView etQueryBox;
 
-    private final ArrayAdapter<String> arrayAdapter =
-            new ArrayAdapter<>(App.getInstance().getApplicationContext(), android.R.layout.simple_list_item_1);
+    private final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+            App.getInstance().getApplicationContext(),
+            android.R.layout.simple_list_item_1
+    );
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
@@ -68,8 +75,18 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
+        imm = (InputMethodManager) requireActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
         initView();
-        Log.d(TAG, "onViewCreated: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        View currentFocus = requireActivity().getCurrentFocus();
+        if (currentFocus != null)
+            if (imm.isAcceptingText())
+                imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -113,11 +130,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length() != 0) {
-                    binding.btClearQuery.setVisibility(View.VISIBLE);
-                } else {
-                    binding.btClearQuery.setVisibility(View.GONE);
-                }
+                presenter.setQuery(s.toString().trim());
+
             }
 
             @Override
@@ -127,9 +141,16 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         });
 
         presenter.initData();
-
         binding.etQuery.setOnClickListener(c -> etQueryBox.showDropDown());
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Auto Show KeyBoard when Fragment show on Screen
+        binding.etQuery.requestFocus(); // focus Query EditText
+        imm.showSoftInput(binding.etQuery, 0); // Hiển thị bàn phím cho EditText
     }
 
     @Override
@@ -154,6 +175,10 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     public void notifyItemChanged(int index) {
         searchSuggestAdapter.notifyItemChanged(index);
         searchSuggestAdapter.notifyDataSetChanged();
+    }
+
+    public void onSeeMoreRecommendedProductsViewClick() {
+
     }
 
     @Override
@@ -187,6 +212,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     @Override
     public void getSearchSuggestions(List<String> list) {
+        arrayAdapter.clear();
         arrayAdapter.addAll(list);
     }
 
@@ -201,6 +227,11 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
+    public void clearQueryButtonVisible(boolean visible) {
+        binding.setClearQueryButtonVisible(visible);
+    }
+
+    @Override
     public void onProductClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
@@ -209,6 +240,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     public void onClearQueryButtonClick() {
         binding.etQuery.setText("");
+        presenter.setQuery("");
     }
 
     @Override

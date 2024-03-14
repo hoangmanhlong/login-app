@@ -26,4 +26,6 @@ public interface SearchView {
     void hideSearchSuggestionsDropdown();
 
     void isSearchSuggestionViewVisible(boolean visible);
+
+    void clearQueryButtonVisible(boolean visible);
 }

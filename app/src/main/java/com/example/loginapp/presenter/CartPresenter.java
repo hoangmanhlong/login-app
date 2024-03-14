@@ -22,9 +22,11 @@ public class CartPresenter implements CartListener {
 
     private final CartView view;
 
-    public final List<FirebaseProduct> basket = new ArrayList<>();
+    public List<FirebaseProduct> basket = new ArrayList<>();
 
     public List<FirebaseProduct> selectedProduct = new ArrayList<>();
+
+    private boolean wasTakenForTheFirstTime = false;
 
     private final Order order = new Order();
 
@@ -33,9 +35,8 @@ public class CartPresenter implements CartListener {
     }
 
     public void initBasket() {
-        if (basket.isEmpty()) interator.getCartProductsFromFirebase();
-        else {
-            view.bindProducts(basket);
+        if (!basket.isEmpty() && wasTakenForTheFirstTime) {
+            view.bindBasket(basket);
             updateUI();
         }
     }
@@ -58,27 +59,11 @@ public class CartPresenter implements CartListener {
     }
 
     @Override
-    public void notifyItemAdded(FirebaseProduct product) {
-        boolean isDuplicate = false;
-        for (FirebaseProduct item : basket) {
-            if (item.getId() == product.getId()) {
-                isDuplicate = true;
-                break;
-            }
-        }
-        if (!isDuplicate) {
-            basket.add(product);
-            updateUI();
-            view.bindProducts(basket);
-        }
-    }
-
-    @Override
-    public void notifyItemChanged(FirebaseProduct product) {
-        int index = basket.indexOf(basket.stream().filter(p -> p.getId() == product.getId()).collect(Collectors.toList()).get(0));
-        basket.set(index, product);
+    public void getProductsFromShoppingCart(List<FirebaseProduct> products) {
+        this.basket = products;
+        wasTakenForTheFirstTime = true;
+        view.bindBasket(basket);
         updateUI();
-        view.notifyItemChanged(index);
     }
 
     @Override
@@ -86,13 +71,6 @@ public class CartPresenter implements CartListener {
         view.onMessage(message);
     }
 
-    @Override
-    public void notifyItemRemoved(FirebaseProduct product) {
-        int index = basket.indexOf(basket.stream().filter(p -> p.getId() == product.getId()).collect(Collectors.toList()).get(0));
-        basket.remove(index);
-        updateUI();
-        view.notifyItemRemoved(index);
-    }
 
     @Override
     public void isCartEmpty() {
@@ -115,6 +93,14 @@ public class CartPresenter implements CartListener {
             view.setCheckAllChecked(false);
             interator.updateChecked(product.getId(), false);
         }
+    }
+
+    public void addShoppingCartValueEventListener() {
+        interator.addShoppingCartValueEventListener();
+    }
+
+    public void removeShoppingCartValueEventListener() {
+        interator.removeShoppingCartValueEventListener();
     }
 
     private void updateUI() {

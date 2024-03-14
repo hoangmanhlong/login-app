@@ -70,30 +70,6 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     private void showMenu(View v, @MenuRes int menuRes) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), v);
         popupMenu.getMenuInflater().inflate(menuRes, popupMenu.getMenu());
-//        if (popupMenu.getMenu() instanceof MenuBuilder) {
-//            MenuBuilder menuBuilder = (MenuBuilder) popupMenu.getMenu();
-//            menuBuilder.setOptionalIconsVisible(true);
-//            for (MenuItem item : menuBuilder.getVisibleItems()) {
-//
-//                float iconMarginPx = TypedValue.applyDimension(
-//                        TypedValue.COMPLEX_UNIT_DIP, (float) ICON_MARGIN, getResources().getDisplayMetrics());
-//                int iconMarginPxInt = (int) iconMarginPx;
-//
-//                if (item.getIcon() != null) {
-//                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-//                        item.setIcon(new InsetDrawable(item.getIcon(), iconMarginPxInt, 0, iconMarginPxInt, 0));
-//                    } else {
-//                        item.setIcon(new InsetDrawable(item.getIcon(), iconMarginPxInt, 0, iconMarginPxInt, 0) {
-//                            @Override
-//                            public int getIntrinsicWidth() {
-//                                return super.getIntrinsicWidth() + iconMarginPxInt + iconMarginPxInt;
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        }
-
         popupMenu.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.price_high_to_low) sortProductBy(SortStatus.PRICE_HIGH_TO_LOW);

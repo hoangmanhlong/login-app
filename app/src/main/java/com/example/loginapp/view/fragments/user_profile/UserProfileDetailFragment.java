@@ -1,7 +1,6 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class UserProfileDetailFragment extends Fragment implements UserProfileDetailView {
 
-    private final String TAG = this.toString();
+    private static final String TAG = UserProfileDetailFragment.class.getSimpleName();
 
     private final UserProfileDetailPresenter presenter = new UserProfileDetailPresenter(this);
 
@@ -46,17 +45,16 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
         navController = NavHostFragment.findNavController(this);
         binding.setProfileFragment(this);
         presenter.initData();
-        Log.d(TAG, "onViewCreated: ");
     }
 
-    public void logOut() {
+    public void onLogoutButtonClick() {
         new MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
                 .setTitle(R.string.logout)
                 .setMessage(R.string.logout_message)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     FirebaseAuth.getInstance().signOut();
                     navController.popBackStack(navController.getCurrentDestination().getId(), true);
-                    navController.navigate(R.id.loginFragment);
+                    navController.navigate(R.id.overviewFragment);
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
@@ -73,7 +71,18 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     @Override
-    public void bindNumberOfOrders(int numberOfProcessingOrder, int numberOfCompletedOrder, int numberOfCancelOrder, int numberOfReturnOrder) {
+    public void onDestroyView() {
+        super.onDestroyView();
+//        binding = null;
+    }
+
+    @Override
+    public void bindNumberOfOrders(
+            int numberOfProcessingOrder,
+            int numberOfCompletedOrder,
+            int numberOfCancelOrder,
+            int numberOfReturnOrder
+    ) {
         binding.tvNumberOfOrdersProcessing.setText(String.valueOf(numberOfProcessingOrder));
         binding.tvNumberOfOrdersCompleted.setText(String.valueOf(numberOfCompletedOrder));
         binding.tvNumberOfOrdersCancel.setText(String.valueOf(numberOfCancelOrder));
@@ -99,7 +108,6 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     public void goOrdersScreen() {
         navController.navigate(R.id.ordersFragment);
     }
-
 
     public void goShippingAddressesScreen() {
         navController.navigate(R.id.deliveryAddressFragment);

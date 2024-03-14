@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     private final NetworkRequest networkRequest = new NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build();
 
     private final ConnectivityManager.NetworkCallback networkCallback =
@@ -53,12 +51,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-    private final FirebaseAuth.AuthStateListener authStateListener
-            = firebaseAuth -> isLogged.setValue(firebaseAuth.getCurrentUser() != null);
+    private final FirebaseAuth.AuthStateListener authStateListener = firebaseAuth ->
+            isLogged.setValue(firebaseAuth.getCurrentUser() != null);
 
     private boolean backPressedOnce = false;
 
-    private final String TAG = MainActivity.class.getName();
+    private final String TAG = getClass().getSimpleName(); // More concise
 
     private NavController navController;
 
@@ -72,24 +70,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setupNetworkListener();
         setupNavigation();
-        destinationChangedListener();
+//        destinationChangedListener();
     }
 
     private void setupNetworkListener() {
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        // Kiểm tra tính khả dụng của mạng khi ứng dụng được khởi chạy
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         isConnected.postValue(activeNetwork != null);
         isConnected.observe(this, isConnected -> {
             binding.setIsConnected(isConnected);
-            if (isConnected) {
-                binding.networkConnectionErrorView.setVisibility(View.GONE);
-                binding.shimmerLayout.stopShimmerAnimation();
-            } else {
-                binding.networkConnectionErrorView.setVisibility(View.VISIBLE);
-                binding.shimmerLayout.startShimmerAnimation();
-            }
+            updateUiBasedOnConnectivity(isConnected);
         });
+    }
+
+    private void updateUiBasedOnConnectivity(boolean isConnected) {
+        if (isConnected) {
+            binding.networkConnectionErrorView.setVisibility(View.GONE);
+            binding.shimmerLayout.stopShimmerAnimation();
+        } else {
+            binding.networkConnectionErrorView.setVisibility(View.VISIBLE);
+            binding.shimmerLayout.startShimmerAnimation();
+        }
     }
 
     private void setupNavigation() {
@@ -98,20 +99,20 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
     }
 
-    private void destinationChangedListener() {
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            Log.d(TAG, "getPreviousBackStackEntry: " + navController.getPreviousBackStackEntry());
-            Log.d(TAG, "getCurrentDestination: " + controller.getCurrentDestination());
-
-//            if (isStartDestination && navigationBar.getVisibility() == View.GONE)
-//                AppAnimationState.setBottomNavigationBarState(navigationBar, this, true);
+//    private void destinationChangedListener() {
+//        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+//            Log.d(TAG, "getPreviousBackStackEntry: " + navController.getPreviousBackStackEntry());
+//            Log.d(TAG, "getCurrentDestination: " + controller.getCurrentDestination());
 //
-//            if (!isStartDestination && navigationBar.getVisibility() == View.VISIBLE)
-//                AppAnimationState.setBottomNavigationBarState(navigationBar, this, false);
-//
-//            binding.setIsStartDestination(isStartDestination);
-        });
-    }
+////            if (isStartDestination && navigationBar.getVisibility() == View.GONE)
+////                AppAnimationState.setBottomNavigationBarState(navigationBar, this, true);
+////
+////            if (!isStartDestination && navigationBar.getVisibility() == View.VISIBLE)
+////                AppAnimationState.setBottomNavigationBarState(navigationBar, this, false);
+////
+////            binding.setIsStartDestination(isStartDestination);
+//        });
+//    }
 
     @Override
     public void onStart() {

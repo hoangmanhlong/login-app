@@ -7,7 +7,6 @@ import com.example.loginapp.view.fragments.favorite_product.FavoriteView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FavoritePresenter implements FavoriteListener {
 
@@ -21,24 +20,18 @@ public class FavoritePresenter implements FavoriteListener {
         this.view = view;
     }
 
+    // Whether the list has been retrieved from the backend or not - Danh sách đã được lấy từ backend hay chưa
+    private boolean isChecked = false;
+
     public void initData() {
-        if (wishlist.isEmpty()) getFavoriteProducts();
-        else view.onItemAdded(wishlist);
-    }
-
-    private void getFavoriteProducts() {
-        interator.getFavoriteProductFromFirebase();
-    }
-
-    @Override
-    public void onItemAdded(Product product) {
-        wishlist.add(product);
-        wishlistState();
-        view.onItemAdded(wishlist);
-    }
-
-    private void wishlistState() {
-        view.isWishlistEmpty(wishlist.isEmpty());
+        /**
+         * @Vietnamese Danh sách đã được lấy từ backend và không rỗng THÌ tải lên VIEW - Điều này giúp VIEW
+         * hiển thị dữ liệu với người dùng ngay.
+         * @english: The list has been retrieved from the backend and is not empty THEN upload
+         * to the VIEW - This helps the VIEW display the data to the user immediately.
+         */
+        if (!wishlist.isEmpty() && isChecked) view.bindFavoriteListProduct(wishlist);
+        if (wishlist.isEmpty() && isChecked) view.isWishlistEmpty(true);
     }
 
     @Override
@@ -46,17 +39,25 @@ public class FavoritePresenter implements FavoriteListener {
         view.onMessage(message);
     }
 
-    @Override
-    public void notifyItemRemoved(Product product) {
-        int index = wishlist.indexOf(wishlist.stream().filter(p -> p.getId() == product.getId()).collect(Collectors.toList()).get(0));
-        wishlist.remove(index);
-        wishlistState();
-        view.notifyItemRemoved(index);
+    public void addFavoriteListValueEventListener() {
+        interator.addFavoriteListValueEventListener();
+    }
+
+    public void removeFavoriteListValueEventListener() {
+        interator.removeFavoriteListValueEventListener();
     }
 
     @Override
     public void isWishlistEmpty() {
+        isChecked = true;
         view.isWishlistEmpty(true);
+    }
+
+    @Override
+    public void bindFavoriteListProduct(List<Product> products) {
+        isChecked = true;
+        this.wishlist = products;
+        view.bindFavoriteListProduct(wishlist);
     }
 
     public void deleteFavoriteProduct(int id) {

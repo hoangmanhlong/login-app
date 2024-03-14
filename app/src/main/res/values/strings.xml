@@ -198,5 +198,16 @@
     <string name="database_error">Realtime database error</string>
     <string name="loading___">Loading…</string>
 
+<!--    Verification Screen-->
+    <string name="resend_otp">Resend OTP</string>
+    <string name="verify">Verify</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="otp_verification">OTP Verification</string>
+
+    <string name="edit">Edit</string>
+
+    <!--    Search Screen-->
+    <string name="recent_search">Recent searches</string>
+
 
 </resources>

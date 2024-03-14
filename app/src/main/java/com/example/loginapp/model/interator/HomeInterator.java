@@ -67,19 +67,21 @@ public class HomeInterator {
     }
 
     public void getUserData() {
-        if (currentUser != null) {
-            Constant.userRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    listener.getUserData(snapshot.getValue(UserData.class));
-                }
+        Constant.userRef.child(currentUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists())
+                            listener.getUserData(snapshot.getValue(UserData.class));
+                        else listener.isUserDataEmpty();
+                    }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-        }
+                    }
+                });
+
     }
 
     public void getFavoriteProductFromFirebase() {
@@ -108,19 +110,19 @@ public class HomeInterator {
 
     public void getBestsellerProducts() {
         List<Product> products = new ArrayList<>();
-        Constant.bestSellerRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                            products.add(dataSnapshot.getValue(Product.class));
-                        listener.getBestsellerProducts(products);
-                    }
+        Constant.bestSellerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    products.add(dataSnapshot.getValue(Product.class));
+                listener.getBestsellerProducts(products);
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+            }
+        });
     }
 
     private void insertProductNames(List<Product> products) {

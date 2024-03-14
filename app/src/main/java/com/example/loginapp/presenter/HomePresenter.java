@@ -1,5 +1,7 @@
 package com.example.loginapp.presenter;
 
+import android.util.Log;
+
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInterator;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class HomePresenter implements HomeListener {
 
-    private final String TAG = HomePresenter.class.getName();
+    private  static final String TAG = HomePresenter.class.getName();
 
     private final HomeView view;
 
@@ -35,6 +37,7 @@ public class HomePresenter implements HomeListener {
     private final boolean authenticated;
 
     public HomePresenter(HomeView view) {
+        Log.d(TAG, "HomePresenter: ");
         this.view = view;
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
@@ -43,7 +46,10 @@ public class HomePresenter implements HomeListener {
         view.showAskLogin(!authenticated);
         if (authenticated) {
             if (currentUserData == null) getUserData();
-            else checkUser(currentUserData);
+            else {
+                view.isUserLoading(false);
+                view.getUserData(currentUserData);
+            }
         } else {
             view.isUserLoading(false);
             view.setShowUserView(false);
@@ -81,14 +87,8 @@ public class HomePresenter implements HomeListener {
     @Override
     public void getUserData(UserData userData) {
         currentUserData = userData;
-        checkUser(userData);
-    }
-
-    private void checkUser(UserData userData) {
         view.isUserLoading(false);
-        Boolean check = !userData.getUsername().isEmpty() && !userData.getPhotoUrl().isEmpty();
-        view.setShowUserView(check);
-        if (check) view.getUserData(userData);
+        view.getUserData(userData);
     }
 
     @Override
@@ -143,5 +143,11 @@ public class HomePresenter implements HomeListener {
     public void getBestsellerProducts(List<Product> products) {
         bestSellerProducts = products;
         view.getBestsellerProducts(products);
+    }
+
+    @Override
+    public void isUserDataEmpty() {
+        view.isUserLoading(false);
+        view.setShowUserView(false);
     }
 }

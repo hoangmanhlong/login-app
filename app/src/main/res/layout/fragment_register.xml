@@ -122,29 +122,6 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/confirmTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/confirm_password"
-                app:boxCornerRadiusBottomEnd="30dp"
-                app:boxCornerRadiusBottomStart="30dp"
-                app:boxCornerRadiusTopEnd="30dp"
-                app:boxCornerRadiusTopStart="30dp"
-                app:boxStrokeColor="@android:color/holo_blue_light"
-                app:endIconMode="password_toggle"
-                app:startIconDrawable="@drawable/ic_key">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etConfirmPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:singleLine="true" />
@@ -152,7 +129,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:padding="@dimen/_8sdp"
                 android:text="@{message}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -162,12 +138,11 @@
                 android:textColor="@color/red"
                 android:visibility="@{isSignUpStateMessageVisible ? View.VISIBLE : View.GONE}" />
 
-
             <Button
                 android:id="@+id/btRegister"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_height="@dimen/_46sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:enabled="false"
                 android:onClick="@{() -> registerFragment.onRegisterButtonClick()}"
                 android:text="@string/register" />

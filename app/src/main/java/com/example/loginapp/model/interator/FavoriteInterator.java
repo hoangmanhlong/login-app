@@ -1,18 +1,18 @@
 package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.FavoriteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FavoriteInterator {
 
@@ -20,51 +20,37 @@ public class FavoriteInterator {
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+    private final ValueEventListener favoriteListValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                List<Product> products = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    products.add(dataSnapshot.getValue(Product.class));
+                listener.bindFavoriteListProduct(products);
+            } else {
+                listener.isWishlistEmpty();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
     public FavoriteInterator(FavoriteListener listener) {
         this.listener = listener;
     }
 
-    public void getFavoriteProductFromFirebase() {
-        Query query = Constant.favoriteProductRef.child(FirebaseAuth.getInstance().getUid());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) listener.isWishlistEmpty();
-            }
+    public void addFavoriteListValueEventListener() {
+        Constant.favoriteProductRef.child(user.getUid())
+                .addValueEventListener(favoriteListValueEventListener);
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                listener.onItemAdded(snapshot.getValue(Product.class));
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                listener.notifyItemRemoved(snapshot.getValue(Product.class));
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+    public void removeFavoriteListValueEventListener() {
+        Constant.favoriteProductRef.child(user.getUid())
+                .removeEventListener(favoriteListValueEventListener);
     }
 
     public void deleteProduct(int id) {

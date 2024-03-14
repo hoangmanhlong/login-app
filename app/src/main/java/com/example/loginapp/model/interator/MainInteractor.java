@@ -15,7 +15,7 @@ public class MainInteractor {
 
     private final MainListener listener;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
@@ -36,8 +36,7 @@ public class MainInteractor {
     }
 
     public void addValueEventListener() {
-        if (user != null)
-            cartRef.child(user.getUid()).addValueEventListener(valueEventListener);
+        cartRef.child(user.getUid()).addValueEventListener(valueEventListener);
     }
 
     public void removeValueEventListener() {

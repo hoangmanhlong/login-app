@@ -9,6 +9,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
@@ -31,19 +35,13 @@ import com.example.loginapp.utils.MyOpenDocumentContract;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
-import com.example.loginapp.view.state.TextEditTextObserver;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 
 public class EditUserInformationFragment extends Fragment implements EditUserProfileView {
 
-    // Hold a reference to the current animator so that it can be canceled
-    // mid-way.
     private Animator currentAnimator;
 
-    // The system "short" animation time duration in milliseconds. This duration
-    // is ideal for subtle animations or animations that occur frequently.
     private int shortAnimationDuration;
 
     private FragmentEditUserInformationBinding binding;
@@ -53,8 +51,6 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
     private Dialog dialog;
 
     private TextInputEditText etName, etPhoneNumber, etAddress;
-
-    private TextInputLayout nameTextInputLayout, addressTextInputLayout, phoneNumberTextInputLayout;
 
     @Nullable
     @Override
@@ -71,9 +67,6 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
         etAddress = binding.etAddress;
         etName = binding.etName;
         etPhoneNumber = binding.etPhoneNumber;
-        nameTextInputLayout = binding.nameTextInputLayout;
-        phoneNumberTextInputLayout = binding.phoneNumberTextInputLayout;
-        addressTextInputLayout = binding.addressTextInputLayout;
 
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         dialog = LoadingDialog.getLoadingDialog(requireContext());
@@ -91,14 +84,11 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
         }
     }
 
-
     private final ActivityResultLauncher<String[]> openDocument =
             registerForActivityResult(new MyOpenDocumentContract(), presenter::setPhotoUri);
 
     public void onImageClick() {
-        String imageUrl = presenter.getUserData().getPhotoUrl();
-        if (imageUrl != null && !imageUrl.isEmpty())
-            zoomImageFromThumb(binding.tvUserAvatar, presenter.getUserData().getPhotoUrl());
+
     }
 
     public void onEditImageButtonClick() {
@@ -106,23 +96,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
     }
 
     public void saveUserData() {
-        String name = etName.getText().toString().trim();
-        String phoneNumber = etPhoneNumber.getText().toString().trim();
-        String address = etAddress.getText().toString().trim();
-        boolean isAllValid = true;
-        if (name.isEmpty()) {
-            isAllValid = false;
-            nameTextInputLayout.setError("Invalid Name");
-        }
-        if (phoneNumber.length() != 10) {
-            isAllValid = false;
-            phoneNumberTextInputLayout.setError("Invalid phone number");
-        }
-        if (address.isEmpty()) {
-            isAllValid = false;
-            addressTextInputLayout.setError("Invalid address");
-        }
-        if (isAllValid) presenter.saveUserData(name, phoneNumber, address);
+        presenter.saveUserData();
     }
 
     @Override
@@ -138,7 +112,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
 
     @Override
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        NavHostFragment.findNavController(this).navigateUp();
     }
 
     @Override
@@ -151,10 +125,68 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
         binding.setUserData(userData);
     }
 
+    @Override
+    public void saveButtonEnabled(boolean enabled) {
+        binding.setSaveButtonEnabled(enabled);
+    }
+
     public void onInputState() {
-        etName.addTextChangedListener(new TextEditTextObserver(nameTextInputLayout));
-        etPhoneNumber.addTextChangedListener(new TextEditTextObserver(phoneNumberTextInputLayout));
-        etAddress.addTextChangedListener(new TextEditTextObserver(addressTextInputLayout));
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setUsername(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        etPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setPhoneNumber(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setAddress(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     private void zoomImageFromThumb(final View thumbView, String imageUrl) {

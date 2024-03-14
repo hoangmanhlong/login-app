@@ -2,9 +2,6 @@ package com.example.loginapp.presenter;
 
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.os.LocaleListCompat;
-
 import com.example.loginapp.App;
 import com.example.loginapp.data.local.AppSharedPreferences;
 import com.example.loginapp.model.entity.Order;
@@ -35,7 +32,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         return currentUser;
     }
 
-    private final List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     public UserProfileDetailPresenter(UserProfileDetailView view) {
         this.view = view;
@@ -77,6 +74,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     @Override
     public void getOrders(List<Order> orders) {
         isChecked = true;
+        this.orders = orders;
         int numberOfProcessingOrder = countOrdersWithStatus(orders, OrderStatus.Processing);
         int numberOfCompletedOrder = countOrdersWithStatus(orders, OrderStatus.Completed);
         int numberOfCancelOrder = countOrdersWithStatus(orders, OrderStatus.Cancel);
@@ -86,6 +84,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
     @Override
     public void isOrdersListEmpty() {
+        this.orders.clear();
         view.bindNumberOfOrders(0, 0, 0, 0);
     }
 

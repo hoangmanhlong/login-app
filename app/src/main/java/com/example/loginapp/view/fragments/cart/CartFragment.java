@@ -3,7 +3,6 @@ package com.example.loginapp.view.fragments.cart;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
@@ -38,14 +38,14 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     private NavController navController;
 
-    private final String TAG = getClass().getSimpleName();
-
     private final CartPresenter presenter = new CartPresenter(this);
 
     private FragmentCartBinding binding;
 
     private final CartAdapter adapter = new CartAdapter(this);
 
+
+    private RecyclerView shoppingCartRecyclerview;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,21 +57,26 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
+        shoppingCartRecyclerview = binding.basketRecyclerView;
         initView();
-        Log.d(TAG, "onViewCreated: ");
     }
 
     @Override
-    public void onResume() {
-        Log.d(TAG, "onResume: ");
-        super.onResume();
+    public void onStart() {
+        super.onStart();
+        presenter.addShoppingCartValueEventListener();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         MessageVoucherSelected messageVoucherSelected =
                 EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
         if (messageVoucherSelected != null)
@@ -90,9 +95,10 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     private void initView() {
         binding.setFragment(this);
-        binding.basketRecyclerView.setAdapter(adapter);
+        shoppingCartRecyclerview.setAdapter(adapter);
+        ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
         presenter.initBasket();
-        new SwipeHelper(requireContext(), binding.basketRecyclerView) {
+        new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
             @Override
             public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
                 underlayButtons.add(new SwipeHelper.UnderlayButton(
@@ -106,24 +112,20 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        presenter.removeShoppingCartValueEventListener();
+    }
+
+    @Override
     public void onMessage(String message) {
         AppMessage.showMessage(requireContext(), message);
     }
 
     @Override
-    public void bindProducts(List<FirebaseProduct> products) {
+    public void bindBasket(List<FirebaseProduct> products) {
         adapter.submitList(products);
-        adapter.notifyItemInserted(products.size() - 1);
-    }
-
-    @Override
-    public void notifyItemRemoved(int index) {
-        adapter.notifyItemRemoved(index);
-    }
-
-    @Override
-    public void notifyItemChanged(int index) {
-        adapter.notifyItemChanged(index);
     }
 
     @Override
@@ -204,6 +206,10 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     public void clearDiscountCode() {
+        MessageVoucherSelected messageVoucherSelected =
+                EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
+        if (messageVoucherSelected != null)
+            EventBus.getDefault().removeStickyEvent(messageVoucherSelected);
         presenter.setClearCode(true);
     }
 

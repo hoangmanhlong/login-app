@@ -140,14 +140,7 @@ public class VerificationInterator {
         FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true);
         mAuth.signInWithCredential(credential).addOnCompleteListener(activity, task -> {
             if (task.isSuccessful()) {
-                String uid = mAuth.getUid();
-                UserData userData = new UserData(uid, "", "", "", phoneNumberTemp, "", "");
-                userRef.child(uid).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        listener.goHomeScreen();
-                    }
-                });
+                Log.d(TAG, "signInWithPhoneAuthCredential: ");
             } else {
                 // Sign in failed, display a message and update the UI
 //                            Log.w(TAG, "signInWithCredential:failure", task.getException());

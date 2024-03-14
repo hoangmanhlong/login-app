@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.app.Activity;
-
 import com.example.loginapp.view.fragments.login.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -16,24 +14,50 @@ public class LoginPresenter {
 
     private String phoneNumber;
 
+    private String email;
+
+    private String password;
+
+    private boolean isEmailValid = false;
+
+    private boolean isPasswordValid = false;
+
+    private boolean isPhoneNumberValid = false;
+
     public LoginPresenter(LoginView view) {
         this.view = view;
     }
 
-    public void loginWithEmail(String email, String password, Activity activity) {
+    public void initData() {
+        view.loginEmailAndPasswordButtonEnabled(isEmailAndPasswordValid());
+        view.requestOTPButtonEnabled(isPhoneNumberValid);
+    }
+
+    public void loginWithEmail() {
         if (isValidEmail(email) && password.length() >= 6) {
             view.isLoading(true);
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(activity, task -> {
-                        if (task.isSuccessful())
-                            view.isLoginSuccess(FirebaseAuth.getInstance().getCurrentUser() != null);
-                        else
-                            view.isLoginSuccess(false);
-                    })
-                    .addOnFailureListener(e -> view.onMessage(e.getMessage()));
+                    .addOnSuccessListener(task -> view.isLoginSuccess(true))
+                    .addOnFailureListener(e -> view.isLoginSuccess(false));
         } else {
             view.isLoginSuccess(false);
         }
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+        isEmailValid = !email.isEmpty();
+        view.loginEmailAndPasswordButtonEnabled(isEmailAndPasswordValid());
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        isPasswordValid = !password.isEmpty();
+        view.loginEmailAndPasswordButtonEnabled(isEmailAndPasswordValid());
+    }
+
+    private boolean isEmailAndPasswordValid() {
+        return isEmailValid && isPasswordValid;
     }
 
     public String getPhoneNumber() {
@@ -42,7 +66,8 @@ public class LoginPresenter {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        view.requestOTPButtonEnabled(phoneNumber.length() == 10);
+        isPhoneNumberValid = phoneNumber.length() == 10 && isNumber(phoneNumber);
+        view.requestOTPButtonEnabled(isPhoneNumberValid);
     }
 
     private boolean isValidEmail(String email) {
@@ -54,5 +79,9 @@ public class LoginPresenter {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    public static boolean isNumber(String text) {
+        return Pattern.matches("[0-9]+", text);
     }
 }

@@ -16,4 +16,6 @@ public interface EditUserProfileView {
 
     void bindUserData(UserData userData);
 
+    void saveButtonEnabled(boolean enabled);
+
 }

@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface FavoriteView {
 
-    void onItemAdded(List<Product> products);
-
     void onMessage(String message);
 
-    void notifyItemRemoved(int index);
-
     void isWishlistEmpty(Boolean isEmpty);
+
+    void bindFavoriteListProduct(List<Product> products);
 }

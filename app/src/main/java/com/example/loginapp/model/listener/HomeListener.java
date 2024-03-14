@@ -15,4 +15,6 @@ public interface HomeListener {
     void getFavoriteProducts(List<Product> products);
 
     void getBestsellerProducts(List<Product> products);
+
+    void isUserDataEmpty();
 }

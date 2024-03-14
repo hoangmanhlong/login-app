@@ -9,11 +9,7 @@ public interface CartView {
 
     void onMessage(String message);
 
-    void bindProducts(List<FirebaseProduct> products);
-
-    void notifyItemRemoved(int index);
-
-    void notifyItemChanged(int index);
+    void bindBasket(List<FirebaseProduct> products);
 
     void setTotal(String subtotal, String quantity, String total);
 

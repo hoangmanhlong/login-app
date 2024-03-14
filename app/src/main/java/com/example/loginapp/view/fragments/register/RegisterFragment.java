@@ -12,12 +12,13 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentRegisterBinding;
 import com.example.loginapp.presenter.RegisterPresenter;
-import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class RegisterFragment extends Fragment implements RegisterView {
 
     private final String TAG = this.toString();
+
     private FragmentRegisterBinding binding;
 
     private final RegisterPresenter presenter = new RegisterPresenter(this);
@@ -35,6 +37,8 @@ public class RegisterFragment extends Fragment implements RegisterView {
     private TextInputEditText[] textInputEditTexts;
 
     private Dialog dialog;
+
+    private NavController navController;
 
     @Nullable
     @Override
@@ -47,9 +51,10 @@ public class RegisterFragment extends Fragment implements RegisterView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setRegisterFragment(this);
+        navController = NavHostFragment.findNavController(this);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        textInputLayouts = new TextInputLayout[]{binding.emailTextInputLayout, binding.passwordTextInputLayout, binding.confirmTextInputLayout};
-        textInputEditTexts = new TextInputEditText[]{binding.etEmail, binding.etPassword, binding.etConfirmPassword};
+        textInputLayouts = new TextInputLayout[]{binding.emailTextInputLayout, binding.passwordTextInputLayout};
+        textInputEditTexts = new TextInputEditText[]{binding.etEmail, binding.etPassword};
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         buttonState();
@@ -83,6 +88,13 @@ public class RegisterFragment extends Fragment implements RegisterView {
     }
 
     @Override
+    public void signupSuccess() {
+        int startDestinationId = navController.getGraph().getStartDestinationId();
+        navController.popBackStack(startDestinationId, true);
+        navController.navigate(startDestinationId);
+    }
+
+    @Override
     public void isValidPassword(boolean isValid) {
         if (isValid) {
             textInputLayouts[1].setErrorEnabled(false);
@@ -93,13 +105,9 @@ public class RegisterFragment extends Fragment implements RegisterView {
     }
 
     @Override
-    public void isValidConfirmPassword(boolean isValid) {
-        if (isValid) {
-            textInputLayouts[2].setErrorEnabled(false);
-        } else {
-            textInputLayouts[2].setErrorEnabled(true);
-            textInputLayouts[2].setError("Invalid password");
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
@@ -140,24 +148,6 @@ public class RegisterFragment extends Fragment implements RegisterView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 presenter.setPassword(s.toString().trim());
-                binding.setIsSignUpStateMessageVisible(false);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        textInputEditTexts[2].addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                presenter.setConfirmPassword(s.toString().trim());
                 binding.setIsSignUpStateMessageVisible(false);
             }
 

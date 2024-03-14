@@ -1,19 +1,19 @@
 package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.listener.CartListener;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartInterator {
 
@@ -25,51 +25,35 @@ public class CartInterator {
 
     private final CartListener listener;
 
+    private final ValueEventListener shoppingCartValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                List<FirebaseProduct> products = new ArrayList<>();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                    products.add(dataSnapshot.getValue(FirebaseProduct.class));
+                listener.getProductsFromShoppingCart(products);
+            } else {
+                listener.isCartEmpty();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
     public CartInterator(CartListener listener) {
         this.listener = listener;
     }
 
-    public void getCartProductsFromFirebase() {
-        Query query = cartRef.child(FirebaseAuth.getInstance().getUid());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) listener.isCartEmpty();
-            }
+    public void addShoppingCartValueEventListener() {
+        Constant.cartRef.child(user.getUid()).addValueEventListener(shoppingCartValueEventListener);
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                listener.notifyItemAdded(snapshot.getValue(FirebaseProduct.class));
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                listener.notifyItemChanged(snapshot.getValue(FirebaseProduct.class));
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                listener.notifyItemRemoved(snapshot.getValue(FirebaseProduct.class));
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+    public void removeShoppingCartValueEventListener() {
+        Constant.cartRef.child(user.getUid()).removeEventListener(shoppingCartValueEventListener);
     }
 
     public void updateQuantity(int id, int quantity) {

@@ -81,7 +81,7 @@
                             app:strokeWidth="0dp">
 
                             <ImageView
-                                imgUrl="@{userData.photoUrl}"
+                                imgUrl="@{userData.avatar}"
                                 android:layout_width="@dimen/_80sdp"
                                 android:layout_height="@dimen/_80sdp"
                                 android:contentDescription="@null"
@@ -673,7 +673,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{() -> profileFragment.logOut()}"
+                        android:onClick="@{() -> profileFragment.onLogoutButtonClick()}"
                         android:padding="@dimen/_16sdp">
 
                         <LinearLayout

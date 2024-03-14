@@ -9,4 +9,6 @@ public interface LoginView {
     void onMessage(String message);
 
     void requestOTPButtonEnabled(boolean enabled);
+
+    void loginEmailAndPasswordButtonEnabled(boolean visible);
 }

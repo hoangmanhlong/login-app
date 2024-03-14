@@ -4,16 +4,16 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -24,7 +24,6 @@ import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
-import com.example.loginapp.view.state.LoginEmailButtonObserver;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginFragment extends Fragment implements LoginView {
@@ -38,12 +37,6 @@ public class LoginFragment extends Fragment implements LoginView {
     private Dialog dialog;
 
     private TextInputEditText[] editTexts;
-
-    private Button loginWithEmailButton;
-
-    private TextView loginEmailFailTextView;
-
-    private Button btRequestOtp;
 
     private EditText etPhoneNumber;
 
@@ -61,24 +54,14 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.setLoginFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        loginWithEmailButton = binding.loginEmailBtn;
-        loginEmailFailTextView = binding.tvLoginFailed;
-        btRequestOtp = binding.btRequestOtp;
         etPhoneNumber = binding.etPhoneNumber;
         editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
-        loginWithEmailButton.setEnabled(hasValidEmailAndPassword());
-        btRequestOtp.setEnabled(!etPhoneNumber.getText().toString().trim().isEmpty());
+        presenter.initData();
         loginWithEmailButtonObserver();
-        phoneNumberTextViewListener();
-//        getDataShared();
+        phoneNumberEditTextListener();
     }
 
-    private boolean hasValidEmailAndPassword() {
-        return !binding.emailTextInputEditText.getText().toString().trim().isEmpty() &&
-                !binding.passwordTextInputEditText.getText().toString().trim().isEmpty();
-    }
-
-    private void phoneNumberTextViewListener() {
+    private void phoneNumberEditTextListener() {
         etPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,17 +80,6 @@ public class LoginFragment extends Fragment implements LoginView {
         });
     }
 
-//    private void getDataShared() {
-//        if (getArguments() != null) {
-//            String email = getArguments().getString(Constant.EMAIL_KEY);
-//            String password = getArguments().getString(Constant.PASSWORD_KEY);
-//            editTexts[0].setText(email);
-//            editTexts[1].setText(password);
-//            onEmailClick();
-//        }
-//    }
-
-
     public void onNumberPhoneBtn() {
         binding.numberPhoneInput.setVisibility(View.VISIBLE);
         binding.linearInputEmail.setVisibility(View.GONE);
@@ -123,27 +95,57 @@ public class LoginFragment extends Fragment implements LoginView {
     }
 
     public void onLoginWithEmailClick() {
-        String email = binding.emailTextInputEditText.getText().toString().trim();
-        String password = binding.passwordTextInputEditText.getText().toString().trim();
-        presenter.loginWithEmail(email, password, requireActivity());
+        presenter.loginWithEmail();
     }
 
     public void goRegisterScreen() {
         navController.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 
-    private void loginWithEmailButtonObserver() {
-        editTexts[0].addTextChangedListener(new LoginEmailButtonObserver(
-                loginWithEmailButton,
-                loginEmailFailTextView,
-                editTexts
-        ));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(this.toString(), "onDestroy: ");
+        binding = null;
+        System.gc();
+    }
 
-        editTexts[1].addTextChangedListener(new LoginEmailButtonObserver(
-                loginWithEmailButton,
-                loginEmailFailTextView,
-                editTexts
-        ));
+    private void loginWithEmailButtonObserver() {
+        editTexts[0].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setEmail(s.toString().trim());
+                binding.setLoginEmailAndPasswordMessageVisible(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        editTexts[1].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setPassword(s.toString().trim());
+                binding.setLoginEmailAndPasswordMessageVisible(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
@@ -156,10 +158,17 @@ public class LoginFragment extends Fragment implements LoginView {
     public void isLoginSuccess(boolean isSuccess) {
         dialog.dismiss();
         if (isSuccess) {
-            navController.popBackStack();
-            navController.navigate(R.id.mainFragment);
+            int startDestinationId = navController.getGraph().getStartDestinationId();
+            if (navController.getPreviousBackStackEntry() != null) {
+                navController.popBackStack(startDestinationId, true);
+                navController.navigate(startDestinationId);
+            } else {
+                navController.popBackStack(R.id.loginFragment, true);
+                navController.navigate(startDestinationId);
+            }
+
         } else {
-            binding.tvLoginFailed.setVisibility(View.VISIBLE);
+            binding.setLoginEmailAndPasswordMessageVisible(true);
         }
     }
 
@@ -170,7 +179,12 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void requestOTPButtonEnabled(boolean enabled) {
-        btRequestOtp.setEnabled(enabled);
+        binding.setLoginWithPhoneNumberButtonEnabled(enabled);
+    }
+
+    @Override
+    public void loginEmailAndPasswordButtonEnabled(boolean visible) {
+        binding.setLoginEmailAndPasswordButtonEnable(visible);
     }
 
     public void onLoginPhoneNumberClick() {

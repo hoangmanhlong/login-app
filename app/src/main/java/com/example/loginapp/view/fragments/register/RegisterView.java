@@ -10,9 +10,9 @@ public interface RegisterView {
 
     void isValidEmail(boolean isValid);
 
-    void isValidPassword(boolean isValid);
+    void signupSuccess();
 
-    void isValidConfirmPassword(boolean isValid);
+    void isValidPassword(boolean isValid);
 
     void isRegisterButtonVisible(boolean visible);
 }

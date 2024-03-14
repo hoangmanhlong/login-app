@@ -13,8 +13,6 @@ public class MainFragmentPresenter implements MainListener {
 
     private final MainInteractor interactor = new MainInteractor(this);
 
-    private final boolean verified;
-
     private final boolean logged;
 
     private final AppSharedPreferences sharedPreferences;
@@ -22,13 +20,11 @@ public class MainFragmentPresenter implements MainListener {
     public MainFragmentPresenter(MainFragmentView view) {
         this.view = view;
         logged = FirebaseAuth.getInstance().getCurrentUser() != null;
-        verified = true;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }
 
     public void initData() {
         view.setAdapter(logged);
-        addValueEventListener();
     }
 
     private void getWishlistStatus() {
@@ -41,12 +37,14 @@ public class MainFragmentPresenter implements MainListener {
     }
 
     public void addValueEventListener() {
-        getWishlistStatus();
-        interactor.addValueEventListener();
+        if (logged) {
+            getWishlistStatus();
+            interactor.addValueEventListener();
+        }
     }
 
     public void removeValueEventListener() {
-        interactor.removeValueEventListener();
+        if (logged) interactor.removeValueEventListener();
     }
 
     @Override

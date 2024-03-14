@@ -3,15 +3,13 @@ package com.example.loginapp.model.listener;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 
+import java.util.List;
+
 public interface CartListener {
 
-    void notifyItemAdded(FirebaseProduct product);
-
-    void notifyItemChanged(FirebaseProduct product);
+    void getProductsFromShoppingCart(List<FirebaseProduct> products);
 
     void onMessage(String message);
-
-    void notifyItemRemoved(FirebaseProduct product);
 
     void isCartEmpty();
 }

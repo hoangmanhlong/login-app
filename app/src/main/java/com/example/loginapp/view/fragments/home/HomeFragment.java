@@ -79,9 +79,16 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         Log.d(TAG, "onViewCreated: ");
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     @SuppressLint("ResourceAsColor")
     private void initView() {
         binding.setHomeFragment(this);
+        binding.setIsAskLoginVisible(false);
 
         recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder.getRoot();
         topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder.getRoot();
@@ -140,7 +147,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     }
 
     public void onLoginButtonClick() {
-        navController.navigate(R.id.loginFragment);
+        navController.navigate(R.id.overviewFragment);
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.example.loginapp.view.fragments.favorite_product;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
@@ -23,7 +22,6 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.FavoritePresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
@@ -45,17 +43,18 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        Log.d(TAG, "onViewCreated: ");
     }
 
     private void initView() {
         RecyclerView recyclerView = binding.favoriteRecyclerView;
         recyclerView.setAdapter(adapter);
+
+        // Remove flashes
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         presenter.initData();
         new SwipeHelper(requireContext(), recyclerView) {
             @Override
@@ -71,24 +70,18 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     }
 
     @Override
-    public void onItemAdded(List<Product> products) {
-        adapter.submitList(products);
-        adapter.notifyItemInserted(products.size() - 1);
-    }
-
-    @Override
     public void onMessage(String message) {
         AppMessage.showMessage(requireContext(), message);
     }
 
     @Override
-    public void notifyItemRemoved(int index) {
-        adapter.notifyItemRemoved(index);
+    public void isWishlistEmpty(Boolean isEmpty) {
+        binding.setIsWishlistEmpty(isEmpty);
     }
 
     @Override
-    public void isWishlistEmpty(Boolean isEmpty) {
-        binding.setIsWishlistEmpty(isEmpty);
+    public void bindFavoriteListProduct(List<Product> products) {
+        adapter.submitList(products);
     }
 
     @Override
@@ -99,11 +92,20 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        presenter.removeFavoriteListValueEventListener();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.addFavoriteListValueEventListener();
+    }
+
+    @Override
     public void getProductByPosition(int productId) {
-        new AlertDialog.Builder(requireContext())
-                .setMessage(R.string.dialog_message)
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteFavoriteProduct(productId))
-                .setNegativeButton(R.string.cancel,null)
-                .show();
+        presenter.deleteFavoriteProduct(productId);
     }
 }

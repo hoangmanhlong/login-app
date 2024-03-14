@@ -5,7 +5,21 @@
 
     <data>
 
+        <variable
+            name="loginEmailAndPasswordMessageVisible"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+
         <import type="android.graphics.Color" />
+
+        <variable
+            name="loginEmailAndPasswordButtonEnable"
+            type="Boolean" />
+
+        <variable
+            name="loginWithPhoneNumberButtonEnabled"
+            type="Boolean" />
 
         <variable
             name="loginFragment"
@@ -19,6 +33,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_20sdp"
             android:paddingHorizontal="@dimen/_20sdp">
 
             <TextView
@@ -121,6 +136,7 @@
                         android:imeOptions="actionNext"
                         android:textColorHint="#000"
                         app:boxBackgroundColor="@color/gray_1000"
+                        app:boxStrokeColor="@android:color/holo_blue_light"
                         app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -128,7 +144,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/phone_number"
-                            android:inputType="phone"
+                            android:inputType="numberDecimal"
                             android:maxLength="10"
                             android:singleLine="true"
                             android:textColorHint="@color/gray"
@@ -141,8 +157,9 @@
                 <Button
                     android:id="@+id/btRequestOtp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="@dimen/_40ssp"
+                    android:enabled="@{loginWithPhoneNumberButtonEnabled}"
                     android:onClick="@{() -> loginFragment.onLoginPhoneNumberClick()}"
                     android:text="@string/request_otp"
                     android:textAllCaps="false"
@@ -150,6 +167,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:animateLayoutChanges="true"
                 android:id="@+id/linear_input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -166,6 +184,7 @@
                     android:imeOptions="actionNext"
                     android:textColorHint="#000"
                     app:boxBackgroundColor="@color/gray_1000"
+                    app:boxStrokeColor="@android:color/holo_blue_light"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/email">
 
@@ -188,6 +207,7 @@
                     android:layout_marginVertical="@dimen/_10sdp"
                     android:textColorHint="#000"
                     app:boxBackgroundColor="@color/gray_1000"
+                    app:boxStrokeColor="@android:color/holo_blue_light"
                     app:endIconMode="password_toggle"
                     app:startIconDrawable="@drawable/lock">
 
@@ -211,14 +231,15 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="@string/login_email_false_message"
                     android:textColor="#D70000"
-                    android:visibility="gone"
+                    android:visibility="@{loginEmailAndPasswordMessageVisible ? View.VISIBLE : View.GONE}"
                     tools:text="Invalid Username or Password. Try Again!" />
 
                 <Button
                     android:id="@+id/loginEmailBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_46sdp"
                     android:layout_marginTop="@dimen/_24sdp"
+                    android:enabled="@{loginEmailAndPasswordButtonEnable}"
                     android:onClick="@{() -> loginFragment.onLoginWithEmailClick()}"
                     android:text="@string/login"
                     android:textAllCaps="false"
@@ -236,9 +257,9 @@
                 app:layout_constraintTop_toBottomOf="@id/login_option_view">
 
                 <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="0dp"
                     android:layout_height="0.5dp"
-                    android:layout_weight="1"
-                    android:layout_width="0dp" />
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -248,9 +269,9 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="0dp"
                     android:layout_height="0.5dp"
-                    android:layout_weight="1"
-                    android:layout_width="0dp" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
