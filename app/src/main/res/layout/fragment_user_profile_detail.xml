@@ -343,7 +343,7 @@
                                 android:layout_marginStart="@dimen/_4sdp"
                                 android:fontFamily="@font/dm_sans_36pt_regular"
                                 android:includeFontPadding="false"
-                                android:text="@string/discount_code"
+                                android:text="@string/my_voucher"
                                 android:textColor="@color/black"
                                 android:textStyle="bold" />
                         </LinearLayout>

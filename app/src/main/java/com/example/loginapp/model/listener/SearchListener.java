@@ -9,11 +9,13 @@ public interface SearchListener {
 
     void getProducts(List<Product> products);
 
-    void notifyItemAdded(SearchHistory history);
+    void getSearchHistories(List<SearchHistory> searchHistories);
 
-    void notifyItemChanged(SearchHistory history);
-
-    void notifyItemRemoved(SearchHistory history);
+//    void notifyItemAdded(SearchHistory history);
+//
+//    void notifyItemChanged(SearchHistory history);
+//
+//    void notifyItemRemoved(SearchHistory history);
 
     void onLoadError(String message);
 

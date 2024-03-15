@@ -90,29 +90,31 @@
                             android:scaleType="centerCrop"
                             tools:src="@drawable/dog" />
 
-                        <View
+                        <FrameLayout
+                            android:onClick="@{() -> fragment.onEditImageButtonClick()}"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_25sdp"
-                            android:alpha="0.5"
-                            android:background="#000"
-                            android:onClick="@{() -> fragment.onEditImageButtonClick()}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:alpha="0.5"
+                                android:background="#000"
+                                android:onClick="@{() -> fragment.onEditImageButtonClick()}"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:onClick="@{() -> fragment.onEditImageButtonClick()}"
-                            android:paddingBottom="@dimen/_6sdp"
-                            android:text="@string/edit"
-                            android:textAlignment="center"
-                            android:textColor="#fff"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_camera_black"
+                                android:layout_gravity="center" />
+
+                        </FrameLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>

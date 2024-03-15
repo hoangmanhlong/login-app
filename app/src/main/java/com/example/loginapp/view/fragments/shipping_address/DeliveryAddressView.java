@@ -5,16 +5,11 @@ import com.example.loginapp.model.entity.DeliveryAddress;
 import java.util.List;
 
 public interface DeliveryAddressView {
-    void getShippingAddresses(List<DeliveryAddress> deliveryAddress);
+    void bindShippingAddresses(List<DeliveryAddress> deliveryAddress);
 
     void isLoading(boolean loading);
 
-    void isAddNewAddressButtonEnabled(Boolean enable);
+    void isDeliveryAddressEmpty(boolean isEmpty);
 
-
-    void notifyItemChanged(int index);
-
-    void notifyItemRemoved(int index);
-
-    void isListEmpty(Boolean isEmpty);
+    void addNewDeliveryAddressButtonVisible(boolean visible);
 }

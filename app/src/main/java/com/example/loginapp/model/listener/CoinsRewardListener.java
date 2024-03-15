@@ -11,7 +11,7 @@ public interface CoinsRewardListener {
 
    void iAttendanceSuccess(boolean isSuccess);
 
-   void isCheckedDayEmpty();
+   void isAttendanceDataEmpty();
 
    void getDataError();
 

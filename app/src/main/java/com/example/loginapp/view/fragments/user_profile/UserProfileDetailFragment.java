@@ -2,7 +2,6 @@ package com.example.loginapp.view.fragments.user_profile;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +47,9 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     public void onLogoutButtonClick() {
-        new MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.logout)
+                .setIcon(R.drawable.ic_logout)
                 .setMessage(R.string.logout_message)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     FirebaseAuth.getInstance().signOut();
@@ -73,7 +73,21 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        binding = null;
+        binding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.addUserDataValueEventListener();
+        presenter.addOrdersValueEventListener();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.removeUserDataValueEventListener();
+        presenter.removeOrdersValueEventListener();
     }
 
     @Override
@@ -91,7 +105,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
 
     public void onImageAvatarClick() {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.USER_KEY_NAME, presenter.getCurrentUser());
+        bundle.putSerializable(Constant.USER_KEY_NAME, presenter.getUserData());
         navController.navigate(R.id.editUserInformationFragment, bundle);
     }
 

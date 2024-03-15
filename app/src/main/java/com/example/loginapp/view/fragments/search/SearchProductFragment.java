@@ -1,14 +1,10 @@
 package com.example.loginapp.view.fragments.search;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.loginapp.App;
 import com.example.loginapp.R;
@@ -39,7 +36,6 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -75,8 +71,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        imm = (InputMethodManager) requireActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
+        imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
         initView();
     }
 
@@ -103,18 +98,15 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         RecyclerView searchSuggestionRecyclerview = binding.searchSuggestions;
         searchSuggestionRecyclerview.setLayoutManager(layoutManager);
         searchSuggestionRecyclerview.setAdapter(searchSuggestAdapter);
+        ((SimpleItemAnimator) searchSuggestionRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
 
         binding.etQuery.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                presenter.onSearchProduct(binding.etQuery.getText().toString().trim());
+                presenter.onActionSearchClick();
                 View currentFocus = requireActivity().getCurrentFocus();
                 if (currentFocus != null) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    if (inputMethodManager.isAcceptingText()) {
-                        inputMethodManager.hideSoftInputFromWindow(
-                                currentFocus.getWindowToken(),
-                                0
-                        );
+                    if (imm.isAcceptingText()) {
+                        imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
                     }
                 }
                 return true;
@@ -141,8 +133,20 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         });
 
         presenter.initData();
-        binding.etQuery.setOnClickListener(c -> etQueryBox.showDropDown());
+        etQueryBox.setOnClickListener(c -> etQueryBox.showDropDown());
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.addSearchHistoriesValueEventListener();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.removeSearchHistoriesValueEventListener();
     }
 
     @Override
@@ -154,7 +158,17 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
-    public void onLoadProducts(List<Product> products) {
+    public void bindSearchHistories(List<SearchHistory> searchHistories) {
+        searchSuggestAdapter.submitList(searchHistories);
+    }
+
+    @Override
+    public void isProductListVisible(boolean visible) {
+        binding.setIsProductsViewVisible(visible);
+    }
+
+    @Override
+    public void bindProducts(List<Product> products) {
         searchProductAdapter.submitList(products);
     }
 
@@ -163,51 +177,9 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         AppMessage.showMessage(requireContext(), message);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void notifyItemAdded(List<SearchHistory> list) {
-        searchSuggestAdapter.submitList(list);
-        searchSuggestAdapter.notifyDataSetChanged();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void notifyItemChanged(int index) {
-        searchSuggestAdapter.notifyItemChanged(index);
-        searchSuggestAdapter.notifyDataSetChanged();
-    }
-
-    public void onSeeMoreRecommendedProductsViewClick() {
-
-    }
-
-    @Override
-    public void notifyItemRemoved(int index) {
-        searchSuggestAdapter.notifyItemRemoved(index);
-    }
-
-    @Override
-    public void showSearchResult(Boolean show) {
-        if (show) {
-            binding.searchSuggestions.setVisibility(View.GONE);
-            binding.productRecyclerview.setVisibility(View.VISIBLE);
-            binding.btBack.setVisibility(View.VISIBLE);
-        } else {
-            binding.searchSuggestions.setVisibility(View.VISIBLE);
-            binding.productRecyclerview.setVisibility(View.GONE);
-            binding.btBack.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void isSearchEmpty(boolean isEmpty) {
-        if (isEmpty) {
-            binding.productRecyclerview.setVisibility(View.GONE);
-            binding.tvListEmpty.setVisibility(View.VISIBLE);
-        } else {
-            binding.productRecyclerview.setVisibility(View.VISIBLE);
-            binding.tvListEmpty.setVisibility(View.GONE);
-        }
+    public void isProductListEmpty(boolean isEmpty) {
+        binding.setIsProductListEmpty(isEmpty);
     }
 
     @Override
@@ -222,8 +194,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
-    public void isSearchSuggestionViewVisible(boolean visible) {
-        binding.setIsSearchSuggestionsVisible(visible);
+    public void setIsSearchHistoriesViewVisible(boolean visible) {
+        binding.setIsSearchHistoriesViewVisible(visible);
     }
 
     @Override
@@ -241,26 +213,30 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     public void onClearQueryButtonClick() {
         binding.etQuery.setText("");
         presenter.setQuery("");
+
     }
 
     @Override
     public void onSearchSuggestClick(SearchHistory history) {
         binding.etQuery.setText(history.getText());
-        presenter.onSearchProduct(history.getText());
+        presenter.searchWithSearchHistory(history.getText());
     }
 
     public void onBtBackClick() {
         presenter.onBtBackClick();
-        binding.tvListEmpty.setVisibility(View.GONE);
     }
 
     public void onDeleteAllSearchHistoriesButtonClick() {
-        new MaterialAlertDialogBuilder(requireActivity(), R.style.AlertDialogTheme)
+        new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.delete)
                 .setMessage(R.string.delete_all_search_histories)
                 .setPositiveButton(R.string.delete, (dialog, which) -> presenter.deleteAllSearchHistories())
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    public void onSeeMoreRecommendedProductsViewClick() {
+
     }
 
     @Override

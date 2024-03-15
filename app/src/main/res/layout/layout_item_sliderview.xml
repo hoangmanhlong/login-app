@@ -40,7 +40,7 @@
 
             <TextView
                 tools:text="Track your Orders"
-                style="@style/title"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -51,13 +51,13 @@
                 android:text='@{sliderItem.title}' />
 
             <TextView
-                style="@style/content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:paddingHorizontal="@dimen/_8sdp"
                 android:fontFamily="@font/inter_regular"
                 android:textSize="16sp"
+                android:includeFontPadding="false"
                 tools:text="Free and fast delivery for all meals above ₹100."
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text='@{sliderItem.description}' />

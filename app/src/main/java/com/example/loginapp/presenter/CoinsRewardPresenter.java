@@ -16,9 +16,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class CoinsRewardPresenter implements CoinsRewardListener {
+
+    private boolean wasCoinsTakenForTheFirstTime = false;
+
+    private boolean tookTheVoucherListForTheFirstTime = false;
 
     private final String TAG = this.toString();
 
@@ -36,9 +39,9 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     private boolean tookAttendance = false;
 
-    private List<Voucher> allVouchers = new ArrayList<>();
+    private List<Voucher> listOfAllOriginalVouchers = new ArrayList<>();
 
-    private List<Voucher> showedVouchers = new ArrayList<>();
+    private List<Voucher> voucherListHasBeenFiltered = new ArrayList<>();
 
     private int currentDay;
 
@@ -68,17 +71,18 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     public void initData() {
         view.getLastDayOfMonth(lastDayOfMonth);
-        if (attendanceManager == null) getAttendanceData();
-        else {
+        if (wasCoinsTakenForTheFirstTime) {
             view.isAttendanceLoading(false);
-            view.isGetCoinButtonVisible(tookAttendance);
-            view.bindNumberOfCoins(attendanceManager.getNumberOfCoins());
-            view.bindCheckedDates(checkedDays);
+            if (attendanceManager == null) {
+                isAttendanceDataEmpty();
+            } else {
+                getAttendanceData(attendanceManager);
+            }
         }
-        if (showedVouchers.isEmpty()) getVouchers();
-        else {
+
+        if (tookTheVoucherListForTheFirstTime) {
             view.isVouchersLoading(false);
-            view.bindVouchersList(showedVouchers);
+            if (!voucherListHasBeenFiltered.isEmpty()) view.bindVouchersList(voucherListHasBeenFiltered);
         }
     }
 
@@ -93,6 +97,33 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
             view.onMessage("You do not have enough points to redeem this voucher");
         }
     }
+
+    public void addAttendanceDataValueEventListener() {
+        view.isAttendanceLoading(true);
+        interator.addAttendanceDataValueEventListener();
+    }
+
+    public void removeAttendanceDataValueEventListener() {
+        interator.removeAttendanceDataValueEventListener();
+    }
+
+    public void addVouchersValueEventListener() {
+        view.isVouchersLoading(true);
+        interator.addVouchersValueEventListener();
+    }
+
+    public void removeVouchersValueEventListener() {
+        interator.removeVouchersValueEventListener();
+    }
+
+    public void addMyVouchersValueEventListener() {
+        interator.addMyVouchersValueEventListener();
+    }
+
+    public void removeMyVouchersValueEventListener() {
+        interator.removeMyVouchersValueEventListener();
+    }
+
 
     public void attendance() {
         if (!tookAttendance) {
@@ -112,28 +143,18 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
         }
     }
 
-    private void getVouchers() {
-        view.isVouchersLoading(true);
-        interator.getAllVouchers();
-    }
-
-    private void getAttendanceData() {
-        view.isAttendanceLoading(true);
-        interator.getAttendanceData();
-    }
-
     @Override
     public void getAttendanceData(AttendanceManager manager) {
         view.isAttendanceLoading(false);
         this.attendanceManager = manager;
         view.bindNumberOfCoins(manager.getNumberOfCoins());
-//        view.getLastDayOfMonth(manager.getExpiratioDate());
 
         List<Integer> checkedDays = manager.getCheckedDates();
         view.bindCheckedDates(getCheckedDays(checkedDays));
 
         tookAttendance = checkedDays.contains(currentDay);
         view.isGetCoinButtonVisible(tookAttendance);
+        wasCoinsTakenForTheFirstTime = true;
     }
 
     private List<DayWithCheck> getCheckedDays(List<Integer> list) {
@@ -152,7 +173,7 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
     }
 
     @Override
-    public void isCheckedDayEmpty() {
+    public void isAttendanceDataEmpty() {
         view.isAttendanceLoading(false);
         view.bindCheckedDates(daysInWeek);
         view.getLastDayOfMonth(lastDayOfMonth);
@@ -169,14 +190,13 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     @Override
     public void getVouchers(List<Voucher> vouchers) {
-        this.allVouchers = vouchers;
-        interator.getMyVouchers();
+        this.listOfAllOriginalVouchers = vouchers;
+        addMyVouchersValueEventListener();
     }
 
     @Override
     public void getMyVouchers(List<Voucher> vouchers) {
-        List<Voucher> newVouchersTemp = new ArrayList<>(allVouchers);
-        newVouchersTemp.removeAll(vouchers);
+        List<Voucher> newVouchersTemp = new ArrayList<>(listOfAllOriginalVouchers);
         for (Voucher myVoucher : vouchers) {
             // Duyệt qua từng voucher trong danh sách tất cả các voucher
             for (int i = 0; i < newVouchersTemp.size(); i++) {
@@ -190,21 +210,22 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
                 }
             }
         }
-        showedVouchers = newVouchersTemp;
+        voucherListHasBeenFiltered = newVouchersTemp;
         view.isVouchersLoading(false);
-        view.bindVouchersList(newVouchersTemp);
+        view.bindVouchersList(voucherListHasBeenFiltered);
+        tookTheVoucherListForTheFirstTime = true;
     }
 
     @Override
     public void isMyVoucherEmpty() {
         view.isVouchersLoading(false);
-        showedVouchers = allVouchers;
-        view.bindVouchersList(showedVouchers);
+        view.bindVouchersList(listOfAllOriginalVouchers);
     }
 
     @Override
     public void isVouchersListEmpty() {
         view.isVouchersLoading(false);
+        tookTheVoucherListForTheFirstTime = true;
     }
 
     @Override

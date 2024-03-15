@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.attendance_adapter.CalendarAdapter;
@@ -24,8 +26,6 @@ import com.example.loginapp.model.entity.DayWithCheck;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.presenter.CoinsRewardPresenter;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,11 +45,11 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
 
     private final ChangeCoinsAdapter changeCoinsAdapter = new ChangeCoinsAdapter(this);
 
-    private ShimmerFrameLayout coinsPlaceHolder;
+    private ShimmerFrameLayout coinsPlaceHolder, vouchersLoadingView;
 
-    private ShimmerFrameLayout vouchersLoadingView;
+    private RecyclerView changeCoinsRecyclerView, calendarRecyclerview;
 
-    private RecyclerView changeCoinsRecyclerView;
+    private NavController navController;
 
     @Nullable
     @Override
@@ -63,22 +63,47 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
+        navController = NavHostFragment.findNavController(this);
+
         coinsPlaceHolder = binding.coinsPlaceHolder;
         vouchersLoadingView = binding.voucherLoadingView;
         changeCoinsRecyclerView = binding.changeCoinsRecyclerView;
-
-        binding.calendarRecyclerview.setAdapter(calendarAdapter);
+        calendarRecyclerview = binding.calendarRecyclerview;
+        calendarRecyclerview.setAdapter(calendarAdapter);
+        ((SimpleItemAnimator) calendarRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) changeCoinsRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         changeCoinsRecyclerView.setAdapter(changeCoinsAdapter);
 
         presenter.initData();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.addAttendanceDataValueEventListener();
+        presenter.addVouchersValueEventListener();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.removeAttendanceDataValueEventListener();
+        presenter.removeMyVouchersValueEventListener();
+        presenter.removeVouchersValueEventListener();
+    }
+
     public void onNavigateUp() {
-        NavHostFragment.findNavController(this).navigateUp();
+        navController.navigateUp();
     }
 
     public void goVoucherScreen() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_global_voucherFragment);
+        navController.navigate(R.id.action_coinsRewardFragment_to_voucherFragment);
     }
 
     public void onAttendanceButtonClick() {
@@ -97,8 +122,6 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
             binding.llAttendance.setVisibility(View.VISIBLE);
         }
     }
-
-
 
     @Override
     public void bindNumberOfCoins(int numberOfCoins) {

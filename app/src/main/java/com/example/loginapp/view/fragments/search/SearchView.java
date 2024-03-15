@@ -7,25 +7,21 @@ import java.util.List;
 
 public interface SearchView {
 
-    void onLoadProducts(List<Product> products);
+    void bindSearchHistories(List<SearchHistory> searchHistories);
+
+    void isProductListVisible(boolean visible);
+
+    void bindProducts(List<Product> products);
 
     void onMessage(String message);
 
-    void notifyItemAdded(List<SearchHistory> list);
-
-    void notifyItemChanged(int index);
-
-    void notifyItemRemoved(int index);
-
-    void showSearchResult(Boolean show);
-
-    void isSearchEmpty(boolean isEmpty);
+    void isProductListEmpty(boolean isEmpty);
 
     void getSearchSuggestions(List<String> list);
 
     void hideSearchSuggestionsDropdown();
 
-    void isSearchSuggestionViewVisible(boolean visible);
+    void setIsSearchHistoriesViewVisible(boolean visible);
 
     void clearQueryButtonVisible(boolean visible);
 }

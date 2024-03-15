@@ -1,18 +1,18 @@
 package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.listener.DeliveryAddressListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeliveryAddressInterator {
 
@@ -20,52 +20,36 @@ public class DeliveryAddressInterator {
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private final Query query = user != null ? Constant.deliveryAddressRef.child(user.getUid()) : null;
+    private final ValueEventListener deliveryAddressValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
+                listener.getDeliveryAddress(deliveryAddresses);
+            } else {
+                listener.isDeliveryAddressEmpty();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
     public DeliveryAddressInterator(DeliveryAddressListener listener) {
         this.listener = listener;
     }
 
-    public void getShippingAddresses() {
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    query.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            listener.notifyItemAdded(snapshot.getValue(DeliveryAddress.class));
-                        }
+    public void addDeliveryAddressValueEventListener() {
+        Constant.deliveryAddressRef.child(user.getUid())
+                .addValueEventListener(deliveryAddressValueEventListener);
+    }
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            listener.notifyItemChanged(snapshot.getValue(DeliveryAddress.class));
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                            listener.notifyItemRemoved(snapshot.getValue(DeliveryAddress.class));
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                } else {
-                    listener.isDeliveryAddressesEmpty(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    public void removeDeliveryAddressValueEventListener() {
+        Constant.deliveryAddressRef.child(user.getUid())
+                .removeEventListener(deliveryAddressValueEventListener);
     }
 }

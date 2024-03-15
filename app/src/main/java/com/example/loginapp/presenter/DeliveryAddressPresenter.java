@@ -7,8 +7,6 @@ import com.example.loginapp.view.fragments.shipping_address.DeliveryAddressView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
@@ -18,51 +16,51 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
     private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
 
+    private boolean wasTakenForTheFirstTime = false;
+
     public DeliveryAddressPresenter(DeliveryAddressView view) {
         this.view = view;
     }
 
-    public void getDeliveryAddresses() {
-        interator.getShippingAddresses();
-    }
-
     public void initData() {
-        if (deliveryAddresses.isEmpty()) getDeliveryAddresses();
-        else {
-            view.getShippingAddresses(deliveryAddresses);
-            buttonState();
+        if (wasTakenForTheFirstTime) {
+            view.isLoading(false);
+            if (deliveryAddresses.isEmpty()) {
+                view.isDeliveryAddressEmpty(true);
+                view.addNewDeliveryAddressButtonVisible(true);
+            }
+            else {
+                view.bindShippingAddresses(deliveryAddresses);
+                view.addNewDeliveryAddressButtonVisible(deliveryAddresses.size() < 3);
+            }
         }
     }
 
-    @Override
-    public void notifyItemAdded(DeliveryAddress deliveryAddress) {
-        deliveryAddresses.add(deliveryAddress);
-        view.getShippingAddresses(deliveryAddresses);
-        buttonState();
+    public void addDeliveryAddressValueEventListener() {
+        view.isLoading(true);
+        interator.addDeliveryAddressValueEventListener();
+    }
+
+    public void removeDeliveryAddressValueEventListener() {
+        interator.removeDeliveryAddressValueEventListener();
     }
 
     @Override
-    public void isDeliveryAddressesEmpty(Boolean isEmpty) {
-        view.isListEmpty(isEmpty);
+    public void getDeliveryAddress(List<DeliveryAddress> deliveryAddresses) {
+        view.isLoading(false);
+        this.deliveryAddresses = deliveryAddresses;
+        view.isDeliveryAddressEmpty(false);
+        view.bindShippingAddresses(deliveryAddresses);
+        view.addNewDeliveryAddressButtonVisible(deliveryAddresses.size() < 3);
+        wasTakenForTheFirstTime = true;
     }
 
     @Override
-    public void notifyItemChanged(DeliveryAddress deliveryAddress) {
-        int index = deliveryAddresses.indexOf(deliveryAddresses.stream().filter(p -> Objects.equals(p.getDeliveryAddressId(), deliveryAddress.getDeliveryAddressId())).collect(Collectors.toList()).get(0));
-        deliveryAddresses.set(index, deliveryAddress);
-        view.notifyItemChanged(index);
-        buttonState();
-    }
-
-    private void buttonState() {
-        view.isAddNewAddressButtonEnabled(deliveryAddresses.size() < 3);
-    }
-
-    @Override
-    public void notifyItemRemoved(DeliveryAddress deliveryAddress) {
-        int index = deliveryAddresses.indexOf(deliveryAddresses.stream().filter(p -> Objects.equals(p.getDeliveryAddressId(), deliveryAddress.getDeliveryAddressId())).collect(Collectors.toList()).get(0));
-        deliveryAddresses.remove(index);
-        view.notifyItemRemoved(index);
-        buttonState();
+    public void isDeliveryAddressEmpty() {
+        view.isLoading(false);
+        deliveryAddresses.clear();
+        view.isDeliveryAddressEmpty(true);
+        view.addNewDeliveryAddressButtonVisible(true);
+        wasTakenForTheFirstTime = true;
     }
 }

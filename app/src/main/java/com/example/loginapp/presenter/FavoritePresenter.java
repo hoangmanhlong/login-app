@@ -58,6 +58,7 @@ public class FavoritePresenter implements FavoriteListener {
         isChecked = true;
         this.wishlist = products;
         view.bindFavoriteListProduct(wishlist);
+        view.isWishlistEmpty(false);
     }
 
     public void deleteFavoriteProduct(int id) {

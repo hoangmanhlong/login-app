@@ -8,7 +8,7 @@ public interface CheckoutInfoView {
 
     void onMessage(String message);
 
-    void bindDefaultDeliveryAddress(DeliveryAddress deliveryAddress);
+    void bindDeliveryAddress(DeliveryAddress deliveryAddress);
 
     void getSharedData();
 

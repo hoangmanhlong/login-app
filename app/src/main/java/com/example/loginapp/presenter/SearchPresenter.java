@@ -1,10 +1,8 @@
 package com.example.loginapp.presenter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.example.loginapp.App;
-import com.example.loginapp.data.local.room.AppDatabase;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.ProductName;
 import com.example.loginapp.model.entity.SearchHistory;
@@ -15,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -24,13 +21,13 @@ public class SearchPresenter implements SearchListener {
 
     private final String TAG = this.toString();
 
-    private final AppDatabase database = App.getDatabase();
-
     private final SearchProductInterator interator = new SearchProductInterator(this);
 
     private final SearchView view;
 
     public boolean isShowSearchResult = false;
+
+    private boolean retrievedSearchHistories = false;
 
     private final boolean authenticated;
 
@@ -49,21 +46,25 @@ public class SearchPresenter implements SearchListener {
 
     public void initData() {
         if (authenticated) {
-            if (searchHistories.isEmpty()) getSearchHistories();
-            else {
-                view.notifyItemAdded(searchHistories);
-                view.isSearchSuggestionViewVisible(true);
+            if (retrievedSearchHistories) {
+                if (searchHistories.isEmpty()) {
+                    view.setIsSearchHistoriesViewVisible(false);
+                } else {
+                    view.setIsSearchHistoriesViewVisible(true);
+                    view.bindSearchHistories(searchHistories);
+                }
             }
         }
 
-        if (!products.isEmpty() && isShowSearchResult) {
-            view.onLoadProducts(products);
-            view.showSearchResult(true);
-            listStatus();
+        if (isShowSearchResult) {
+            if (products.isEmpty()) {
+                view.isProductListEmpty(true);
+            } else {
+                view.isProductListEmpty(false);
+                view.bindProducts(this.products);
+            }
+            view.isProductListVisible(true);
         }
-
-        if (searchSuggestions.isEmpty()) getSearchSuggestions();
-        else view.getSearchSuggestions(searchSuggestions);
     }
 
     public void setQuery(String query) {
@@ -73,7 +74,7 @@ public class SearchPresenter implements SearchListener {
 
     @SuppressLint("CheckResult")
     public void getSearchSuggestions() {
-        database.dao().getProductsName()
+        App.getDatabase().dao().getProductsName()
                 .map(productNames -> {
                     List<String> names = new ArrayList<>();
                     for (ProductName productName : productNames) {
@@ -86,65 +87,56 @@ public class SearchPresenter implements SearchListener {
                 .subscribe(view::getSearchSuggestions);
     }
 
-    public void onSearchProduct(String query) {
-        if (!query.isEmpty() && isValidFirebasePath(query)) {
-            products.clear();
+    public void searchWithSearchHistory(String query) {
+        this.query = query;
+        searchProcess(query);
+    }
+
+    public void onActionSearchClick() {
+        searchProcess(query);
+    }
+
+    private void searchProcess(String query) {
+        if (query != null && !query.isEmpty() && isValidFirebasePath(query)) {
             interator.searchProduct(query);
             if (authenticated) interator.saveSearchHistory(query);
+            view.isProductListVisible(true);
             view.hideSearchSuggestionsDropdown();
         } else {
             view.onMessage("Invalid information");
         }
     }
 
-    private void getSearchHistories() {
-        interator.getSearchHistories();
+    public void addSearchHistoriesValueEventListener() {
+        interator.addSearchHistoriesValueEventListener();
+    }
+
+    public void removeSearchHistoriesValueEventListener() {
+        interator.removeSearchHistoriesValueEventListener();
     }
 
     @Override
     public void getProducts(List<Product> products) {
-        setIsShowSearchResult(true);
         this.products = products;
-        view.onLoadProducts(this.products);
-        listStatus();
+        isShowSearchResult = true;
+        if (!products.isEmpty()) view.bindProducts(this.products);
+        view.isProductListEmpty(products.isEmpty());
     }
 
-    private void setIsShowSearchResult(boolean isShowSearchResult) {
-        this.isShowSearchResult = isShowSearchResult;
-        view.showSearchResult(isShowSearchResult);
-    }
-
-    private void listStatus() {
-        view.isSearchEmpty(products.isEmpty());
+    @Override
+    public void getSearchHistories(List<SearchHistory> searchHistories) {
+        this.searchHistories = searchHistories;
+        if (searchHistories.size() > 1)
+            this.searchHistories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
+        view.setIsSearchHistoriesViewVisible(true);
+        view.bindSearchHistories(this.searchHistories);
+        retrievedSearchHistories = true;
     }
 
     public void onBtBackClick() {
-        setIsShowSearchResult(false);
-    }
-
-    @Override
-    public void notifyItemAdded(SearchHistory history) {
-        view.isSearchSuggestionViewVisible(true);
-        searchHistories.add(history);
-        if (searchHistories.size() > 1)
-            searchHistories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
-        view.notifyItemAdded(searchHistories);
-    }
-
-    @Override
-    public void notifyItemChanged(SearchHistory history) {
-        int index = searchHistories.indexOf(searchHistories.stream().filter(p -> p.getText().equals(history.getText())).collect(Collectors.toList()).get(0));
-        searchHistories.set(index, history);
-        searchHistories.sort((history1, history2) -> Long.compare(history2.getTime(), history1.getTime()));
-        view.notifyItemChanged(index);
-    }
-
-    @Override
-    public void notifyItemRemoved(SearchHistory history) {
-        int index = searchHistories.indexOf(searchHistories.stream().filter(p -> p.getTime().equals(history.getTime())).collect(Collectors.toList()).get(0));
-        searchHistories.remove(index);
-        view.isSearchSuggestionViewVisible(searchHistories.size() > 0);
-        view.notifyItemRemoved(index);
+        isShowSearchResult = false;
+        view.isProductListVisible(false);
+        products.clear();
     }
 
     @Override
@@ -159,7 +151,8 @@ public class SearchPresenter implements SearchListener {
 
     @Override
     public void isSearchHistoriesEmpty() {
-        view.isSearchSuggestionViewVisible(false);
+        retrievedSearchHistories = true;
+        view.setIsSearchHistoriesViewVisible(false);
     }
 
     public void deleteHistory(String text) {
@@ -173,28 +166,4 @@ public class SearchPresenter implements SearchListener {
     private boolean isValidFirebasePath(String path) {
         return !path.contains(".") && !path.contains("#") && !path.contains("$") && !path.contains("[") && !path.contains("]");
     }
-
-//    @SuppressLint("StaticFieldLeak")
-//    public class GetProductNamesAsyncTask extends AsyncTask<Void, Void, List<ProductName>> {
-//
-//        private final AppDao dao;
-//
-//        public GetProductNamesAsyncTask(AppDao dao) {
-//            this.dao = dao;
-//        }
-//
-//        @Override
-//        protected List<ProductName> doInBackground(Void... voids) {
-//            return dao.getProductsName();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<ProductName> productNames) {
-//            List<String> name = new ArrayList<>();
-//            for (ProductName productName : productNames)
-//                name.add(productName.productName);
-//            searchSuggestions = name;
-//            view.getSearchSuggestions(searchSuggestions);
-//        }
-//    }
 }

@@ -6,6 +6,13 @@
     <data>
 
         <variable
+            name="isAllVouchersEmpty"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+
+
+        <variable
             name="voucher"
             type="com.example.loginapp.model.entity.Voucher" />
 
@@ -40,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:includeFontPadding="false"
-                android:text="@string/discount_code"
+                android:text="@string/my_voucher"
                 android:textColor="@color/black_100"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -50,31 +57,33 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/vouchersTabLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/gray_1000"
-            app:tabIndicatorFullWidth="true">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.tabs.TabItem
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/myVoucherRecyclerView"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="@dimen/_8sdp"
+                android:visibility="@{isAllVouchersEmpty ? View.GONE : View.VISIBLE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/layout_voucher" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/all" />
+                android:text="@string/voucher_empty"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="@{isAllVouchersEmpty ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/my_voucher" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
+
 </layout>

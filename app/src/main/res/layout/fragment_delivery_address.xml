@@ -7,11 +7,19 @@
     <data>
 
         <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
+            name="isDeliveryAddressEmpty"
+            type="Boolean" />
+
+        <variable
             name="fragment"
             type="com.example.loginapp.view.fragments.shipping_address.DeliveryAddressFragment" />
 
         <variable
-            name="isVisible"
+            name="addNewDeliveryAddressButtonVisible"
             type="Boolean" />
 
         <import type="android.view.View" />
@@ -51,7 +59,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <LinearLayout
+            android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"/>
+        </LinearLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -62,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="@{isDeliveryAddressEmpty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/averia_gruesa_libre_regular"
-                    android:text="Delivery address is empty"
+                    android:text="@string/delivery_address_empty"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -89,6 +109,7 @@
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
                 android:padding="@dimen/_8sdp"
+                android:visibility="@{isDeliveryAddressEmpty ? View.GONE : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:itemCount="3"
@@ -100,15 +121,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_25sdp"
                 android:onClick="@{() -> fragment.onAddNewAddress()}"
-                android:visibility="@{isVisible ? View.VISIBLE : View.GONE}"
+                android:visibility="@{addNewDeliveryAddressButtonVisible ? View.VISIBLE : View.GONE}"
                 app:backgroundTint="#fff"
                 app:icon="@drawable/ic_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     </LinearLayout>
 </layout>

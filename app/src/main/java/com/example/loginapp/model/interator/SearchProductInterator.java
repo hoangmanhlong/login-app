@@ -19,6 +19,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +35,25 @@ public class SearchProductInterator {
     private final DatabaseReference searchHistoriesRef = Constant.searchHistoriesRef;
 
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+    private final ValueEventListener searchHistoriesValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                List<SearchHistory> searchHistories = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    searchHistories.add(dataSnapshot.getValue(SearchHistory.class));
+                listener.getSearchHistories(searchHistories);
+            } else {
+                listener.isSearchHistoriesEmpty();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
     public SearchProductInterator(SearchListener listener) {
         this.listener = listener;
@@ -65,51 +87,59 @@ public class SearchProductInterator {
                 .setValue(new SearchHistory(text));
     }
 
-    public void getSearchHistories() {
-
-        assert currentUser != null;
-        Query query = searchHistoriesRef.child(currentUser.getUid());
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                query.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Log.d(TAG, "onChildAdded: ");
-                        listener.notifyItemAdded(snapshot.getValue(SearchHistory.class));
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        listener.notifyItemChanged(snapshot.getValue(SearchHistory.class));
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                        listener.notifyItemRemoved(snapshot.getValue(SearchHistory.class));
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-                if (!snapshot.exists()) listener.isSearchHistoriesEmpty();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    public void addSearchHistoriesValueEventListener() {
+        searchHistoriesRef.child(currentUser.getUid()).addValueEventListener(searchHistoriesValueEventListener);
     }
+
+    public void removeSearchHistoriesValueEventListener() {
+        searchHistoriesRef.child(currentUser.getUid()).removeEventListener(searchHistoriesValueEventListener);
+    }
+
+//    public void getSearchHistories() {
+//
+//        assert currentUser != null;
+//        Query query = searchHistoriesRef.child(currentUser.getUid());
+//
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                query.addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                        Log.d(TAG, "onChildAdded: ");
+//                        listener.notifyItemAdded(snapshot.getValue(SearchHistory.class));
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                        listener.notifyItemChanged(snapshot.getValue(SearchHistory.class));
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//                        listener.notifyItemRemoved(snapshot.getValue(SearchHistory.class));
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//                if (!snapshot.exists()) listener.isSearchHistoriesEmpty();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     public void deleteSearchHistory(String key) {
         searchHistoriesRef.child(currentUser.getUid()).child(key).removeValue();

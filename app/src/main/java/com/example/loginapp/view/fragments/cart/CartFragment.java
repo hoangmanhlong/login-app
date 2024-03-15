@@ -72,6 +72,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        presenter.removeShoppingCartValueEventListener();
     }
 
     @Override
@@ -115,7 +116,6 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        presenter.removeShoppingCartValueEventListener();
     }
 
     @Override

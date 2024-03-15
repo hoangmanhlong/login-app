@@ -201,6 +201,8 @@
 
 <!--    Search Screen-->
     <string name="recent_search">Tìm kiếm gần đây</string>
+    <string name="default_">Mặc định</string>
+    <string name="delivery_address_empty">Địa chỉ giao hàng trống</string>
 
 
 </resources>

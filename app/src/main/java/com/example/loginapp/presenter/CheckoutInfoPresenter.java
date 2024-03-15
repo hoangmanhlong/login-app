@@ -16,6 +16,8 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     private final CheckoutInfoView view;
 
+    private boolean deliveryAddressesTaken = false;
+
     private Order currentOrder;
 
     private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
@@ -23,11 +25,6 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     public CheckoutInfoPresenter(CheckoutInfoView view) {
         this.view = view;
-    }
-
-    public void getDefaultDeliveryAddress() {
-        view.isLoading(true);
-        interator.getDeliveryAddresses();
     }
 
     public List<DeliveryAddress> getDeliveryAddresses() {
@@ -38,15 +35,14 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
         if (currentOrder == null) view.getSharedData();
         else {
             view.isLoading(false);
-            view.bindDefaultDeliveryAddress(currentOrder.getDeliveryAddress());
+            view.bindDeliveryAddress(currentOrder.getDeliveryAddress());
         }
-
-        if (deliveryAddresses.isEmpty()) getDefaultDeliveryAddress();
+        if (!deliveryAddressesTaken) interator.getDeliveryAddresses();
     }
 
     public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
         currentOrder.setDeliveryAddress(deliveryAddress);
-        view.bindDefaultDeliveryAddress(deliveryAddress);
+        view.bindDeliveryAddress(deliveryAddress);
     }
 
     public Order getCurrentOrder() {
@@ -74,10 +70,13 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
     public void getDeliveryAddresses(List<DeliveryAddress> deliveryAddresses) {
         view.isLoading(false);
         this.deliveryAddresses = deliveryAddresses;
-        DeliveryAddress defaultDeliveryAddress = deliveryAddresses.stream().filter(DeliveryAddress::getIsDefault).collect(Collectors.toList()).get(0);
-        currentOrder.setDeliveryAddress(defaultDeliveryAddress);
-        view.bindDefaultDeliveryAddress(defaultDeliveryAddress);
-
+        List<DeliveryAddress> defaultDeliveryAddress = deliveryAddresses.stream().filter(DeliveryAddress::getIsDefault).collect(Collectors.toList());
+        DeliveryAddress deliveryAddress = null;
+        if (defaultDeliveryAddress.isEmpty()) deliveryAddress = deliveryAddresses.get(0);
+        else deliveryAddress = defaultDeliveryAddress.get(0);
+        currentOrder.setDeliveryAddress(deliveryAddress);
+        view.bindDeliveryAddress(deliveryAddress);
+        deliveryAddressesTaken = true;
     }
 
     @Override

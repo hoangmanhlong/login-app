@@ -41,7 +41,7 @@ public class ChangeCoinsAdapter extends ListAdapter<Voucher, ChangeCoinsAdapter.
         public VoucherViewHolder(LayoutVoucherCoinExchangeBinding binding, OnVoucherClickListener listener) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.btChange.setOnClickListener(c -> listener.onVoucherClick(getItem(getAdapterPosition())));
+            binding.btRedeem.setOnClickListener(c -> listener.onVoucherClick(getItem(getAdapterPosition())));
         }
 
         public void bind(Voucher voucher) {
@@ -49,7 +49,6 @@ public class ChangeCoinsAdapter extends ListAdapter<Voucher, ChangeCoinsAdapter.
             if (voucher.getVoucherType() == VoucherType.FreeShipping)
                 binding.voucherImageView.setBackgroundResource(R.color.free_shipping_color);
             else binding.voucherImageView.setBackgroundResource(R.color.orange);
-            binding.executePendingBindings();
         }
     }
 

@@ -2,12 +2,10 @@ package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.model.entity.Date;
-import com.example.loginapp.model.entity.DeliveryAddress;
-import com.example.loginapp.model.listener.CheckoutInfoListener;
+import com.example.loginapp.model.entity.Voucher;
+import com.example.loginapp.model.listener.VoucherListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -15,29 +13,27 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutInfoInterator {
+public class VoucherInteractor {
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    private CheckoutInfoListener listener;
+    private final VoucherListener listener;
 
-    public CheckoutInfoInterator(CheckoutInfoListener listener) {
+    public VoucherInteractor(VoucherListener listener) {
         this.listener = listener;
     }
 
-    public void getDeliveryAddresses() {
-        Constant.deliveryAddressRef.child(FirebaseAuth.getInstance().getUid())
+    public void getVouchers() {
+        Constant.myVoucherRef.child(FirebaseAuth.getInstance().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+                            List<Voucher> vouchers = new ArrayList<>();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                                deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                            listener.getDeliveryAddresses(deliveryAddresses);
+                                vouchers.add(dataSnapshot.getValue(Voucher.class));
+                            listener.getVouchers(vouchers);
                         } else {
-                            listener.isDeliveryAddressesEmpty();
+                            listener.isVouchersEmpty();
                         }
-
                     }
 
                     @Override

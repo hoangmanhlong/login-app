@@ -1,5 +1,7 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.loginapp.model.entity.AttendanceManager;
@@ -10,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -24,7 +25,57 @@ public class CoinsRewardInterator {
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private List<Voucher> allVouchers = new ArrayList<>();
+    private final ValueEventListener attendanceDataValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) listener.getAttendanceData(snapshot.getValue(AttendanceManager.class));
+            else listener.isAttendanceDataEmpty();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+    private final ValueEventListener vouchersValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                Log.d(TAG, "onDataChange: snapshot != null");
+                List<Voucher> vouchers = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    vouchers.add(dataSnapshot.getValue(Voucher.class));
+                listener.getVouchers(vouchers);
+            } else {
+                listener.isVouchersListEmpty();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+    private final ValueEventListener myVouchersValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                List<Voucher> vouchers = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    vouchers.add(dataSnapshot.getValue(Voucher.class));
+                listener.getMyVouchers(vouchers);
+            } else {
+                listener.isMyVoucherEmpty();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
     public CoinsRewardInterator(CoinsRewardListener listener) {
         this.listener = listener;
@@ -36,68 +87,28 @@ public class CoinsRewardInterator {
                 .addOnCompleteListener(e -> listener.iAttendanceSuccess(false));
     }
 
-    public void getAttendanceData() {
-
-        Query query = Constant.coinsRef.child(user.getUid());
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) listener.getAttendanceData(snapshot.getValue(AttendanceManager.class));
-                else listener.isCheckedDayEmpty();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                listener.getDataError();
-            }
-        });
+    public void addAttendanceDataValueEventListener() {
+        Constant.coinsRef.child(user.getUid()).addValueEventListener(attendanceDataValueEventListener);
     }
 
-    public void getAllVouchers() {
-
-        Constant.voucherRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    List<Voucher> vouchers = new ArrayList<>();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                        vouchers.add(dataSnapshot.getValue(Voucher.class));
-                    listener.getVouchers(vouchers);
-                } else {
-                    // Handle case when there are no all vouchers
-                    listener.isVouchersListEmpty();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle onCancelled
-            }
-        });
+    public void removeAttendanceDataValueEventListener() {
+        Constant.coinsRef.child(user.getUid()).removeEventListener(attendanceDataValueEventListener);
     }
 
-    public void getMyVouchers() {
-        Constant.myVoucherRef.child(FirebaseAuth.getInstance().getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            List<Voucher> vouchers = new ArrayList<>();
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                                vouchers.add(dataSnapshot.getValue(Voucher.class));
-                            listener.getMyVouchers(vouchers);
-                        } else {
-                            listener.isMyVoucherEmpty();
-                        }
-                    }
+    public void addVouchersValueEventListener() {
+        Constant.voucherRef.addValueEventListener(vouchersValueEventListener);
+    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+    public void removeVouchersValueEventListener() {
+        Constant.voucherRef.removeEventListener(vouchersValueEventListener);
+    }
 
-                    }
-                });
+    public void addMyVouchersValueEventListener() {
+        Constant.myVoucherRef.child(user.getUid()).addValueEventListener(myVouchersValueEventListener);
+    }
 
+    public void removeMyVouchersValueEventListener() {
+        Constant.myVoucherRef.child(user.getUid()).removeEventListener(myVouchersValueEventListener);
     }
 
     public void redeemVoucher(Voucher voucher, int newNumberOfCoins) {

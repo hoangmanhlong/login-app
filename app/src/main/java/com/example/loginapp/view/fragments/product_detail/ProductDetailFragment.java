@@ -59,14 +59,13 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("viewpager", this + "onViewCreated: ");
         initView();
     }
 
     private void initView() {
         binding.setFragment(this);
 
-        AppAnimationState.setBottomActionView(binding.bottomActionView, true);
+//        AppAnimationState.setBottomActionView(binding.bottomActionView, true);
 
         getDataShared();
 

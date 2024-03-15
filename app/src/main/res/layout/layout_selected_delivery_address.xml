@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:fontFamily="@font/averia_gruesa_libre_regular"
-                        android:text="Default"
+                        android:text="@string/default_"
                         android:textColor="@color/orange"
                         android:visibility="@{deliveryAddress.isDefault ? View.VISIBLE  : View.GONE}" />
 

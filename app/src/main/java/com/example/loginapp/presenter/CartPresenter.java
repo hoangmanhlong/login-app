@@ -35,9 +35,11 @@ public class CartPresenter implements CartListener {
     }
 
     public void initBasket() {
-        if (!basket.isEmpty() && wasTakenForTheFirstTime) {
-            view.bindBasket(basket);
-            updateUI();
+        if (wasTakenForTheFirstTime) {
+            if (!basket.isEmpty()) {
+                view.bindBasket(basket);
+                updateUI();
+            }
         }
     }
 
@@ -74,6 +76,7 @@ public class CartPresenter implements CartListener {
 
     @Override
     public void isCartEmpty() {
+        this.basket.clear();
         view.isCheckAllCheckboxChecked(false);
         view.isBasketEmpty(true);
     }

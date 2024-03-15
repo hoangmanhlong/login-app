@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.DeliveryAddressAdapter.DeliveryAddressAdapter;
@@ -33,6 +35,10 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
 
     private Dialog dialog;
 
+    private NavController navController;
+
+    RecyclerView deliveryAddressesRecyclerView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,64 +49,65 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-        binding.deliveryAddressRecyclerview.setAdapter(deliveryAddressAdapter);
+        deliveryAddressesRecyclerView = binding.deliveryAddressRecyclerview;
+        deliveryAddressesRecyclerView.setAdapter(deliveryAddressAdapter);
+        ((SimpleItemAnimator) deliveryAddressesRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         presenter.initData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.addDeliveryAddressValueEventListener();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.removeDeliveryAddressValueEventListener();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
     public void onDeliveryAddressClick(DeliveryAddress deliveryAddress) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.DELIVERY_ADDRESS_KEY, deliveryAddress);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_deliveryAddressFragment_to_deliveryAddressDetailFragment, bundle);
+        navController.navigate(R.id.action_deliveryAddressFragment_to_deliveryAddressDetailFragment, bundle);
     }
 
     public void onNavigateUp() {
-        NavHostFragment.findNavController(this).navigateUp();
+        navController.navigateUp();
     }
 
     @Override
-    public void getShippingAddresses(List<DeliveryAddress> deliveryAddresses) {
+    public void bindShippingAddresses(List<DeliveryAddress> deliveryAddresses) {
         deliveryAddressAdapter.submitList(deliveryAddresses);
-        deliveryAddressAdapter.notifyItemInserted(deliveryAddresses.size() - 1);
     }
 
     @Override
     public void isLoading(boolean loading) {
-        if (loading) dialog.show();
-        else dialog.dismiss();
+        binding.setIsLoading(loading);
+    }
+
+    @Override
+    public void isDeliveryAddressEmpty(boolean isEmpty) {
+        binding.setIsDeliveryAddressEmpty(isEmpty);
+    }
+
+    @Override
+    public void addNewDeliveryAddressButtonVisible(boolean visible) {
+        binding.setAddNewDeliveryAddressButtonVisible(visible);
     }
 
     public void onAddNewAddress() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_deliveryAddressFragment_to_deliveryAddressDetailFragment);
-    }
-
-    @Override
-    public void isAddNewAddressButtonEnabled(Boolean enable) {
-        binding.setIsVisible(enable);
-    }
-
-    @Override
-    public void notifyItemChanged(int index) {
-        deliveryAddressAdapter.notifyItemChanged(index);
-    }
-
-    @Override
-    public void notifyItemRemoved(int index) {
-        deliveryAddressAdapter.notifyItemRemoved(index);
-    }
-
-    @Override
-    public void isListEmpty(Boolean isEmpty) {
-        if (isEmpty) {
-            binding.llEmpty.setVisibility(View.VISIBLE);
-            binding.deliveryAddressRecyclerview.setVisibility(View.GONE);
-            binding.addNewAddressButton.setVisibility(View.VISIBLE);
-        } else {
-            binding.llEmpty.setVisibility(View.GONE);
-            binding.deliveryAddressRecyclerview.setVisibility(View.VISIBLE);
-        }
-
+        navController.navigate(R.id.action_deliveryAddressFragment_to_deliveryAddressDetailFragment);
     }
 }

@@ -6,11 +6,19 @@
     <data>
 
         <variable
+            name="isProductsViewVisible"
+            type="Boolean" />
+
+        <variable
+            name="isProductListEmpty"
+            type="Boolean" />
+
+        <variable
             name="clearQueryButtonVisible"
             type="Boolean" />
 
         <variable
-            name="isSearchSuggestionsVisible"
+            name="isSearchHistoriesViewVisible"
             type="Boolean" />
 
         <variable
@@ -40,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.onBtBackClick()}"
-                android:visibility="gone"
+                android:visibility="@{isProductsViewVisible ? View.VISIBLE : View.GONE}"
                 app:icon="@drawable/ic_arrow_left" />
 
             <LinearLayout
@@ -89,129 +97,141 @@
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="@{isSearchSuggestionsVisible ? View.VISIBLE : View.GONE}">
+                android:visibility="@{isProductsViewVisible ? View.GONE : View.VISIBLE}">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
+                    android:visibility="@{isSearchHistoriesViewVisible ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/ivHistory"
-                        android:layout_width="wrap_content"
+                    android:orientation="vertical">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:src="@drawable/ic_restore"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:text="@string/recent_search"
-                        android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/ivHistory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:src="@drawable/ic_restore"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:text="@string/recent_search"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:includeFontPadding="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ivHistory"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="@string/recent_search" />
+
+                        <Button
+                            app:icon="@drawable/ic_clear_search_query"
+                            android:id="@+id/btDeleteAllSearchSuggestion"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{() -> fragment.onDeleteAllSearchHistoriesButtonClick()}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/searchSuggestions"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:includeFontPadding="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/ivHistory"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="@string/recent_search" />
+                        android:paddingHorizontal="@dimen/_8sdp"
+                        app:layout_constraintTop_toBottomOf="@id/btDeleteAllSearchSuggestion"
+                        tools:listitem="@layout/layout_search_suggestion" />
 
-                    <Button
-                        app:icon="@drawable/ic_clear_search_query"
-                        android:id="@+id/btDeleteAllSearchSuggestion"
-                        style="?attr/materialIconButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> fragment.onDeleteAllSearchHistoriesButtonClick()}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/searchSuggestions"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/_8sdp"
-                    app:layout_constraintTop_toBottomOf="@id/btDeleteAllSearchSuggestion"
-                    tools:listitem="@layout/layout_search_suggestion" />
+                    android:orientation="vertical">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:onClick="@{() -> fragment.onSeeMoreRecommendedProductsViewClick()}"
+                        android:padding="@dimen/_8sdp"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ivRecommended"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_outward"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                        <TextView
+                            android:text="@string/recommended_for_you"
+                            android:includeFontPadding="false"
+                            android:fontFamily="@font/poppins_regular"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            app:layout_constraintStart_toEndOf="@id/ivRecommended"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:onClick="@{() -> fragment.onSeeMoreRecommendedProductsViewClick()}"
-                    android:padding="@dimen/_8sdp"
-                    android:background="?attr/selectableItemBackground"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/ivRecommended"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_recommend"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_arrow_right_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:text="@string/recommended_for_you"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_regular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        app:layout_constraintStart_toEndOf="@id/ivRecommended"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageView
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_arrow_right_black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/product_recyclerview"
+            <LinearLayout
+                android:visibility="@{isProductsViewVisible ? View.VISIBLE : View.GONE}"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/gray_1000"
-                android:clipToPadding="false"
-                android:visibility="gone"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/layout_favorite" />
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/product_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray_1000"
+                    android:clipToPadding="false"
+                    android:visibility="@{isProductListEmpty ? View.GONE : View.VISIBLE}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/layout_favorite" />
 
-            <TextView
-                android:id="@+id/tvListEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/montserrat_bold"
-                android:gravity="center"
-                android:text="No results found"
-                android:textSize="20sp"
-                android:visibility="gone" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvListEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:gravity="center"
+                    android:text="No results found"
+                    android:textSize="20sp"
+                    android:visibility="@{isProductListEmpty ? View.VISIBLE : View.GONE}" />
+            </LinearLayout>
 
     </LinearLayout>
 

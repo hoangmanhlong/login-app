@@ -22,6 +22,7 @@ import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.presenter.CheckoutInfoPresenter;
 import com.example.loginapp.view.commonUI.AppMessage;
+import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.example.loginapp.view.fragments.select_delivery_address.SelectedDeliveryAddressMessage;
 
@@ -62,6 +63,7 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
+        HideKeyboard.setupHideKeyboard(view, requireActivity());
         binding.setFragment(this);
         presenter.initData();
     }
@@ -122,7 +124,7 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     }
 
     @Override
-    public void bindDefaultDeliveryAddress(DeliveryAddress deliveryAddress) {
+    public void bindDeliveryAddress(DeliveryAddress deliveryAddress) {
         updateUI(deliveryAddress);
     }
 

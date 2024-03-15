@@ -208,6 +208,8 @@
 
     <!--    Search Screen-->
     <string name="recent_search">Recent searches</string>
+    <string name="default_">Default</string>
+    <string name="delivery_address_empty">Delivery address is empty</string>
 
 
 </resources>

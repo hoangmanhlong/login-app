@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.App;
 import com.example.loginapp.data.local.AppSharedPreferences;
 import com.example.loginapp.model.entity.Order;
@@ -20,16 +18,25 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
     private final UserProfileDetailView view;
 
+    private boolean userDataIsObtainedForTheFirstTime = false;
+
+    /**
+     * @English List of orders taken for the first time
+     * @Vietnamese Danh sách đơn hàng được lấy lần đầu tiên
+     * @Default false
+     */
+    private boolean listOfOrdersTakenForTheFirstTime = false;
+
     private final UserProfileInterator interator = new UserProfileInterator(this);
 
     private final AppSharedPreferences sharedPreferences;
 
-    private UserData currentUser;
+    private UserData userData;
 
     private boolean isVietnamese;
 
-    public UserData getCurrentUser() {
-        return currentUser;
+    public UserData getUserData() {
+        return userData;
     }
 
     private List<Order> orders = new ArrayList<>();
@@ -39,12 +46,6 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }
 
-    private boolean isChecked = false;
-
-    private void getUserData() {
-        interator.getUserData();
-    }
-
     public boolean isVietnamese() {
         return isVietnamese;
     }
@@ -52,40 +53,58 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     public void initData() {
         isVietnamese = sharedPreferences.getLanguage();
         view.bindLanguageState(isVietnamese);
-        if (currentUser == null) getUserData();
-        else view.bindUserData(currentUser);
-
-        if (isChecked) {
-            if (orders.isEmpty()) view.bindNumberOfOrders(0, 0, 0, 0);
+        if (userDataIsObtainedForTheFirstTime) {
+            if (userData != null) view.bindUserData(userData);
+        }
+        if (listOfOrdersTakenForTheFirstTime) {
+            if (orders.isEmpty())view.bindNumberOfOrders(0, 0, 0, 0);
             else getOrders(orders);
-        } else getOrdersStatus();
+        }
     }
 
-    private void getOrdersStatus() {
-        interator.getOrderStatus();
+    public void addOrdersValueEventListener() {
+        interator.addOrdersValueEventListener();
+    }
+    public void removeOrdersValueEventListener() {
+        interator.removeOrdersValueEventListener();
     }
 
     @Override
     public void getUserData(UserData userData) {
-        currentUser = userData;
-        view.bindUserData(currentUser);
+        this.userData = userData;
+        view.bindUserData(this.userData);
+        userDataIsObtainedForTheFirstTime = true;
+    }
+
+    public void addUserDataValueEventListener() {
+        interator.addUserDataValueEventListener();
+    }
+
+    public void removeUserDataValueEventListener() {
+        interator.removeUserDataValueEventListener();
     }
 
     @Override
     public void getOrders(List<Order> orders) {
-        isChecked = true;
         this.orders = orders;
         int numberOfProcessingOrder = countOrdersWithStatus(orders, OrderStatus.Processing);
         int numberOfCompletedOrder = countOrdersWithStatus(orders, OrderStatus.Completed);
         int numberOfCancelOrder = countOrdersWithStatus(orders, OrderStatus.Cancel);
         int numberOfReturnOrder = countOrdersWithStatus(orders, OrderStatus.Return);
         view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
+        listOfOrdersTakenForTheFirstTime = true;
     }
 
     @Override
     public void isOrdersListEmpty() {
         this.orders.clear();
         view.bindNumberOfOrders(0, 0, 0, 0);
+        listOfOrdersTakenForTheFirstTime = true;
+    }
+
+    @Override
+    public void userDataEmpty() {
+        userDataIsObtainedForTheFirstTime = true;
     }
 
     private int countOrdersWithStatus(List<Order> orders, OrderStatus status) {
