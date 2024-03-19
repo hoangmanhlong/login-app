@@ -39,6 +39,7 @@
                 android:contentDescription="@null" />
 
             <TextView
+                android:textColor="@color/cam"
                 tools:text="Track your Orders"
                 android:includeFontPadding="false"
                 android:layout_width="wrap_content"

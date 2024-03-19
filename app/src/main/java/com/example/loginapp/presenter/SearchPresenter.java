@@ -108,11 +108,11 @@ public class SearchPresenter implements SearchListener {
     }
 
     public void addSearchHistoriesValueEventListener() {
-        interator.addSearchHistoriesValueEventListener();
+        if (authenticated) interator.addSearchHistoriesValueEventListener();
     }
 
     public void removeSearchHistoriesValueEventListener() {
-        interator.removeSearchHistoriesValueEventListener();
+        if (authenticated) interator.removeSearchHistoriesValueEventListener();
     }
 
     @Override

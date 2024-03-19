@@ -1,6 +1,5 @@
 package com.example.loginapp.view.fragments.checkout;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,19 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
-import com.example.loginapp.model.entity.DeliveryAddresses;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentCheckoutInfoBinding;
 import com.example.loginapp.model.entity.DeliveryAddress;
+import com.example.loginapp.model.entity.DeliveryAddresses;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.presenter.CheckoutInfoPresenter;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
-import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.example.loginapp.view.fragments.select_delivery_address.SelectedDeliveryAddressMessage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,7 +65,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         presenter.initData();
     }
 
-
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getDeliveryAddress(SelectedDeliveryAddressMessage message) {
         DeliveryAddress deliveryAddress = message.getDeliveryAddress();
@@ -89,7 +85,7 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     }
 
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        navController.navigateUp();
     }
 
     public void onPaymentOptionScreen() {
@@ -139,7 +135,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     public void goSelectDeliveryAddressScreen() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.DELIVERY_ADDRESSES_KEY, new DeliveryAddresses(presenter.getDeliveryAddresses()));
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment, bundle);
+        navController.navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment, bundle);
     }
 }

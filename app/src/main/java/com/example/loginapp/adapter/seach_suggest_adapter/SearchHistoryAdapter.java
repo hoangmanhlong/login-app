@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.loginapp.databinding.LayoutSearchSuggestionBinding;
 import com.example.loginapp.model.entity.SearchHistory;
 
-public class SearchSuggestAdapter extends ListAdapter<SearchHistory, SearchSuggestAdapter.ItemViewHolder> {
+public class SearchHistoryAdapter extends ListAdapter<SearchHistory, SearchHistoryAdapter.ItemViewHolder> {
 
     private final OnSearchSuggestionClickListener listener;
 
-    public SearchSuggestAdapter(OnSearchSuggestionClickListener listener) {
+    public SearchHistoryAdapter(OnSearchSuggestionClickListener listener) {
         super(DiffCallback);
         this.listener = listener;
     }

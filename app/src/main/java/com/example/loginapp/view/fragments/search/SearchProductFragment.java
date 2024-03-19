@@ -24,7 +24,7 @@ import com.example.loginapp.R;
 import com.example.loginapp.adapter.seach_suggest_adapter.OnSearchProductClickListener;
 import com.example.loginapp.adapter.seach_suggest_adapter.OnSearchSuggestionClickListener;
 import com.example.loginapp.adapter.seach_suggest_adapter.SearchProductAdapter;
-import com.example.loginapp.adapter.seach_suggest_adapter.SearchSuggestAdapter;
+import com.example.loginapp.adapter.seach_suggest_adapter.SearchHistoryAdapter;
 import com.example.loginapp.databinding.FragmentSearchProductBinding;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
@@ -47,9 +47,9 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private FragmentSearchProductBinding binding;
 
-    private InputMethodManager imm;
+    private InputMethodManager inputMethodManager;
 
-    private final SearchSuggestAdapter searchSuggestAdapter = new SearchSuggestAdapter(this);
+    private final SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(this);
 
     private final SearchProductAdapter searchProductAdapter = new SearchProductAdapter(this);
 
@@ -71,7 +71,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
+        inputMethodManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
         initView();
     }
 
@@ -80,8 +80,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onPause();
         View currentFocus = requireActivity().getCurrentFocus();
         if (currentFocus != null)
-            if (imm.isAcceptingText())
-                imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+            if (inputMethodManager.isAcceptingText())
+                inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -97,7 +97,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         layoutManager.setJustifyContent(JustifyContent.FLEX_START);
         RecyclerView searchSuggestionRecyclerview = binding.searchSuggestions;
         searchSuggestionRecyclerview.setLayoutManager(layoutManager);
-        searchSuggestionRecyclerview.setAdapter(searchSuggestAdapter);
+        searchSuggestionRecyclerview.setAdapter(searchHistoryAdapter);
         ((SimpleItemAnimator) searchSuggestionRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
 
         binding.etQuery.setOnEditorActionListener((v, actionId, event) -> {
@@ -105,8 +105,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
                 presenter.onActionSearchClick();
                 View currentFocus = requireActivity().getCurrentFocus();
                 if (currentFocus != null) {
-                    if (imm.isAcceptingText()) {
-                        imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+                    if (inputMethodManager.isAcceptingText()) {
+                        inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
                     }
                 }
                 return true;
@@ -154,12 +154,12 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onResume();
         // Auto Show KeyBoard when Fragment show on Screen
         binding.etQuery.requestFocus(); // focus Query EditText
-        imm.showSoftInput(binding.etQuery, 0); // Hiển thị bàn phím cho EditText
+        inputMethodManager.showSoftInput(binding.etQuery, 0); // Hiển thị bàn phím cho EditText
     }
 
     @Override
     public void bindSearchHistories(List<SearchHistory> searchHistories) {
-        searchSuggestAdapter.submitList(searchHistories);
+        searchHistoryAdapter.submitList(searchHistories);
     }
 
     @Override

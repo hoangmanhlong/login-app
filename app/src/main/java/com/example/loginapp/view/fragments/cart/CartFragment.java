@@ -44,8 +44,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     private final CartAdapter adapter = new CartAdapter(this);
 
-
     private RecyclerView shoppingCartRecyclerview;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         binding.setFragment(this);
         shoppingCartRecyclerview.setAdapter(adapter);
         ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
-        presenter.initBasket();
+//        presenter.initBasket();
         new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
             @Override
             public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {

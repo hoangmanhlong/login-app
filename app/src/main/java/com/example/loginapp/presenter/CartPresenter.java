@@ -37,6 +37,7 @@ public class CartPresenter implements CartListener {
     public void initBasket() {
         if (wasTakenForTheFirstTime) {
             if (!basket.isEmpty()) {
+                Log.d(TAG, "initBasket: " + basket.size());
                 view.bindBasket(basket);
                 updateUI();
             }
@@ -91,6 +92,7 @@ public class CartPresenter implements CartListener {
 
     public void onItemChecked(FirebaseProduct product, boolean checked) {
         if (checked) {
+            Log.d(TAG, "onItemChecked: ");
             interator.updateChecked(product.getId(), true);
         } else {
             view.setCheckAllChecked(false);
@@ -99,6 +101,7 @@ public class CartPresenter implements CartListener {
     }
 
     public void addShoppingCartValueEventListener() {
+        basket.clear();
         interator.addShoppingCartValueEventListener();
     }
 

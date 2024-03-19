@@ -44,7 +44,6 @@ public class SearchProductAdapter extends ListAdapter<Product, SearchProductAdap
 
         public void bind(Product product) {
             binding.setProduct(product);
-            binding.executePendingBindings();
         }
     }
 

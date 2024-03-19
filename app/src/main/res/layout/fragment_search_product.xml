@@ -95,6 +95,14 @@
                     app:icon="@drawable/ic_clear_search_query" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/btFilter"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{isProductsViewVisible ? View.VISIBLE : View.GONE}"
+                app:icon="@drawable/ic_filter_list" />
+
         </LinearLayout>
 
             <LinearLayout
