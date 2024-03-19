@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.annotation.SuppressLint;
-
 import com.example.loginapp.R;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Products;
@@ -25,7 +23,8 @@ public class ExpandProductsPresenter {
     }
 
     public void initData() {
-        sortProduct(status);
+        if (products == null || products.isEmpty()) view.getSharedData();
+        else sortProduct(status);
     }
 
     public List<Product> getProducts() {
@@ -38,6 +37,7 @@ public class ExpandProductsPresenter {
     }
 
     public void sortProduct(SortStatus status) {
+        this.status = status;
         setLabel(status);
         if (status == SortStatus.PRICE_HIGH_TO_LOW) {
             products = products.stream()
@@ -57,18 +57,24 @@ public class ExpandProductsPresenter {
                     .collect(Collectors.toList());
         }
         view.getProducts(products);
-        this.status = status;
     }
 
-    @SuppressLint("ResourceType")
     private void setLabel(SortStatus status) {
-        if (status == SortStatus.PRICE_HIGH_TO_LOW)
-            view.setSortStatusName(R.string.price_high_to_low);
-        else if (status == SortStatus.PRICE_LOW_TO_HIGH)
-            view.setSortStatusName(R.string.price_low_to_high);
-        else if (status == SortStatus.RATE_LOW_TO_HIGH)
-            view.setSortStatusName(R.string.rate_low_to_high);
-        else if (status == SortStatus.RATE_HIGH_TO_LOW)
-            view.setSortStatusName(R.string.rate_high_to_low);
+        int statusLabel = 0;
+        switch (status) {
+            case PRICE_HIGH_TO_LOW:
+                statusLabel = R.string.price_high_to_low;
+                break;
+            case PRICE_LOW_TO_HIGH:
+                statusLabel = R.string.price_low_to_high;
+                break;
+            case RATE_LOW_TO_HIGH:
+                statusLabel = R.string.rate_low_to_high;
+                break;
+            case RATE_HIGH_TO_LOW:
+                statusLabel = R.string.rate_high_to_low;
+                break;
+        }
+        if (statusLabel != 0) view.setSortStatusName(statusLabel);
     }
 }

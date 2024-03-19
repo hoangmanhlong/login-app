@@ -136,7 +136,6 @@ public class SearchPresenter implements SearchListener {
     public void onBtBackClick() {
         isShowSearchResult = false;
         view.isProductListVisible(false);
-        products.clear();
     }
 
     @Override

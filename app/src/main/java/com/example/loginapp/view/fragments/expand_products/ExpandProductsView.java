@@ -10,4 +10,6 @@ public interface ExpandProductsView {
     void getProducts(List<Product> products);
 
     void setSortStatusName(@StringRes int res);
+
+    void getSharedData();
 }

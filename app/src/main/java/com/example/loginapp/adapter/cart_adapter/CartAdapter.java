@@ -68,7 +68,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
         @Override
         public void onClick(View v) {
             FirebaseProduct product = getItem(getAdapterPosition());
-            int quantity = Integer.parseInt(product.getQuantity());
+            int quantity = product.getQuantity();
             if (v.getId() == binding.minus.getId()) {
                 if (quantity > 1) listener.updateQuantity(product.getId(), quantity - 1);
                 else listener.onDeleteProduct(product);

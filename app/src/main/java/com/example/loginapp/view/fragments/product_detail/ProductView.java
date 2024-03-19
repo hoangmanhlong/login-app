@@ -22,4 +22,8 @@ public interface ProductView {
     void hasNewFavoriteProduct();
 
     void getSimilarProducts(List<Product> products);
+
+    void showSelectProductQuantityAndVoucherFragment(Product product);
+
+    void showAddProductToCartFragment(Product product);
 }

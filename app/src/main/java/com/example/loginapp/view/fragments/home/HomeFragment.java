@@ -39,7 +39,7 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeView, OnProductClickListener {
 
-    private final String TAG = this.toString();
+    private static final String TAG = HomeFragment.class.getSimpleName();
 
     private FragmentHomeBinding binding;
 
@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private Button expandRecommendedProductsView, expandTopChartsProductsView, expandDiscountProductsView;
 
-    SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private boolean isRefreshing = false;
 
@@ -74,9 +74,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-        binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
+//        binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
         initView();
-        Log.d(TAG, "onViewCreated: ");
     }
 
     @Override
@@ -103,6 +102,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         topChartsRecyclerview = binding.topChartsRecyclerview;
         discountRecyclerView = binding.discountRecyclerView;
 
+        swipeRefreshLayout = binding.homeSwipe;
+
         recommendedRecyclerview.setAdapter(recommendedAdapter);
         topChartsRecyclerview.setAdapter(topChartsAdapter);
         discountRecyclerView.setAdapter(discountAdapter);
@@ -117,7 +118,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
         presenter.initData();
 
-        swipeRefreshLayout = binding.homeSwipe;
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (!isRefreshing) {
                 isRefreshing = true;
@@ -126,24 +126,22 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         });
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void showRecommendedProducts(List<Product> products) {
-        recommendedAdapter.submitList(products);
-        recommendedAdapter.notifyDataSetChanged();
         isRecommendedProductsLoading(false);
+        recommendedAdapter.submitList(products);
     }
 
     @Override
     public void showTopChartsProducts(List<Product> products) {
-        topChartsAdapter.submitList(products);
         isTopChartsProductsLoading(false);
+        topChartsAdapter.submitList(products);
     }
 
     @Override
     public void showDiscountProducts(List<Product> products) {
-        discountAdapter.submitList(products);
         isDiscountProductsLoading(false);
+        discountAdapter.submitList(products);
     }
 
     public void onLoginButtonClick() {
@@ -219,25 +217,16 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         if (show) {
             binding.userView.setVisibility(View.VISIBLE);
 
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    new CountDownTimer(5000, 1000) {
-                        public void onTick(long millisUntilFinished) {
-                            // Không cần làm gì trong thời gian đếm ngược
-                        }
-
-                        public void onFinish() {
-                            binding.userView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    binding.userView.setVisibility(View.GONE);
-                                }
-                            });
-                        }
-                    }.start();
+            new Handler().post(() -> new CountDownTimer(5000, 1000) {
+                public void onTick(long millisUntilFinished) {
                 }
-            });
+
+                public void onFinish() {
+                    if (binding != null) {
+                        binding.userView.post(() -> binding.userView.setVisibility(View.GONE));
+                    }
+                }
+            }.start());
         } else {
             binding.userView.setVisibility(View.GONE);
         }
@@ -264,7 +253,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.EXPAND_PRODUCTS_KEY, new Products(products));
         bundle.putInt(Constant.EXPAND_LABEL_KEY, label);
-        NavHostFragment.findNavController(this).navigate(R.id.expandProductsFragment, bundle);
+        navController.navigate(R.id.expandProductsFragment, bundle);
     }
 
     @Override
@@ -287,6 +276,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
+        navController.navigate(R.id.action_global_productFragment, bundle);
     }
 }

@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInterator;
@@ -36,8 +34,9 @@ public class HomePresenter implements HomeListener {
 
     private final boolean authenticated;
 
+    private boolean gotDataFromAPI = false;
+
     public HomePresenter(HomeView view) {
-        Log.d(TAG, "HomePresenter: ");
         this.view = view;
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
@@ -46,17 +45,14 @@ public class HomePresenter implements HomeListener {
         view.showAskLogin(!authenticated);
         if (authenticated) {
             if (currentUserData == null) getUserData();
-            else {
-                view.isUserLoading(false);
-                view.getUserData(currentUserData);
-            }
+            else getUserData(currentUserData);
         } else {
             view.isUserLoading(false);
             view.setShowUserView(false);
         }
 
-        if (products.isEmpty()) getListProductFromNetwork();
-        else showProducts();
+        if (gotDataFromAPI) showProducts();
+        else getListProductFromNetwork();
 
         if (bestSellerProducts.isEmpty()) getBestsellerProducts();
         else view.getBestsellerProducts(bestSellerProducts);
@@ -88,36 +84,39 @@ public class HomePresenter implements HomeListener {
     public void getUserData(UserData userData) {
         currentUserData = userData;
         view.isUserLoading(false);
-        view.getUserData(userData);
+        boolean isUserViewVisible = currentUserData.getAvatar() != null || currentUserData.getUsername() != null;
+        if (isUserViewVisible) view.getUserData(userData);
+        view.setShowUserView(isUserViewVisible);
     }
 
     @Override
     public void getProductsFromAPI(List<Product> products) {
         this.products = products;
+        gotDataFromAPI = true;
         productClassification(products);
     }
 
     private void productClassification(List<Product> products) {
+        getTopChartsProducts(products);
+        getDiscountProducts(products);
         if (authenticated) interator.getFavoriteProductFromFirebase();
         else {
             List<Product> tempProducts = new ArrayList<>(this.products);
             Collections.shuffle(tempProducts);
             recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 30));
             view.showRecommendedProducts(recommendedProducts);
+            view.refreshInvisible();
         }
-        getTopChartsProducts(products);
-        getDiscountProducts(products);
     }
 
     private void getTopChartsProducts(List<Product> products) {
-        topChartsProducts = products.stream().filter(v -> v.getRating() > 4.8f).collect(Collectors.toList());
+        topChartsProducts = products.stream().filter(product -> product.getRating() > 4.8f).collect(Collectors.toList());
         view.showTopChartsProducts(topChartsProducts);
     }
 
     private void getDiscountProducts(List<Product> products) {
         discountProducts = products.stream().filter(v -> v.getDiscountPercentage() > 12.00).collect(Collectors.toList());
         view.showDiscountProducts(discountProducts);
-        view.refreshInvisible();
     }
 
     @Override

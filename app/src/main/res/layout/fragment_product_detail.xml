@@ -336,7 +336,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_30sdp"
                     android:contentDescription="@null"
-                    android:onClick="@{() -> fragment.onCartBtnClick()}"
+                    android:onClick="@{() -> fragment.onAddToCartButtonClick()}"
                     app:backgroundTint="@color/design_default_color_background"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -361,7 +361,7 @@
                     android:layout_height="@dimen/_50sdp"
                     android:layout_marginEnd="@dimen/_14sdp"
                     android:fontFamily="@font/poppins_bold"
-                    android:onClick="@{() -> fragment.showBottomSheet()}"
+                    android:onClick="@{() -> fragment.onBuyNowButtonClick()}"
                     android:text="@string/buy_now"
                     app:elevation="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -372,7 +372,7 @@
 
         </LinearLayout>
 
-        <include layout="@layout/fragment_bottom_sheet" />
+        <include layout="@layout/fragment_select_product_quantity_and_voucher" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

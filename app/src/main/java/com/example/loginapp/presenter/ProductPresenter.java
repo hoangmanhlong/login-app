@@ -54,29 +54,19 @@ public class ProductPresenter implements ProductListener {
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
+    public void onBuyNowButtonClick() {
+        if (authenticated) view.showSelectProductQuantityAndVoucherFragment(product);
+    }
+
+    public void onAddToCartButtonClick() {
+        if (authenticated) view.showAddProductToCartFragment(product);
+    }
 
     public void updateFavorite() {
         if (authenticated) {
             if (isFavorite) interator.removeFavoriteProduct(product.getId());
             else interator.saveFavoriteProduct(product);
         }
-    }
-
-    public void addProductToCart() {
-        interator.updateQuantity(
-                new FirebaseProduct(
-                        product.getId(),
-                        product.getTitle(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        product.getDiscountPercentage(),
-                        product.getRating(),
-                        product.getStock(),
-                        product.getBrand(),
-                        product.getCategory(),
-                        product.getThumbnail(),
-                        product.getImages()
-                ));
     }
 
     @Override

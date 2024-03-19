@@ -3,6 +3,7 @@ package com.example.loginapp.view.fragments.cart;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 public class CartFragment extends Fragment implements CartView, CartItemClickListener {
+    
+    private static final String TAG = CartFragment.class.getSimpleName();
 
     private NavController navController;
 

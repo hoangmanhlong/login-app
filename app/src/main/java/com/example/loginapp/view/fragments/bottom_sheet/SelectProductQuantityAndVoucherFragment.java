@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.loginapp.R;
-import com.example.loginapp.databinding.FragmentBottomSheetBinding;
+import com.example.loginapp.databinding.FragmentSelectProductQuantityAndVoucherBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Voucher;
@@ -25,9 +25,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Collections;
 
-public class ModalBottomSheetFragment extends BottomSheetDialogFragment implements SheetView {
+public class SelectProductQuantityAndVoucherFragment extends BottomSheetDialogFragment implements SheetView {
 
-    public static final String TAG = ModalBottomSheetFragment.class.getName();
+    public static final String TAG = SelectProductQuantityAndVoucherFragment.class.getSimpleName();
 
     private int quantity = 1;
 
@@ -35,12 +35,12 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment implemen
 
     private Order order = new Order();
 
-    private FragmentBottomSheetBinding binding;
+    private FragmentSelectProductQuantityAndVoucherBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentBottomSheetBinding.inflate(inflater, container, false);
+        binding = FragmentSelectProductQuantityAndVoucherBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 

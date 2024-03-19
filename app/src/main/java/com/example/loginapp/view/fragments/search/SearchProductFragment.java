@@ -43,7 +43,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private final SearchPresenter presenter = new SearchPresenter(this);
 
-    private final String TAG = this.toString();
+    private static final String TAG = SearchProductFragment.class.getSimpleName();
 
     private FragmentSearchProductBinding binding;
 
@@ -73,15 +73,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         inputMethodManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
         initView();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        View currentFocus = requireActivity().getCurrentFocus();
-        if (currentFocus != null)
-            if (inputMethodManager.isAcceptingText())
-                inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -149,13 +140,13 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         presenter.removeSearchHistoriesValueEventListener();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Auto Show KeyBoard when Fragment show on Screen
-        binding.etQuery.requestFocus(); // focus Query EditText
-        inputMethodManager.showSoftInput(binding.etQuery, 0); // Hiển thị bàn phím cho EditText
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        // Auto Show KeyBoard when Fragment show on Screen
+//        binding.etQuery.requestFocus(); // focus Query EditText
+//        inputMethodManager.showSoftInput(binding.etQuery, 0); // Hiển thị bàn phím cho EditText
+//    }
 
     @Override
     public void bindSearchHistories(List<SearchHistory> searchHistories) {

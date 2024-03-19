@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.example.loginapp.data.remote.api.AppApiService;
 import com.example.loginapp.data.remote.api.dto.ProductResponse;
 import com.example.loginapp.model.entity.CommentRespond;
-import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.utils.Constant;
@@ -20,8 +19,6 @@ import retrofit2.Response;
 public class ProductInterator {
 
     private final DatabaseReference favoriteProductRef = Constant.favoriteProductRef;
-
-    private final DatabaseReference cartRef = Constant.cartRef;
 
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -58,25 +55,6 @@ public class ProductInterator {
         favoriteProductRef.child(currentUser.getUid()).child(String.valueOf(productID)).removeValue()
                 .addOnCompleteListener(task -> listener.isFavoriteProduct(false))
                 .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
-    }
-
-    public void updateQuantity(FirebaseProduct product) {
-        String id = String.valueOf(product.getId());
-        cartRef.child(currentUser.getUid()).child(id).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                FirebaseProduct product1 = task.getResult().getValue(FirebaseProduct.class);
-                if (product1 == null) {
-                    cartRef.child(currentUser.getUid()).child(id).setValue(product)
-                            .addOnCompleteListener(a -> listener.saveToBasketSuccess())
-                            .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
-                } else {
-                    cartRef.child(currentUser.getUid()).child(id).child("quantity")
-                            .setValue(String.valueOf(Integer.parseInt(product1.getQuantity()) + 1))
-                            .addOnCompleteListener(a -> listener.saveToBasketSuccess())
-                            .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
-                }
-            }
-        });
     }
 
     public void getComments() {

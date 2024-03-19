@@ -204,5 +204,7 @@
     <string name="default_">Mặc định</string>
     <string name="delivery_address_empty">Địa chỉ giao hàng trống</string>
 
+    <string name="add_to_cart">Thêm vào giỏ hàng</string>
+    <string name="added_to_cart">Đã thêm vào giỏ hàng</string>
 
 </resources>

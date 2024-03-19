@@ -104,4 +104,8 @@ public class Product implements Serializable {
         return new OrderProduct(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images, quantity);
     }
 
+    public FirebaseProduct toProductInCart(int quantity) {
+        return new FirebaseProduct(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images, quantity);
+    }
+
 }

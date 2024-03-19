@@ -101,7 +101,6 @@ public class CartPresenter implements CartListener {
     }
 
     public void addShoppingCartValueEventListener() {
-        basket.clear();
         interator.addShoppingCartValueEventListener();
     }
 
@@ -126,7 +125,7 @@ public class CartPresenter implements CartListener {
         if (!selectedProduct.isEmpty()) {
             order.setOrderProducts(toOrdersProductList(selectedProduct));
 
-            double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * Integer.parseInt(product.getQuantity())).sum();
+            double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
             double total = subtotal;
 
             Voucher voucher = order.getVoucher();

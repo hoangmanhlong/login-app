@@ -6,6 +6,7 @@ import com.example.loginapp.model.entity.UserData;
 import java.util.List;
 
 public interface HomeListener {
+
     void getUserData(UserData userData);
 
     void getProductsFromAPI(List<Product> products);

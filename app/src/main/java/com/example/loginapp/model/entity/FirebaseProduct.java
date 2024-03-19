@@ -16,7 +16,7 @@ public class FirebaseProduct {
     private String thumbnail;
     private List<String> images;
 
-    private String quantity = "1";
+    private int quantity = 1;
 
     private boolean isChecked = false;
 
@@ -51,6 +51,21 @@ public class FirebaseProduct {
         this.category = category;
         this.thumbnail = thumbnail;
         this.images = images;
+    }
+
+    public FirebaseProduct(int id, String title, String description, int price, double discountPercentage, double rating, int stock, String brand, String category, String thumbnail, List<String> images, int quantity) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.discountPercentage = discountPercentage;
+        this.rating = rating;
+        this.stock = stock;
+        this.brand = brand;
+        this.category = category;
+        this.thumbnail = thumbnail;
+        this.images = images;
+        this.quantity = quantity;
     }
 
     public int getId() {
@@ -98,7 +113,7 @@ public class FirebaseProduct {
     }
 
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
@@ -120,8 +135,10 @@ public class FirebaseProduct {
     }
 
     public OrderProduct toOrderProduct() {
-        return new OrderProduct(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images, Integer.parseInt(this.quantity));
+        return new OrderProduct(this.id, this.title, this.description, this.price, this.discountPercentage, this.rating, this.stock, this.brand, this.category, this.thumbnail, this.images, this.quantity);
     }
+
+    public static final String QUANTITY = "quantity";
 }
 
 

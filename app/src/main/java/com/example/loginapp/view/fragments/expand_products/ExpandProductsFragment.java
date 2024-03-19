@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
@@ -29,9 +29,11 @@ import java.util.List;
 
 public class ExpandProductsFragment extends Fragment implements ExpandProductClickListener, ExpandProductsView {
 
-    private final String TAG = this.toString();
+    private static final String TAG = ExpandProductsFragment.class.getSimpleName();
 
     private final ExpandProductsPresenter presenter = new ExpandProductsPresenter(this);
+
+    private NavController navController;
 
     private FragmentExpandProductsBinding binding;
 
@@ -47,13 +49,15 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
         binding.recommendedRecyclerview.setAdapter(expandAdapter);
-        getDataShared();
+        presenter.initData();
         binding.sortButton.setOnClickListener(v -> showMenu(v, R.menu.sort_menu));
     }
 
-    private void getDataShared() {
+    @Override
+    public void getSharedData() {
         if (getArguments() != null) {
             @StringRes int label = getArguments().getInt(Constant.EXPAND_LABEL_KEY);
             binding.fragmentLabelTextView.setText(label);
@@ -71,30 +75,33 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
         PopupMenu popupMenu = new PopupMenu(requireContext(), v);
         popupMenu.getMenuInflater().inflate(menuRes, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
+            SortStatus status = null;
             int id = item.getItemId();
-            if (id == R.id.price_high_to_low) sortProductBy(SortStatus.PRICE_HIGH_TO_LOW);
-            if (id == R.id.price_low_to_high) sortProductBy(SortStatus.PRICE_LOW_TO_HIGH);
-            if (id == R.id.rate_high_to_low) sortProductBy(SortStatus.RATE_HIGH_TO_LOW);
-            if (id == R.id.rate_low_to_high) sortProductBy(SortStatus.RATE_LOW_TO_HIGH);
+            if (id == R.id.price_high_to_low) status = SortStatus.PRICE_HIGH_TO_LOW;
+            if (id == R.id.price_low_to_high) status = SortStatus.PRICE_LOW_TO_HIGH;
+            if (id == R.id.rate_high_to_low) status = SortStatus.RATE_HIGH_TO_LOW;
+            if (id == R.id.rate_low_to_high) status = SortStatus.RATE_LOW_TO_HIGH;
+            if (status != null) presenter.sortProduct(status);
             return false;
         });
         popupMenu.show();
-    }
-
-
-    private void sortProductBy(SortStatus status) {
-        presenter.sortProduct(status);
     }
 
     @Override
     public void onProductClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
+        navController.navigate(R.id.action_global_productFragment, bundle);
     }
 
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        navController.navigateUp();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override

@@ -57,7 +57,7 @@ public class CartInterator {
     }
 
     public void updateQuantity(int id, int quantity) {
-        cartRef.child(user.getUid()).child(String.valueOf(id)).child("quantity").setValue(String.valueOf(quantity));
+        cartRef.child(user.getUid()).child(String.valueOf(id)).child("quantity").setValue(quantity);
     }
 
     public void updateChecked(int id, boolean checked) {

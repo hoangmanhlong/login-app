@@ -1,7 +1,6 @@
 package com.example.loginapp.view.fragments.product_detail;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +24,9 @@ import com.example.loginapp.model.entity.Comment;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.ProductPresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
-import com.example.loginapp.view.commonUI.LoginRemindDialog;
-import com.example.loginapp.view.fragments.bottom_sheet.ModalBottomSheetFragment;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.loginapp.view.fragments.add_to_cart.AddProductToCartFragment;
+import com.example.loginapp.view.fragments.bottom_sheet.SelectProductQuantityAndVoucherFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -89,20 +86,8 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
         }
     }
 
-    public void showBottomSheet() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Product product = presenter.getProduct();
-            if (product != null) {
-                ModalBottomSheetFragment bottomSheet = new ModalBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constant.PRODUCT_KEY, product);
-
-                bottomSheet.setArguments(bundle);
-                bottomSheet.show(getChildFragmentManager(), ModalBottomSheetFragment.TAG);
-            }
-        } else {
-            LoginRemindDialog.show(this, requireContext());
-        }
+    public void onBuyNowButtonClick() {
+        presenter.onBuyNowButtonClick();
     }
 
     public void onNavigateUp() {
@@ -111,16 +96,10 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
 
     public void onFavoriteButtonClick() {
         presenter.updateFavorite();
-
     }
 
-    public void onCartBtnClick() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            binding.tvAddToCart.setVisibility(View.VISIBLE);
-            presenter.addProductToCart();
-        } else {
-            LoginRemindDialog.show(this, requireContext());
-        }
+    public void onAddToCartButtonClick() {
+        presenter.onAddToCartButtonClick();
     }
 
     @Override
@@ -162,6 +141,24 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     @Override
     public void getSimilarProducts(List<Product> products) {
         similarProductsAdapter.submitList(products);
+    }
+
+    @Override
+    public void showSelectProductQuantityAndVoucherFragment(Product product) {
+        SelectProductQuantityAndVoucherFragment bottomSheet = new SelectProductQuantityAndVoucherFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.PRODUCT_KEY, product);
+        bottomSheet.setArguments(bundle);
+        bottomSheet.show(getChildFragmentManager(), SelectProductQuantityAndVoucherFragment.TAG);
+    }
+
+    @Override
+    public void showAddProductToCartFragment(Product product) {
+        AddProductToCartFragment addProductToCartFragment = new AddProductToCartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.PRODUCT_KEY, product);
+        addProductToCartFragment.setArguments(bundle);
+        addProductToCartFragment.show(getChildFragmentManager(), AddProductToCartFragment.TAG);
     }
 
     @Override

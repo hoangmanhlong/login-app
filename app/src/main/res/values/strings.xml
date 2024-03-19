@@ -191,14 +191,14 @@
 
     <string name="select_language">Select language</string>
 
-<!--    Sign up screen-->
+    <!--    Sign up screen-->
     <string name="password_text_helper">Password must be longer than 6 characters</string>
     <string name="server_error">Server Error</string>
     <string name="account_already_exists">Account already exists</string>
     <string name="database_error">Realtime database error</string>
     <string name="loading___">Loading…</string>
 
-<!--    Verification Screen-->
+    <!--    Verification Screen-->
     <string name="resend_otp">Resend OTP</string>
     <string name="verify">Verify</string>
     <string name="enter_otp">Enter OTP</string>
@@ -211,5 +211,6 @@
     <string name="default_">Default</string>
     <string name="delivery_address_empty">Delivery address is empty</string>
 
-
+    <string name="add_to_cart">Add to cart</string>
+    <string name="added_to_cart">Added to cart</string>
 </resources>
