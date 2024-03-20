@@ -124,7 +124,7 @@
                     android:id="@+id/discount_sliderView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_140sdp"
-                    android:layout_marginHorizontal="@dimen/_14sdp"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:clipToPadding="false"
                     app:sliderAnimationDuration="600"
@@ -141,23 +141,34 @@
                     app:sliderScrollTimeInSec="1"
                     app:sliderStartAutoCycle="true" />
 
-                <Button
-                    android:id="@+id/expandRecommendedProductsView"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_36pt_regular"
-                    android:includeFontPadding="false"
-                    android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
-                    android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="@string/recommended_for_you"
-                    android:textAlignment="textStart"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:padding="@dimen/_12sdp"
                     android:visibility="gone"
-                    app:icon="@drawable/ic_arrow_forward_black"
-                    app:iconGravity="end" />
+                    android:id="@+id/expandRecommendedProductsView"
+                    android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/recommended_for_you"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/ic_arrow_forward_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include
                     android:id="@+id/recommendedProductsPlaceHolder"
@@ -176,23 +187,34 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <Button
-                    android:id="@+id/expandTopChartsProductsView"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_36pt_regular"
-                    android:includeFontPadding="false"
-                    android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
-                    android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="@string/bestseller"
-                    android:textAlignment="textStart"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:padding="@dimen/_12sdp"
                     android:visibility="gone"
-                    app:icon="@drawable/ic_arrow_forward_black"
-                    app:iconGravity="end" />
+                    android:id="@+id/expandTopChartsProductsView"
+                    android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/bestseller"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/ic_arrow_forward_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include
                     android:id="@+id/topChartsProductsPlaceHolder"
@@ -210,23 +232,35 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <Button
-                    android:id="@+id/expandDiscountProductsView"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/dm_sans_36pt_regular"
-                    android:includeFontPadding="false"
-                    android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
-                    android:paddingHorizontal="@dimen/_14sdp"
-                    android:text="@string/discounted_products_label"
-                    android:textAlignment="textStart"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:padding="@dimen/_12sdp"
                     android:visibility="gone"
-                    app:icon="@drawable/ic_arrow_forward_black"
-                    app:iconGravity="end" />
+                    android:id="@+id/expandDiscountProductsView"
+                    android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/discounted_products_label"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/ic_arrow_forward_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include
                     android:id="@+id/discountProductsPlaceHolder"

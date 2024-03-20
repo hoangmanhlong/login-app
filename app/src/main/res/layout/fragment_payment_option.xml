@@ -326,12 +326,14 @@
                     android:paddingTop="@dimen/_25sdp"
                     android:paddingBottom="@dimen/_14sdp">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content">
 
                         <TextView
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
@@ -339,12 +341,11 @@
                             android:text="@string/merchandise_subtotal"
                             android:textColor="@color/gray_500" />
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
 
                         <TextView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
@@ -353,15 +354,17 @@
                             android:textColor="@color/black_100"
                             tools:text="1000$" />
 
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_16sdp"
-                        android:orientation="horizontal">
+                        android:layout_marginVertical="@dimen/_16sdp">
 
                         <TextView
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
@@ -369,12 +372,10 @@
                             android:text="@string/shipping_subtotal"
                             android:textColor="@color/gray_500" />
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
                         <TextView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
@@ -383,19 +384,21 @@
                             android:textColor="@color/black_100"
                             tools:text="200$" />
 
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp" />
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="@dimen/_16sdp">
 
                         <TextView
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
@@ -405,12 +408,10 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
                         <TextView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
@@ -421,14 +422,12 @@
                             android:textStyle="bold"
                             tools:text="1200$" />
 
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <Button
-                        android:id="@+id/buy"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_39sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:backgroundTint="@android:color/background_dark"
                         android:fontFamily="@font/poppins_bold"
                         android:onClick="@{() -> fragment.onPayButtonClick()}"
                         android:text="@string/pay"

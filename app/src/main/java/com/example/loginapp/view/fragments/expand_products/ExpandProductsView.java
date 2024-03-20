@@ -12,4 +12,6 @@ public interface ExpandProductsView {
     void setSortStatusName(@StringRes int res);
 
     void getSharedData();
+
+    void bindScreenLabel(@StringRes int label);
 }

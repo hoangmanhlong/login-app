@@ -125,7 +125,7 @@
     <string name="price_low_to_high">Giá: Thấp đến cao</string>
     <string name="price_high_to_low">Giá: Cao đến thấp</string>
     <string name="rate_low_to_high">Đánh giá: Thấp đến cao</string>
-    <string name="rate_high_to_low">Đánh giá: Thấp đến cao</string>
+    <string name="rate_high_to_low">Đánh giá: Cao đến thấp</string>
     <string name="add_new_address">Thêm địa chỉ giao hàng mới</string>
     <string name="edit_address">Chỉnh sửa địa chỉ giao hàng</string>
     <string name="my_orders">Đơn hàng của tôi</string>
@@ -174,7 +174,7 @@
     <!--    Order Success-->
     <string name="order_success">Đặt hàng thành công</string>
     <string name="thanks_order">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn sẽ được giao trong vòng 3–5 ngày làm việc</string>
-    <string name="back_to_shopping">Quay lại</string>
+    <string name="back">Quay lại</string>
 
     <!--    My address-->
     <string name="my_address">Địa chỉ giao hàng của tôi</string>

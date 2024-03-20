@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,8 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
 
     private FragmentProductDetailBinding binding;
 
+    private NavController navController;
+
     private CheckBox btFavorite;
 
     private final ProductAdapter similarProductsAdapter = new ProductAdapter(this);
@@ -56,6 +59,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         initView();
     }
 
@@ -91,7 +95,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     }
 
     public void onNavigateUp() {
-        NavHostFragment.findNavController(this).navigateUp();
+        navController.navigateUp();
     }
 
     public void onFavoriteButtonClick() {
@@ -174,6 +178,6 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
+        navController.navigate(R.id.action_global_productFragment, bundle);
     }
 }

@@ -12,32 +12,30 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="@dimen/_98sdp"
-        android:layout_height="@dimen/_145sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/transparent"
         android:layout_margin="@dimen/_4sdp"
-        android:checkable="true"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="@color/md_theme_light_background"
         app:cardCornerRadius="@dimen/_8sdp"
         app:strokeWidth="0dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="@dimen/_98sdp"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:orientation="vertical"
             android:padding="@dimen/_4sdp">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="@dimen/_16sdp"
                 app:cardElevation="2dp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:strokeWidth="0dp">
 
                 <ImageView
-                    android:id="@+id/product_image"
                     imgUrl="@{product.thumbnail}"
                     android:layout_width="@dimen/_90sdp"
                     android:layout_height="@dimen/_90sdp"
@@ -52,28 +50,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/product_image">
 
                 <TextView
                     android:id="@+id/tvProductName"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:fontFamily="@font/averia_gruesa_libre_regular"
                     android:includeFontPadding="false"
-                    android:maxWidth="@dimen/_120sdp"
                     android:maxLines="2"
                     android:text="@{product.title}"
                     android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Iphone 14 apple max Iphone 14 apple max" />
 
                 <LinearLayout
                     android:id="@+id/llRating"
+                    android:gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:gravity="center"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvProductName">
@@ -81,12 +81,13 @@
                     <TextView
                         bindRatingRounded="@{product.rating}"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/averia_gruesa_libre_regular"
                         android:includeFontPadding="false"
                         tools:text="4.5" />
 
                     <ImageView
+                        android:layout_marginStart="@dimen/_2sdp"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_height="@dimen/_10sdp"
                         android:src="@drawable/ic_star_rate" />
@@ -95,7 +96,7 @@
                 <TextView
                     android:id="@+id/tvPrice"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_14sdp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/averia_gruesa_libre_regular"
@@ -107,7 +108,7 @@
                     tools:text="100$" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

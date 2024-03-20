@@ -60,7 +60,7 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     public void getSharedData() {
         if (getArguments() != null) {
             @StringRes int label = getArguments().getInt(Constant.EXPAND_LABEL_KEY);
-            binding.fragmentLabelTextView.setText(label);
+            presenter.setLabel(label);
 
             Products products = (Products) getArguments().getSerializable(Constant.EXPAND_PRODUCTS_KEY);
             if (products != null) {
@@ -68,6 +68,11 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
                 else presenter.initData();
             }
         }
+    }
+
+    @Override
+    public void bindScreenLabel(int label) {
+        binding.fragmentLabelTextView.setText(label);
     }
 
     @SuppressLint("RestrictedApi")

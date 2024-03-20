@@ -16,7 +16,7 @@
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="@color/md_theme_light_background"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="@dimen/_8sdp"
         app:strokeWidth="0dp">
 

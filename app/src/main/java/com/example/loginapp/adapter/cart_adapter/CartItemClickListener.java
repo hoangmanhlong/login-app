@@ -8,7 +8,7 @@ public interface CartItemClickListener {
 
     void updateQuantity(int id, int quantity);
 
-    void onItemChecked(FirebaseProduct product, boolean checked);
+    void onCheckboxClick(FirebaseProduct product);
 
     void onDeleteProduct(FirebaseProduct product);
 }

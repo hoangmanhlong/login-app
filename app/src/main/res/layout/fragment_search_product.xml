@@ -224,7 +224,6 @@
                     android:id="@+id/product_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/gray_1000"
                     android:clipToPadding="false"
                     android:visibility="@{isProductListEmpty ? View.GONE : View.VISIBLE}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

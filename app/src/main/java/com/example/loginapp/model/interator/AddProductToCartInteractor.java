@@ -32,7 +32,7 @@ public class AddProductToCartInteractor {
                                 listener.isAddProductSuccess(false);
                             });
                 else
-                    cartRef.child(FirebaseProduct.QUANTITY).setValue(product.getQuantity())
+                    cartRef.child(FirebaseProduct.QUANTITY).setValue(product1.getQuantity() + product.getQuantity())
                             .addOnSuccessListener(unused -> listener.isAddProductSuccess(true))
                             .addOnFailureListener(e -> {
                                 Log.d(TAG, "addProductToCart: " + e.getMessage());

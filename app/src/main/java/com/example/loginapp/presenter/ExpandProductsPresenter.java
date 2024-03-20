@@ -1,5 +1,7 @@
 package com.example.loginapp.presenter;
 
+import androidx.annotation.StringRes;
+
 import com.example.loginapp.R;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Products;
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExpandProductsPresenter {
+
+    @StringRes private int label;
 
     private final ExpandProductsView view;
 
@@ -24,7 +28,10 @@ public class ExpandProductsPresenter {
 
     public void initData() {
         if (products == null || products.isEmpty()) view.getSharedData();
-        else sortProduct(status);
+        else {
+            sortProduct(status);
+            view.bindScreenLabel(label);
+        }
     }
 
     public List<Product> getProducts() {
@@ -36,25 +43,36 @@ public class ExpandProductsPresenter {
         sortProduct(SortStatus.PRICE_LOW_TO_HIGH);
     }
 
+    public void setLabel(int label) {
+        this.label = label;
+        view.bindScreenLabel(label);
+    }
+
     public void sortProduct(SortStatus status) {
         this.status = status;
         setLabel(status);
-        if (status == SortStatus.PRICE_HIGH_TO_LOW) {
-            products = products.stream()
-                    .sorted(Comparator.comparingInt(Product::getPrice).reversed())
-                    .collect(Collectors.toList());
-        } else if (status == SortStatus.PRICE_LOW_TO_HIGH) {
-            products = products.stream()
-                    .sorted(Comparator.comparingDouble(Product::getPrice))
-                    .collect(Collectors.toList());
-        } else if (status == SortStatus.RATE_LOW_TO_HIGH) {
-            products = this.products.stream()
-                    .sorted(Comparator.comparingDouble(Product::getRating))
-                    .collect(Collectors.toList());
-        } else if (status == SortStatus.RATE_HIGH_TO_LOW) {
-            products = this.products.stream()
-                    .sorted(Comparator.comparingDouble(Product::getRating).reversed())
-                    .collect(Collectors.toList());
+
+        switch (status) {
+            case PRICE_HIGH_TO_LOW:
+                products = products.stream()
+                        .sorted(Comparator.comparingInt(Product::getPrice).reversed())
+                        .collect(Collectors.toList());
+                break;
+            case PRICE_LOW_TO_HIGH:
+                products = products.stream()
+                        .sorted(Comparator.comparingDouble(Product::getPrice))
+                        .collect(Collectors.toList());
+                break;
+            case RATE_LOW_TO_HIGH:
+                products = products.stream()
+                        .sorted(Comparator.comparingDouble(Product::getRating))
+                        .collect(Collectors.toList());
+                break;
+            case RATE_HIGH_TO_LOW:
+                products = products.stream()
+                        .sorted(Comparator.comparingDouble(Product::getRating).reversed())
+                        .collect(Collectors.toList());
+                break;
         }
         view.getProducts(products);
     }

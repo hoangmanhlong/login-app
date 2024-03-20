@@ -29,11 +29,14 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
     @NonNull
     @Override
     public ItemCartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemCartViewHolder(LayoutItemCartBinding.inflate(
-                LayoutInflater.from(parent.getContext()),
-                parent,
-                false
-        ), listener);
+        return new ItemCartViewHolder(
+                LayoutItemCartBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                ),
+                listener
+        );
     }
 
     @Override
@@ -54,10 +57,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
             binding.getRoot().setOnClickListener(this);
             binding.add.setOnClickListener(this);
             binding.minus.setOnClickListener(this);
-            binding.checkbox.setOnClickListener(this);
-            binding.checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    listener.onItemChecked(getItem(getAdapterPosition()), isChecked)
-            );
+            binding.checkbox.setOnClickListener(c -> listener.onCheckboxClick(getItem(getAdapterPosition())));
         }
 
         public void bind(FirebaseProduct product) {

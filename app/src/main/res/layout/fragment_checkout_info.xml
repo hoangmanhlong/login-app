@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:indeterminate="true" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -465,11 +465,10 @@
                         android:layout_height="@dimen/_39sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:backgroundTint="@color/black"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/poppins_bold"
                         android:includeFontPadding="false"
                         android:onClick="@{() -> fragment.onPaymentOptionScreen()}"
-                        android:text="@string/select_payment_method"
-                        android:textStyle="bold"
+                        android:text="@string/checkout"
                         app:elevation="@dimen/_10sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -479,6 +478,6 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </layout>

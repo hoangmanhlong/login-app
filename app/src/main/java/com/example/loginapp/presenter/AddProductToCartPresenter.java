@@ -42,8 +42,10 @@ public class AddProductToCartPresenter implements AddProductToCartListener {
     }
 
     public void reduceTheNumberOf() {
-        quantity--;
-        bindQuantity();
+        if (quantity > 1) {
+            quantity--;
+            bindQuantity();
+        }
     }
 
     public void bindQuantity() {
@@ -58,8 +60,8 @@ public class AddProductToCartPresenter implements AddProductToCartListener {
     @Override
     public void isAddProductSuccess(boolean success) {
         if (success) {
-            view.dismissAddProductToCartFragment();
             view.onMessage(R.string.added_to_cart);
+            view.dismissAddProductToCartFragment();
         }
     }
 }

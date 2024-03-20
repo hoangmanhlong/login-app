@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +32,7 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
 
     private NavController navController;
 
-    private final String TAG = this.toString();
+    private static final String TAG = CheckoutInfoFragment.class.getSimpleName();
 
     private final CheckoutInfoPresenter presenter = new CheckoutInfoPresenter(this);
 
@@ -60,6 +61,7 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         binding.setFragment(this);
         presenter.initData();

@@ -20,9 +20,15 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
 
     public static final String TAG = AddProductToCartFragment.class.getSimpleName();
 
-    private final AddProductToCartPresenter presenter = new AddProductToCartPresenter(this);
+    private AddProductToCartPresenter presenter;
 
     private FragmentAddProductToCartBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new AddProductToCartPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -82,5 +88,11 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter = null;
     }
 }

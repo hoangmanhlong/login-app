@@ -4,14 +4,13 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -59,7 +58,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private RecyclerView recommendedRecyclerview, topChartsRecyclerview, discountRecyclerView;
 
-    private Button expandRecommendedProductsView, expandTopChartsProductsView, expandDiscountProductsView;
+    private ConstraintLayout expandRecommendedProductsView, expandTopChartsProductsView, expandDiscountProductsView;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 

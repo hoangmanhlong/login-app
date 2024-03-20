@@ -37,7 +37,6 @@ public class CartPresenter implements CartListener {
     public void initBasket() {
         if (wasTakenForTheFirstTime) {
             if (!basket.isEmpty()) {
-                Log.d(TAG, "initBasket: " + basket.size());
                 view.bindBasket(basket);
                 updateUI();
             }
@@ -77,9 +76,8 @@ public class CartPresenter implements CartListener {
 
     @Override
     public void isCartEmpty() {
-        this.basket.clear();
-        view.isCheckAllCheckboxChecked(false);
-        view.isBasketEmpty(true);
+        basket.clear();
+        updateUI();
     }
 
     public void deleteProductInFirebase(FirebaseProduct product) {
@@ -90,14 +88,8 @@ public class CartPresenter implements CartListener {
         interator.updateQuantity(id, quantity);
     }
 
-    public void onItemChecked(FirebaseProduct product, boolean checked) {
-        if (checked) {
-            Log.d(TAG, "onItemChecked: ");
-            interator.updateChecked(product.getId(), true);
-        } else {
-            view.setCheckAllChecked(false);
-            interator.updateChecked(product.getId(), false);
-        }
+    public void onItemChecked(FirebaseProduct product) {
+        interator.updateChecked(product.getId(), !product.isChecked());
     }
 
     public void addShoppingCartValueEventListener() {
@@ -129,7 +121,8 @@ public class CartPresenter implements CartListener {
             double total = subtotal;
 
             Voucher voucher = order.getVoucher();
-            if (voucher != null) total = subtotal - (subtotal * voucher.getDiscountPercentage() / 100);
+            if (voucher != null)
+                total = subtotal - (subtotal * voucher.getDiscountPercentage() / 100);
             view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
         }
     }

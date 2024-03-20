@@ -181,7 +181,7 @@
     <!--    Order Success-->
     <string name="order_success">Order Success</string>
     <string name="thanks_order">Thank you for purchasing. Your order will be shipped within 3–5 business days</string>
-    <string name="back_to_shopping">Back to Shopping</string>
+    <string name="back">Back</string>
 
     <!--    My address-->
     <string name="my_address">My Address</string>

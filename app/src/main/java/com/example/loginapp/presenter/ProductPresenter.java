@@ -2,7 +2,6 @@ package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.entity.Comment;
 import com.example.loginapp.model.entity.CommentRespond;
-import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.ProductInterator;

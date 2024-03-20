@@ -1,9 +1,7 @@
 package com.example.loginapp.view.fragments.cart;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +99,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         binding.setFragment(this);
         shoppingCartRecyclerview.setAdapter(adapter);
         ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
-//        presenter.initBasket();
+        presenter.initBasket();
         new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
             @Override
             public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
@@ -144,8 +142,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     @Override
-    public void onItemChecked(FirebaseProduct product, boolean checked) {
-        presenter.onItemChecked(product, checked);
+    public void onCheckboxClick(FirebaseProduct product) {
+        presenter.onItemChecked(product);
     }
 
     @Override
@@ -183,11 +181,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     @Override
     public void onDeleteProduct(FirebaseProduct product) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage(R.string.dialog_message)
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteProductInFirebase(product))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        presenter.deleteProductInFirebase(product);
     }
 
     @Override

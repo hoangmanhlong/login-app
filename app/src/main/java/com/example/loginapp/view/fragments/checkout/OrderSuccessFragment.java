@@ -33,16 +33,16 @@ public class OrderSuccessFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-        binding.setFragment(this);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-
+                onBackHomeScreen();
             }
         });
+        binding.btBack.setOnClickListener(v -> onBackHomeScreen());
     }
 
-    public void onBackHomeScreen() {
+    private void onBackHomeScreen() {
         navController.popBackStack(navController.getGraph().getStartDestinationId(), false);
     }
 }
