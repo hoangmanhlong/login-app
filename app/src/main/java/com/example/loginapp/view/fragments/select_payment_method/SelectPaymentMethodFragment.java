@@ -38,7 +38,22 @@ public class SelectPaymentMethodFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
-        binding.btOK.setVisibility(View.GONE);
+        if (getArguments() != null) {
+            selectedPaymentMethod = (PaymentMethod) getArguments().getSerializable(Constant.PAYMENT_METHOD_KEY);
+            if (selectedPaymentMethod != null) {
+                switch (selectedPaymentMethod) {
+                    case FPX:
+                        onFpxClick();
+                        break;
+                    case CreditDebitCard:
+                        onVisaClick();
+                        break;
+                    case PayPal:
+                        onPaypalClick();
+                        break;
+                }
+            }
+        }
     }
 
     public void onFpxClick() {
@@ -49,7 +64,6 @@ public class SelectPaymentMethodFragment extends Fragment {
         binding.visaRadio.setBackgroundResource(R.drawable.ic_radio_no_selected);
         binding.paypalBackground.setBackgroundResource(R.drawable.payment_card_no_selected_background);
         binding.payPalRadio.setBackgroundResource(R.drawable.ic_radio_no_selected);
-
         binding.btOK.setVisibility(View.VISIBLE);
     }
 
@@ -61,7 +75,6 @@ public class SelectPaymentMethodFragment extends Fragment {
         binding.visaRadio.setBackgroundResource(R.drawable.ic_radio_selected);
         binding.paypalBackground.setBackgroundResource(R.drawable.payment_card_no_selected_background);
         binding.payPalRadio.setBackgroundResource(R.drawable.ic_radio_no_selected);
-
         binding.btOK.setVisibility(View.VISIBLE);
     }
 
@@ -73,7 +86,6 @@ public class SelectPaymentMethodFragment extends Fragment {
         binding.visaRadio.setBackgroundResource(R.drawable.ic_radio_no_selected);
         binding.paypalBackground.setBackgroundResource(R.drawable.payment_card_selected_background);
         binding.payPalRadio.setBackgroundResource(R.drawable.ic_radio_selected);
-
         binding.btOK.setVisibility(View.VISIBLE);
     }
 

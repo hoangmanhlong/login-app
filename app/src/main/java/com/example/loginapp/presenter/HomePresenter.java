@@ -28,7 +28,7 @@ public class HomePresenter implements HomeListener {
 
     public List<Product> discountProducts = new ArrayList<>();
 
-    private List<Product> bestSellerProducts = new ArrayList<>();
+    private List<Product> recommendedEveryDay = new ArrayList<>();
 
     public UserData currentUserData;
 
@@ -53,14 +53,8 @@ public class HomePresenter implements HomeListener {
 
         if (gotDataFromAPI) showProducts();
         else getListProductFromNetwork();
-
-        if (bestSellerProducts.isEmpty()) getBestsellerProducts();
-        else view.getBestsellerProducts(bestSellerProducts);
     }
 
-    private void getBestsellerProducts() {
-        interator.getBestsellerProducts();
-    }
 
     private void getUserData() {
         view.isUserLoading(true);
@@ -75,6 +69,7 @@ public class HomePresenter implements HomeListener {
     }
 
     private void showProducts() {
+        view.bindRecommendedEveryDay(recommendedEveryDay);
         view.showRecommendedProducts(recommendedProducts);
         view.showTopChartsProducts(topChartsProducts);
         view.showDiscountProducts(discountProducts);
@@ -97,6 +92,7 @@ public class HomePresenter implements HomeListener {
     }
 
     private void productClassification(List<Product> products) {
+        getRecommendedEveryDay(products);
         getTopChartsProducts(products);
         getDiscountProducts(products);
         if (authenticated) interator.getFavoriteProductFromFirebase();
@@ -107,6 +103,12 @@ public class HomePresenter implements HomeListener {
             view.showRecommendedProducts(recommendedProducts);
             view.refreshInvisible();
         }
+    }
+
+    private void getRecommendedEveryDay(List<Product> products) {
+        Collections.shuffle(products);
+        recommendedEveryDay = products.subList(0, Math.min(products.size(), 10));
+        view.bindRecommendedEveryDay(recommendedEveryDay);
     }
 
     private void getTopChartsProducts(List<Product> products) {
@@ -136,12 +138,6 @@ public class HomePresenter implements HomeListener {
         }
         view.showRecommendedProducts(recommendedProducts);
         view.refreshInvisible();
-    }
-
-    @Override
-    public void getBestsellerProducts(List<Product> products) {
-        bestSellerProducts = products;
-        view.getBestsellerProducts(products);
     }
 
     @Override

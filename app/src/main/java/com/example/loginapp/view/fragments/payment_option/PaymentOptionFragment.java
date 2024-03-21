@@ -19,6 +19,9 @@ import com.example.loginapp.model.entity.PaymentMethod;
 import com.example.loginapp.presenter.PaymentOptionPresenter;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.LoadingDialog;
+import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class PaymentOptionFragment extends Fragment implements PaymentOptionView {
 
@@ -48,9 +51,9 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
         if (getArguments() != null) {
             Order order = (Order) getArguments().getSerializable(Constant.ORDER_KEY);
             boolean isSaveDeliveryAddress = getArguments().getBoolean(Constant.SAVE_ADDRESS_KEY);
-            boolean isProductsFroShoppingCart = getArguments().getBoolean(Constant.IS_PRODUCTS_FROM_CART);
+            boolean isProductsFromShoppingCart = getArguments().getBoolean(Constant.IS_PRODUCTS_FROM_CART);
             if (order != null) presenter.setOrder(order);
-            presenter.setProductsFroShoppingCart(isProductsFroShoppingCart);
+            presenter.setProductsFromShoppingCart(isProductsFromShoppingCart);
             presenter.setSaveDeliveryAddress(isSaveDeliveryAddress);
         }
     }
@@ -95,6 +98,10 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
 
     @Override
     public void goOrderSuccessScreen() {
+        MessageVoucherSelected messageVoucherSelected =
+                EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
+        if (messageVoucherSelected != null)
+            EventBus.getDefault().removeStickyEvent(messageVoucherSelected);
         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_paymentOptionFragment_to_orderSuccessFragment);
     }
 
@@ -110,9 +117,15 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
     }
 
     @Override
-    public void setView(String subTotal, String sippingCost, String total) {
-        binding.setSubtotal(subTotal);
-        binding.setShippingCosts(sippingCost);
-        binding.setTotalPayment(total);
+    public void hasVoucher(boolean hasVoucher) {
+        binding.setHasVoucher(hasVoucher);
+    }
+
+    @Override
+    public void setView(String merchandiseSubtotal, String shippingCost,String reducedPrice, String totalPayment) {
+        binding.setMerchandiseSubtotal(merchandiseSubtotal);
+        binding.setShippingCost(shippingCost);
+        binding.setReducedPrice(reducedPrice);
+        binding.setTotalPayment(totalPayment);
     }
 }

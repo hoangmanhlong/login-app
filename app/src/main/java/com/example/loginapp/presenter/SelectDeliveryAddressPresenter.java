@@ -36,8 +36,9 @@ public class SelectDeliveryAddressPresenter implements SelectDeliveryAddressList
     }
 
     public void initData() {
-        if (deliveryAddresses.isEmpty()) view.getDataShared();
-        else view.getDeliveryAddresses(deliveryAddresses);
+        getDeliveryAddresses();
+//        if (deliveryAddresses.isEmpty()) view.getDataShared();
+//        else view.getDeliveryAddresses(deliveryAddresses);
     }
 
     public void getDeliveryAddresses() {

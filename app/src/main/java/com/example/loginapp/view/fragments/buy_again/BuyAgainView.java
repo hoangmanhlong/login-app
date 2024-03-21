@@ -31,4 +31,6 @@ public interface BuyAgainView {
     void onCheckoutSuccess(boolean success);
 
     void isLoading(boolean isLoading);
+
+    void navigateSelectPaymentMethodFragment(PaymentMethod paymentMethod);
 }

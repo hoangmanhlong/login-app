@@ -134,7 +134,7 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
             binding.addressLayout.setError("Invalid address");
         }
 
-        if (postalCode.length() != 4) {
+        if (postalCode.length() != 6) {
             isAllCorrect = false;
             binding.postalCodeLayout.setError("Invalid postal code");
         }

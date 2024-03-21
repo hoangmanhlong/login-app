@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,24 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
     public void showRecommendedProducts(List<Product> products) {
         isRecommendedProductsLoading(false);
         recommendedAdapter.submitList(products);
@@ -206,29 +225,14 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     }
 
     @Override
-    public void getBestsellerProducts(List<Product> products) {
+    public void bindRecommendedEveryDay(List<Product> products) {
         adapter.setData(products);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void setShowUserView(Boolean show) {
-        if (show) {
-            binding.userView.setVisibility(View.VISIBLE);
-
-            new Handler().post(() -> new CountDownTimer(5000, 1000) {
-                public void onTick(long millisUntilFinished) {
-                }
-
-                public void onFinish() {
-                    if (binding != null) {
-                        binding.userView.post(() -> binding.userView.setVisibility(View.GONE));
-                    }
-                }
-            }.start());
-        } else {
-            binding.userView.setVisibility(View.GONE);
-        }
+        binding.userView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -10,15 +10,14 @@ import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionView;
 
 public class PaymentOptionPresenter implements PaymentOptionListener {
+
     private final PaymentOptionView view;
 
     private final PaymentOptionInterator interator = new PaymentOptionInterator(this);
 
     private boolean isSaveDeliveryAddress;
 
-    private boolean isProductsFroShoppingCart;
-
-    private final int shippingCost = Constant.ShippingCost;
+    private boolean isProductsFromShoppingCart;
 
     private Order order;
 
@@ -34,31 +33,40 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
         isSaveDeliveryAddress = saveDeliveryAddress;
     }
 
-    public void setProductsFroShoppingCart(boolean productsFroShoppingCart) {
-        isProductsFroShoppingCart = productsFroShoppingCart;
+    public void setProductsFromShoppingCart(boolean productsFroShoppingCart) {
+        isProductsFromShoppingCart = productsFroShoppingCart;
     }
 
     public void setOrder(Order order) {
         this.order = order;
-        double subTotal = order.getOrderProducts().stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
+        double reducedPrice = 0.0d;
+        double merchandiseSubtotal = order.getOrderProducts().stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
         Voucher voucher = order.getVoucher();
+        int shippingCost = Constant.ShippingCost;
+        double paymentTotal = merchandiseSubtotal + shippingCost;
         if (voucher != null) {
-            if (voucher.getVoucherType() == VoucherType.Discount) {
-                subTotal = (int) (subTotal - ((subTotal * voucher.getDiscountPercentage()) / 100));
-            }
+            view.hasVoucher(true);
             if (voucher.getVoucherType() == VoucherType.FreeShipping) {
-                subTotal -= shippingCost;
+                reducedPrice = 200;
             }
+            if (voucher.getVoucherType() == VoucherType.Discount) {
+                reducedPrice = (paymentTotal * voucher.getDiscountPercentage() / 100);
+            }
+        } else {
+            view.hasVoucher(false);
+            reducedPrice = 0;
         }
-        double total = subTotal + shippingCost;
-        total = Math.round(total * 100.00) / 100.00;
-        view.setView(String.valueOf(subTotal), String.valueOf(shippingCost), String.valueOf(total));
-        order.setPaymentTotal(total);
+
+        // Làm tròn reducedPrice đến chữ số thứ hai sau dấu phẩy
+        reducedPrice = Math.round(reducedPrice * 100.0) / 100.0;
+
+        paymentTotal -= reducedPrice;
+        view.setView(String.valueOf(merchandiseSubtotal), String.valueOf(shippingCost), String.valueOf(reducedPrice), String.valueOf(paymentTotal));
     }
 
     public void createOrder() {
         view.isLoading(true);
-        interator.createOrder(order, isSaveDeliveryAddress, isProductsFroShoppingCart);
+        interator.createOrder(order, isSaveDeliveryAddress, isProductsFromShoppingCart);
     }
 
     @Override

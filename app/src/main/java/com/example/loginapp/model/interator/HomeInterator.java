@@ -108,23 +108,6 @@ public class HomeInterator {
 //                    .setValue(product);
 //    }
 
-    public void getBestsellerProducts() {
-        List<Product> products = new ArrayList<>();
-        Constant.bestSellerRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    products.add(dataSnapshot.getValue(Product.class));
-                listener.getBestsellerProducts(products);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     private void insertProductNames(List<Product> products) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             List<ProductName> productNameList = new ArrayList<>();

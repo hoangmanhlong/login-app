@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.checkout;
 
 import com.example.loginapp.model.entity.DeliveryAddress;
+import com.example.loginapp.model.entity.Order;
 
 public interface CheckoutInfoView {
 
@@ -11,5 +12,13 @@ public interface CheckoutInfoView {
     void bindDeliveryAddress(DeliveryAddress deliveryAddress);
 
     void getSharedData();
+
+    void isCheckoutButtonVisible(boolean visible);
+
+    void isSelectDeliveryAddressButtonVisible(boolean visible);
+
+    void navigateToPaymentMethodScreen(Order order);
+
+    void isSaveAddressCheckboxVisible(boolean visible);
 
 }

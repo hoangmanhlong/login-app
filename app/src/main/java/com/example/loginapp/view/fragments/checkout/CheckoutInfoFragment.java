@@ -1,7 +1,8 @@
 package com.example.loginapp.view.fragments.checkout;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,49 +66,23 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         binding.setFragment(this);
         presenter.initData();
+        editTextListener();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getDeliveryAddress(SelectedDeliveryAddressMessage message) {
         DeliveryAddress deliveryAddress = message.getDeliveryAddress();
         presenter.setDeliveryAddress(deliveryAddress);
-    }
-
-    private void updateUI(DeliveryAddress deliveryAddress) {
-        binding.setDeliveryAddress(deliveryAddress);
-        binding.saveAddressCheckBox.setChecked(false);
-        binding.saveAddressView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        SelectedDeliveryAddressMessage message = EventBus.getDefault().getStickyEvent(SelectedDeliveryAddressMessage.class);
-        if (message != null) EventBus.getDefault().removeStickyEvent(message);
+        SelectedDeliveryAddressMessage selectedDeliveryAddressMessage = EventBus.getDefault().getStickyEvent(SelectedDeliveryAddressMessage.class);
+        if (selectedDeliveryAddressMessage != null) EventBus.getDefault().removeStickyEvent(selectedDeliveryAddressMessage);
     }
 
     public void onNavigateUp() {
         navController.navigateUp();
     }
 
-    public void onPaymentOptionScreen() {
-        String name = binding.etName.getText().toString().trim();
-        String address = binding.etAddress.getText().toString().trim();
-        String province = binding.etProvince.getText().toString().trim();
-        String postalCode = binding.etPostalCode.getText().toString().trim();
-        String country = binding.etCountry.getText().toString().trim();
-        String shoppingOption = binding.etShoppingOption.getText().toString().trim();
-        String phoneNumber = binding.etPhoneNumber.getText().toString().trim();
-        DeliveryAddress deliveryAddress = presenter.checkInput(name, phoneNumber, address, province, postalCode, country, shoppingOption);
-        if (deliveryAddress == null) {
-            onMessage("Please enter complete information");
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(Constant.ORDER_KEY, presenter.getCurrentOrder());
-            bundle.putBoolean(Constant.SAVE_ADDRESS_KEY, binding.saveAddressCheckBox.isChecked());
-            bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, getArguments().getBoolean(Constant.IS_PRODUCTS_FROM_CART));
-            navController.navigate(R.id.action_checkoutInfoFragment_to_paymentOptionFragment, bundle);
-        }
+    public void onCheckoutButtonClick() {
+        presenter.onCheckoutButtonClick();
     }
 
     @Override
@@ -123,7 +98,8 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
 
     @Override
     public void bindDeliveryAddress(DeliveryAddress deliveryAddress) {
-        updateUI(deliveryAddress);
+        binding.setDeliveryAddress(deliveryAddress);
+        binding.saveAddressCheckBox.setChecked(false);
     }
 
     @Override
@@ -134,9 +110,137 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         }
     }
 
+    @Override
+    public void isCheckoutButtonVisible(boolean visible) {
+        binding.btCheckout.setEnabled(visible);
+    }
+
+    @Override
+    public void isSelectDeliveryAddressButtonVisible(boolean visible) {
+        binding.btSelectDeliveryAddress.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void navigateToPaymentMethodScreen(Order order) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.ORDER_KEY, order);
+        bundle.putBoolean(Constant.SAVE_ADDRESS_KEY, binding.saveAddressCheckBox.isChecked());
+        bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, getArguments().getBoolean(Constant.IS_PRODUCTS_FROM_CART));
+        navController.navigate(R.id.action_checkoutInfoFragment_to_paymentOptionFragment, bundle);
+    }
+
+    @Override
+    public void isSaveAddressCheckboxVisible(boolean visible) {
+        binding.saveAddressCheckBox.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
     public void goSelectDeliveryAddressScreen() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.DELIVERY_ADDRESSES_KEY, new DeliveryAddresses(presenter.getDeliveryAddresses()));
         navController.navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment, bundle);
+    }
+
+    private void editTextListener() {
+        binding.etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setName(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setPhoneNumber(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setAddress(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etProvince.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setProvince(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etPostalCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setPostalCode(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etShippingOption.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setShippingOption(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }

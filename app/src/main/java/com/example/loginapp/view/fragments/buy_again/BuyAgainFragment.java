@@ -31,7 +31,7 @@ import java.util.List;
 
 public class BuyAgainFragment extends Fragment implements BuyAgainView {
 
-    private final BuyAgainPresenter presenter = new BuyAgainPresenter(this);
+    private BuyAgainPresenter presenter = new BuyAgainPresenter(this);
 
     private FragmentBuyAgainBinding binding;
 
@@ -122,9 +122,28 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter = null;
+    }
+
+    @Override
     public void isLoading(boolean isLoading) {
         if (isLoading) dialog.show();
         else dialog.dismiss();
+    }
+
+    @Override
+    public void navigateSelectPaymentMethodFragment(PaymentMethod paymentMethod) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.PAYMENT_METHOD_KEY, paymentMethod);
+        navController.navigate(R.id.action_buyAgainFragment_to_selectPaymentMethodFragment, bundle);
     }
 
     public void onNavigateUp() {
@@ -136,8 +155,9 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
     }
 
     public void onPaymentMethodClick() {
-        navController.navigate(R.id.action_buyAgainFragment_to_selectPaymentMethodFragment);
+        presenter.onPaymentMethodClick();
     }
+
 
     public void onCheckoutButtonClick() {
         presenter.checkout();

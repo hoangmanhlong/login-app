@@ -68,7 +68,7 @@
         <font color="#FF0000">Điều khoản giao dịch chung của Smarteshop</font>
     </string>
     <string name="dollar_price">đ%s</string>
-    <string name="dollar_discount_price">- đ%s</string>
+    <string name="dollar_discount_price">- ₫%s</string>
     <string name="dialog_message">Bạn có chắc chắn muốn xóa sản phẩm?</string>
     <string name="logout_message">Bạn có chắc chắn bạn muốn đăng xuất?</string>
     <string name="delete_delivery_address">Bạn có chắc chắn muốn xóa địa chỉ giao hàng không?</string>

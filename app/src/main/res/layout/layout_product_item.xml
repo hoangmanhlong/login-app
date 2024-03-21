@@ -61,12 +61,13 @@
                     android:fontFamily="@font/averia_gruesa_libre_regular"
                     android:includeFontPadding="false"
                     android:maxLines="2"
+                    android:lines="2"
                     android:text="@{product.title}"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Iphone 14 apple max Iphone 14 apple max" />
+                    tools:text="Iphone 14 " />
 
                 <LinearLayout
                     android:id="@+id/llRating"

@@ -7,6 +7,8 @@ import com.google.firebase.storage.StorageReference;
 
 public final class Constant {
 
+    public static final String VIETNAM = "Việt Nam";
+
     public static final String IS_VIETNAMESE_LANGUAGE = "is_vietnamese_language";
 
     public static final int BACK_PRESS_INTERVAL = 2000;

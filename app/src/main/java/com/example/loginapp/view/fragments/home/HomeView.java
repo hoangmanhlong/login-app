@@ -27,7 +27,7 @@ public interface HomeView {
 
     void isUserLoading(boolean isLoading);
 
-    void getBestsellerProducts(List<Product> products);
+    void bindRecommendedEveryDay(List<Product> products);
 
     void setShowUserView(Boolean show);
 

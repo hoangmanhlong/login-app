@@ -66,7 +66,7 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
                 phoneNumber,
                 address,
                 province,
-                Integer.parseInt(postalCode),
+                postalCode,
                 country,
                 shippingOptions.isEmpty() ? "" : shippingOptions,
                 isDefault

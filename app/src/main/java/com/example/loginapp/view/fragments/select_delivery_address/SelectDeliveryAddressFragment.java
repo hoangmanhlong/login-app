@@ -10,13 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.adapter.select_address_adapter.OnSelectDeliveryAddressClickListener;
 import com.example.loginapp.adapter.select_address_adapter.SelectSelectDeliveryAddressAdapter;
 import com.example.loginapp.databinding.FragmentSelectDeliveryAddressBinding;
-import com.example.loginapp.model.entity.Date;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.entity.DeliveryAddresses;
 import com.example.loginapp.presenter.SelectDeliveryAddressPresenter;

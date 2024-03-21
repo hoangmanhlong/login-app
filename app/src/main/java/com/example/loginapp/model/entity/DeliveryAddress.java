@@ -1,5 +1,7 @@
 package com.example.loginapp.model.entity;
 
+import com.example.loginapp.utils.Constant;
+
 import java.io.Serializable;
 
 public class DeliveryAddress implements Serializable {
@@ -14,17 +16,19 @@ public class DeliveryAddress implements Serializable {
 
     private String province;
 
-    private int postalCode;
+    private String postalCode;
 
-    private String country;
+    private String country = Constant.VIETNAM;
 
     private String shippingOptions;
 
     private Boolean isDefault = false;
 
-    public DeliveryAddress() {}
+    public DeliveryAddress() {
+        this.deliveryAddressId = "DA" + System.currentTimeMillis();
+    }
 
-    public DeliveryAddress(String deliveryAddressId, String recipientName, String phoneNumber, String address, String province, int postalCode, String country, String shippingOptions, Boolean isDefault) {
+    public DeliveryAddress(String deliveryAddressId, String recipientName, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions, Boolean isDefault) {
         this.deliveryAddressId = deliveryAddressId;
         this.recipientName = recipientName;
         this.phoneNumber = phoneNumber;
@@ -36,7 +40,7 @@ public class DeliveryAddress implements Serializable {
         this.isDefault = isDefault;
     }
 
-    public DeliveryAddress(String recipientName, String phoneNumber, String address, String province, int postalCode, String country, String shippingOptions) {
+    public DeliveryAddress(String recipientName, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions) {
         this.deliveryAddressId = "DA" + System.currentTimeMillis();
         this.recipientName = recipientName;
         this.phoneNumber = phoneNumber;
@@ -47,7 +51,7 @@ public class DeliveryAddress implements Serializable {
         this.shippingOptions = shippingOptions;
     }
 
-    public DeliveryAddress(String recipientName, String phoneNumber, String address, String province, int postalCode, String country, String shippingOptions, Boolean isDefault) {
+    public DeliveryAddress(String recipientName, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions, Boolean isDefault) {
         this.deliveryAddressId = "DA" + System.currentTimeMillis();
         this.recipientName = recipientName;
         this.phoneNumber = phoneNumber;
@@ -79,7 +83,7 @@ public class DeliveryAddress implements Serializable {
         return province;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
@@ -108,6 +112,42 @@ public class DeliveryAddress implements Serializable {
                 ", shippingOptions='" + shippingOptions + '\'' +
                 ", isDefault=" + isDefault +
                 '}';
+    }
+
+    public void setDeliveryAddressId(String deliveryAddressId) {
+        this.deliveryAddressId = deliveryAddressId;
+    }
+
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setShippingOptions(String shippingOptions) {
+        this.shippingOptions = shippingOptions;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public String getFormatPostalCode() {

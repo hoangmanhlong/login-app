@@ -33,6 +33,10 @@ public class BuyAgainPresenter {
         else bindDataToView(currentOrder);
     }
 
+    public void onPaymentMethodClick() {
+        view.navigateSelectPaymentMethodFragment(currentOrder.getPaymentMethod());
+    }
+
     public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
         currentOrder.setDeliveryAddress(deliveryAddress);
         view.bindAddress(deliveryAddress);

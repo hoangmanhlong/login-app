@@ -56,16 +56,13 @@ public class SelectSelectDeliveryAddressAdapter extends ListAdapter<DeliveryAddr
                 listener.enableOkButton();
             });
 
-            binding.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        listener.onDeliveryAddressClick(getItem(getAdapterPosition()));
-                        listener.enableOkButton();
-                        for (SelectAddressViewHolder viewHolder : viewHolders) {
-                            if (viewHolder.getAdapterPosition() != getAdapterPosition()) {
-                                viewHolder.binding.radioButton.setChecked(false);
-                            }
+            binding.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    listener.onDeliveryAddressClick(getItem(getAdapterPosition()));
+                    listener.enableOkButton();
+                    for (SelectAddressViewHolder viewHolder : viewHolders) {
+                        if (viewHolder.getAdapterPosition() != getAdapterPosition()) {
+                            viewHolder.binding.radioButton.setChecked(false);
                         }
                     }
                 }
