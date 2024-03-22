@@ -33,6 +33,17 @@ public class Order implements Serializable {
         this.paymentTotal = paymentTotal;
     }
 
+    public Order(String orderId, List<OrderProduct> orderProducts, Long orderDate, OrderStatus orderStatus, DeliveryAddress deliveryAddress, PaymentMethod paymentMethod, double paymentTotal, Voucher voucher) {
+        this.orderId = orderId;
+        this.orderProducts = orderProducts;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.deliveryAddress = deliveryAddress;
+        this.paymentMethod = paymentMethod;
+        this.paymentTotal = paymentTotal;
+        this.voucher = voucher;
+    }
+
     public Order(List<OrderProduct> orderProducts, Voucher voucher) {
         this.orderProducts = orderProducts;
         this.voucher = voucher;
@@ -100,6 +111,32 @@ public class Order implements Serializable {
 
     public void setVoucher(Voucher voucher) {
         this.voucher = voucher;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId='" + orderId + '\'' +
+                ", orderProducts=" + orderProducts +
+                ", orderDate=" + orderDate +
+                ", orderStatus=" + orderStatus +
+                ", deliveryAddress=" + deliveryAddress +
+                ", paymentMethod=" + paymentMethod +
+                ", paymentTotal=" + paymentTotal +
+                ", voucher=" + voucher +
+                '}';
+    }
+
+    public Order copy(Order order) {
+        this.orderId = order.orderId;
+        this.orderProducts = order.orderProducts;
+        this.orderDate = order.orderDate;
+        this.orderStatus = order.orderStatus;
+        this.deliveryAddress = order.deliveryAddress;
+        this.paymentMethod = order.paymentMethod;
+        this.paymentTotal = order.paymentTotal;
+        this.voucher = order.voucher;
+        return this;
     }
 }
 

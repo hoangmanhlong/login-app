@@ -25,13 +25,19 @@ public class SelectDeliveryAddressInteractor {
     }
 
     public void getDeliveryAddresses() {
-        List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+
         Constant.deliveryAddressRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                listener.getDeliveryAddresses(deliveryAddresses);
+                if (snapshot.exists()) {
+                    List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
+                    listener.getDeliveryAddresses(deliveryAddresses);
+                } else {
+                    listener.isDeliveryAddressEmpty();
+                }
+
             }
 
             @Override

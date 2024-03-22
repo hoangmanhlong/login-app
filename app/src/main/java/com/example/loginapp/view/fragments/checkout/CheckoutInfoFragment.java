@@ -140,6 +140,12 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         navController.navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment, bundle);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     private void editTextListener() {
         binding.etName.addTextChangedListener(new TextWatcher() {
             @Override

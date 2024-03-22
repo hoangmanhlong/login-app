@@ -70,6 +70,11 @@ public class SelectDeliveryAddressFragment extends Fragment implements OnSelectD
         }
     }
 
+    @Override
+    public void isDeliveryAddressEmpty(boolean isDeliveryAddressEmpty) {
+        binding.setDeliveryAddressEmpty(isDeliveryAddressEmpty);
+    }
+
     public void onNavigateUp() {
         navController.navigateUp();
     }

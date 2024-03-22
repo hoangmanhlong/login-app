@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.SwipeHelper;
 import com.example.loginapp.adapter.cart_adapter.CartAdapter;
@@ -47,6 +48,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     private RecyclerView shoppingCartRecyclerview;
 
+    private LottieAnimationView cartEmptyLottieAnimationView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,6 +61,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
+        cartEmptyLottieAnimationView = binding.animationView;
+
         shoppingCartRecyclerview = binding.basketRecyclerView;
         initView();
     }
@@ -67,6 +72,18 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         super.onStart();
         presenter.addShoppingCartValueEventListener();
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cartEmptyLottieAnimationView.playAnimation();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cartEmptyLottieAnimationView.cancelAnimation();
     }
 
     @Override
@@ -96,6 +113,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     private void initView() {
+        cartEmptyLottieAnimationView.cancelAnimation();
+        cartEmptyLottieAnimationView.playAnimation();
         binding.setFragment(this);
         shoppingCartRecyclerview.setAdapter(adapter);
         ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);

@@ -9,4 +9,6 @@ public interface SelectDeliveryAddressView {
 
     void getDataShared();
 
+    void isDeliveryAddressEmpty(boolean isDeliveryAddressEmpty);
+
 }

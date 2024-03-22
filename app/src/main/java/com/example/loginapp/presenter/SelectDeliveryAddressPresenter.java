@@ -48,6 +48,12 @@ public class SelectDeliveryAddressPresenter implements SelectDeliveryAddressList
     @Override
     public void getDeliveryAddresses(List<DeliveryAddress> deliveryAddresses) {
         this.deliveryAddresses = deliveryAddresses;
+        view.isDeliveryAddressEmpty(false);
         view.getDeliveryAddresses(deliveryAddresses);
+    }
+
+    @Override
+    public void isDeliveryAddressEmpty() {
+        view.isDeliveryAddressEmpty(true);
     }
 }

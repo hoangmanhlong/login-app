@@ -8,9 +8,9 @@ public interface DeliveryAddressDetailView {
 
     void navigateUp();
 
-    void onMessage(String message);
-
     void bindAddress(DeliveryAddress deliveryAddress);
 
     void bindProvinces(String[] provinces);
+
+    void isCheckoutButtonVisible(boolean visible);
 }

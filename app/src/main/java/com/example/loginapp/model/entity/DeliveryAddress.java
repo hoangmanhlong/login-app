@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class DeliveryAddress implements Serializable {
 
-    private String deliveryAddressId;
+    private String deliveryAddressId = "DA" + System.currentTimeMillis();
 
     private String recipientName;
 
@@ -25,34 +25,10 @@ public class DeliveryAddress implements Serializable {
     private Boolean isDefault = false;
 
     public DeliveryAddress() {
-        this.deliveryAddressId = "DA" + System.currentTimeMillis();
     }
 
     public DeliveryAddress(String deliveryAddressId, String recipientName, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions, Boolean isDefault) {
         this.deliveryAddressId = deliveryAddressId;
-        this.recipientName = recipientName;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.province = province;
-        this.postalCode = postalCode;
-        this.country = country;
-        this.shippingOptions = shippingOptions;
-        this.isDefault = isDefault;
-    }
-
-    public DeliveryAddress(String recipientName, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions) {
-        this.deliveryAddressId = "DA" + System.currentTimeMillis();
-        this.recipientName = recipientName;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.province = province;
-        this.postalCode = postalCode;
-        this.country = country;
-        this.shippingOptions = shippingOptions;
-    }
-
-    public DeliveryAddress(String recipientName, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions, Boolean isDefault) {
-        this.deliveryAddressId = "DA" + System.currentTimeMillis();
         this.recipientName = recipientName;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -150,7 +126,18 @@ public class DeliveryAddress implements Serializable {
         isDefault = aDefault;
     }
 
-    public String getFormatPostalCode() {
-        return String.valueOf(postalCode);
+    public DeliveryAddress copy(DeliveryAddress deliveryAddress) {
+        this.deliveryAddressId = deliveryAddress.deliveryAddressId;
+        this.recipientName = deliveryAddress.recipientName;
+        this.phoneNumber = deliveryAddress.phoneNumber;
+        this.address = deliveryAddress.address;
+        this.province = deliveryAddress.province;
+        this.postalCode = deliveryAddress.postalCode;
+        this.country = deliveryAddress.country;
+        this.shippingOptions = deliveryAddress.shippingOptions;
+        this.isDefault = deliveryAddress.isDefault;
+        return this;
     }
+
+    public static final String IS_DEFAULT = "isDefault";
 }

@@ -176,7 +176,7 @@
                             android:inputType="number"
                             android:maxLength="6"
                             android:singleLine="true"
-                            android:text="@{deliveryAddress.formatPostalCode}" />
+                            android:text="@{deliveryAddress.postalCode}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -266,13 +266,13 @@
                     app:strokeColor="#ff0000" />
 
                 <Button
-                    android:id="@+id/btSubmit"
+                    android:id="@+id/btSave"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
-                    android:onClick="@{() -> fragment.onSubmitButtonClick()}"
+                    android:onClick="@{() -> fragment.onSaveButtonClick()}"
                     android:text="@string/save"
                     android:textStyle="bold" />
             </LinearLayout>

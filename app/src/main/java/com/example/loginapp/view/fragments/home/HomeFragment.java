@@ -162,6 +162,12 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         discountAdapter.submitList(products);
     }
 
+    public void onUserAvatarClick() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.USER_KEY_NAME, presenter.currentUserData);
+        navController.navigate(R.id.editUserInformationFragment, bundle);
+    }
+
     public void onLoginButtonClick() {
         navController.navigate(R.id.overviewFragment);
     }

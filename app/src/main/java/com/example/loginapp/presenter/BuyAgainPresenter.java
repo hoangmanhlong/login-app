@@ -16,11 +16,7 @@ public class BuyAgainPresenter {
 
     private Order currentOrder;
 
-    private int merchandiseSubtotal = 0;
-
     private double reducedPrice = 0.0;
-
-    private int shippingCost = Constant.ShippingCost;
 
     private double total = 0;
 
@@ -48,7 +44,7 @@ public class BuyAgainPresenter {
     }
 
     public void setCurrentOrder(Order currentOrder) {
-        this.currentOrder = currentOrder;
+        this.currentOrder = new Order().copy(currentOrder);
         currentOrder.setVoucher(null);
         view.hasVoucher(false);
         bindDataToView(currentOrder);
@@ -86,9 +82,10 @@ public class BuyAgainPresenter {
         view.bindAddress(order.getDeliveryAddress());
         view.bindOrderProducts(order.getOrderProducts());
         view.bindPaymentMethod(order.getPaymentMethod());
-        merchandiseSubtotal = order.getOrderProducts().stream()
+        int merchandiseSubtotal = order.getOrderProducts().stream()
                 .mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
         view.bindMerchandiseSubtotal(String.valueOf(merchandiseSubtotal));
+        int shippingCost = Constant.ShippingCost;
         view.bindShippingCost(String.valueOf(shippingCost));
         Voucher voucher = order.getVoucher();
         total = merchandiseSubtotal + shippingCost;

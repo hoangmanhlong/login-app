@@ -1,77 +1,95 @@
 package com.example.loginapp.presenter;
 
-import android.os.AsyncTask;
-
 import com.example.loginapp.data.local.AssertReader;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.interator.DeliveryAddressDetailInteractor;
 import com.example.loginapp.model.listener.DeliveryAddressDetailListener;
 import com.example.loginapp.view.fragments.delivery_address_detail.DeliveryAddressDetailView;
 
-import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailListener {
 
     private final DeliveryAddressDetailInteractor interactor = new DeliveryAddressDetailInteractor(this);
 
+    private boolean isNameValid, isPhoneNumberValid, isAddressValid, isProvinceValid, isPostalCodeValid = false;
 
     private final DeliveryAddressDetailView view;
 
-    private DeliveryAddress currentDeliveryAddress;
+    private final ExecutorService execute = Executors.newFixedThreadPool(5);
+
+    private DeliveryAddress deliveryAddress;
 
     public DeliveryAddressDetailPresenter(DeliveryAddressDetailView view) {
         this.view = view;
-        new GetProvinceAsyncTask(this).execute();
-
     }
 
-    private class GetProvinceAsyncTask extends AsyncTask<Void, Void, String[]> {
-
-        private final WeakReference<DeliveryAddressDetailPresenter> presenterWeakReference;
-
-        GetProvinceAsyncTask(DeliveryAddressDetailPresenter presenter) {
-            presenterWeakReference = new WeakReference<>(presenter);
-        }
-
-        @Override
-        protected String[] doInBackground(Void... voids) {
-            DeliveryAddressDetailPresenter presenter = presenterWeakReference.get();
-            if (presenter == null) return null;
-            return AssertReader.getProvinces();
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            DeliveryAddressDetailPresenter presenter = presenterWeakReference.get();
-            if (presenter != null && strings != null) {
-                presenter.view.bindProvinces(strings); // Sử dụng đối số truyền vào hàm này thay vì gọi lại AssertReader.getProvinces()
-            }
-        }
+    public void createNewDeliveryAddress() {
+        deliveryAddress = new DeliveryAddress();
+        view.bindAddress(deliveryAddress);
     }
 
-    public void setCurrentDeliveryAddress(DeliveryAddress deliveryAddress) {
-        currentDeliveryAddress = deliveryAddress;
-        view.bindAddress(currentDeliveryAddress);
+    public void fetchProvinces() {
+        execute.execute(() -> {
+            String[] provinces = AssertReader.getProvinces();
+            if (provinces != null) view.bindProvinces(provinces);
+            execute.shutdown();
+        });
+    }
+
+    public void onSaveButtonClick(boolean isSaveDefaultDeliveryAddress) {
+        deliveryAddress.setDefault(isSaveDefaultDeliveryAddress);
+        interactor.updateDeliveryAddress(deliveryAddress);
+    }
+
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+        this.deliveryAddress = new DeliveryAddress().copy(deliveryAddress);
+        view.bindAddress(this.deliveryAddress);
     }
 
     public void deleteDeliveryAddress() {
         view.isLoading(true);
-        interactor.deleteDeliveryAddress(currentDeliveryAddress.getDeliveryAddressId());
+        interactor.deleteDeliveryAddress(deliveryAddress.getDeliveryAddressId());
     }
 
-    public void updateDeliveryAddress(String name, String phoneNumber, String address, String province, String postalCode, String country, String shippingOptions, Boolean isDefault) {
-        DeliveryAddress deliveryAddress = new DeliveryAddress(
-                currentDeliveryAddress != null ? currentDeliveryAddress.getDeliveryAddressId() : ("DA" + System.currentTimeMillis()),
-                name,
-                phoneNumber,
-                address,
-                province,
-                postalCode,
-                country,
-                shippingOptions.isEmpty() ? "" : shippingOptions,
-                isDefault
-        );
-        interactor.updateDeliveryAddress(currentDeliveryAddress == null, deliveryAddress);
+    public void setName(String name) {
+        isNameValid = !name.isEmpty();
+        deliveryAddress.setRecipientName(name);
+        view.isCheckoutButtonVisible(isAllInputValid());
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        isPhoneNumberValid = phoneNumber.length() == 10 && isNumber(phoneNumber);
+        deliveryAddress.setPhoneNumber(phoneNumber);
+        view.isCheckoutButtonVisible(isAllInputValid());
+    }
+
+    public void setAddress(String address) {
+        isAddressValid = !address.isEmpty();
+        deliveryAddress.setAddress(address);
+        view.isCheckoutButtonVisible(isAllInputValid());
+    }
+
+    public void setProvince(String province) {
+        isProvinceValid = !province.isEmpty();
+        deliveryAddress.setProvince(province);
+        view.isCheckoutButtonVisible(isAllInputValid());
+    }
+
+    public void setPostalCode(String postalCode) {
+        isPostalCodeValid = postalCode.length() == 6 && isNumber(postalCode);
+        deliveryAddress.setPostalCode(postalCode);
+        view.isCheckoutButtonVisible(isAllInputValid());
+    }
+
+    public void setShippingOption(String shippingOption) {
+        deliveryAddress.setShippingOptions(shippingOption);
+    }
+
+    private boolean isAllInputValid() {
+        return isNameValid && isPhoneNumberValid && isAddressValid && isProvinceValid && isPostalCodeValid;
     }
 
     @Override
@@ -86,15 +104,12 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
     }
 
     @Override
-    public void onMessage(String message) {
-        view.onMessage(message);
+    public void isUpdateSuccess(Boolean success) {
+        view.isLoading(false);
+        if (success) view.navigateUp();
     }
 
-    @Override
-    public void isUpdateSuccess(Boolean success) {
-        if (success) {
-            view.isLoading(false);
-            view.navigateUp();
-        }
+    public static boolean isNumber(String text) {
+        return Pattern.matches("[0-9]+", text);
     }
 }
