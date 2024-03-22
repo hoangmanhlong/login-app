@@ -13,6 +13,4 @@ public interface AddProductToCartView {
     void bindProduct(Product product);
 
     void dismissAddProductToCartFragment();
-
-    void onMessage(@StringRes int message);
 }

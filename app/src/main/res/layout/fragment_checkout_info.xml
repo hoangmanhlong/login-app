@@ -211,31 +211,31 @@
                         android:layout_height="0.5dp"
                         android:layout_marginVertical="@dimen/_8sdp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="?attr/textInputFilledStyle"
+                        android:id="@+id/phoneNumberLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:includeFontPadding="false"
-                        android:text="@string/phone_number_star"
-                        android:textColor="@color/gray_700"
-                        android:textSize="12sp" />
+                        app:endIconMode="clear_text"
+                        app:boxStrokeWidth="0.5dp"
+                        app:helperTextEnabled="true"
+                        android:hint="@string/phone_number_star"
+                        app:helperText="@string/phone_number_text_helper"
+                        app:boxStrokeColor="@color/gray_500"
+                        app:boxBackgroundColor="@color/gray_1000">
 
-                    <EditText
-                        android:id="@+id/etPhoneNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_30sdp"
-                        android:background="@android:color/transparent"
-                        android:imeOptions="actionNext"
-                        android:inputType="numberDecimal"
-                        android:maxLength="10"
-                        android:singleLine="true"
-                        android:text="@{deliveryAddress.phoneNumber}" />
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginVertical="@dimen/_8sdp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPhoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:imeOptions="actionNext"
+                            android:textColorHint="@color/gray_500"
+                            android:inputType="numberDecimal"
+                            android:maxLength="10"
+                            android:singleLine="true"
+                            android:text="@{deliveryAddress.phoneNumber}" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -436,14 +436,14 @@
                         android:layout_marginVertical="@dimen/_8sdp" />
 
                     <CheckBox
-                        android:fontFamily="@font/poppins_regular"
-                        android:textColor="@color/gray_500"
-                        android:includeFontPadding="false"
                         android:id="@+id/saveAddressCheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
                         android:text="@string/save_address_label"
+                        android:textColor="@color/gray_500"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

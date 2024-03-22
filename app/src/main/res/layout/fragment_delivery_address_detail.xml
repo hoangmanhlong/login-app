@@ -96,7 +96,7 @@
                     app:counterEnabled="true"
                     app:counterMaxLength="10"
                     app:endIconMode="clear_text"
-                    app:helperText="Includes 10 digits"
+                    app:helperText="@string/phone_number_text_helper"
                     app:startIconDrawable="@drawable/ic_phone">
 
                     <com.google.android.material.textfield.TextInputEditText

@@ -188,6 +188,7 @@
 
     <!--    Address Details-->
     <string name="set_default_address">Set as Default Address</string>
+    <string name="phone_number_text_helper">Includes 10 digits</string>
 
     <string name="select_language">Select language</string>
 

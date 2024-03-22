@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.databinding.LayoutProductImageBinding;
+import com.example.loginapp.databinding.LayoutProductImageSmailBinding;
 
 /**
  * This Adapter using in [ProductFragment]
@@ -26,7 +26,7 @@ public class ProductImageAdapter extends ListAdapter<String, ProductImageAdapter
     @NonNull
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ImageViewHolder(LayoutProductImageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), listener);
+        return new ImageViewHolder(LayoutProductImageSmailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), listener);
     }
 
     @Override
@@ -38,9 +38,9 @@ public class ProductImageAdapter extends ListAdapter<String, ProductImageAdapter
 
         private OnImageClickListener listener;
 
-        private final LayoutProductImageBinding binding;
+        private final LayoutProductImageSmailBinding binding;
 
-        public ImageViewHolder(LayoutProductImageBinding binding, OnImageClickListener listener) {
+        public ImageViewHolder(LayoutProductImageSmailBinding binding, OnImageClickListener listener) {
             super(binding.getRoot());
             this.listener = listener;
             this.binding = binding;

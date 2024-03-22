@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.comment_adapter.CommentAdapter;
 import com.example.loginapp.adapter.product_adapter.OnProductClickListener;
 import com.example.loginapp.adapter.product_adapter.ProductAdapter;
+import com.example.loginapp.adapter.product_image_adapter.ImagesProductAdapter;
 import com.example.loginapp.adapter.product_images_adapter.OnImageClickListener;
 import com.example.loginapp.adapter.product_images_adapter.ProductImageAdapter;
 import com.example.loginapp.databinding.FragmentProductDetailBinding;
@@ -45,6 +47,8 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
 
     private FragmentProductDetailBinding binding;
 
+    private ViewPager viewPager;
+
     private NavController navController;
 
     private CheckBox btFavorite;
@@ -67,6 +71,8 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
 
     private void initView() {
         binding.setFragment(this);
+
+        viewPager = binding.viewPager;
 
 //        AppAnimationState.setBottomActionView(binding.bottomActionView, true);
 
@@ -137,6 +143,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     public void bindProduct(Product product) {
         binding.setProduct(product);
         productImageAdapter.submitList(product.getImages());
+        viewPager.setAdapter(new ImagesProductAdapter(product.getImages(), requireContext()));
     }
 
     @Override
@@ -169,11 +176,6 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
 
     @Override
     public void onImageClick(String url) {
-        Glide.with(requireContext())
-                .load(url)
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_broken_image)
-                .into(binding.ivThumbnail);
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.example.loginapp.presenter.CartPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
 import com.example.loginapp.view.commonUI.AppMessage;
+import com.example.loginapp.view.fragments.payment_option.PaymentOptionMessage;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
 
 import org.greenrobot.eventbus.EventBus;
@@ -110,6 +111,13 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void bindDiscountCode(String code) {
         binding.discountCode.setText(code);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void getPaymentOptionMessage(PaymentOptionMessage paymentOptionMessage) {
+        presenter.setClearCode(true);
+        PaymentOptionMessage paymentOptionMessage1 = EventBus.getDefault().getStickyEvent(PaymentOptionMessage.class);
+        if (paymentOptionMessage1 != null) EventBus.getDefault().removeStickyEvent(paymentOptionMessage1);
     }
 
     private void initView() {

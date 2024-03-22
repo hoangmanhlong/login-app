@@ -115,14 +115,15 @@ public class SelectProductQuantityAndVoucherFragment extends BottomSheetDialogFr
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        MessageVoucherSelected stickyEvent = EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
-        if (stickyEvent != null) EventBus.getDefault().removeStickyEvent(stickyEvent);
+
     }
 
     public void onClearDiscountCodeClick() {
         binding.setSelectVoucherVisible(true);
         order.setVoucher(null);
         updateUI();
+        MessageVoucherSelected stickyEvent = EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
+        if (stickyEvent != null) EventBus.getDefault().removeStickyEvent(stickyEvent);
     }
 
     public void onSelectCodeClick() {

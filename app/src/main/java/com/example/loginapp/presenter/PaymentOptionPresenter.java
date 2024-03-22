@@ -9,6 +9,8 @@ import com.example.loginapp.model.listener.PaymentOptionListener;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionView;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class PaymentOptionPresenter implements PaymentOptionListener {
 
     private final PaymentOptionView view;
@@ -61,6 +63,7 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
         reducedPrice = Math.round(reducedPrice * 100.0) / 100.0;
 
         paymentTotal -= reducedPrice;
+        order.setPaymentTotal(paymentTotal);
         view.setView(String.valueOf(merchandiseSubtotal), String.valueOf(shippingCost), String.valueOf(reducedPrice), String.valueOf(paymentTotal));
     }
 

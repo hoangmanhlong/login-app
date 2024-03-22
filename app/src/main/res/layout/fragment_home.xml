@@ -280,10 +280,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/layout_product_item" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_16sdp" />
-
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -181,6 +181,7 @@
 
     <!--    Address Details-->
     <string name="set_default_address">Đặt là địa chỉ mặc định</string>
+    <string name="phone_number_text_helper">Gồm 10 chữ số</string>
 
     <string name="select_language">Chọn ngôn ngữ</string>
 

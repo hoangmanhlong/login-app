@@ -1,6 +1,5 @@
 package com.example.loginapp.presenter;
 
-import com.example.loginapp.R;
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.interator.AddProductToCartInteractor;
@@ -59,9 +58,6 @@ public class AddProductToCartPresenter implements AddProductToCartListener {
 
     @Override
     public void isAddProductSuccess(boolean success) {
-        if (success) {
-            view.onMessage(R.string.added_to_cart);
-            view.dismissAddProductToCartFragment();
-        }
+        if (success) view.dismissAddProductToCartFragment();
     }
 }

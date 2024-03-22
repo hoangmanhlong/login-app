@@ -71,11 +71,6 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
         this.dismiss();
     }
 
-    @Override
-    public void onMessage(int message) {
-        AppMessage.showMessage(requireContext(), getString(message));
-    }
-
     public void onPlusButtonClick() {
         presenter.increasingTheNumber();
     }

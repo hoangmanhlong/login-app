@@ -68,47 +68,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/productImageView"
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_200sdp"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/ivThumbnail"
-                            imgUrl="@{product.thumbnail}"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_200sdp"
-                            android:adjustViewBounds="true"
-                            android:contentDescription="@null"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/iphone9" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/productImageRecyclerview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:overScrollMode="never"
                         android:layout_marginBottom="16dp"
                         android:orientation="horizontal"
+                        android:overScrollMode="never"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/productImageView"
-                        tools:listitem="@layout/layout_product_image" />
+                        app:layout_constraintTop_toBottomOf="@id/viewPager"
+                        tools:listitem="@layout/layout_product_image_smail" />
 
 
                     <LinearLayout
+                        android:id="@+id/productInformationDetail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
                         android:orientation="vertical"
-                        android:padding="@dimen/_20sdp"
+                        android:padding="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/productImageRecyclerview">
@@ -127,15 +114,6 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_regular"
-                                    android:text="@{product.category}"
-                                    android:textColor="@color/gray_500"
-                                    android:textSize="13sp"
-                                    tools:text="Iphone" />
-
-                                <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ellipsize="end"
@@ -146,6 +124,19 @@
                                     android:textSize="18sp"
                                     android:textStyle="bold"
                                     tools:text="Iphone 15 pro max" />
+
+                                <TextView
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:includeFontPadding="false"
+                                    android:text="@{product.category}"
+                                    android:textColor="@color/blue"
+                                    android:textStyle="bold"
+                                    android:textSize="13sp"
+                                    tools:text="Iphone" />
+
 
                             </LinearLayout>
 
@@ -254,10 +245,18 @@
                             tools:itemCount="3"
                             tools:listitem="@layout/layout_comment" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/productInformationDetail">
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp">
+                            android:layout_marginHorizontal="@dimen/_12sdp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -288,6 +287,7 @@
                             android:clipToPadding="false"
                             android:orientation="horizontal"
                             android:overScrollMode="never"
+                            android:paddingHorizontal="@dimen/_6sdp"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             tools:itemCount="6"
                             tools:listitem="@layout/layout_product_item" />
