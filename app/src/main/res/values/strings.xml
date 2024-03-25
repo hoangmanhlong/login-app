@@ -214,4 +214,6 @@
 
     <string name="add_to_cart">Add to cart</string>
     <string name="added_to_cart">Added to cart</string>
+
+    <string name="order_empty">There are no orders</string>
 </resources>

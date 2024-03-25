@@ -31,27 +31,34 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
 
     private static final String TAG = ExpandProductsFragment.class.getSimpleName();
 
-    private final ExpandProductsPresenter presenter = new ExpandProductsPresenter(this);
+    private ExpandProductsPresenter presenter;
 
     private NavController navController;
 
     private FragmentExpandProductsBinding binding;
 
-    private final ExpandAdapter expandAdapter = new ExpandAdapter(this);
+    private ExpandAdapter expandAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new ExpandProductsPresenter(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentExpandProductsBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
+        expandAdapter = new ExpandAdapter(this);
+        binding.recommendedRecyclerview.setAdapter(expandAdapter);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
-        binding.setFragment(this);
-        binding.recommendedRecyclerview.setAdapter(expandAdapter);
         presenter.initData();
         binding.sortButton.setOnClickListener(v -> showMenu(v, R.menu.sort_menu));
     }
@@ -107,6 +114,14 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        expandAdapter = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     @Override

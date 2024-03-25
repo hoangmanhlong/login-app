@@ -23,29 +23,38 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
 
     private FragmentOrderDetailBinding binding;
 
-    private final OrderDetailPresenter presenter = new OrderDetailPresenter(this);
+    private OrderDetailPresenter presenter;
 
     private NavController navController;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new OrderDetailPresenter(this);
+        navController = NavHostFragment.findNavController(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOrderDetailBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
-        binding.setFragment(this);
         presenter.initData();
     }
 
     @Override
     public void getSharedOrder() {
-        Order order = getArguments() != null ? (Order) getArguments().getSerializable(Constant.ORDER_KEY) : null;
-        if (order != null) presenter.setOrder(order);
+        if (getArguments() != null) {
+            Order order = (Order) getArguments().getSerializable(Constant.ORDER_KEY);
+            if (order != null) presenter.setOrder(order);
+        }
+
     }
 
     public void onCancelOrderButtonClick() {
@@ -64,6 +73,19 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
 
     public void onNavigateUp() {
         navController.navigateUp();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     @Override

@@ -20,11 +20,18 @@ import java.util.List;
 
 public class VoucherFragment extends Fragment implements VoucherView {
 
-    private final VoucherPresenter presenter = new VoucherPresenter(this);
+    private VoucherPresenter presenter;
 
     private FragmentVoucherBinding binding;
 
-    private final VoucherAdapter adapter = new VoucherAdapter();
+    private VoucherAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new VoucherPresenter(this);
+        adapter = new VoucherAdapter();
+    }
 
     @Nullable
     @Override
@@ -39,6 +46,20 @@ public class VoucherFragment extends Fragment implements VoucherView {
         binding.setFragment(this);
         binding.myVoucherRecyclerView.setAdapter(adapter);
         presenter.getVouchers();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
+        adapter = null;
     }
 
     public void onNavigateUp() {

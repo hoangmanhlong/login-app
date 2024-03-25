@@ -30,16 +30,23 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
 
     private final String TAG = getClass().getSimpleName();
 
-    private final FavoritePresenter presenter = new FavoritePresenter(this);
+    private FavoritePresenter presenter;
 
     private FragmentFavoriteProductBinding binding;
 
-    private final FavoriteAdapter adapter = new FavoriteAdapter(this);
+    private FavoriteAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new FavoritePresenter(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentFavoriteProductBinding.inflate(inflater, container, false);
+        adapter = new FavoriteAdapter(this);
         return binding.getRoot();
     }
 
@@ -47,6 +54,13 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
     }
 
     private void initView() {
@@ -94,14 +108,20 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        adapter = null;
         binding = null;
-        presenter.removeFavoriteListValueEventListener();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         presenter.addFavoriteListValueEventListener();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.removeFavoriteListValueEventListener();
     }
 
     @Override

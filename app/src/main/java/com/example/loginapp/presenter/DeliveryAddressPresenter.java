@@ -10,9 +10,9 @@ import java.util.List;
 
 public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
-    private final DeliveryAddressView view;
+    private DeliveryAddressView view;
 
-    private final DeliveryAddressInterator interator = new DeliveryAddressInterator(this);
+    private DeliveryAddressInterator interator;
 
     private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
 
@@ -20,6 +20,14 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
     public DeliveryAddressPresenter(DeliveryAddressView view) {
         this.view = view;
+        interator = new DeliveryAddressInterator(this);
+    }
+
+    public void clear() {
+        view = null;
+        interator.clear();
+        interator = null;
+        deliveryAddresses = null;
     }
 
     public void initData() {

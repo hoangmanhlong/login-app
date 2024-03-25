@@ -9,7 +9,5 @@ public interface CartListener {
 
     void getProductsFromShoppingCart(List<FirebaseProduct> products);
 
-    void onMessage(String message);
-
     void isCartEmpty();
 }

@@ -26,19 +26,40 @@ import java.util.List;
 
 public class SelectVoucherFragment extends Fragment implements SelectVoucherView, OnSelectVoucherClickListener {
 
-    private final SelectVoucherPresenter presenter = new SelectVoucherPresenter(this);
+    private SelectVoucherPresenter presenter;
 
     private FragmentSelectVoucherBinding binding;
 
-    private final SelectVoucherAdapter adapter = new SelectVoucherAdapter(this);
+    private SelectVoucherAdapter adapter;
 
     private NavController navController;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new SelectVoucherPresenter(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSelectVoucherBinding.inflate(inflater, container, false);
+        adapter = new SelectVoucherAdapter(this);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        adapter = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     @Override

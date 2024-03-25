@@ -18,7 +18,6 @@ import com.example.loginapp.databinding.FragmentCancelOrdersBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.fragments.orders.OrdersMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,12 +34,20 @@ public class CancelOrdersFragment extends Fragment implements OnOrderClickListen
 
     private FragmentCancelOrdersBinding binding;
 
-    private final OrdersAdapter ordersAdapter = new OrdersAdapter(this);
+    private OrdersAdapter ordersAdapter;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        ordersAdapter = null;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCancelOrdersBinding.inflate(inflater, container, false);
+        ordersAdapter = new OrdersAdapter(this);
         return binding.getRoot();
     }
 

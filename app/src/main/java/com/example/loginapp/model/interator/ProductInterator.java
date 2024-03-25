@@ -1,5 +1,7 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.loginapp.data.remote.api.AppApiService;
@@ -18,14 +20,23 @@ import retrofit2.Response;
 
 public class ProductInterator {
 
-    private final DatabaseReference favoriteProductRef = Constant.favoriteProductRef;
+    private static final String TAG = ProductInterator.class.getSimpleName();
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference favoriteProductRef = Constant.favoriteProductRef;
 
-    private final ProductListener listener;
+    private FirebaseUser currentUser;
+
+    private ProductListener listener;
 
     public ProductInterator(ProductListener listener) {
         this.listener = listener;
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public void clear() {
+        listener = null;
+        favoriteProductRef = null;
+        currentUser = null;
     }
 
     public void isFavoriteProduct(Product product) {
@@ -34,10 +45,12 @@ public class ProductInterator {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        listener.isFavoriteProduct(task.getResult().exists());
+                        if (listener != null) listener.isFavoriteProduct(task.getResult().exists());
                     } else {
-                        listener.onMessage("Get Favorite Fail");
+                        Log.e(TAG, "isFavoriteProduct: Get Favorite Fail");
                     }
+                    getComments();
+                    getSimilarProducts(product.getCategory());
                 });
     }
 
@@ -45,16 +58,18 @@ public class ProductInterator {
         String productId = String.valueOf(product.getId());
         favoriteProductRef.child(currentUser.getUid()).child(productId).setValue(product)
                 .addOnCompleteListener(s -> {
-                    listener.isFavoriteProduct(true);
-                    listener.hasNewFavoriteProduct();
+                    if (listener != null) {
+                        listener.isFavoriteProduct(true);
+                        listener.hasNewFavoriteProduct();
+                    }
                 })
-                .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
+                .addOnFailureListener(e -> Log.e(TAG, "removeFavoriteProduct: " + e.getMessage()));
     }
 
     public void removeFavoriteProduct(int productID) {
         favoriteProductRef.child(currentUser.getUid()).child(String.valueOf(productID)).removeValue()
                 .addOnCompleteListener(task -> listener.isFavoriteProduct(false))
-                .addOnFailureListener(e -> listener.onMessage("An error occurred. Please try again later"));
+                .addOnFailureListener(e -> Log.e(TAG, "removeFavoriteProduct: " + e.getMessage()));
     }
 
     public void getComments() {
@@ -64,19 +79,14 @@ public class ProductInterator {
             public void onResponse(@NonNull Call<CommentRespond> call, @NonNull Response<CommentRespond> response) {
                 if (response.isSuccessful()) {
                     CommentRespond commentRespond = response.body();
-                    if (commentRespond != null) {
+                    if (commentRespond != null && listener != null)
                         listener.getCommentRespond(commentRespond);
-                    } else {
-                        listener.onMessage("Empty");
-                    }
-                } else {
-                    listener.onMessage("Respond fail");
                 }
             }
 
             @Override
             public void onFailure(Call<CommentRespond> call, Throwable t) {
-                listener.onMessage(t.getMessage());
+
             }
         });
     }
@@ -89,14 +99,14 @@ public class ProductInterator {
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if (response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
-                    if (productResponse != null)
+                    if (productResponse != null && listener != null)
                         listener.getSimilarProducts(productResponse.getProducts());
                 }
             }
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
-
+                Log.e(TAG, "onFailure: "  + t.getMessage());
             }
         });
     }

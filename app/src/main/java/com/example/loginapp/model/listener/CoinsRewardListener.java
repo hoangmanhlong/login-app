@@ -13,8 +13,6 @@ public interface CoinsRewardListener {
 
    void isAttendanceDataEmpty();
 
-   void getDataError();
-
    void getVouchers(List<Voucher> vouchers);
 
    void getMyVouchers(List<Voucher> vouchers);

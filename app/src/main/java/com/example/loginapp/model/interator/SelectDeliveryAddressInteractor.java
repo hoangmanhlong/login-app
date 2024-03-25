@@ -16,12 +16,18 @@ import java.util.List;
 
 public class SelectDeliveryAddressInteractor {
 
-    private final SelectDeliveryAddressListener listener;
+    private SelectDeliveryAddressListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user;
 
     public SelectDeliveryAddressInteractor(SelectDeliveryAddressListener listener) {
         this.listener = listener;
+        user = FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public void clear() {
+        listener = null;
+        user = null;
     }
 
     public void getDeliveryAddresses() {
@@ -33,9 +39,9 @@ public class SelectDeliveryAddressInteractor {
                     List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren())
                         deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                    listener.getDeliveryAddresses(deliveryAddresses);
+                    if (listener != null) listener.getDeliveryAddresses(deliveryAddresses);
                 } else {
-                    listener.isDeliveryAddressEmpty();
+                    if (listener != null) listener.isDeliveryAddressEmpty();
                 }
 
             }

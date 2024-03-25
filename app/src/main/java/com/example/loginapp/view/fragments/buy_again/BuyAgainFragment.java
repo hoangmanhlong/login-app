@@ -31,13 +31,19 @@ import java.util.List;
 
 public class BuyAgainFragment extends Fragment implements BuyAgainView {
 
-    private BuyAgainPresenter presenter = new BuyAgainPresenter(this);
+    private BuyAgainPresenter presenter;
 
     private FragmentBuyAgainBinding binding;
 
     private NavController navController;
 
     private Dialog dialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new BuyAgainPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -125,11 +131,13 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        dialog = null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.clear();
         presenter = null;
     }
 

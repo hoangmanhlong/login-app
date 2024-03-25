@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface CartView {
 
-    void onMessage(String message);
-
     void bindBasket(List<FirebaseProduct> products);
 
     void setTotal(String subtotal, String quantity, String total);

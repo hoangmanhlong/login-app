@@ -9,9 +9,11 @@ import java.util.List;
 
 public class SelectVoucherPresenter implements SelectVoucherListener {
 
-    private final SelectVoucherView view;
+    private SelectVoucherInterator interator;
 
-    private Voucher selectedVoucher = null;
+    private SelectVoucherView view;
+
+    private Voucher selectedVoucher;
 
     public Voucher getSelectedVoucher() {
         return selectedVoucher;
@@ -21,10 +23,16 @@ public class SelectVoucherPresenter implements SelectVoucherListener {
         this.selectedVoucher = selectedVoucher;
     }
 
-    private final SelectVoucherInterator interator = new SelectVoucherInterator(this);
+    public void clear() {
+        view = null;
+        selectedVoucher = null;
+        interator.clear();
+        interator = null;
+    }
 
     public SelectVoucherPresenter(SelectVoucherView view) {
         this.view = view;
+        interator = new SelectVoucherInterator(this);
     }
 
     public void getVoucher() {

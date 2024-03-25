@@ -17,7 +17,6 @@ import com.example.loginapp.databinding.FragmentReturnOrdersBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.fragments.orders.OrdersMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,19 +31,27 @@ public class ReturnOrdersFragment extends Fragment implements OnOrderClickListen
 
     private FragmentReturnOrdersBinding binding;
 
-    private final OrdersAdapter adapter = new OrdersAdapter(this);
+    private OrdersAdapter ordersAdapter;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        ordersAdapter = null;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentReturnOrdersBinding.inflate(inflater, container, false);
+        ordersAdapter = new OrdersAdapter(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.ordersRecyclerView.setAdapter(adapter);
+        binding.ordersRecyclerView.setAdapter(ordersAdapter);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -58,7 +65,7 @@ public class ReturnOrdersFragment extends Fragment implements OnOrderClickListen
                     .sorted(Comparator.comparing(Order::getOrderId).reversed())
                     .collect(Collectors.toList());
             binding.setIsOrdersListEmpty(completedOrders.isEmpty());
-            if (!completedOrders.isEmpty()) adapter.submitList(completedOrders);
+            if (!completedOrders.isEmpty()) ordersAdapter.submitList(completedOrders);
         }
     }
 

@@ -12,23 +12,20 @@ import java.util.regex.Pattern;
 
 public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailListener {
 
-    private final DeliveryAddressDetailInteractor interactor = new DeliveryAddressDetailInteractor(this);
+    private DeliveryAddressDetailInteractor interactor;
 
     private boolean isNameValid, isPhoneNumberValid, isAddressValid, isProvinceValid, isPostalCodeValid = false;
 
-    private final DeliveryAddressDetailView view;
+    private DeliveryAddressDetailView view;
 
-    private final ExecutorService execute = Executors.newFixedThreadPool(5);
+    private ExecutorService execute = Executors.newFixedThreadPool(5);
 
     private DeliveryAddress deliveryAddress;
 
     public DeliveryAddressDetailPresenter(DeliveryAddressDetailView view) {
         this.view = view;
-    }
-
-    public void createNewDeliveryAddress() {
         deliveryAddress = new DeliveryAddress();
-        view.bindAddress(deliveryAddress);
+        interactor = new DeliveryAddressDetailInteractor(this);
     }
 
     public void fetchProvinces() {
@@ -45,7 +42,7 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
     }
 
     public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
-        this.deliveryAddress = new DeliveryAddress().copy(deliveryAddress);
+        this.deliveryAddress.copy(deliveryAddress);
         view.bindAddress(this.deliveryAddress);
     }
 
@@ -111,5 +108,13 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
 
     public static boolean isNumber(String text) {
         return Pattern.matches("[0-9]+", text);
+    }
+
+    public void detachView() {
+        view = null;
+        interactor.clearData();
+        interactor = null;
+        execute = null;
+        deliveryAddress = null;
     }
 }

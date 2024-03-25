@@ -9,12 +9,13 @@ import java.util.List;
 
 public class VoucherPresenter implements VoucherListener {
 
-    private final VoucherView view;
+    private VoucherView view;
 
-    private final VoucherInteractor interactor = new VoucherInteractor(this);
+    private VoucherInteractor interactor;
 
     public VoucherPresenter(VoucherView view) {
         this.view = view;
+        interactor = new VoucherInteractor(this);
     }
 
     public void getVouchers() {
@@ -23,12 +24,20 @@ public class VoucherPresenter implements VoucherListener {
 
     @Override
     public void getVouchers(List<Voucher> vouchers) {
-        view.isVouchersEmpty(false);
-        view.bindVouchers(vouchers);
+        if (view != null) {
+            view.isVouchersEmpty(false);
+            view.bindVouchers(vouchers);
+        }
     }
 
     @Override
     public void isVouchersEmpty() {
-        view.isVouchersEmpty(true);
+        if (view != null) view.isVouchersEmpty(true);
+    }
+
+    public void detachView() {
+        view = null;
+        interactor.clearRef();
+        interactor = null;
     }
 }

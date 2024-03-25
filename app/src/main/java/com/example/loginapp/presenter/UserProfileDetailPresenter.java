@@ -16,7 +16,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
     private final String TAG = this.toString();
 
-    private final UserProfileDetailView view;
+    private UserProfileDetailView view;
 
     private boolean userDataIsObtainedForTheFirstTime = false;
 
@@ -53,11 +53,9 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     public void initData() {
         isVietnamese = sharedPreferences.getLanguage();
         view.bindLanguageState(isVietnamese);
-        if (userDataIsObtainedForTheFirstTime) {
-            if (userData != null) view.bindUserData(userData);
-        }
+        if (userDataIsObtainedForTheFirstTime && userData != null) view.bindUserData(userData);
         if (listOfOrdersTakenForTheFirstTime) {
-            if (orders.isEmpty())view.bindNumberOfOrders(0, 0, 0, 0);
+            if (orders.isEmpty()) view.bindNumberOfOrders(0, 0, 0, 0);
             else getOrders(orders);
         }
     }
@@ -72,7 +70,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     @Override
     public void getUserData(UserData userData) {
         this.userData = userData;
-        view.bindUserData(this.userData);
+        if (view != null) view.bindUserData(this.userData);
         userDataIsObtainedForTheFirstTime = true;
     }
 
@@ -91,14 +89,14 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         int numberOfCompletedOrder = countOrdersWithStatus(orders, OrderStatus.Completed);
         int numberOfCancelOrder = countOrdersWithStatus(orders, OrderStatus.Cancel);
         int numberOfReturnOrder = countOrdersWithStatus(orders, OrderStatus.Return);
-        view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
+        if (view != null) view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
         listOfOrdersTakenForTheFirstTime = true;
     }
 
     @Override
     public void isOrdersListEmpty() {
         this.orders.clear();
-        view.bindNumberOfOrders(0, 0, 0, 0);
+        if (view != null) view.bindNumberOfOrders(0, 0, 0, 0);
         listOfOrdersTakenForTheFirstTime = true;
     }
 
@@ -109,5 +107,9 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
     private int countOrdersWithStatus(List<Order> orders, OrderStatus status) {
         return (int) orders.stream().filter(order -> order.getOrderStatus() == status).count();
+    }
+
+    public void detachView() {
+        view = null;
     }
 }

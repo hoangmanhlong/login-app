@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.order_adapter.OnOrderClickListener;
 import com.example.loginapp.adapter.order_adapter.OrdersAdapter;
 import com.example.loginapp.databinding.FragmentOrdersAllBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.fragments.orders.OrdersMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,12 +33,13 @@ public class AllOrdersFragment extends Fragment implements OnOrderClickListener 
 
     private FragmentOrdersAllBinding binding;
 
-    private final OrdersAdapter ordersAdapter = new OrdersAdapter(this);
+    private OrdersAdapter ordersAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOrdersAllBinding.inflate(inflater, container, false);
+        ordersAdapter = new OrdersAdapter(this);
         return binding.getRoot();
     }
 
@@ -75,10 +76,17 @@ public class AllOrdersFragment extends Fragment implements OnOrderClickListener 
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        ordersAdapter = null;
+    }
+
+    @Override
     public void onOrderClick(Order order) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.ORDER_KEY, order);
-        NavHostFragment.findNavController(this)
+        NavHostFragment.findNavController(getParentFragment())
                 .navigate(R.id.action_ordersFragment_to_orderDetailFragment, bundle);
     }
 }

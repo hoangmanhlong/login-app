@@ -29,11 +29,17 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
 
     private static final String TAG = DeliveryAddressDetailFragment.class.getSimpleName();
 
-    private final DeliveryAddressDetailPresenter presenter = new DeliveryAddressDetailPresenter(this);
+    private DeliveryAddressDetailPresenter presenter;
 
     private FragmentDeliveryAddressDetailBinding binding;
 
     private Dialog dialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new DeliveryAddressDetailPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -47,10 +53,10 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
+        dialog = LoadingDialog.getLoadingDialog(requireContext());
         onInputState();
         getDataShared();
         presenter.fetchProvinces();
-        dialog = LoadingDialog.getLoadingDialog(requireContext());
     }
 
     private void getDataShared() {
@@ -61,7 +67,6 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
             fragmentLabel = R.string.edit_address;
         } else {
             binding.btDeleteAddress.setVisibility(View.GONE);
-            presenter.createNewDeliveryAddress();
             fragmentLabel = R.string.add_new_address;
         }
         binding.setFragmentLabel(fragmentLabel);
@@ -102,6 +107,21 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
         requireActivity().runOnUiThread(() ->
                 ((MaterialAutoCompleteTextView) binding.tvProvince).setSimpleItems(provinces)
         );
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
+        dialog = null;
+        System.gc();
     }
 
     @Override

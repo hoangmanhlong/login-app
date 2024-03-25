@@ -9,15 +9,7 @@ public interface SearchListener {
 
     void getProducts(List<Product> products);
 
-    void getSearchHistories(List<SearchHistory> searchHistories);
-
-//    void notifyItemAdded(SearchHistory history);
-//
-//    void notifyItemChanged(SearchHistory history);
-//
-//    void notifyItemRemoved(SearchHistory history);
-
-    void onLoadError(String message);
+    void getSearchHistories(List<SearchHistory> searchHistories);;
 
     void deleteSuccess(boolean isSuccess);
 

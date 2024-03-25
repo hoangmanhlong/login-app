@@ -26,11 +26,11 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class RegisterFragment extends Fragment implements RegisterView {
 
-    private final String TAG = this.toString();
+    private static final String TAG = RegisterFragment.class.getSimpleName();
 
     private FragmentRegisterBinding binding;
 
-    private final RegisterPresenter presenter = new RegisterPresenter(this);
+    private RegisterPresenter presenter;
 
     private TextInputLayout[] textInputLayouts;
 
@@ -40,21 +40,34 @@ public class RegisterFragment extends Fragment implements RegisterView {
 
     private NavController navController;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new RegisterPresenter(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        binding.setRegisterFragment(this);
+        textInputLayouts = new TextInputLayout[]{binding.emailTextInputLayout, binding.passwordTextInputLayout};
+        textInputEditTexts = new TextInputEditText[]{binding.etEmail, binding.etPassword};
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setRegisterFragment(this);
-        navController = NavHostFragment.findNavController(this);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        textInputLayouts = new TextInputLayout[]{binding.emailTextInputLayout, binding.passwordTextInputLayout};
-        textInputEditTexts = new TextInputEditText[]{binding.etEmail, binding.etPassword};
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         buttonState();
@@ -108,6 +121,9 @@ public class RegisterFragment extends Fragment implements RegisterView {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        textInputLayouts = null;
+        textInputEditTexts = null;
+        dialog = null;
     }
 
     @Override
@@ -116,7 +132,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
     }
 
     public void onNavigate() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        navController.navigateUp();
     }
 
 

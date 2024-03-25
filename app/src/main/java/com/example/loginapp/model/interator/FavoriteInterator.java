@@ -16,11 +16,11 @@ import java.util.List;
 
 public class FavoriteInterator {
 
-    private final FavoriteListener listener;
+    private FavoriteListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private final ValueEventListener favoriteListValueEventListener = new ValueEventListener() {
+    private ValueEventListener favoriteListValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) {
@@ -57,5 +57,11 @@ public class FavoriteInterator {
         Constant.favoriteProductRef.child(user.getUid())
                 .child(String.valueOf(id)).removeValue()
                 .addOnFailureListener(e -> listener.onMessage("Error"));
+    }
+
+    public void clearData() {
+        listener = null;
+        favoriteListValueEventListener = null;
+        user = null;
     }
 }

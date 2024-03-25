@@ -19,11 +19,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchPresenter implements SearchListener {
 
-    private final String TAG = this.toString();
+    private final String TAG = SearchPresenter.class.getSimpleName();
 
-    private final SearchProductInterator interator = new SearchProductInterator(this);
+    private SearchProductInterator interator;
 
-    private final SearchView view;
+    private SearchView view;
 
     public boolean isShowSearchResult = false;
 
@@ -39,8 +39,17 @@ public class SearchPresenter implements SearchListener {
 
     private String query;
 
+    public void detachView() {
+        view = null;
+        interator.clearRef();
+        interator = null;
+        products = null;
+        searchHistories = null;
+    }
+
     public SearchPresenter(SearchView view) {
         this.view = view;
+        interator = new SearchProductInterator(this);
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
@@ -102,8 +111,6 @@ public class SearchPresenter implements SearchListener {
             if (authenticated) interator.saveSearchHistory(query);
             view.isProductListVisible(true);
             view.hideSearchSuggestionsDropdown();
-        } else {
-            view.onMessage("Invalid information");
         }
     }
 
@@ -136,11 +143,6 @@ public class SearchPresenter implements SearchListener {
     public void onBtBackClick() {
         isShowSearchResult = false;
         view.isProductListVisible(false);
-    }
-
-    @Override
-    public void onLoadError(String message) {
-        view.onMessage(message);
     }
 
     @Override

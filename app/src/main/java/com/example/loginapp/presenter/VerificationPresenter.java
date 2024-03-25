@@ -8,14 +8,21 @@ import com.example.loginapp.view.fragments.verification.VerificationView;
 
 public class VerificationPresenter implements VerificationListener {
 
-    private final VerificationInterator interator = new VerificationInterator(this);
+    private VerificationInterator interator = new VerificationInterator(this);
 
     private String phoneNumber;
 
-    private final VerificationView view;
+    private VerificationView view;
 
     public VerificationPresenter(VerificationView view) {
         this.view = view;
+    }
+
+    public void clear() {
+        phoneNumber = null;
+        view = null;
+        interator.clear();
+        interator = null;
     }
 
     public String getPhoneNumber() {

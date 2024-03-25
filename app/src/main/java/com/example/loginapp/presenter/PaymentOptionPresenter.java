@@ -9,13 +9,11 @@ import com.example.loginapp.model.listener.PaymentOptionListener;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionView;
 
-import org.greenrobot.eventbus.EventBus;
-
 public class PaymentOptionPresenter implements PaymentOptionListener {
 
-    private final PaymentOptionView view;
+    private PaymentOptionView view;
 
-    private final PaymentOptionInterator interator = new PaymentOptionInterator(this);
+    private PaymentOptionInterator interator;
 
     private boolean isSaveDeliveryAddress;
 
@@ -23,12 +21,13 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
 
     private Order order;
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        order.setPaymentMethod(paymentMethod);
-    }
-
     public PaymentOptionPresenter(PaymentOptionView view) {
         this.view = view;
+        interator = new PaymentOptionInterator(this);
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        order.setPaymentMethod(paymentMethod);
     }
 
     public void setSaveDeliveryAddress(boolean saveDeliveryAddress) {
@@ -46,7 +45,9 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
         Voucher voucher = order.getVoucher();
         int shippingCost = Constant.ShippingCost;
         double paymentTotal = merchandiseSubtotal + shippingCost;
-        if (voucher != null) {
+        boolean hasVoucher = voucher != null;
+        view.hasVoucher(hasVoucher);
+        if (hasVoucher) {
             view.hasVoucher(true);
             if (voucher.getVoucherType() == VoucherType.FreeShipping) {
                 reducedPrice = 200;
@@ -54,9 +55,6 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
             if (voucher.getVoucherType() == VoucherType.Discount) {
                 reducedPrice = (paymentTotal * voucher.getDiscountPercentage() / 100);
             }
-        } else {
-            view.hasVoucher(false);
-            reducedPrice = 0;
         }
 
         // Làm tròn reducedPrice đến chữ số thứ hai sau dấu phẩy
@@ -81,5 +79,12 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
     @Override
     public void onMessage(String message) {
         view.onMessage(message);
+    }
+
+    public void DetachView() {
+        view = null;
+        interator.removePaymentOptionListener();
+        interator = null;
+        order = null;
     }
 }

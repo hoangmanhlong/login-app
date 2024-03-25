@@ -10,9 +10,9 @@ import java.util.List;
 
 public class SelectDeliveryAddressPresenter implements SelectDeliveryAddressListener {
 
-    private final SelectDeliveryAddressInteractor interactor = new SelectDeliveryAddressInteractor(this);
+    private SelectDeliveryAddressInteractor interactor;
 
-    private final SelectDeliveryAddressView view;
+    private SelectDeliveryAddressView view;
 
     private DeliveryAddress selectedAddress;
 
@@ -20,6 +20,7 @@ public class SelectDeliveryAddressPresenter implements SelectDeliveryAddressList
 
     public SelectDeliveryAddressPresenter(SelectDeliveryAddressView view) {
         this.view = view;
+        interactor = new SelectDeliveryAddressInteractor(this);
     }
 
     public DeliveryAddress getSelectedAddress() {
@@ -35,10 +36,12 @@ public class SelectDeliveryAddressPresenter implements SelectDeliveryAddressList
         view.getDeliveryAddresses(deliveryAddresses);
     }
 
-    public void initData() {
-        getDeliveryAddresses();
-//        if (deliveryAddresses.isEmpty()) view.getDataShared();
-//        else view.getDeliveryAddresses(deliveryAddresses);
+    public void clear() {
+        view = null;
+        selectedAddress = null;
+        deliveryAddresses = null;
+        interactor.clear();
+        interactor = null;
     }
 
     public void getDeliveryAddresses() {

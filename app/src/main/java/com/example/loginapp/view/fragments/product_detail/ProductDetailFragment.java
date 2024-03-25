@@ -14,7 +14,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.comment_adapter.CommentAdapter;
 import com.example.loginapp.adapter.product_adapter.OnProductClickListener;
@@ -30,8 +29,6 @@ import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.fragments.add_to_cart.AddProductToCartFragment;
 import com.example.loginapp.view.fragments.bottom_sheet.SelectProductQuantityAndVoucherFragment;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,11 +36,11 @@ import java.util.List;
 
 public class ProductDetailFragment extends Fragment implements ProductView, OnImageClickListener, OnProductClickListener {
 
-    private final ProductPresenter presenter = new ProductPresenter(this);
+    private ProductPresenter presenter;
 
-    private final ProductImageAdapter productImageAdapter = new ProductImageAdapter(this);
+    private ProductImageAdapter productImageAdapter;
 
-    private final CommentAdapter commentAdapter = new CommentAdapter();
+    private CommentAdapter commentAdapter;
 
     private FragmentProductDetailBinding binding;
 
@@ -53,30 +50,53 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
 
     private CheckBox btFavorite;
 
-    private final ProductAdapter similarProductsAdapter = new ProductAdapter(this);
+    private ProductAdapter similarProductsAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new ProductPresenter(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        similarProductsAdapter = null;
+        productImageAdapter = null;
+        binding = null;
+        commentAdapter = null;
+        btFavorite = null;
+        viewPager = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentProductDetailBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
+        similarProductsAdapter = new ProductAdapter(this);
+        productImageAdapter = new ProductImageAdapter(this);
+        commentAdapter = new CommentAdapter();
+        btFavorite = binding.favoriteBtn;
+        viewPager = binding.viewPager;
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
         initView();
     }
 
     private void initView() {
-        binding.setFragment(this);
-
-        viewPager = binding.viewPager;
-
-//        AppAnimationState.setBottomActionView(binding.bottomActionView, true);
-
-        getDataShared();
 
         RecyclerView recyclerView = binding.productImageRecyclerview;
         RecyclerView similarProductsRecyclerView = binding.similarProductRecyclerview;
@@ -86,8 +106,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
         commentRecyclerView.setAdapter(commentAdapter);
         similarProductsRecyclerView.setAdapter(similarProductsAdapter);
 
-        btFavorite = binding.favoriteBtn;
-
+        getDataShared();
         presenter.initData();
     }
 

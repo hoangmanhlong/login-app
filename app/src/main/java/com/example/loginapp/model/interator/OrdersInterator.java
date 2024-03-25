@@ -17,17 +17,14 @@ import java.util.List;
 
 public class OrdersInterator {
 
-    private final OrdersListener listener;
+    private FirebaseUser currentUser;
 
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private ValueEventListener ordersValueEventListener;
 
 
     public OrdersInterator(OrdersListener listener) {
-        this.listener = listener;
-    }
-
-    public void getOrders() {
-        Constant.orderRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        ordersValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -44,6 +41,19 @@ public class OrdersInterator {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+    }
+
+    public void addOrdersValueEventListener() {
+        Constant.orderRef.child(currentUser.getUid()).addValueEventListener(ordersValueEventListener);
+    }
+
+    public void removeOrdersValueEventListener() {
+        Constant.orderRef.child(currentUser.getUid()).removeEventListener(ordersValueEventListener);
+    }
+
+    public void clear() {
+        ordersValueEventListener = null;
+        currentUser = null;
     }
 }

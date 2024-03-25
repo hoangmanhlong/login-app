@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.interator.CheckoutInfoInterator;
@@ -17,9 +15,9 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     private static final String TAG = CheckoutInfoPresenter.class.getSimpleName();
 
-    private final CheckoutInfoInterator interator = new CheckoutInfoInterator(this);
+    private CheckoutInfoInterator interator;
 
-    private final CheckoutInfoView view;
+    private CheckoutInfoView view;
 
     private boolean deliveryAddressesTaken = false;
 
@@ -27,7 +25,7 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     private boolean retrievedTheSharedData = false;
 
-    private DeliveryAddress deliveryAddress = new DeliveryAddress();
+    private DeliveryAddress deliveryAddress;
 
     private List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
 
@@ -35,10 +33,11 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     public CheckoutInfoPresenter(CheckoutInfoView view) {
         this.view = view;
+        interator = new CheckoutInfoInterator(this);
+        deliveryAddress = new DeliveryAddress();
     }
 
     public List<DeliveryAddress> getDeliveryAddresses() {
-        Log.d(TAG, "getDeliveryAddresses: when navigate" + deliveryAddresses);
         return deliveryAddresses;
     }
 
@@ -48,6 +47,7 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
         } else {
             interator.getDeliveryAddresses();
         }
+
         if (retrievedTheSharedData) {
             view.isLoading(false);
             view.isCheckoutButtonVisible(isAllInputValid());
@@ -93,7 +93,7 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
     }
 
     public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
+        this.deliveryAddress.copy(deliveryAddress);
         view.bindDeliveryAddress(deliveryAddress);
     }
 
@@ -120,12 +120,12 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
     public void getDeliveryAddresses(List<DeliveryAddress> deliveryAddresses) {
         view.isLoading(false);
         view.isSelectDeliveryAddressButtonVisible(true);
-        this.deliveryAddresses = deliveryAddresses;
+        this.deliveryAddresses.clear();
+        this.deliveryAddresses.addAll(deliveryAddresses);
         view.isSaveAddressCheckboxVisible(isSaveAddressCheckboxVisible());
-        Log.d(TAG, "getDeliveryAddresses: origin" + deliveryAddresses);
         List<DeliveryAddress> defaultDeliveryAddress = deliveryAddresses.stream().filter(DeliveryAddress::getIsDefault).collect(Collectors.toList());
-        if (defaultDeliveryAddress.isEmpty()) deliveryAddress = deliveryAddresses.get(0);
-        else deliveryAddress = defaultDeliveryAddress.get(0);
+        if (defaultDeliveryAddress.isEmpty()) deliveryAddress.copy(deliveryAddresses.get(0));
+        else deliveryAddress.copy(defaultDeliveryAddress.get(0));
         view.bindDeliveryAddress(deliveryAddress);
         deliveryAddressesTaken = true;
     }
@@ -142,5 +142,14 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     public static boolean isNumber(String text) {
         return Pattern.matches("[0-9]+", text);
+    }
+
+    public void detachView() {
+        view = null;
+        interator.detachCheckoutInfoListener();
+        interator = null;
+        currentOrder = null;
+        deliveryAddresses = null;
+        deliveryAddress = null;
     }
 }

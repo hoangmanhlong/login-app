@@ -27,7 +27,7 @@ import java.util.List;
 
 public class SelectDeliveryAddressFragment extends Fragment implements OnSelectDeliveryAddressClickListener, SelectDeliveryAddressView {
 
-    private final SelectDeliveryAddressPresenter presenter = new SelectDeliveryAddressPresenter(this);
+    private SelectDeliveryAddressPresenter presenter;
 
     private NavController navController;
 
@@ -35,22 +35,29 @@ public class SelectDeliveryAddressFragment extends Fragment implements OnSelectD
 
     private final String TAG = this.toString();
 
-    private final SelectSelectDeliveryAddressAdapter adapter = new SelectSelectDeliveryAddressAdapter(this);
+    private SelectSelectDeliveryAddressAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new SelectDeliveryAddressPresenter(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSelectDeliveryAddressBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
+        adapter = new SelectSelectDeliveryAddressAdapter(this);
+        binding.deliveryAddressRecyclerview.setAdapter(adapter);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
-        navController = NavHostFragment.findNavController(this);
-        binding.deliveryAddressRecyclerview.setAdapter(adapter);
-        presenter.initData();
+        presenter.getDeliveryAddresses();
     }
 
     @Override
@@ -63,11 +70,24 @@ public class SelectDeliveryAddressFragment extends Fragment implements OnSelectD
             } else {
                 Log.d(TAG, "getDataShared: deliveryAddresses" + "null");
             }
-
         } else {
             Log.d(TAG, "getDataShared: arg == null");
             presenter.getDeliveryAddresses();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        adapter = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     @Override

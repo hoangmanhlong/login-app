@@ -21,34 +21,16 @@ public class CoinsRewardInterator {
 
     private final String TAG = this.toString();
 
-    private final CoinsRewardListener listener;
+    private CoinsRewardListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private final ValueEventListener attendanceDataValueEventListener = new ValueEventListener() {
+    private ValueEventListener attendanceDataValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) listener.getAttendanceData(snapshot.getValue(AttendanceManager.class));
-            else listener.isAttendanceDataEmpty();
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-    };
-
-    private final ValueEventListener vouchersValueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                Log.d(TAG, "onDataChange: snapshot != null");
-                List<Voucher> vouchers = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    vouchers.add(dataSnapshot.getValue(Voucher.class));
-                listener.getVouchers(vouchers);
-            } else {
-                listener.isVouchersListEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) listener.getAttendanceData(snapshot.getValue(AttendanceManager.class));
+                else listener.isAttendanceDataEmpty();
             }
         }
 
@@ -58,16 +40,39 @@ public class CoinsRewardInterator {
         }
     };
 
-    private final ValueEventListener myVouchersValueEventListener = new ValueEventListener() {
+    private ValueEventListener vouchersValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                List<Voucher> vouchers = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    vouchers.add(dataSnapshot.getValue(Voucher.class));
-                listener.getMyVouchers(vouchers);
-            } else {
-                listener.isMyVoucherEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    List<Voucher> vouchers = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        vouchers.add(dataSnapshot.getValue(Voucher.class));
+                    listener.getVouchers(vouchers);
+                } else {
+                    listener.isVouchersListEmpty();
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+    private ValueEventListener myVouchersValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    List<Voucher> vouchers = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        vouchers.add(dataSnapshot.getValue(Voucher.class));
+                    listener.getMyVouchers(vouchers);
+                } else {
+                    listener.isMyVoucherEmpty();
+                }
             }
         }
 
@@ -79,6 +84,14 @@ public class CoinsRewardInterator {
 
     public CoinsRewardInterator(CoinsRewardListener listener) {
         this.listener = listener;
+    }
+
+    public void clear() {
+        myVouchersValueEventListener = null;
+        listener = null;
+        vouchersValueEventListener = null;
+        attendanceDataValueEventListener = null;
+        user = null;
     }
 
     public void attendance(AttendanceManager attendanceManager) {
@@ -120,8 +133,11 @@ public class CoinsRewardInterator {
                         Constant.myVoucherRef.child(uid)
                                 .child(voucher.getVoucherCode())
                                 .setValue(voucher)
-                                .addOnCompleteListener(myVoucherTask -> listener.isRedeemSuccess(myVoucherTask.isSuccessful()))
-                                .addOnFailureListener(e -> listener.isRedeemSuccess(false));
+                                .addOnCompleteListener(myVoucherTask -> {
+                                    if (listener != null)
+                                        listener.isRedeemSuccess(myVoucherTask.isSuccessful());
+                                })
+                                .addOnFailureListener(e -> Log.e(TAG, "redeemVoucher: " + e.getMessage() ));
                     }
                 });
     }

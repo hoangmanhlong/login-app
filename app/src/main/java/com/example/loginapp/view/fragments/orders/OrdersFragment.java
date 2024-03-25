@@ -1,7 +1,6 @@
 package com.example.loginapp.view.fragments.orders;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +13,16 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.loginapp.adapter.order_pager_adapter.OrdersPagerAdapter;
 import com.example.loginapp.databinding.FragmentOrdersBinding;
-import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.presenter.OrdersPresenter;
 import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
-
 public class OrdersFragment extends Fragment implements OrdersView {
 
     private final String TAG = this.toString();
 
-    private final OrdersPresenter presenter = new OrdersPresenter(this);
+    private OrdersPresenter presenter;
 
     private FragmentOrdersBinding binding;
 
@@ -34,24 +30,30 @@ public class OrdersFragment extends Fragment implements OrdersView {
 
     private TabLayout tabLayout;
 
+    private OrdersPagerAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new OrdersPresenter();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOrdersBinding.inflate(inflater, container, false);
+        adapter = new OrdersPagerAdapter(this);
+        viewPager2 = binding.pager;
+        tabLayout = binding.tabLayout;
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "OrdersFragment onViewCreated: ");
         binding.setFragment(this);
-        viewPager2 = binding.pager;
-        OrdersPagerAdapter adapter = new OrdersPagerAdapter(this);
         viewPager2.setAdapter(adapter);
         viewPager2.setOffscreenPageLimit(5);
-
-        tabLayout = binding.tabLayout;
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -77,14 +79,28 @@ public class OrdersFragment extends Fragment implements OrdersView {
                 tabLayout.getTabAt(position).select();
             }
         });
-        
-        presenter.initData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.addOrdersValueEventListener();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: ");
+        presenter.removeOrdersValueEventListener();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        adapter = null;
+        binding = null;
+        viewPager2 = null;
+        tabLayout = null;
+        System.gc();
     }
 
     public void onNavigateUp() {
@@ -92,19 +108,13 @@ public class OrdersFragment extends Fragment implements OrdersView {
     }
 
     @Override
-    public void getOrders(List<Order> orders) {
-        Log.d(TAG, "getOrders: " + orders.size());
-        EventBus.getDefault().postSticky(new OrdersMessage(orders));
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.clear();
+        presenter = null;
         OrdersMessage message = EventBus.getDefault().getStickyEvent(OrdersMessage.class);
         if (message != null) EventBus.getDefault().removeStickyEvent(message);
     }
-
-
 
     @Override
     public void isLoading(Boolean loading) {

@@ -17,17 +17,25 @@ import com.example.loginapp.presenter.SelectLanguagePresenter;
 
 public class SelectLanguageFragment extends Fragment implements SelectLanguageView {
 
-    private final SelectLanguagePresenter presenter = new SelectLanguagePresenter(this);
+    private static final String TAG = SelectLanguageFragment.class.getSimpleName();
+
+    private SelectLanguagePresenter presenter;
 
     private FragmentSelectLanguageBinding binding;
 
     private NavController navController;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new SelectLanguagePresenter(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSelectLanguageBinding.inflate(inflater, container, false);
-        navController = NavHostFragment.findNavController(this);
         return binding.getRoot();
     }
 
@@ -52,6 +60,19 @@ public class SelectLanguageFragment extends Fragment implements SelectLanguageVi
 
     public void onEnglishClick() {
         presenter.setSelectedVietnamese(false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
     }
 
     @Override

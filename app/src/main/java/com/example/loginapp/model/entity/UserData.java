@@ -86,4 +86,14 @@ public class UserData implements Serializable {
     public static final String USERID = "uid";
 
     public static final String EMAIL = "email";
+
+    public UserData copy(UserData userData) {
+        this.uid = userData.uid;
+        this.username = userData.username;
+        this.email = userData.email;
+        this.address = userData.address;
+        this.phoneNumber = userData.phoneNumber;
+        this.avatar = userData.avatar;
+        return this;
+    }
 }

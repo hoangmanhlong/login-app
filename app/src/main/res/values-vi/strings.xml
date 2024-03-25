@@ -208,4 +208,6 @@
     <string name="add_to_cart">Thêm vào giỏ hàng</string>
     <string name="added_to_cart">Đã thêm vào giỏ hàng</string>
 
+    <string name="order_empty">Không có đơn hàng nào</string>
+
 </resources>

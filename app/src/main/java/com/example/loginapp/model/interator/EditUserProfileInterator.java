@@ -10,7 +10,6 @@ import com.example.loginapp.model.listener.EditUserProfileListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -19,8 +18,6 @@ import java.util.HashMap;
 public class EditUserProfileInterator {
 
     private static final String TAG = EditUserProfileInterator.class.getSimpleName();
-
-    private final DatabaseReference userRef = Constant.userRef;
 
     private final EditUserProfileListener listener;
 
@@ -37,7 +34,7 @@ public class EditUserProfileInterator {
         updates.put(UserData.PHONE_NUMBER, userData.getPhoneNumber());
         updates.put(UserData.ADDRESS, userData.getAddress());
         if (uri == null) {
-            userRef.child(uid).updateChildren(updates)
+            Constant.userRef.child(uid).updateChildren(updates)
                     .addOnFailureListener(e -> listener.isUpdateSuccess(false))
                     .addOnCompleteListener(s -> listener.isUpdateSuccess(s.isSuccessful()));
         } else {
@@ -50,7 +47,7 @@ public class EditUserProfileInterator {
                             Log.d(TAG, "saveUserData: " + downloadUri);
                             updates.put(UserData.AVATAR, downloadUri.toString());
                             Log.d(TAG, "saveUserData: " + updates);
-                            userRef.child(uid).updateChildren(updates)
+                            Constant.userRef.child(uid).updateChildren(updates)
                                     .addOnCompleteListener(task1 -> listener.isUpdateSuccess(task1.isSuccessful()))
                                     .addOnFailureListener(e -> listener.isUpdateSuccess(false));
                         }

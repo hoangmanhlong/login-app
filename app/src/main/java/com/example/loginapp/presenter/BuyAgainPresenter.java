@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class BuyAgainPresenter {
 
-    private final BuyAgainView view;
+    private BuyAgainView view;
 
     private Order currentOrder;
 
@@ -22,6 +22,11 @@ public class BuyAgainPresenter {
 
     public BuyAgainPresenter(BuyAgainView view) {
         this.view = view;
+    }
+
+    public void clear() {
+        view = null;
+        currentOrder = null;
     }
 
     public void initData() {

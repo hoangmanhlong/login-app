@@ -68,7 +68,7 @@
         android:id="@+id/modalBottomSheetFragment"
         android:name="com.example.loginapp.view.fragments.bottom_sheet.SelectProductQuantityAndVoucherFragment"
         android:label="ModalBottomSheetFragment"
-        tools:layout="@layout/fragment_bottom_sheet" />
+        tools:layout="@layout/fragment_select_product_quantity_and_voucher" />
     <fragment
         android:id="@+id/paymentOptionFragment"
         android:name="com.example.loginapp.view.fragments.payment_option.PaymentOptionFragment"
@@ -248,7 +248,11 @@
         app:destination="@id/voucherFragment" />
     <action
         android:id="@+id/action_global_productFragment"
-        app:destination="@id/productFragment" />
+        app:destination="@id/productFragment"
+        app:enterAnim="@anim/from_right"
+        app:exitAnim="@anim/to_left"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right" />
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.loginapp.view.fragments.main_fragment.MainFragment"

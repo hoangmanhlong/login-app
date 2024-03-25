@@ -45,4 +45,10 @@ public class OrderSuccessFragment extends Fragment {
     private void onBackHomeScreen() {
         navController.popBackStack(navController.getGraph().getStartDestinationId(), false);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

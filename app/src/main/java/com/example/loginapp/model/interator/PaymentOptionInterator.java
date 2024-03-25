@@ -14,12 +14,13 @@ import org.greenrobot.eventbus.EventBus;
 
 public class PaymentOptionInterator {
 
-    private final PaymentOptionListener listener;
+    private PaymentOptionListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user;
 
     public PaymentOptionInterator(PaymentOptionListener listener) {
         this.listener = listener;
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     public void createOrder(Order order, boolean isSaveDeliveryAddress, boolean isProductsFroShoppingCart) {
@@ -56,5 +57,10 @@ public class PaymentOptionInterator {
                 .setValue(order)
                 .addOnCompleteListener(task -> listener.goOrderSuccessScreen())
                 .addOnFailureListener(task -> listener.onMessage("An error occurred, Please try again"));
+    }
+
+    public void removePaymentOptionListener() {
+        listener = null;
+        user = null;
     }
 }

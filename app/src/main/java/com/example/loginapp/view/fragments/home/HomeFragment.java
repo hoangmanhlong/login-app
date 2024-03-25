@@ -2,14 +2,12 @@ package com.example.loginapp.view.fragments.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -28,7 +26,6 @@ import com.example.loginapp.model.entity.Products;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.HomePresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.AppMessage;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -45,15 +42,15 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private NavController navController;
 
-    private final HomePresenter presenter = new HomePresenter(this);
+    private HomePresenter presenter;
 
-    private final ProductAdapter recommendedAdapter = new ProductAdapter(this);
+    private ProductAdapter recommendedAdapter;
 
-    private final ProductAdapter topChartsAdapter = new ProductAdapter(this);
+    private ProductAdapter topChartsAdapter;
 
-    private final ProductAdapter discountAdapter = new ProductAdapter(this);
+    private ProductAdapter discountAdapter;
 
-    private final DiscountAdapter adapter = new DiscountAdapter(new ArrayList<>());
+    private DiscountAdapter adapter;
 
     private ShimmerFrameLayout recommendedProductsPlaceHolder, topChartsProductsPlaceHolder, discountProductsPlaceHolder, userPlaceHolder;
 
@@ -63,32 +60,24 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private SliderView sliderView;
+
     private boolean isRefreshing = false;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
     @Override
-    public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-//        binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
-        initView();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+        presenter = new HomePresenter(this);
     }
 
     @SuppressLint("ResourceAsColor")
-    private void initView() {
-        binding.setHomeFragment(this);
-        binding.setIsAskLoginVisible(false);
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        recommendedAdapter = new ProductAdapter(this);
+        topChartsAdapter = new ProductAdapter(this);
+        discountAdapter = new ProductAdapter(this);
+        adapter = new DiscountAdapter(new ArrayList<>());
         recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder.getRoot();
         topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder.getRoot();
         discountProductsPlaceHolder = binding.discountProductsPlaceHolder.getRoot();
@@ -103,20 +92,53 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         discountRecyclerView = binding.discountRecyclerView;
 
         swipeRefreshLayout = binding.homeSwipe;
+        swipeRefreshLayout.setColorSchemeResources(R.color.cam, R.color.blue, R.color.red, R.color.free_shipping_color);
+        sliderView = binding.discountSliderView;
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
+        initView();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        expandRecommendedProductsView = null;
+        expandTopChartsProductsView = null;
+        expandDiscountProductsView = null;
+        recommendedProductsPlaceHolder = null;
+        topChartsProductsPlaceHolder = null;
+        discountProductsPlaceHolder = null;
+        recommendedRecyclerview = null;
+        topChartsRecyclerview = null;
+        discountRecyclerView = null;
+        recommendedAdapter = null;
+        topChartsAdapter = null;
+        discountAdapter = null;
+        adapter = null;
+        userPlaceHolder = null;
+        swipeRefreshLayout = null;
+        sliderView = null;
+        binding = null;
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void initView() {
+        binding.setHomeFragment(this);
 
         recommendedRecyclerview.setAdapter(recommendedAdapter);
         topChartsRecyclerview.setAdapter(topChartsAdapter);
         discountRecyclerView.setAdapter(discountAdapter);
 
-        SliderView sliderView = binding.discountSliderView;
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         sliderView.setScrollTimeInSec(4);
-        sliderView.startAutoCycle();
         sliderView.setSliderAdapter(adapter);
-
-        presenter.initData();
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (!isRefreshing) {
@@ -124,24 +146,8 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
                 presenter.getListProductFromNetwork();
             }
         });
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
+        presenter.initData();
     }
 
     @Override
@@ -190,10 +196,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void isTopChartsProductsLoading(boolean isLoading) {
         if (isLoading) {
-            topChartsProductsPlaceHolder.setVisibility(View.VISIBLE);
-            topChartsProductsPlaceHolder.startShimmerAnimation();
             topChartsRecyclerview.setVisibility(View.GONE);
             expandTopChartsProductsView.setVisibility(View.GONE);
+            topChartsProductsPlaceHolder.setVisibility(View.VISIBLE);
+            topChartsProductsPlaceHolder.startShimmerAnimation();
         } else {
             topChartsProductsPlaceHolder.stopShimmerAnimation();
             topChartsProductsPlaceHolder.setVisibility(View.GONE);
@@ -205,10 +211,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void isDiscountProductsLoading(boolean isLoading) {
         if (isLoading) {
-            discountProductsPlaceHolder.setVisibility(View.VISIBLE);
-            discountProductsPlaceHolder.startShimmerAnimation();
             discountRecyclerView.setVisibility(View.GONE);
             expandDiscountProductsView.setVisibility(View.GONE);
+            discountProductsPlaceHolder.setVisibility(View.VISIBLE);
+            discountProductsPlaceHolder.startShimmerAnimation();
         } else {
             discountProductsPlaceHolder.stopShimmerAnimation();
             discountProductsPlaceHolder.setVisibility(View.GONE);
@@ -220,9 +226,9 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void isUserLoading(boolean isLoading) {
         if (isLoading) {
+            binding.userView.setVisibility(View.GONE);
             userPlaceHolder.setVisibility(View.VISIBLE);
             userPlaceHolder.startShimmerAnimation();
-            binding.userView.setVisibility(View.GONE);
         } else {
             userPlaceHolder.stopShimmerAnimation();
             userPlaceHolder.setVisibility(View.GONE);
@@ -233,7 +239,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void bindRecommendedEveryDay(List<Product> products) {
         adapter.setData(products);
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -266,6 +271,31 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        presenter.addUserDataValueEventListener();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sliderView.startAutoCycle();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sliderView.stopAutoCycle();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.removeUserDataValueEventListener();
+    }
+
+    @Override
     public void getUserData(UserData userData) {
         binding.setUserData(userData);
     }
@@ -274,11 +304,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void refreshInvisible() {
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void onMessage(String message) {
-        AppMessage.showMessage(requireContext(), message);
     }
 
     @Override

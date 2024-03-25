@@ -25,26 +25,45 @@ public class OverviewFragment extends Fragment {
 
     private NavController navController;
 
+    private SliderView sliderView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOverviewBinding.inflate(inflater, container, false);
+        navController = NavHostFragment.findNavController(this);
+        sliderView = binding.sliderView;
+        binding.setOverviewFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setOverviewFragment(this);
-        navController = NavHostFragment.findNavController(this);
-        SliderView sliderView = binding.sliderView;
-        SliderAdapter adapter = new SliderAdapter();
-        binding.sliderView.setSliderAdapter(adapter);
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         sliderView.setScrollTimeInSec(4);
+        sliderView.setSliderAdapter(new SliderAdapter());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        sliderView.stopAutoCycle();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         sliderView.startAutoCycle();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        sliderView = null;
     }
 
     public void goLoginScreen() {

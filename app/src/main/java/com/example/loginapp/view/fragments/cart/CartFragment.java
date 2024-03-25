@@ -41,30 +41,36 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     private NavController navController;
 
-    private final CartPresenter presenter = new CartPresenter(this);
+    private CartPresenter presenter;
 
     private FragmentCartBinding binding;
 
-    private final CartAdapter adapter = new CartAdapter(this);
+    private CartAdapter adapter;
 
     private RecyclerView shoppingCartRecyclerview;
 
     private LottieAnimationView cartEmptyLottieAnimationView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new CartPresenter(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCartBinding.inflate(inflater, container, false);
+        cartEmptyLottieAnimationView = binding.animationView;
+        shoppingCartRecyclerview = binding.basketRecyclerView;
+        adapter = new CartAdapter(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
-        cartEmptyLottieAnimationView = binding.animationView;
-
-        shoppingCartRecyclerview = binding.basketRecyclerView;
         initView();
     }
 
@@ -97,6 +103,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.detachView();
+        presenter = null;
         MessageVoucherSelected messageVoucherSelected =
                 EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
         if (messageVoucherSelected != null)
@@ -121,8 +129,6 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     private void initView() {
-        cartEmptyLottieAnimationView.cancelAnimation();
-        cartEmptyLottieAnimationView.playAnimation();
         binding.setFragment(this);
         shoppingCartRecyclerview.setAdapter(adapter);
         ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -144,11 +150,9 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onMessage(String message) {
-        AppMessage.showMessage(requireContext(), message);
+        adapter = null;
+        cartEmptyLottieAnimationView = null;
+        shoppingCartRecyclerview = null;
     }
 
     @Override

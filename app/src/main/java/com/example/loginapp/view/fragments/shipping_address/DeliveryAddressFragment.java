@@ -27,11 +27,11 @@ import java.util.List;
 
 public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddressClickListener, DeliveryAddressView {
 
-    private final DeliveryAddressPresenter presenter = new DeliveryAddressPresenter(this);
+    private DeliveryAddressPresenter presenter;
 
     private FragmentDeliveryAddressBinding binding;
 
-    private final DeliveryAddressAdapter deliveryAddressAdapter = new DeliveryAddressAdapter(this);
+    private DeliveryAddressAdapter deliveryAddressAdapter;
 
     private Dialog dialog;
 
@@ -39,20 +39,27 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
 
     RecyclerView deliveryAddressesRecyclerView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new DeliveryAddressPresenter(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDeliveryAddressBinding.inflate(inflater, container, false);
+        deliveryAddressesRecyclerView = binding.deliveryAddressRecyclerview;
+        deliveryAddressAdapter = new DeliveryAddressAdapter(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
         binding.setFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-        deliveryAddressesRecyclerView = binding.deliveryAddressRecyclerview;
         deliveryAddressesRecyclerView.setAdapter(deliveryAddressAdapter);
         ((SimpleItemAnimator) deliveryAddressesRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         presenter.initData();
@@ -71,9 +78,21 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
+        dialog = null;
+        System.gc();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        deliveryAddressAdapter = null;
+        deliveryAddressesRecyclerView = null;
         binding = null;
+        System.gc();
     }
 
     @Override

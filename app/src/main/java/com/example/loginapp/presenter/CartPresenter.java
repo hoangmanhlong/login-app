@@ -18,20 +18,24 @@ public class CartPresenter implements CartListener {
 
     private final String TAG = this.toString();
 
-    private final CartInterator interator = new CartInterator(this);
+    private CartInterator interator;
 
-    private final CartView view;
+    private CartView view;
 
-    public List<FirebaseProduct> basket = new ArrayList<>();
+    public List<FirebaseProduct> basket;
 
-    public List<FirebaseProduct> selectedProduct = new ArrayList<>();
+    public List<FirebaseProduct> selectedProduct;
 
     private boolean wasTakenForTheFirstTime = false;
 
-    private final Order order = new Order();
+    private Order order;
 
     public CartPresenter(CartView view) {
         this.view = view;
+        interator = new CartInterator(this);
+        basket = new ArrayList<>();
+        selectedProduct = new ArrayList<>();
+        order = new Order();
     }
 
     public void initBasket() {
@@ -67,12 +71,6 @@ public class CartPresenter implements CartListener {
         view.bindBasket(basket);
         updateUI();
     }
-
-    @Override
-    public void onMessage(String message) {
-        view.onMessage(message);
-    }
-
 
     @Override
     public void isCartEmpty() {
@@ -135,5 +133,14 @@ public class CartPresenter implements CartListener {
         List<OrderProduct> list = new ArrayList<>();
         for (FirebaseProduct product : firebaseProducts) list.add(product.toOrderProduct());
         return list;
+    }
+
+    public void detachView() {
+        view = null;
+        basket = null;
+        selectedProduct = null;
+        order = null;
+        interator.clearData();
+        interator = null;
     }
 }

@@ -20,7 +20,7 @@ public class HomePresenter implements HomeListener {
 
     private final HomeInterator interator = new HomeInterator(this);
 
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>(); // All Products get from API
 
     public List<Product> recommendedProducts = new ArrayList<>();
 
@@ -36,6 +36,8 @@ public class HomePresenter implements HomeListener {
 
     private boolean gotDataFromAPI = false;
 
+    private boolean gotUserData = false;
+
     public HomePresenter(HomeView view) {
         this.view = view;
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
@@ -43,22 +45,22 @@ public class HomePresenter implements HomeListener {
 
     public void initData() {
         view.showAskLogin(!authenticated);
-        if (authenticated) {
-            if (currentUserData == null) getUserData();
-            else getUserData(currentUserData);
-        } else {
+        if (gotUserData) {
             view.isUserLoading(false);
-            view.setShowUserView(false);
+            if (currentUserData != null) view.getUserData(currentUserData);
+            else view.setShowUserView(false);
         }
 
         if (gotDataFromAPI) showProducts();
         else getListProductFromNetwork();
     }
 
+    public void addUserDataValueEventListener() {
+        if (authenticated) interator.addUserDataValueEventListener();
+    }
 
-    private void getUserData() {
-        view.isUserLoading(true);
-        interator.getUserData();
+    public void removeUserDataValueEventListener() {
+        if (authenticated) interator.removeUserDataValueEventListener();
     }
 
     public void getListProductFromNetwork() {
@@ -79,9 +81,10 @@ public class HomePresenter implements HomeListener {
     public void getUserData(UserData userData) {
         currentUserData = userData;
         view.isUserLoading(false);
-        boolean isUserViewVisible = currentUserData.getAvatar() != null || currentUserData.getUsername() != null;
+        boolean isUserViewVisible = currentUserData.getAvatar() != null && currentUserData.getUsername() != null;
         if (isUserViewVisible) view.getUserData(userData);
         view.setShowUserView(isUserViewVisible);
+        gotUserData = true;
     }
 
     @Override
@@ -96,13 +99,7 @@ public class HomePresenter implements HomeListener {
         getTopChartsProducts(products);
         getDiscountProducts(products);
         if (authenticated) interator.getFavoriteProductFromFirebase();
-        else {
-            List<Product> tempProducts = new ArrayList<>(this.products);
-            Collections.shuffle(tempProducts);
-            recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 30));
-            view.showRecommendedProducts(recommendedProducts);
-            view.refreshInvisible();
-        }
+        else getRecommendedProducts();
     }
 
     private void getRecommendedEveryDay(List<Product> products) {
@@ -121,9 +118,13 @@ public class HomePresenter implements HomeListener {
         view.showDiscountProducts(discountProducts);
     }
 
-    @Override
-    public void onMessage(String message) {
-        view.onMessage(message);
+
+    private void getRecommendedProducts() {
+        List<Product> tempProducts = new ArrayList<>(this.products);
+        Collections.shuffle(tempProducts);
+        recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 30));
+        view.showRecommendedProducts(recommendedProducts);
+        view.refreshInvisible();
     }
 
     @Override
@@ -142,7 +143,16 @@ public class HomePresenter implements HomeListener {
 
     @Override
     public void isUserDataEmpty() {
+        currentUserData = null;
         view.isUserLoading(false);
         view.setShowUserView(false);
+        gotUserData = true;
+    }
+
+
+
+    @Override
+    public void isFavoriteProductEmpty() {
+        getRecommendedProducts();
     }
 }

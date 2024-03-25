@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,14 +24,13 @@ import com.example.loginapp.App;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.seach_suggest_adapter.OnSearchProductClickListener;
 import com.example.loginapp.adapter.seach_suggest_adapter.OnSearchSuggestionClickListener;
-import com.example.loginapp.adapter.seach_suggest_adapter.SearchProductAdapter;
 import com.example.loginapp.adapter.seach_suggest_adapter.SearchHistoryAdapter;
+import com.example.loginapp.adapter.seach_suggest_adapter.SearchProductAdapter;
 import com.example.loginapp.databinding.FragmentSearchProductBinding;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.presenter.SearchPresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -41,7 +41,7 @@ import java.util.List;
 
 public class SearchProductFragment extends Fragment implements SearchView, OnSearchProductClickListener, OnSearchSuggestionClickListener {
 
-    private final SearchPresenter presenter = new SearchPresenter(this);
+    private SearchPresenter presenter;
 
     private static final String TAG = SearchProductFragment.class.getSimpleName();
 
@@ -49,20 +49,29 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     private InputMethodManager inputMethodManager;
 
-    private final SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(this);
+    private SearchHistoryAdapter searchHistoryAdapter;
 
-    private final SearchProductAdapter searchProductAdapter = new SearchProductAdapter(this);
+    private SearchProductAdapter searchProductAdapter;
 
     private AutoCompleteTextView etQueryBox;
 
-    private final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-            App.getInstance().getApplicationContext(),
-            android.R.layout.simple_list_item_1
-    );
+    private ArrayAdapter<String> arrayAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new SearchPresenter(this);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentSearchProductBinding.inflate(inflater, container, false);
+        searchHistoryAdapter = new SearchHistoryAdapter(this);
+        searchProductAdapter = new SearchProductAdapter(this);
+        arrayAdapter = new ArrayAdapter<>(
+                App.getInstance().getApplicationContext(),
+                android.R.layout.simple_list_item_1
+        );
         return binding.getRoot();
     }
 
@@ -129,6 +138,24 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        etQueryBox = null;
+        inputMethodManager = null;
+        searchHistoryAdapter = null;
+        searchProductAdapter = null;
+        arrayAdapter = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         presenter.addSearchHistoriesValueEventListener();
@@ -139,14 +166,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         super.onStop();
         presenter.removeSearchHistoriesValueEventListener();
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        // Auto Show KeyBoard when Fragment show on Screen
-//        binding.etQuery.requestFocus(); // focus Query EditText
-//        inputMethodManager.showSoftInput(binding.etQuery, 0); // Hiển thị bàn phím cho EditText
-//    }
 
     @Override
     public void bindSearchHistories(List<SearchHistory> searchHistories) {
@@ -161,11 +180,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public void bindProducts(List<Product> products) {
         searchProductAdapter.submitList(products);
-    }
-
-    @Override
-    public void onMessage(String message) {
-        AppMessage.showMessage(requireContext(), message);
     }
 
     @Override
@@ -204,7 +218,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     public void onClearQueryButtonClick() {
         binding.etQuery.setText("");
         presenter.setQuery("");
-
     }
 
     @Override

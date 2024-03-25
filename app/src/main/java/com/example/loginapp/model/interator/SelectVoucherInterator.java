@@ -15,10 +15,14 @@ import java.util.List;
 
 public class SelectVoucherInterator {
 
-    private final SelectVoucherListener listener;
+    private SelectVoucherListener listener;
 
     public SelectVoucherInterator(SelectVoucherListener listener) {
         this.listener = listener;
+    }
+
+    public void clear() {
+        listener = null;
     }
 
     public void getVoucher() {
@@ -28,14 +32,15 @@ public class SelectVoucherInterator {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                                vouchers.add(dataSnapshot.getValue(Voucher.class));
-                            listener.getVouchers(vouchers);
-                        } else {
-                            listener.isVouchersEmpty();
+                        if(listener != null) {
+                            if (snapshot.exists()) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                                    vouchers.add(dataSnapshot.getValue(Voucher.class));
+                                listener.getVouchers(vouchers);
+                            } else {
+                                listener.isVouchersEmpty();
+                            }
                         }
-
                     }
 
                     @Override

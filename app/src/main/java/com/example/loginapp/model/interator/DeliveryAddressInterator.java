@@ -16,11 +16,11 @@ import java.util.List;
 
 public class DeliveryAddressInterator {
 
-    private final DeliveryAddressListener listener;
+    private DeliveryAddressListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private final ValueEventListener deliveryAddressValueEventListener = new ValueEventListener() {
+    private ValueEventListener deliveryAddressValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) {
@@ -38,6 +38,12 @@ public class DeliveryAddressInterator {
 
         }
     };
+
+    public void clear() {
+        listener = null;
+        deliveryAddressValueEventListener = null;
+        user = null;
+    }
 
     public DeliveryAddressInterator(DeliveryAddressListener listener) {
         this.listener = listener;

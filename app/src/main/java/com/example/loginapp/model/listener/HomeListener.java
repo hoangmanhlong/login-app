@@ -11,9 +11,9 @@ public interface HomeListener {
 
     void getProductsFromAPI(List<Product> products);
 
-    void onMessage(String message);
-
     void getFavoriteProducts(List<Product> products);
 
     void isUserDataEmpty();
+
+    void isFavoriteProductEmpty();
 }

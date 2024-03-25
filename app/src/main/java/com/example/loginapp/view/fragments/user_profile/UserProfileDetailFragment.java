@@ -84,6 +84,12 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         presenter.removeUserDataValueEventListener();
@@ -110,9 +116,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     public void onChangeLanguageClick() {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(Constant.IS_VIETNAMESE_LANGUAGE, presenter.isVietnamese());
-        navController.navigate(R.id.selectLanguageFragment, bundle);
+        navController.navigate(R.id.selectLanguageFragment);
     }
 
     public void goVoucherScreen() {

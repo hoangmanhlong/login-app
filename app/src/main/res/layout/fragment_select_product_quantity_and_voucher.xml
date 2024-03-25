@@ -129,7 +129,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/discountCode"
+                        android:id="@+id/tvDiscountCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
@@ -260,7 +260,7 @@
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/poppins_regular"
                     android:includeFontPadding="false"
-                    android:text="@{@string/price_format(total)}"
+                    android:text="@{@string/dollar_price(total)}"
                     android:textColor="@color/black_100"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -286,7 +286,7 @@
                 android:layout_marginTop="@dimen/_16sdp"
                 android:fontFamily="@font/poppins_bold"
                 android:includeFontPadding="false"
-                android:onClick="@{() -> fragment.onBuyClick()}"
+                android:onClick="@{() -> fragment.onCheckoutButtonClick()}"
                 android:text="@string/checkout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -8,14 +8,19 @@ import com.google.firebase.database.DatabaseReference;
 
 public class OrderDetailInteractor {
 
-    private final String TAG = this.toString();
+    private final String TAG = OrderDetailInteractor.class.getSimpleName();
 
-    private final OrderDetailListener listener;
+    private OrderDetailListener listener;
 
-    private final DatabaseReference orderRefOfCurrentUser = Constant.orderRef.child(FirebaseAuth.getInstance().getUid());
+    private DatabaseReference orderRefOfCurrentUser = Constant.orderRef.child(FirebaseAuth.getInstance().getUid());
 
     public OrderDetailInteractor(OrderDetailListener listener) {
         this.listener = listener;
+    }
+
+    public void clear() {
+        listener = null;
+        orderRefOfCurrentUser = null;
     }
 
     public void cancelOrder(Order order) {

@@ -19,12 +19,17 @@ public class RegisterInterator {
 
     private final String TAG = this.toString();
 
-    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    private final RegisterListener listener;
+    private RegisterListener listener;
 
     public RegisterInterator(RegisterListener listener) {
         this.listener = listener;
+    }
+
+    public void clear() {
+        mAuth = null;
+        listener = null;
     }
 
     public void register(String email, String password) {

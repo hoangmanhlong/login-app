@@ -9,9 +9,9 @@ import com.example.loginapp.view.fragments.select_language.SelectLanguageView;
 
 public class SelectLanguagePresenter {
 
-    private final AppSharedPreferences sharedPreferences;
+    private AppSharedPreferences sharedPreferences;
 
-    private final SelectLanguageView view;
+    private SelectLanguageView view;
 
     private boolean isVietnamese;
 
@@ -20,6 +20,11 @@ public class SelectLanguagePresenter {
     public SelectLanguagePresenter(SelectLanguageView view) {
         this.view= view;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
+    }
+
+    public void detachView() {
+        view = null;
+        sharedPreferences = null;
     }
 
     public void initData() {

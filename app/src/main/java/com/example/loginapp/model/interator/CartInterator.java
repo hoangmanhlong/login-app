@@ -19,13 +19,13 @@ public class CartInterator {
 
 //    private final String TAG = this.toString();
 
-    private final DatabaseReference cartRef = Constant.cartRef;
+    private DatabaseReference cartRef = Constant.cartRef;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private final CartListener listener;
+    private CartListener listener;
 
-    private final ValueEventListener shoppingCartValueEventListener = new ValueEventListener() {
+    private ValueEventListener shoppingCartValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) {
@@ -66,5 +66,12 @@ public class CartInterator {
 
     public void removeProductFromShoppingCart(FirebaseProduct product) {
         cartRef.child(user.getUid()).child(String.valueOf(product.getId())).removeValue();
+    }
+
+    public void clearData() {
+        listener = null;
+        cartRef = null;
+        user = null;
+        shoppingCartValueEventListener = null;
     }
 }

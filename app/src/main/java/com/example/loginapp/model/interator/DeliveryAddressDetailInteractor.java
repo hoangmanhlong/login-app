@@ -22,13 +22,13 @@ public class DeliveryAddressDetailInteractor {
 
     private static final String TAG = DeliveryAddressDetailInteractor.class.getSimpleName();
 
-    private final DeliveryAddressDetailListener listener;
+    private DeliveryAddressDetailListener listener;
 
     @Nullable
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Nullable
-    DatabaseReference ref = (user != null) ? Constant.deliveryAddressRef.child(user.getUid()) : null;
+    private DatabaseReference ref = (user != null) ? Constant.deliveryAddressRef.child(user.getUid()) : null;
 
     public DeliveryAddressDetailInteractor(DeliveryAddressDetailListener listener) {
         this.listener = listener;
@@ -70,5 +70,11 @@ public class DeliveryAddressDetailInteractor {
         ref.child(id).removeValue()
                 .addOnCompleteListener(task -> listener.deleteSuccess())
                 .addOnFailureListener(e -> Log.d(TAG, "deleteDeliveryAddress: " + e.getMessage()));
+    }
+
+    public void clearData() {
+        listener = null;
+        user = null;
+        ref = null;
     }
 }

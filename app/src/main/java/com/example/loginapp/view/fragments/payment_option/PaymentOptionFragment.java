@@ -9,14 +9,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentPaymentOptionBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.PaymentMethod;
 import com.example.loginapp.presenter.PaymentOptionPresenter;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
@@ -25,23 +26,32 @@ import org.greenrobot.eventbus.EventBus;
 
 public class PaymentOptionFragment extends Fragment implements PaymentOptionView {
 
-    private final PaymentOptionPresenter presenter = new PaymentOptionPresenter(this);
+    private PaymentOptionPresenter presenter;
 
     private FragmentPaymentOptionBinding binding;
+
+    private NavController navController;
     
     private Dialog dialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new PaymentOptionPresenter(this);
+        navController = NavHostFragment.findNavController(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPaymentOptionBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         getSharedData();
         onFpxClick();
@@ -59,7 +69,7 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
     }
 
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        navController.navigateUp();
     }
 
     public void onFpxClick() {
@@ -102,7 +112,21 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
                 EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
         if (messageVoucherSelected != null)
             EventBus.getDefault().removeStickyEvent(messageVoucherSelected);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_paymentOptionFragment_to_orderSuccessFragment);
+        navController.navigate(R.id.action_paymentOptionFragment_to_orderSuccessFragment);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        dialog = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.DetachView();
+        presenter = null;
     }
 
     @Override

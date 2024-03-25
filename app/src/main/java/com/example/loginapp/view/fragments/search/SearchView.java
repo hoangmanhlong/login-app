@@ -13,8 +13,6 @@ public interface SearchView {
 
     void bindProducts(List<Product> products);
 
-    void onMessage(String message);
-
     void isProductListEmpty(boolean isEmpty);
 
     void getSearchSuggestions(List<String> list);

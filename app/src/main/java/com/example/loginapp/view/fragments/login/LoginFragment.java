@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -30,7 +28,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private FragmentLoginBinding binding;
 
-    private final LoginPresenter presenter = new LoginPresenter(this);
+    private LoginPresenter presenter;
 
     private NavController navController;
 
@@ -40,22 +38,28 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private EditText etPhoneNumber;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new LoginPresenter(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+        binding.setLoginFragment(this);
+        etPhoneNumber = binding.etPhoneNumber;
+        editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
-        binding.setLoginFragment(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
-        etPhoneNumber = binding.etPhoneNumber;
-        editTexts = new TextInputEditText[]{binding.emailTextInputEditText, binding.passwordTextInputEditText};
         presenter.initData();
         loginWithEmailButtonObserver();
         phoneNumberEditTextListener();
@@ -103,11 +107,19 @@ public class LoginFragment extends Fragment implements LoginView {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        editTexts = null;
+        etPhoneNumber = null;
+        System.gc();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(this.toString(), "onDestroy: ");
-        binding = null;
-        System.gc();
+        presenter.clear();
+        presenter = null;
     }
 
     private void loginWithEmailButtonObserver() {

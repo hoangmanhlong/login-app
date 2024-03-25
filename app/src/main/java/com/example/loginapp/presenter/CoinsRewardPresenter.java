@@ -25,15 +25,15 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
 
     private final String TAG = this.toString();
 
-    private final CoinsRewardInterator interator = new CoinsRewardInterator(this);
+    private CoinsRewardInterator interator = new CoinsRewardInterator(this);
 
     private AttendanceManager attendanceManager;
 
-    private final List<DayWithCheck> daysInWeek = new ArrayList<>();
+    private List<DayWithCheck> daysInWeek = new ArrayList<>();
 
-    private final List<DayWithCheck> checkedDays = new ArrayList<>();
+    private List<DayWithCheck> checkedDays = new ArrayList<>();
 
-    private final CoinsRewardView view;
+    private CoinsRewardView view;
 
     private Date lastDayOfMonth;
 
@@ -67,6 +67,17 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
                     lastDayOfMonthLocalDate.getYear()
             );
         }
+    }
+
+    public void clear() {
+        view = null;
+        interator = null;
+        attendanceManager = null;
+        daysInWeek = null;
+        checkedDays = null;
+        lastDayOfMonth = null;
+        listOfAllOriginalVouchers = null;
+        voucherListHasBeenFiltered = null;
     }
 
     public void initData() {
@@ -181,11 +192,6 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
         view.bindNumberOfCoins(0);
         view.isGetCoinButtonVisible(tookAttendance);
         attendanceManager = null;
-    }
-
-    @Override
-    public void getDataError() {
-        view.isAttendanceLoading(false);
     }
 
     @Override

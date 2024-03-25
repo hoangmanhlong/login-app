@@ -1,5 +1,7 @@
 package com.example.loginapp.presenter;
 
+import android.util.Log;
+
 import com.example.loginapp.view.fragments.login.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -10,7 +12,7 @@ public class LoginPresenter {
 
     private final String TAG = this.toString();
 
-    private final LoginView view;
+    private LoginView view;
 
     private String phoneNumber;
 
@@ -28,6 +30,13 @@ public class LoginPresenter {
         this.view = view;
     }
 
+    public void clear() {
+        email = null;
+        password = null;
+        phoneNumber = null;
+        view = null;
+    }
+
     public void initData() {
         view.loginEmailAndPasswordButtonEnabled(isEmailAndPasswordValid());
         view.requestOTPButtonEnabled(isPhoneNumberValid);
@@ -38,7 +47,10 @@ public class LoginPresenter {
             view.isLoading(true);
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener(task -> view.isLoginSuccess(true))
-                    .addOnFailureListener(e -> view.isLoginSuccess(false));
+                    .addOnFailureListener(e -> {
+                        view.isLoginSuccess(false);
+                        Log.e(TAG, "loginWithEmail: " + e.getMessage());
+                    });
         } else {
             view.isLoginSuccess(false);
         }

@@ -15,10 +15,14 @@ import java.util.List;
 
 public class VoucherInteractor {
 
-    private final VoucherListener listener;
+    private VoucherListener listener;
 
     public VoucherInteractor(VoucherListener listener) {
         this.listener = listener;
+    }
+
+    public void clearRef() {
+        listener = null;
     }
 
     public void getVouchers() {

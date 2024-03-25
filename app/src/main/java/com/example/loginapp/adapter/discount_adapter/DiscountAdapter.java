@@ -20,6 +20,7 @@ public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountS
     public void setData(List<Product> products) {
         this.products.clear();
         this.products.addAll(products);
+        notifyDataSetChanged();
     }
 
     @Override

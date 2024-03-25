@@ -35,26 +35,39 @@ import java.util.List;
 
 public class CoinsRewardFragment extends Fragment implements CoinsRewardView, OnVoucherClickListener {
 
-    private final CoinsRewardPresenter presenter = new CoinsRewardPresenter(this);
+    private CoinsRewardPresenter presenter;
 
-    private final String TAG = this.toString();
+    private static final String TAG = CoinsRewardFragment.class.getSimpleName();
 
     private FragmentCoinsRewardBinding binding;
 
-    private final CalendarAdapter calendarAdapter = new CalendarAdapter();
+    private CalendarAdapter calendarAdapter;
 
-    private final ChangeCoinsAdapter changeCoinsAdapter = new ChangeCoinsAdapter(this);
+    private ChangeCoinsAdapter changeCoinsAdapter;
 
     private ShimmerFrameLayout coinsPlaceHolder, vouchersLoadingView;
 
-    private RecyclerView changeCoinsRecyclerView, calendarRecyclerview;
+    private RecyclerView changeCoinsRecyclerView;
 
     private NavController navController;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new CoinsRewardPresenter(this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCoinsRewardBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
+        coinsPlaceHolder = binding.coinsPlaceHolder;
+        vouchersLoadingView = binding.voucherLoadingView;
+        changeCoinsRecyclerView = binding.changeCoinsRecyclerView;
+        calendarAdapter = new CalendarAdapter();
+        changeCoinsAdapter = new ChangeCoinsAdapter(this);
         return binding.getRoot();
     }
 
@@ -62,18 +75,11 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
-        navController = NavHostFragment.findNavController(this);
-
-        coinsPlaceHolder = binding.coinsPlaceHolder;
-        vouchersLoadingView = binding.voucherLoadingView;
-        changeCoinsRecyclerView = binding.changeCoinsRecyclerView;
-        calendarRecyclerview = binding.calendarRecyclerview;
+        RecyclerView calendarRecyclerview = binding.calendarRecyclerview;
         calendarRecyclerview.setAdapter(calendarAdapter);
         ((SimpleItemAnimator) calendarRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
         ((SimpleItemAnimator) changeCoinsRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         changeCoinsRecyclerView.setAdapter(changeCoinsAdapter);
-
         presenter.initData();
     }
 
@@ -87,7 +93,18 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        changeCoinsAdapter = null;
+        calendarAdapter = null;
+        changeCoinsRecyclerView = null;
+        coinsPlaceHolder = null;
+        vouchersLoadingView = null;
         binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter = null;
     }
 
     @Override

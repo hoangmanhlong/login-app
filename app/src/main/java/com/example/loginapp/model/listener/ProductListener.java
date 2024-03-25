@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface ProductListener {
 
-    void onMessage(String message);
-
     void isFavoriteProduct(Boolean isFavoriteProduct);
 
     void saveToBasketSuccess();

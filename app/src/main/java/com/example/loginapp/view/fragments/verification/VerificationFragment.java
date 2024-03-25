@@ -26,11 +26,17 @@ import com.example.loginapp.view.activities.MainActivity;
 
 public class VerificationFragment extends Fragment implements VerificationView {
 
-    private final VerificationPresenter presenter = new VerificationPresenter(this);
+    private VerificationPresenter presenter;
 
     private FragmentVerificationBinding binding;
 
     private Dialog dialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new VerificationPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -61,6 +67,20 @@ public class VerificationFragment extends Fragment implements VerificationView {
             String phoneNumber = getArguments().getString(Constant.PHONE_NUMBER_KEY);
             presenter.setPhoneNumber(phoneNumber);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        dialog = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     public void onNavigateUp() {

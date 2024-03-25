@@ -3,7 +3,6 @@ package com.example.loginapp.model.interator;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.example.loginapp.App;
 import com.example.loginapp.data.local.room.AppDatabase;
@@ -22,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,17 +29,39 @@ import retrofit2.Response;
 
 public class HomeInterator {
 
-    private final AppDatabase database = App.getDatabase();
+    private final AppDatabase database;
 
     private final String TAG = this.toString();
 
-    @Nullable
-    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private final ValueEventListener userDataValueEventListener;
+
+    private final FirebaseUser currentUser;
 
     private final HomeListener listener;
 
     public HomeInterator(HomeListener listener) {
         this.listener = listener;
+        database = App.getDatabase();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userDataValueEventListener = createUserDataListener();
+    }
+
+    private ValueEventListener createUserDataListener() {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    listener.getUserData(snapshot.getValue(UserData.class));
+                } else {
+                    listener.isUserDataEmpty();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors (optional)
+            }
+        };
     }
 
     public void getListProductFromNetwork() {
@@ -53,8 +75,6 @@ public class HomeInterator {
                         List<Product> products = productResponse.getProducts();
                         listener.getProductsFromAPI(products);
                         insertProductNames(products);
-                    } else {
-                        listener.onMessage("Load data fail");
                     }
                 }
             }
@@ -66,33 +86,34 @@ public class HomeInterator {
         });
     }
 
-    public void getUserData() {
-        Constant.userRef.child(currentUser.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists())
-                            listener.getUserData(snapshot.getValue(UserData.class));
-                        else listener.isUserDataEmpty();
-                    }
+    public void addUserDataValueEventListener() {
+        if (currentUser != null) {
+            Constant.userRef.child(currentUser.getUid())
+                    .addValueEventListener(userDataValueEventListener);
+        }
+    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
+    public void removeUserDataValueEventListener() {
+        if (currentUser != null) {
+            Constant.userRef.child(currentUser.getUid())
+                    .removeEventListener(userDataValueEventListener);
+        }
     }
 
     public void getFavoriteProductFromFirebase() {
-        List<Product> products = new ArrayList<>();
+
         if (currentUser != null)
-            Constant.favoriteProductRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            Constant.favoriteProductRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                        products.add(dataSnapshot.getValue(Product.class));
-                    listener.getFavoriteProducts(products);
+                    if (snapshot.exists()) {
+                        List<Product> products = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                            products.add(dataSnapshot.getValue(Product.class));
+                        listener.getFavoriteProducts(products);
+                    } else {
+                        listener.isFavoriteProductEmpty();
+                    }
                 }
 
                 @Override
@@ -102,19 +123,28 @@ public class HomeInterator {
             });
     }
 
-//    public void updateBestseller(List<Product> products) {
-//        for (Product product : products)
-//            Constant.bestSellerRef.child(String.valueOf(product.getId()))
-//                    .setValue(product);
-//    }
-
     private void insertProductNames(List<Product> products) {
+        // Tạo một CountDownLatch với số lượng công việc là số lượng sản phẩm
+        CountDownLatch latch = new CountDownLatch(products.size());
+
         AppDatabase.databaseWriteExecutor.execute(() -> {
             List<ProductName> productNameList = new ArrayList<>();
-
             for (Product product : products)
                 productNameList.add(new ProductName(product.getTitle()));
             database.dao().insertProduct(productNameList);
+
+            // Giảm đếm của CountDownLatch khi công việc được hoàn thành
+            latch.countDown();
+
+            // Kiểm tra nếu tất cả công việc đã hoàn thành, hủy executor
+            try {
+                latch.await(); // Chờ cho tất cả các công việc hoàn thành
+                AppDatabase.databaseWriteExecutor.shutdown(); // Hủy executor
+            } catch (InterruptedException e) {
+                Log.e(TAG, "insertProductNames: " +  e.getMessage());
+
+            }
         });
     }
+
 }

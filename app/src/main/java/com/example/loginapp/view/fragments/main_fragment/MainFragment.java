@@ -1,7 +1,6 @@
 package com.example.loginapp.view.fragments.main_fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,52 +34,63 @@ import java.util.List;
 
 public class MainFragment extends Fragment implements MainFragmentView {
 
-    private final String TAG = this.toString();
+    private static final String TAG = MainFragment.class.getSimpleName();
 
-    private final MainFragmentPresenter presenter = new MainFragmentPresenter(this);
+    private MainFragmentPresenter presenter;
 
     private FragmentMainBinding binding;
 
     private TabLayout tabLayout;
 
-    private final List<Fragment> listOfVerifiedDestinations = new ArrayList<>(Arrays.asList(
-            new HomeFragment(),
-            new SearchProductFragment(),
-            new CartFragment(),
-            new FavoriteProductFragment(),
-            new UserProfileDetailFragment()
-    ));
+    private List<Fragment> listOfVerifiedDestinations;
 
-    private final List<Fragment> listOfUnconfirmedDestinations = new ArrayList<>(Arrays.asList(
-            new HomeFragment(),
-            new SearchProductFragment()
-    ));
+    private List<Fragment> listOfUnconfirmedDestinations;
+
+    private ViewPagerAdapter viewPagerAdapter;
 
     private ViewPager2 viewPager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new MainFragmentPresenter(this);
+        listOfVerifiedDestinations = new ArrayList<>(Arrays.asList(
+                new HomeFragment(),
+                new SearchProductFragment(),
+                new CartFragment(),
+                new FavoriteProductFragment(),
+                new UserProfileDetailFragment()
+        ));
+
+        listOfUnconfirmedDestinations = new ArrayList<>(Arrays.asList(
+                new HomeFragment(),
+                new SearchProductFragment()
+        ));
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
+        viewPager = binding.viewPager;
+        tabLayout = binding.tabLayout;
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewPager = binding.viewPager;
-        tabLayout = binding.tabLayout;
-        presenter.initData();
-        viewPager.setOffscreenPageLimit(5);
-        viewPager.setUserInputEnabled(false);
-        tabSelectedListener();
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                tabLayout.getTabAt(position).select();
-            }
-        });
+            presenter.initData();
+            viewPager.setOffscreenPageLimit(5);
+            viewPager.setUserInputEnabled(false);
+            tabSelectedListener();
+            viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageSelected(int position) {
+                    super.onPageSelected(position);
+                    tabLayout.getTabAt(position).select();
+                }
+            });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -89,12 +99,22 @@ public class MainFragment extends Fragment implements MainFragmentView {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter = null;
+        listOfVerifiedDestinations = null;
+        listOfUnconfirmedDestinations = null;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding = null;
+        viewPager = null;
+        tabLayout = null;
+        viewPagerAdapter = null;
         NewProductInWishlistMessage message = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
         if (message != null) EventBus.getDefault().removeStickyEvent(message);
-        Log.d(TAG, "onDestroyView: ");
-        binding = null;
     }
 
     @Override
@@ -187,8 +207,9 @@ public class MainFragment extends Fragment implements MainFragmentView {
 
     @Override
     public void setAdapter(boolean logged) {
-        if (logged) viewPager.setAdapter(new ViewPagerAdapter(this, listOfVerifiedDestinations));
-        else viewPager.setAdapter(new ViewPagerAdapter(this, listOfUnconfirmedDestinations));
+        if (logged) viewPagerAdapter = new ViewPagerAdapter(this, listOfVerifiedDestinations);
+        else viewPagerAdapter = new ViewPagerAdapter(this, listOfUnconfirmedDestinations);
+        viewPager.setAdapter(viewPagerAdapter);
     }
 
     public static class ViewPagerAdapter extends FragmentStateAdapter {

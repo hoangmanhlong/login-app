@@ -12,14 +12,22 @@ public class OrderDetailPresenter implements OrderDetailListener {
 
     private static final String TAG = OrderDetailPresenter.class.getSimpleName();
 
-    private final OrderDetailInteractor interactor = new OrderDetailInteractor(this);
+    private OrderDetailInteractor interactor;
 
-    private final OrderDetailView view;
+    private OrderDetailView view;
 
     private Order order;
 
     public OrderDetailPresenter(OrderDetailView view) {
         this.view = view;
+        interactor = new OrderDetailInteractor(this);
+    }
+
+    public void clear() {
+        view = null;
+        interactor.clear();
+        interactor = null;
+        order = null;
     }
 
     public void initData() {
@@ -31,8 +39,7 @@ public class OrderDetailPresenter implements OrderDetailListener {
     }
 
     public void setOrder(Order order) {
-        this.order = order;
-        Log.d(TAG, "setOrder: " + order);
+        this.order = new Order().copy(order);
         view.bindOrder(order);
     }
 

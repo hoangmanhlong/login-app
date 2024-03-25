@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,15 +21,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityMainBinding;
 import com.example.loginapp.utils.Constant;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private ConnectivityManager connectivityManager;
 
     private final MutableLiveData<Boolean> isConnected = new MutableLiveData<>();
-
-    private final MutableLiveData<Boolean> isLogged = new MutableLiveData<>();
 
     private final NetworkRequest networkRequest = new NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -51,12 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-    private final FirebaseAuth.AuthStateListener authStateListener = firebaseAuth ->
-            isLogged.setValue(firebaseAuth.getCurrentUser() != null);
-
     private boolean backPressedOnce = false;
-
-    private final String TAG = getClass().getSimpleName(); // More concise
 
     private NavController navController;
 
@@ -70,24 +63,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setupNetworkListener();
         setupNavigation();
-//        destinationChangedListener();
     }
 
     private void setupNetworkListener() {
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         isConnected.postValue(activeNetwork != null);
-        isConnected.observe(this, isConnected -> {
-            binding.setIsConnected(isConnected);
-            updateUiBasedOnConnectivity(isConnected);
-        });
+        isConnected.observe(this, this::updateUiBasedOnConnectivity);
     }
 
     private void updateUiBasedOnConnectivity(boolean isConnected) {
         if (isConnected) {
+            binding.container.setVisibility(View.VISIBLE);
             binding.networkConnectionErrorView.setVisibility(View.GONE);
             binding.shimmerLayout.stopShimmerAnimation();
         } else {
+            binding.container.setVisibility(View.GONE);
             binding.networkConnectionErrorView.setVisibility(View.VISIBLE);
             binding.shimmerLayout.startShimmerAnimation();
         }
@@ -99,32 +90,15 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
     }
 
-//    private void destinationChangedListener() {
-//        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-//            Log.d(TAG, "getPreviousBackStackEntry: " + navController.getPreviousBackStackEntry());
-//            Log.d(TAG, "getCurrentDestination: " + controller.getCurrentDestination());
-//
-////            if (isStartDestination && navigationBar.getVisibility() == View.GONE)
-////                AppAnimationState.setBottomNavigationBarState(navigationBar, this, true);
-////
-////            if (!isStartDestination && navigationBar.getVisibility() == View.VISIBLE)
-////                AppAnimationState.setBottomNavigationBarState(navigationBar, this, false);
-////
-////            binding.setIsStartDestination(isStartDestination);
-//        });
-//    }
-
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
         connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
         connectivityManager.unregisterNetworkCallback(networkCallback);
     }
 
@@ -152,4 +126,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-

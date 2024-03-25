@@ -13,8 +13,7 @@ import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentSelectProductQuantityAndVoucherBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.model.entity.Voucher;
-import com.example.loginapp.model.entity.VoucherType;
+import com.example.loginapp.presenter.SelectProductQuantityAndVoucherPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -23,19 +22,21 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Collections;
-
-public class SelectProductQuantityAndVoucherFragment extends BottomSheetDialogFragment implements SheetView {
+public class SelectProductQuantityAndVoucherFragment
+        extends BottomSheetDialogFragment
+        implements SelectProductQuantityAndVoucherView {
 
     public static final String TAG = SelectProductQuantityAndVoucherFragment.class.getSimpleName();
 
-    private int quantity = 1;
-
-    private Product currentProduct;
-
-    private Order order = new Order();
+    private SelectProductQuantityAndVoucherPresenter presenter;
 
     private FragmentSelectProductQuantityAndVoucherBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new SelectProductQuantityAndVoucherPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -48,47 +49,26 @@ public class SelectProductQuantityAndVoucherFragment extends BottomSheetDialogFr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-        binding.setSelectVoucherVisible(true);
         getSharedData();
-        binding.setProduct(currentProduct);
-        updateUI();
     }
 
     private void getSharedData() {
         if (getArguments() != null) {
             Product product = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
-            if (product != null) currentProduct = product;
+            if (product != null) presenter.setProduct(product);
         }
     }
 
     public void onPlusBtnClick() {
-        quantity++;
-        updateUI();
+        presenter.onPlusBtnClick();
     }
 
     public void onMinusBtnClick() {
-        if (quantity > 1) quantity--;
-        updateUI();
+        presenter.onMinusBtnClick();
     }
 
-    private void updateUI() {
-        double total = currentProduct.getPrice() * quantity;
-        Voucher voucher = order.getVoucher();
-        if (voucher != null)
-            if (voucher.getVoucherType() == VoucherType.Discount)
-                total = (total - ((total * voucher.getDiscountPercentage()) / 100));
-        total = Math.round(total * 100.00) / 100.00;
-        binding.quantity.setText(String.valueOf(quantity));
-        binding.setTotal(String.valueOf(total));
-    }
-
-    public void onBuyClick() {
-        Bundle bundle = new Bundle();
-        order.setOrderProducts(Collections.singletonList(currentProduct.toOrderProduct(quantity)));
-        bundle.putSerializable(Constant.ORDER_KEY, order);
-        bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, false);
-        Navigation.findNavController(requireParentFragment().requireView())
-                .navigate(R.id.action_productFragment_to_checkoutInfoFragment, bundle);
+    public void onCheckoutButtonClick() {
+        presenter.onCheckoutButtonClick();
     }
 
     @Override
@@ -105,28 +85,60 @@ public class SelectProductQuantityAndVoucherFragment extends BottomSheetDialogFr
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getSelectedVoucher(MessageVoucherSelected messageVoucherSelected) {
-        Voucher voucher1 = messageVoucherSelected.getVoucher();
-        order.setVoucher(voucher1);
-        binding.setSelectVoucherVisible(false);
-        binding.discountCode.setText(voucher1.getVoucherCode());
-        updateUI();
+        presenter.setVoucher(messageVoucherSelected.getVoucher());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding = null;
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
+        System.gc();
     }
 
     public void onClearDiscountCodeClick() {
-        binding.setSelectVoucherVisible(true);
-        order.setVoucher(null);
-        updateUI();
+        presenter.clearVoucher();
         MessageVoucherSelected stickyEvent = EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
         if (stickyEvent != null) EventBus.getDefault().removeStickyEvent(stickyEvent);
     }
 
     public void onSelectCodeClick() {
         Navigation.findNavController(requireParentFragment().requireView()).navigate(R.id.action_productFragment_to_selectVoucherFragment);
+    }
+
+    @Override
+    public void navigateToCheckoutInfoFragment(Order order) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.ORDER_KEY, order);
+        bundle.putBoolean(Constant.IS_PRODUCTS_FROM_CART, false);
+        Navigation.findNavController(requireParentFragment().requireView())
+                .navigate(R.id.action_productFragment_to_checkoutInfoFragment, bundle);
+    }
+
+    @Override
+    public void isSelectVoucherViewVisible(boolean visible) {
+        binding.setSelectVoucherVisible(visible);
+    }
+
+    @Override
+    public void bindQuantityAndTotal(String quantity, String total) {
+        binding.quantity.setText(quantity);
+        binding.setTotal(total);
+    }
+
+    @Override
+    public void bindProduct(Product product) {
+        binding.setProduct(product);
+    }
+
+    @Override
+    public void bindDiscountCode(String discountCode) {
+        binding.tvDiscountCode.setText(discountCode);
     }
 }

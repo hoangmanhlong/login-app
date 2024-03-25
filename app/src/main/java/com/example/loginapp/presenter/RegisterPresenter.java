@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 public class RegisterPresenter implements RegisterListener {
 
-    private final RegisterInterator interator;
+    private RegisterInterator interator;
 
-    private final RegisterView view;
+    private RegisterView view;
 
     private String email;
 
@@ -26,6 +26,14 @@ public class RegisterPresenter implements RegisterListener {
     public RegisterPresenter(RegisterView view) {
         this.view = view;
         interator = new RegisterInterator(this);
+    }
+
+    public void clear() {
+        view = null;
+        interator.clear();
+        interator = null;
+        email = null;
+        password = null;
     }
 
     public void register() {

@@ -7,10 +7,12 @@ import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,22 +40,36 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class EditUserInformationFragment extends Fragment implements EditUserProfileView {
 
+    private static final String TAG = EditUserInformationFragment.class.getSimpleName();
+
+    private EditUserProfilePresenter presenter;
+
     private Animator currentAnimator;
 
     private int shortAnimationDuration;
 
     private FragmentEditUserInformationBinding binding;
 
-    private final EditUserProfilePresenter presenter = new EditUserProfilePresenter(this);
-
     private Dialog dialog;
 
     private TextInputEditText etName, etPhoneNumber, etAddress;
+
+    private ActivityResultLauncher<String[]> openDocument;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new EditUserProfilePresenter(this);
+        openDocument = registerForActivityResult(new MyOpenDocumentContract(), presenter::setPhotoUri);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentEditUserInformationBinding.inflate(inflater, container, false);
+        etAddress = binding.etAddress;
+        etName = binding.etName;
+        etPhoneNumber = binding.etPhoneNumber;
         return binding.getRoot();
     }
 
@@ -61,10 +77,6 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-
-        etAddress = binding.etAddress;
-        etName = binding.etName;
-        etPhoneNumber = binding.etPhoneNumber;
 
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         dialog = LoadingDialog.getLoadingDialog(requireContext());
@@ -82,11 +94,8 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
         }
     }
 
-    private final ActivityResultLauncher<String[]> openDocument =
-            registerForActivityResult(new MyOpenDocumentContract(), presenter::setPhotoUri);
-
     public void onImageClick() {
-
+        zoomImageFromThumb(binding.ivUserAvatar, binding.ivUserAvatar.getDrawable());
     }
 
     public void onEditImageButtonClick() {
@@ -115,7 +124,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
 
     @Override
     public void bindPhotoSelected(Uri photoUri) {
-        binding.tvUserAvatar.setImageURI(photoUri);
+        binding.ivUserAvatar.setImageURI(photoUri);
     }
 
     @Override
@@ -185,9 +194,23 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        currentAnimator = null;
+        etName = null;
+        etPhoneNumber = null;
+        etAddress = null;
+        System.gc();
     }
 
-    private void zoomImageFromThumb(final View thumbView, String imageUrl) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
+        dialog = null;
+        System.gc();
+    }
+
+    private void zoomImageFromThumb(final View thumbView, Drawable imageUrl) {
         // If there's an animation in progress, cancel it immediately and
         // proceed with this one.
         if (currentAnimator != null) {

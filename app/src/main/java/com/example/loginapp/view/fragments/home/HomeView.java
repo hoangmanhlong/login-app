@@ -11,8 +11,6 @@ public interface HomeView {
 
     void refreshInvisible();
 
-    void onMessage(String message);
-
     void showRecommendedProducts(List<Product> products);
 
     void showTopChartsProducts(List<Product> products);

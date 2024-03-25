@@ -32,12 +32,20 @@ public class ProcessingOrdersFragment extends Fragment implements OnOrderClickLi
 
     private FragmentOrdersProcessingBinding binding;
 
-    private final OrdersAdapter ordersAdapter = new OrdersAdapter(this);
+    private OrdersAdapter ordersAdapter;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        ordersAdapter = null;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOrdersProcessingBinding.inflate(inflater, container, false);
+        ordersAdapter = new OrdersAdapter(this);
         return binding.getRoot();
     }
 

@@ -1,6 +1,7 @@
 package com.example.loginapp.presenter;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -8,24 +9,22 @@ import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.EditUserProfileInterator;
 import com.example.loginapp.model.listener.EditUserProfileListener;
 import com.example.loginapp.view.fragments.edit_user_profile.EditUserProfileView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Pattern;
 
 public class EditUserProfilePresenter implements EditUserProfileListener {
 
+    private static final String TAG = EditUserProfilePresenter.class.getSimpleName();
+
     private final EditUserProfileInterator interator = new EditUserProfileInterator(this);
 
-    private final EditUserProfileView view;
+    private EditUserProfileView view;
 
-    @Nullable private Uri photoUri = null;
+    @Nullable
+    private Uri photoUri = null;
 
-    private UserData userData;
-
-    private String username;
-
-    private String phoneNumber;
-
-    private String address;
+    private final UserData userData;
 
     private boolean isNameValid = false;
 
@@ -38,30 +37,29 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
     }
 
     public void setUserData(UserData userData) {
-        this.userData = userData;
-        view.bindUserData(userData);
+        this.userData.copy(userData);
+        view.bindUserData(this.userData);
     }
 
     public EditUserProfilePresenter(EditUserProfileView view) {
         this.view = view;
+        userData = new UserData();
+        userData.setUid(FirebaseAuth.getInstance().getUid());
     }
 
     public void setUsername(String username) {
-        this.username = username;
         isNameValid = !username.isEmpty();
         if (isNameValid) userData.setUsername(username);
         view.saveButtonEnabled(isInputValid());
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
         isPhoneNumberValid = phoneNumber.length() == 10 && isNumber(phoneNumber);
         if (isPhoneNumberValid) userData.setPhoneNumber(phoneNumber);
         view.saveButtonEnabled(isInputValid());
     }
 
     public void setAddress(String address) {
-        this.address = address;
         isAddressValid = !address.isEmpty();
         if (isAddressValid) userData.setAddress(address);
         view.saveButtonEnabled(isInputValid());
@@ -87,6 +85,10 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
         view.showProcessBar(false);
         if (success) view.onNavigateUp();
         else view.onMessage("Error");
+    }
+
+    public void detachView() {
+        view = null;
     }
 
     public static boolean isNumber(String text) {

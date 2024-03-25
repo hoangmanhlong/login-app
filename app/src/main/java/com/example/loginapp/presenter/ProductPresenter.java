@@ -3,7 +3,6 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.Comment;
 import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.interator.ProductInterator;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.view.fragments.product_detail.ProductView;
@@ -18,24 +17,19 @@ public class ProductPresenter implements ProductListener {
 
     public boolean isFavorite = false;
 
-    private final ProductView view;
+    private ProductView view;
 
-    public Voucher voucher;
+    private ProductInterator interator;
 
-    private final ProductInterator interator = new ProductInterator(this);
+    private List<Comment> comments;
 
-    private List<Comment> comments = new ArrayList<>();
-
-    private List<Product> similarProducts = new ArrayList<>();
+    private List<Product> similarProducts;
 
     private final boolean authenticated;
 
     public void initData() {
-        if (comments.isEmpty()) getComments();
-        else view.getComments(comments);
-
-        if (similarProducts.isEmpty()) getSimilarProducts();
-        else view.getSimilarProducts(similarProducts);
+        if (!comments.isEmpty()) view.getComments(comments);
+        if (!similarProducts.isEmpty()) view.getSimilarProducts(similarProducts);
     }
 
     public Product getProduct() {
@@ -50,6 +44,9 @@ public class ProductPresenter implements ProductListener {
 
     public ProductPresenter(ProductView view) {
         this.view = view;
+        interator = new ProductInterator(this);
+        comments = new ArrayList<>();
+        similarProducts = new ArrayList<>();
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
@@ -68,11 +65,6 @@ public class ProductPresenter implements ProductListener {
         }
     }
 
-    @Override
-    public void onMessage(String message) {
-        view.onMessage(message);
-    }
-
 
     /***
      *  Method check product is favorite from server
@@ -80,41 +72,41 @@ public class ProductPresenter implements ProductListener {
     @Override
     public void isFavoriteProduct(Boolean isFavoriteProduct) {
         isFavorite = isFavoriteProduct;
-        view.enableFavorite(isFavoriteProduct);
-    }
-
-    /***
-     * Get comments from API
-     */
-    public void getComments() {
-        interator.getComments();
+        if (view != null) view.enableFavorite(isFavoriteProduct);
     }
 
     @Override
     public void saveToBasketSuccess() {
-        view.saveToBasketSuccess();
+        if (view != null) view.saveToBasketSuccess();
     }
 
     @Override
     public void getCommentRespond(CommentRespond commentRespond) {
-        comments = commentRespond.getComments();
-        view.getComments(comments);
-        view.getCommentCount(String.valueOf(commentRespond.getLimit()));
+        if (view != null) {
+            comments = commentRespond.getComments();
+            view.getComments(comments);
+            view.getCommentCount(String.valueOf(commentRespond.getLimit()));
+        }
     }
 
     @Override
     public void hasNewFavoriteProduct() {
-        view.hasNewFavoriteProduct();
+        if (view != null) view.hasNewFavoriteProduct();
     }
 
     @Override
     public void getSimilarProducts(List<Product> products) {
         similarProducts = products;
         similarProducts.remove(product);
-        view.getSimilarProducts(products);
+        if (view != null) view.getSimilarProducts(products);
     }
 
-    public void getSimilarProducts() {
-        interator.getSimilarProducts(product.getCategory());
+    public void clear() {
+        comments = null;
+        product = null;
+        similarProducts = null;
+        view = null;
+        interator.clear();
+        interator = null;
     }
 }

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,13 +32,20 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
 
-    private NavController navController;
-
     private static final String TAG = CheckoutInfoFragment.class.getSimpleName();
 
-    private final CheckoutInfoPresenter presenter = new CheckoutInfoPresenter(this);
+    private NavController navController;
+
+    private CheckoutInfoPresenter presenter;
 
     private FragmentCheckoutInfoBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new CheckoutInfoPresenter(this);
+    }
 
     @Nullable
     @Override
@@ -63,7 +69,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         binding.setFragment(this);
@@ -74,7 +79,7 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getDeliveryAddress(SelectedDeliveryAddressMessage message) {
         DeliveryAddress deliveryAddress = message.getDeliveryAddress();
-        presenter.setDeliveryAddress(deliveryAddress);
+        if (deliveryAddress != null) presenter.setDeliveryAddress(deliveryAddress);
         SelectedDeliveryAddressMessage selectedDeliveryAddressMessage = EventBus.getDefault().getStickyEvent(SelectedDeliveryAddressMessage.class);
         if (selectedDeliveryAddressMessage != null) EventBus.getDefault().removeStickyEvent(selectedDeliveryAddressMessage);
     }
@@ -91,6 +96,19 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     public void isLoading(boolean isLoading) {
         if (isLoading) binding.processIndicator.show();
         else binding.processIndicator.hide();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        presenter = null;
     }
 
     @Override
@@ -140,12 +158,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.DELIVERY_ADDRESSES_KEY, new DeliveryAddresses(presenter.getDeliveryAddresses()));
         navController.navigate(R.id.action_checkoutInfoFragment_to_selectDeliveryAddressFragment, bundle);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private void editTextListener() {

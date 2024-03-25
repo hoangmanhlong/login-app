@@ -16,7 +16,7 @@ public class ExpandProductsPresenter {
 
     @StringRes private int label;
 
-    private final ExpandProductsView view;
+    private ExpandProductsView view;
 
     private List<Product> products;
 
@@ -24,6 +24,12 @@ public class ExpandProductsPresenter {
 
     public ExpandProductsPresenter(ExpandProductsView view) {
         this.view = view;
+    }
+
+    public void clear() {
+        products = null;
+        status = null;
+        view = null;
     }
 
     public void initData() {

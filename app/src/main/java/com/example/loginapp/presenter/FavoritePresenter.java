@@ -10,14 +10,16 @@ import java.util.List;
 
 public class FavoritePresenter implements FavoriteListener {
 
-    private final FavoriteInterator interator = new FavoriteInterator(this);
+    private FavoriteInterator interator;
 
-    private final FavoriteView view;
+    private FavoriteView view;
 
-    public List<Product> wishlist = new ArrayList<>();
+    public List<Product> wishlist;
 
     public FavoritePresenter(FavoriteView view) {
         this.view = view;
+        interator = new FavoriteInterator(this);
+        wishlist = new ArrayList<>();
     }
 
     // Whether the list has been retrieved from the backend or not - Danh sách đã được lấy từ backend hay chưa
@@ -63,5 +65,12 @@ public class FavoritePresenter implements FavoriteListener {
 
     public void deleteFavoriteProduct(int id) {
         interator.deleteProduct(id);
+    }
+
+    public void detachView() {
+        wishlist = null;
+        view = null;
+        interator.clearData();
+        interator = null;
     }
 }
