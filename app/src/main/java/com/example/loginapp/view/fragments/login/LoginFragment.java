@@ -112,7 +112,6 @@ public class LoginFragment extends Fragment implements LoginView {
         binding = null;
         editTexts = null;
         etPhoneNumber = null;
-        System.gc();
     }
 
     @Override

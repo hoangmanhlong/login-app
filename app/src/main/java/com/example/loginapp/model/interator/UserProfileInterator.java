@@ -17,21 +17,28 @@ import java.util.List;
 
 public class UserProfileInterator {
 
-    private final UserProfileDetailListener listener;
+    private UserProfileDetailListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public UserProfileInterator(UserProfileDetailListener listener) {
         this.listener = listener;
     }
 
+    public void clear() {
+        listener = null;
+        user = null;
+    }
+
     private final ValueEventListener userDataValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                listener.getUserData(snapshot.getValue(UserData.class));
-            } else {
-                listener.userDataEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    listener.getUserData(snapshot.getValue(UserData.class));
+                } else {
+                    listener.userDataEmpty();
+                }
             }
         }
 
@@ -44,14 +51,17 @@ public class UserProfileInterator {
     private final ValueEventListener ordersValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                List<Order> orders = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    orders.add(dataSnapshot.getValue(Order.class));
-                listener.getOrders(orders);
-            } else {
-                listener.isOrdersListEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    List<Order> orders = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        orders.add(dataSnapshot.getValue(Order.class));
+                    listener.getOrders(orders);
+                } else {
+                    listener.isOrdersListEmpty();
+                }
             }
+
         }
 
         @Override

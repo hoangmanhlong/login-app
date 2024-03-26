@@ -23,14 +23,17 @@ public class FavoriteInterator {
     private ValueEventListener favoriteListValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                List<Product> products = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    products.add(dataSnapshot.getValue(Product.class));
-                listener.bindFavoriteListProduct(products);
-            } else {
-                listener.isWishlistEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    List<Product> products = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        products.add(dataSnapshot.getValue(Product.class));
+                    listener.bindFavoriteListProduct(products);
+                } else {
+                    listener.isWishlistEmpty();
+                }
             }
+
         }
 
         @Override

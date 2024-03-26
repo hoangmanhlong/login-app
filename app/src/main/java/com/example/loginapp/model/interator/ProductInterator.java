@@ -68,7 +68,7 @@ public class ProductInterator {
 
     public void removeFavoriteProduct(int productID) {
         favoriteProductRef.child(currentUser.getUid()).child(String.valueOf(productID)).removeValue()
-                .addOnCompleteListener(task -> listener.isFavoriteProduct(false))
+                .addOnCompleteListener(task -> {if (listener != null) listener.isFavoriteProduct(false);})
                 .addOnFailureListener(e -> Log.e(TAG, "removeFavoriteProduct: " + e.getMessage()));
     }
 
@@ -77,9 +77,9 @@ public class ProductInterator {
         call.enqueue(new Callback<CommentRespond>() {
             @Override
             public void onResponse(@NonNull Call<CommentRespond> call, @NonNull Response<CommentRespond> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && listener != null) {
                     CommentRespond commentRespond = response.body();
-                    if (commentRespond != null && listener != null)
+                    if (commentRespond != null )
                         listener.getCommentRespond(commentRespond);
                 }
             }
@@ -106,7 +106,7 @@ public class ProductInterator {
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: "  + t.getMessage());
+                Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
     }

@@ -17,23 +17,27 @@ import java.util.List;
 
 public class OrdersInterator {
 
+    private OrdersListener listener;
+
     private FirebaseUser currentUser;
 
     private ValueEventListener ordersValueEventListener;
 
-
     public OrdersInterator(OrdersListener listener) {
+        this.listener = listener;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         ordersValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    List<Order> orders = new ArrayList<>();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                        orders.add(dataSnapshot.getValue(Order.class));
-                    listener.getOrders(orders);
-                } else {
-                    listener.isOrdersEmpty();
+                if (listener != null) {
+                    if (snapshot.exists()) {
+                        List<Order> orders = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                            orders.add(dataSnapshot.getValue(Order.class));
+                        listener.getOrders(orders);
+                    } else {
+                        listener.isOrdersEmpty();
+                    }
                 }
             }
 
@@ -53,6 +57,7 @@ public class OrdersInterator {
     }
 
     public void clear() {
+        listener = null;
         ordersValueEventListener = null;
         currentUser = null;
     }

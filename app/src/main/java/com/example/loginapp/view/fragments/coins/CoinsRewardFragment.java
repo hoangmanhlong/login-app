@@ -25,6 +25,7 @@ import com.example.loginapp.model.entity.Date;
 import com.example.loginapp.model.entity.DayWithCheck;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.presenter.CoinsRewardPresenter;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.snackbar.Snackbar;
@@ -195,12 +196,21 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
 
     @Override
     public void onVoucherClick(Voucher voucher) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle(R.string.redeem)
-                .setMessage(getString(
-                                R.string.change_voucher_title, String.valueOf(voucher.getNumberOfCoinsNeededToExchange())))
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.redeemVoucher(voucher))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.redeem),
+                getString(R.string.change_voucher_title, String.valueOf(voucher.getNumberOfCoinsNeededToExchange())),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        presenter.redeemVoucher(voucher);
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+        );
     }
 }

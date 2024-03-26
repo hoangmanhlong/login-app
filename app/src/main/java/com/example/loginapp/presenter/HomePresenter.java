@@ -16,9 +16,9 @@ public class HomePresenter implements HomeListener {
 
     private  static final String TAG = HomePresenter.class.getName();
 
-    private final HomeView view;
+    private HomeView view;
 
-    private final HomeInterator interator = new HomeInterator(this);
+    private HomeInterator interator = new HomeInterator(this);
 
     private List<Product> products = new ArrayList<>(); // All Products get from API
 
@@ -37,6 +37,18 @@ public class HomePresenter implements HomeListener {
     private boolean gotDataFromAPI = false;
 
     private boolean gotUserData = false;
+
+    public void clear() {
+        view = null;
+        interator.clear();
+        interator = null;
+        products = null;
+        recommendedEveryDay = null;
+        topChartsProducts = null;
+        discountProducts = null;
+        recommendedProducts = null;
+        currentUserData = null;
+    }
 
     public HomePresenter(HomeView view) {
         this.view = view;
@@ -148,8 +160,6 @@ public class HomePresenter implements HomeListener {
         view.setShowUserView(false);
         gotUserData = true;
     }
-
-
 
     @Override
     public void isFavoriteProductEmpty() {

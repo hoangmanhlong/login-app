@@ -44,11 +44,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private HomePresenter presenter;
 
-    private ProductAdapter recommendedAdapter;
-
-    private ProductAdapter topChartsAdapter;
-
-    private ProductAdapter discountAdapter;
+    private ProductAdapter recommendedAdapter, topChartsAdapter, discountAdapter;
 
     private DiscountAdapter adapter;
 
@@ -92,7 +88,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         discountRecyclerView = binding.discountRecyclerView;
 
         swipeRefreshLayout = binding.homeSwipe;
-        swipeRefreshLayout.setColorSchemeResources(R.color.cam, R.color.blue, R.color.red, R.color.free_shipping_color);
+        swipeRefreshLayout.setColorSchemeResources(R.color.free_shipping_color, R.color.cam, R.color.blue, R.color.red);
         sliderView = binding.discountSliderView;
         return binding.getRoot();
     }
@@ -107,23 +103,23 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        expandRecommendedProductsView = null;
-        expandTopChartsProductsView = null;
-        expandDiscountProductsView = null;
         recommendedProductsPlaceHolder = null;
         topChartsProductsPlaceHolder = null;
         discountProductsPlaceHolder = null;
+        expandRecommendedProductsView = null;
+        expandTopChartsProductsView = null;
+        expandDiscountProductsView = null;
         recommendedRecyclerview = null;
         topChartsRecyclerview = null;
         discountRecyclerView = null;
         recommendedAdapter = null;
+        swipeRefreshLayout = null;
         topChartsAdapter = null;
         discountAdapter = null;
-        adapter = null;
         userPlaceHolder = null;
-        swipeRefreshLayout = null;
         sliderView = null;
         binding = null;
+        adapter = null;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -273,20 +269,29 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void onStart() {
         super.onStart();
-
         presenter.addUserDataValueEventListener();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        swipeRefreshLayout.setEnabled(true);
         sliderView.startAutoCycle();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.clearAnimation();
         sliderView.stopAutoCycle();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
+        presenter = null;
     }
 
     @Override

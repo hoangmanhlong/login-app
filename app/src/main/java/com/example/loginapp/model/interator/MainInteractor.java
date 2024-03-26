@@ -13,14 +13,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainInteractor {
 
-    private final MainListener listener;
+    private MainListener listener;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private final ValueEventListener valueEventListener = new ValueEventListener() {
+    private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            listener.getNumberOfProductInShoppingCart((int) snapshot.getChildrenCount(), !snapshot.exists());
+            if (listener != null) listener.getNumberOfProductInShoppingCart((int) snapshot.getChildrenCount(), !snapshot.exists());
         }
 
         @Override
@@ -28,6 +28,12 @@ public class MainInteractor {
 
         }
     };
+
+    public void clear() {
+        listener = null;
+        user = null;
+        valueEventListener = null;
+    }
 
     private final DatabaseReference cartRef = Constant.cartRef;
 

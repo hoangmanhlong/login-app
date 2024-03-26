@@ -11,16 +11,16 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/ivPopupProductImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:src="@drawable/shoes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:contentDescription="@null"
             android:id="@+id/ivClosePopup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,46 +29,44 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvProductTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_50sdp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Sport Collection"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold"
+        <LinearLayout
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Sport Collection" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divideView"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="2dp"
-            app:dividerColor="#fff"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProductTitle" />
-
-        <TextView
-            android:id="@+id/discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_50sdp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="30% OFF"
-            android:textColor="#fff"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divideView"
-            tools:text="30% OFF" />
+            android:layout_margin="@dimen/_16sdp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvPopupProductName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
+                android:text="Sport Collection"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Sport Collection" />
 
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divideView"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="2dp"
+                app:dividerColor="#fff"
+                android:layout_marginVertical="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
+                android:text="30% OFF"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="30% OFF" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -77,13 +75,14 @@
         android:layout_height="@dimen/_50sdp">
 
         <Button
+            android:id="@+id/btPopupAction"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#444444"
             android:fontFamily="@font/poppins_regular"
             android:includeFontPadding="false"
-            android:text="Buy now"
+            android:text="@string/buy_now"
             android:textColor="#fff"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"

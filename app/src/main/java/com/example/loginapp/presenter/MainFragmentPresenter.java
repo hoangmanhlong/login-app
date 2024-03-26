@@ -9,16 +9,24 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainFragmentPresenter implements MainListener {
 
-    private final MainFragmentView view;
+    private MainFragmentView view;
 
-    private final MainInteractor interactor = new MainInteractor(this);
+    private MainInteractor interactor;
 
     private final boolean logged;
 
-    private final AppSharedPreferences sharedPreferences;
+    private AppSharedPreferences sharedPreferences;
+
+    public void clear() {
+        view = null;
+        interactor.clear();
+        interactor = null;
+        sharedPreferences = null;
+    }
 
     public MainFragmentPresenter(MainFragmentView view) {
         this.view = view;
+        interactor = new MainInteractor(this);
         logged = FirebaseAuth.getInstance().getCurrentUser() != null;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }

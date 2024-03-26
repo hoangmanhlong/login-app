@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +54,7 @@ public class MainFragment extends Fragment implements MainFragmentView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         presenter = new MainFragmentPresenter(this);
         listOfVerifiedDestinations = new ArrayList<>(Arrays.asList(
                 new HomeFragment(),
@@ -101,6 +103,7 @@ public class MainFragment extends Fragment implements MainFragmentView {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.clear();
         presenter = null;
         listOfVerifiedDestinations = null;
         listOfUnconfirmedDestinations = null;

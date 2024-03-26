@@ -1,5 +1,8 @@
 package com.example.loginapp.view.activities;
 
+import static com.example.loginapp.utils.Constant.BACK_PRESS_INTERVAL;
+
+import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -9,8 +12,10 @@ import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -20,7 +25,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.ActivityMainBinding;
-import com.example.loginapp.utils.Constant;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +66,25 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setupNetworkListener();
+        showPopupDialog();
         setupNavigation();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (navController.getPreviousBackStackEntry() == null) handleDoubleBackPress();
+                else navController.navigateUp();
+            }
+
+            private void handleDoubleBackPress() {
+                if (backPressedOnce) {
+                    finish();
+                } else {
+                    backPressedOnce = true;
+                    Toast.makeText(MainActivity.this, getString(R.string.press_to_exit), Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(() -> backPressedOnce = false, BACK_PRESS_INTERVAL);
+                }
+            }
+        });
     }
 
     private void setupNetworkListener() {
@@ -102,27 +124,12 @@ public class MainActivity extends AppCompatActivity {
         connectivityManager.unregisterNetworkCallback(networkCallback);
     }
 
-//    public void showPopupDialog() {
-//        Dialog dialog = new Dialog(this);
-//        dialog.setContentView(R.layout.layout_popup);
-//        dialog.setCancelable(false);
-//        ImageView imageView = dialog.findViewById(R.id.ivClosePopup);
-//        imageView.setOnClickListener(v -> dialog.dismiss());
-//        dialog.show();
-//    }
-
-    @Override
-    public void onBackPressed() {
-        if (navController.getPreviousBackStackEntry() == null) {
-            if (backPressedOnce) {
-                super.onBackPressed();
-            } else {
-                backPressedOnce = true;
-                Toast.makeText(this, this.getString(R.string.press_to_exit), Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> backPressedOnce = false, Constant.BACK_PRESS_INTERVAL);
-            }
-        } else {
-            super.onBackPressed();
-        }
+    public void showPopupDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.layout_popup);
+        dialog.setCancelable(false);
+        ImageView imageView = dialog.findViewById(R.id.ivClosePopup);
+        imageView.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 }

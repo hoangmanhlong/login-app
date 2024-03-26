@@ -28,13 +28,15 @@ public class CartInterator {
     private ValueEventListener shoppingCartValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                List<FirebaseProduct> products = new ArrayList<>();
-                for (DataSnapshot dataSnapshot: snapshot.getChildren())
-                    products.add(dataSnapshot.getValue(FirebaseProduct.class));
-                listener.getProductsFromShoppingCart(products);
-            } else {
-                listener.isCartEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    List<FirebaseProduct> products = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                        products.add(dataSnapshot.getValue(FirebaseProduct.class));
+                    listener.getProductsFromShoppingCart(products);
+                } else {
+                    listener.isCartEmpty();
+                }
             }
         }
 

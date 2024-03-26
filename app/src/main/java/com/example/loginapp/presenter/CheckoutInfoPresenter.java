@@ -146,7 +146,7 @@ public class CheckoutInfoPresenter implements CheckoutInfoListener {
 
     public void detachView() {
         view = null;
-        interator.detachCheckoutInfoListener();
+        interator.clear();
         interator = null;
         currentOrder = null;
         deliveryAddresses = null;

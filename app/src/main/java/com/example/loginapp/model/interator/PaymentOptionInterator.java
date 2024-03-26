@@ -1,5 +1,7 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.entity.OrderStatus;
@@ -13,6 +15,8 @@ import com.google.firebase.auth.FirebaseUser;
 import org.greenrobot.eventbus.EventBus;
 
 public class PaymentOptionInterator {
+
+    private static final String TAG = PaymentOptionInterator.class.getSimpleName();
 
     private PaymentOptionListener listener;
 
@@ -56,7 +60,7 @@ public class PaymentOptionInterator {
                 .child(order.getOrderId())
                 .setValue(order)
                 .addOnCompleteListener(task -> listener.goOrderSuccessScreen())
-                .addOnFailureListener(task -> listener.onMessage("An error occurred, Please try again"));
+                .addOnFailureListener(e -> Log.d(TAG, "createOrder: " + e.getMessage()));
     }
 
     public void removePaymentOptionListener() {

@@ -16,12 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.databinding.FragmentVerificationBinding;
 import com.example.loginapp.presenter.VerificationPresenter;
+import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.activities.MainActivity;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
-import com.example.loginapp.view.activities.MainActivity;
 
 
 public class VerificationFragment extends Fragment implements VerificationView {
@@ -42,6 +42,7 @@ public class VerificationFragment extends Fragment implements VerificationView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentVerificationBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
@@ -49,17 +50,10 @@ public class VerificationFragment extends Fragment implements VerificationView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView(view);
-    }
-
-    private void initView(View view) {
-        binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         autoFocus();
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         getSharedData();
-
-//        presenter.startPhoneNumberVerification(formatPhoneNumber, requireActivity());
     }
 
     private void getSharedData() {
@@ -91,7 +85,7 @@ public class VerificationFragment extends Fragment implements VerificationView {
         String code = binding.number1.getText().toString() + binding.number2.getText().toString() +
             binding.number3.getText().toString() + binding.number4.getText().toString() +
             binding.number5.getText().toString() + binding.number6.getText().toString();
-        presenter.verifyPhoneNumberWithCode(code, requireActivity());
+//        presenter.verifyPhoneNumberWithCode(code, requireActivity());
     }
 
     private void autoFocus() {

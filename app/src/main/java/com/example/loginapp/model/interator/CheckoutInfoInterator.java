@@ -21,20 +21,25 @@ public class CheckoutInfoInterator {
         this.listener = listener;
     }
 
+    public void clear() {
+        listener = null;
+    }
+
     public void getDeliveryAddresses() {
         Constant.deliveryAddressRef.child(FirebaseAuth.getInstance().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                                deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                            if (listener!= null) listener.getDeliveryAddresses(deliveryAddresses);
-                        } else {
-                            listener.isDeliveryAddressesEmpty();
+                        if (listener != null) {
+                            if (snapshot.exists()) {
+                                List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                                    deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
+                                listener.getDeliveryAddresses(deliveryAddresses);
+                            } else {
+                                listener.isDeliveryAddressesEmpty();
+                            }
                         }
-
                     }
 
                     @Override
@@ -42,9 +47,5 @@ public class CheckoutInfoInterator {
 
                     }
                 });
-    }
-
-    public void detachCheckoutInfoListener() {
-        listener = null;
     }
 }

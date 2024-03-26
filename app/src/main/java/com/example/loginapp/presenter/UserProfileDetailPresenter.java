@@ -27,7 +27,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
      */
     private boolean listOfOrdersTakenForTheFirstTime = false;
 
-    private final UserProfileInterator interator = new UserProfileInterator(this);
+    private UserProfileInterator interator;
 
     private final AppSharedPreferences sharedPreferences;
 
@@ -44,6 +44,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     public UserProfileDetailPresenter(UserProfileDetailView view) {
         this.view = view;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
+        interator = new UserProfileInterator(this);
     }
 
     public boolean isVietnamese() {
@@ -52,17 +53,20 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
     public void initData() {
         isVietnamese = sharedPreferences.getLanguage();
-        view.bindLanguageState(isVietnamese);
-        if (userDataIsObtainedForTheFirstTime && userData != null) view.bindUserData(userData);
-        if (listOfOrdersTakenForTheFirstTime) {
-            if (orders.isEmpty()) view.bindNumberOfOrders(0, 0, 0, 0);
-            else getOrders(orders);
+        if (view != null) {
+            view.bindLanguageState(isVietnamese);
+            if (userDataIsObtainedForTheFirstTime && userData != null) view.bindUserData(userData);
+            if (listOfOrdersTakenForTheFirstTime) {
+                if (orders.isEmpty()) view.bindNumberOfOrders(0, 0, 0, 0);
+                else getOrders(orders);
+            }
         }
     }
 
     public void addOrdersValueEventListener() {
         interator.addOrdersValueEventListener();
     }
+
     public void removeOrdersValueEventListener() {
         interator.removeOrdersValueEventListener();
     }
@@ -89,7 +93,8 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         int numberOfCompletedOrder = countOrdersWithStatus(orders, OrderStatus.Completed);
         int numberOfCancelOrder = countOrdersWithStatus(orders, OrderStatus.Cancel);
         int numberOfReturnOrder = countOrdersWithStatus(orders, OrderStatus.Return);
-        if (view != null) view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
+        if (view != null)
+            view.bindNumberOfOrders(numberOfProcessingOrder, numberOfCompletedOrder, numberOfCancelOrder, numberOfReturnOrder);
         listOfOrdersTakenForTheFirstTime = true;
     }
 
@@ -111,5 +116,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
     public void detachView() {
         view = null;
+        interator.clear();
+        interator = null;
     }
 }

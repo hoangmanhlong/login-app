@@ -69,7 +69,6 @@ public class CheckoutInfoFragment extends Fragment implements CheckoutInfoView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         binding.setFragment(this);
         presenter.initData();

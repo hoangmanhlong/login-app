@@ -1,13 +1,16 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,6 +20,7 @@ import com.example.loginapp.databinding.FragmentUserProfileDetailBinding;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.UserProfileDetailPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,39 +29,53 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
 
     private static final String TAG = UserProfileDetailFragment.class.getSimpleName();
 
-    private final UserProfileDetailPresenter presenter = new UserProfileDetailPresenter(this);
+    private UserProfileDetailPresenter presenter;
 
     private FragmentUserProfileDetailBinding binding;
 
     private NavController navController;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+        presenter = new UserProfileDetailPresenter(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentUserProfileDetailBinding.inflate(inflater, container, false);
+        binding.setProfileFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
-        binding.setProfileFragment(this);
         presenter.initData();
     }
 
     public void onLogoutButtonClick() {
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.logout)
-                .setIcon(R.drawable.ic_logout)
-                .setMessage(R.string.logout_message)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    FirebaseAuth.getInstance().signOut();
-                    navController.popBackStack(navController.getCurrentDestination().getId(), true);
-                    navController.navigate(R.id.overviewFragment);
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.logout),
+                getString(R.string.logout_message),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        FirebaseAuth.getInstance().signOut();
+                        navController.popBackStack(navController.getCurrentDestination().getId(), true);
+                        navController.navigate(R.id.overviewFragment);
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+        );
     }
 
     @Override
@@ -87,6 +105,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     public void onDestroy() {
         super.onDestroy();
         presenter.detachView();
+        presenter = null;
     }
 
     @Override

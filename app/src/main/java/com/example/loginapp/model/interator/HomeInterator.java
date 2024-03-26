@@ -33,11 +33,17 @@ public class HomeInterator {
 
     private final String TAG = this.toString();
 
-    private final ValueEventListener userDataValueEventListener;
+    private ValueEventListener userDataValueEventListener;
 
-    private final FirebaseUser currentUser;
+    private FirebaseUser currentUser;
 
-    private final HomeListener listener;
+    private HomeListener listener;
+
+    public void clear() {
+        userDataValueEventListener = null;
+        currentUser = null;
+        listener = null;
+    }
 
     public HomeInterator(HomeListener listener) {
         this.listener = listener;
@@ -106,13 +112,15 @@ public class HomeInterator {
             Constant.favoriteProductRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        List<Product> products = new ArrayList<>();
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                            products.add(dataSnapshot.getValue(Product.class));
-                        listener.getFavoriteProducts(products);
-                    } else {
-                        listener.isFavoriteProductEmpty();
+                    if (listener != null) {
+                        if (snapshot.exists()) {
+                            List<Product> products = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                                products.add(dataSnapshot.getValue(Product.class));
+                            listener.getFavoriteProducts(products);
+                        } else {
+                            listener.isFavoriteProductEmpty();
+                        }
                     }
                 }
 
@@ -142,7 +150,6 @@ public class HomeInterator {
                 AppDatabase.databaseWriteExecutor.shutdown(); // Hủy executor
             } catch (InterruptedException e) {
                 Log.e(TAG, "insertProductNames: " +  e.getMessage());
-
             }
         });
     }
