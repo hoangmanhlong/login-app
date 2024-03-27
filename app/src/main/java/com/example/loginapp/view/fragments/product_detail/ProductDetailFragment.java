@@ -30,8 +30,6 @@ import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.fragments.add_to_cart.AddProductToCartFragment;
 import com.example.loginapp.view.fragments.bottom_sheet.SelectProductQuantityAndVoucherFragment;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 public class ProductDetailFragment extends Fragment implements ProductView, OnImageClickListener, OnProductClickListener {
@@ -163,11 +161,6 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
         binding.setProduct(product);
         productImageAdapter.submitList(product.getImages());
         viewPager.setAdapter(new ImagesProductAdapter(product.getImages(), requireContext()));
-    }
-
-    @Override
-    public void hasNewFavoriteProduct() {
-        EventBus.getDefault().postSticky(new NewProductInWishlistMessage(true));
     }
 
     @Override

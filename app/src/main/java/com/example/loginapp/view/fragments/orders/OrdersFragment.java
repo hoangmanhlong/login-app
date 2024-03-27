@@ -96,10 +96,17 @@ public class OrdersFragment extends Fragment implements OrdersView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (viewPager2 != null) {
+            viewPager2.setAdapter(null);
+            viewPager2 = null;
+        }
+        if (tabLayout != null) {
+            tabLayout.setupWithViewPager(null);
+            tabLayout = null;
+        }
         adapter = null;
         binding = null;
         viewPager2 = null;
-        tabLayout = null;;
     }
 
     public void onNavigateUp() {

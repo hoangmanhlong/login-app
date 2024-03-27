@@ -98,6 +98,7 @@ public class MainFragment extends Fragment implements MainFragmentView {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void getWishlistStatus(NewProductInWishlistMessage message) {
         presenter.viewedFavoritesList(false);
+        EventBus.getDefault().removeStickyEvent(message);
     }
 
     @Override

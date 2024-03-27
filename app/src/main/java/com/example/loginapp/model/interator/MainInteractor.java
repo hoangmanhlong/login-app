@@ -46,6 +46,6 @@ public class MainInteractor {
     }
 
     public void removeValueEventListener() {
-        cartRef.removeEventListener(valueEventListener);
+        cartRef.child(user.getUid()).removeEventListener(valueEventListener);
     }
 }

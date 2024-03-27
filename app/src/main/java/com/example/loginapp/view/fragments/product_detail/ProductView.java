@@ -19,8 +19,6 @@ public interface ProductView {
 
     void bindProduct(Product product);
 
-    void hasNewFavoriteProduct();
-
     void getSimilarProducts(List<Product> products);
 
     void showSelectProductQuantityAndVoucherFragment(Product product);

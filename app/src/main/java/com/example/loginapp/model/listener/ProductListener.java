@@ -13,7 +13,5 @@ public interface ProductListener {
 
     void getCommentRespond(CommentRespond commentRespond);
 
-    void hasNewFavoriteProduct();
-
     void getSimilarProducts(List<Product> products);
 }

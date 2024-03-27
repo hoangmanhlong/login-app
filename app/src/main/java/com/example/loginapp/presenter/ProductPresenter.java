@@ -3,7 +3,7 @@ package com.example.loginapp.presenter;
 import com.example.loginapp.model.entity.Comment;
 import com.example.loginapp.model.entity.CommentRespond;
 import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.model.interator.ProductInterator;
+import com.example.loginapp.model.interator.ProductInteractor;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.view.fragments.product_detail.ProductView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +19,7 @@ public class ProductPresenter implements ProductListener {
 
     private ProductView view;
 
-    private ProductInterator interator;
+    private ProductInteractor interator;
 
     private List<Comment> comments;
 
@@ -44,7 +44,7 @@ public class ProductPresenter implements ProductListener {
 
     public ProductPresenter(ProductView view) {
         this.view = view;
-        interator = new ProductInterator(this);
+        interator = new ProductInteractor(this);
         comments = new ArrayList<>();
         similarProducts = new ArrayList<>();
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
@@ -64,7 +64,6 @@ public class ProductPresenter implements ProductListener {
             else interator.saveFavoriteProduct(product);
         }
     }
-
 
     /***
      *  Method check product is favorite from server
@@ -87,11 +86,6 @@ public class ProductPresenter implements ProductListener {
             view.getComments(comments);
             view.getCommentCount(String.valueOf(commentRespond.getLimit()));
         }
-    }
-
-    @Override
-    public void hasNewFavoriteProduct() {
-        if (view != null) view.hasNewFavoriteProduct();
     }
 
     @Override
