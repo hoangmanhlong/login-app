@@ -36,13 +36,13 @@ public class SelectLanguageFragment extends Fragment implements SelectLanguageVi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSelectLanguageBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         presenter.initData();
     }
 

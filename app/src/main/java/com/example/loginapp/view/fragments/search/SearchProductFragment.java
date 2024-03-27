@@ -32,11 +32,11 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.presenter.SearchPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         presenter = new SearchPresenter(this);
     }
 
@@ -100,7 +100,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
         RecyclerView searchSuggestionRecyclerview = binding.searchSuggestions;
         searchSuggestionRecyclerview.setLayoutManager(layoutManager);
         searchSuggestionRecyclerview.setAdapter(searchHistoryAdapter);
-        ((SimpleItemAnimator) searchSuggestionRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
+        SimpleItemAnimator simpleItemAnimator = ((SimpleItemAnimator) searchSuggestionRecyclerview.getItemAnimator());
+        if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
 
         binding.etQuery.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -233,12 +234,23 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     public void onDeleteAllSearchHistoriesButtonClick() {
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.delete)
-                .setMessage(R.string.delete_all_search_histories)
-                .setPositiveButton(R.string.delete, (dialog, which) -> presenter.deleteAllSearchHistories())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.delete),
+                getString(R.string.delete_all_search_histories),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        presenter.deleteAllSearchHistories();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+
+        );
     }
 
     public void onSeeMoreRecommendedProductsViewClick() {

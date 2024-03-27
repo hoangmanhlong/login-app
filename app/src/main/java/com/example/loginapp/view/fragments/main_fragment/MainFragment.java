@@ -82,17 +82,17 @@ public class MainFragment extends Fragment implements MainFragmentView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            presenter.initData();
-            viewPager.setOffscreenPageLimit(5);
-            viewPager.setUserInputEnabled(false);
-            tabSelectedListener();
-            viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                @Override
-                public void onPageSelected(int position) {
-                    super.onPageSelected(position);
-                    tabLayout.getTabAt(position).select();
-                }
-            });
+        presenter.initData();
+        viewPager.setOffscreenPageLimit(5);
+        viewPager.setUserInputEnabled(false);
+        tabSelectedListener();
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                tabLayout.getTabAt(position).select();
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -107,17 +107,23 @@ public class MainFragment extends Fragment implements MainFragmentView {
         presenter = null;
         listOfVerifiedDestinations = null;
         listOfUnconfirmedDestinations = null;
+        NewProductInWishlistMessage message = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
+        if (message != null) EventBus.getDefault().removeStickyEvent(message);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (viewPager != null) {
+            viewPager.setAdapter(null);
+            viewPager = null;
+        }
+        if (tabLayout != null) {
+            tabLayout.setupWithViewPager(null);
+            tabLayout = null;
+        }
         binding = null;
-        viewPager = null;
-        tabLayout = null;
         viewPagerAdapter = null;
-        NewProductInWishlistMessage message = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
-        if (message != null) EventBus.getDefault().removeStickyEvent(message);
     }
 
     @Override

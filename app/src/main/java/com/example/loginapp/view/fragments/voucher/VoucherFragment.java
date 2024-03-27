@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.adapter.voucher_adapter.VoucherAdapter;
 import com.example.loginapp.databinding.FragmentVoucherBinding;
@@ -37,13 +37,13 @@ public class VoucherFragment extends Fragment implements VoucherView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentVoucherBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         binding.myVoucherRecyclerView.setAdapter(adapter);
         presenter.getVouchers();
     }
@@ -51,6 +51,7 @@ public class VoucherFragment extends Fragment implements VoucherView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        adapter = null;
         binding = null;
     }
 
@@ -59,11 +60,10 @@ public class VoucherFragment extends Fragment implements VoucherView {
         super.onDestroy();
         presenter.detachView();
         presenter = null;
-        adapter = null;
     }
 
     public void onNavigateUp() {
-        Navigation.findNavController(binding.getRoot()).navigateUp();
+        NavHostFragment.findNavController(this).navigateUp();
     }
 
     @Override

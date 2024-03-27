@@ -26,24 +26,31 @@ public class VoucherInteractor {
     }
 
     public void getVouchers() {
-        Constant.myVoucherRef.child(FirebaseAuth.getInstance().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            List<Voucher> vouchers = new ArrayList<>();
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                                vouchers.add(dataSnapshot.getValue(Voucher.class));
-                            listener.getVouchers(vouchers);
-                        } else {
-                            listener.isVouchersEmpty();
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            Constant.myVoucherRef.child(uid)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (listener != null) {
+                                if (snapshot.exists()) {
+                                    List<Voucher> vouchers = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                                        vouchers.add(dataSnapshot.getValue(Voucher.class));
+                                    listener.getVouchers(vouchers);
+                                } else {
+                                    listener.isVouchersEmpty();
+                                }
+                            }
+
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+        }
+
     }
 }

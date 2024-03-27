@@ -1,11 +1,9 @@
 package com.example.loginapp.view.fragments.delivery_address_detail;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +19,7 @@ import com.example.loginapp.databinding.FragmentDeliveryAddressDetailBinding;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.presenter.DeliveryAddressDetailPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -45,13 +44,13 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDeliveryAddressDetailBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         onInputState();
@@ -73,11 +72,23 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
     }
 
     public void onDeleteButtonClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.delete).setMessage(R.string.delete_delivery_address)
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.deleteDeliveryAddress())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.delete),
+                getString(R.string.delete_delivery_address),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        presenter.deleteDeliveryAddress();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+
+        );
     }
 
     public void onNavigateUp() {
@@ -97,7 +108,6 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
 
     @Override
     public void bindAddress(DeliveryAddress deliveryAddress) {
-        Log.d(TAG, "bindAddress: " + deliveryAddress);
         binding.setDeliveryAddress(deliveryAddress);
         binding.tvProvince.setText(deliveryAddress.getProvince());
     }
@@ -113,6 +123,7 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        dialog = null;
     }
 
     @Override
@@ -120,13 +131,11 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
         super.onDestroy();
         presenter.detachView();
         presenter = null;
-        dialog = null;
-        System.gc();
     }
 
     @Override
-    public void isCheckoutButtonVisible(boolean visible) {
-        binding.btSave.setEnabled(visible);
+    public void isCheckoutButtonEnabled(boolean enabled) {
+        binding.btSave.setEnabled(enabled);
     }
 
     public void onSaveButtonClick() {

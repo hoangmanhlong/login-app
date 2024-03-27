@@ -1,6 +1,5 @@
 package com.example.loginapp.view.fragments.order_detail;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.example.loginapp.databinding.FragmentOrderDetailBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.presenter.OrderDetailPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 
 public class OrderDetailFragment extends Fragment implements OrderDetailView {
 
@@ -54,15 +54,25 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
             Order order = (Order) getArguments().getSerializable(Constant.ORDER_KEY);
             if (order != null) presenter.setOrder(order);
         }
-
     }
 
     public void onCancelOrderButtonClick() {
-        new AlertDialog.Builder(requireContext())
-                .setMessage(R.string.confirm_message)
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.cancelOrder())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.delete),
+                getString(R.string.confirm_message),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        presenter.cancelOrder();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+        );
     }
 
     public void onBuyAgainButtonClick() {

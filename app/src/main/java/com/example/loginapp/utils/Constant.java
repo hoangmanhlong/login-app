@@ -7,6 +7,10 @@ import com.google.firebase.storage.StorageReference;
 
 public final class Constant {
 
+    public static final String VIETNAM_COUNTRY_CODE = "vi";
+
+    public static final String ENGLISH_COUNTRY_CODE = "en-US";
+
     public static final String VIETNAM = "Việt Nam";
 
     public static final String IS_VIETNAMESE_LANGUAGE = "is_vietnamese_language";
@@ -22,10 +26,6 @@ public final class Constant {
     public static final String EXPAND_PRODUCTS_KEY = "expand";
 
     public static final String PHONE_NUMBER_KEY = "phone_number";
-
-    public static final String EMAIL_KEY = "email";
-
-    public static final String PASSWORD_KEY = "password";
 
     public static final String DELIVERY_ADDRESS_KEY = "delivery_address_key";
 
@@ -65,11 +65,7 @@ public final class Constant {
 
     public static final String USER_KEY_NAME = "userdata";
 
-    public static final String BESTSELLER_REF_NAME = "bestseller";
-
     public static final String MY_VOUCHER_REF_NAME = "my_voucher";
-
-    public static final String IS_FIRST_TIME = "is_first_time";
 
     public static final int ShippingCost = 200;
 
@@ -99,9 +95,6 @@ public final class Constant {
 
     public static final DatabaseReference searchHistoriesRef =
             FirebaseDatabase.getInstance().getReference().child(SEARCH_HISTORY_REF_KEY);
-
-    public static final DatabaseReference bestSellerRef =
-            FirebaseDatabase.getInstance().getReference().child(BESTSELLER_REF_NAME);
 
     public static final StorageReference avatarUserRef =
             FirebaseStorage.getInstance().getReference()

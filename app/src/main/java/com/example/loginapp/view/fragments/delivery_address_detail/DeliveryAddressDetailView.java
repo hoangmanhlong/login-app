@@ -12,5 +12,5 @@ public interface DeliveryAddressDetailView {
 
     void bindProvinces(String[] provinces);
 
-    void isCheckoutButtonVisible(boolean visible);
+    void isCheckoutButtonEnabled(boolean enabled);
 }

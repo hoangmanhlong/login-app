@@ -18,7 +18,7 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
 
     private DeliveryAddressDetailView view;
 
-    private ExecutorService execute = Executors.newFixedThreadPool(5);
+    private ExecutorService execute;
 
     private DeliveryAddress deliveryAddress;
 
@@ -26,12 +26,13 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
         this.view = view;
         deliveryAddress = new DeliveryAddress();
         interactor = new DeliveryAddressDetailInteractor(this);
+        execute = Executors.newFixedThreadPool(5);
     }
 
     public void fetchProvinces() {
         execute.execute(() -> {
             String[] provinces = AssertReader.getProvinces();
-            if (provinces != null) view.bindProvinces(provinces);
+            if (provinces != null && view != null) view.bindProvinces(provinces);
             execute.shutdown();
         });
     }
@@ -54,31 +55,31 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
     public void setName(String name) {
         isNameValid = !name.isEmpty();
         deliveryAddress.setRecipientName(name);
-        view.isCheckoutButtonVisible(isAllInputValid());
+        view.isCheckoutButtonEnabled(isAllInputValid());
     }
 
     public void setPhoneNumber(String phoneNumber) {
         isPhoneNumberValid = phoneNumber.length() == 10 && isNumber(phoneNumber);
         deliveryAddress.setPhoneNumber(phoneNumber);
-        view.isCheckoutButtonVisible(isAllInputValid());
+        view.isCheckoutButtonEnabled(isAllInputValid());
     }
 
     public void setAddress(String address) {
         isAddressValid = !address.isEmpty();
         deliveryAddress.setAddress(address);
-        view.isCheckoutButtonVisible(isAllInputValid());
+        view.isCheckoutButtonEnabled(isAllInputValid());
     }
 
     public void setProvince(String province) {
         isProvinceValid = !province.isEmpty();
         deliveryAddress.setProvince(province);
-        view.isCheckoutButtonVisible(isAllInputValid());
+        view.isCheckoutButtonEnabled(isAllInputValid());
     }
 
     public void setPostalCode(String postalCode) {
         isPostalCodeValid = postalCode.length() == 6 && isNumber(postalCode);
         deliveryAddress.setPostalCode(postalCode);
-        view.isCheckoutButtonVisible(isAllInputValid());
+        view.isCheckoutButtonEnabled(isAllInputValid());
     }
 
     public void setShippingOption(String shippingOption) {

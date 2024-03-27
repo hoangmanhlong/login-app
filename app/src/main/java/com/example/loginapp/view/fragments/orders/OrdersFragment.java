@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class OrdersFragment extends Fragment implements OrdersView {
 
-    private final String TAG = this.toString();
+    private static final String TAG = OrdersFragment.class.getSimpleName();
 
     private OrdersPresenter presenter;
 
@@ -42,6 +42,7 @@ public class OrdersFragment extends Fragment implements OrdersView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOrdersBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         adapter = new OrdersPagerAdapter(this);
         viewPager2 = binding.pager;
         tabLayout = binding.tabLayout;
@@ -51,7 +52,6 @@ public class OrdersFragment extends Fragment implements OrdersView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         viewPager2.setAdapter(adapter);
         viewPager2.setOffscreenPageLimit(5);
 
@@ -99,8 +99,7 @@ public class OrdersFragment extends Fragment implements OrdersView {
         adapter = null;
         binding = null;
         viewPager2 = null;
-        tabLayout = null;
-        System.gc();
+        tabLayout = null;;
     }
 
     public void onNavigateUp() {

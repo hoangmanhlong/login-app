@@ -1,6 +1,5 @@
 package com.example.loginapp.view.fragments.shipping_address;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import com.example.loginapp.databinding.FragmentDeliveryAddressBinding;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.presenter.DeliveryAddressPresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.LoadingDialog;
 
 import java.util.List;
 
@@ -32,8 +30,6 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
     private FragmentDeliveryAddressBinding binding;
 
     private DeliveryAddressAdapter deliveryAddressAdapter;
-
-    private Dialog dialog;
 
     private NavController navController;
 
@@ -59,9 +55,9 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragment(this);
-        dialog = LoadingDialog.getLoadingDialog(requireContext());
         deliveryAddressesRecyclerView.setAdapter(deliveryAddressAdapter);
-        ((SimpleItemAnimator) deliveryAddressesRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        SimpleItemAnimator simpleItemAnimator = ((SimpleItemAnimator) deliveryAddressesRecyclerView.getItemAnimator());
+        if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
         presenter.initData();
     }
 
@@ -82,8 +78,6 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
         super.onDestroy();
         presenter.clear();
         presenter = null;
-        dialog = null;
-        System.gc();
     }
 
     @Override
@@ -92,7 +86,6 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
         deliveryAddressAdapter = null;
         deliveryAddressesRecyclerView = null;
         binding = null;
-        System.gc();
     }
 
     @Override

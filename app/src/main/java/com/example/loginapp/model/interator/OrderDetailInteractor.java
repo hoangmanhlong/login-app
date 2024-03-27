@@ -1,5 +1,7 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.listener.OrderDetailListener;
 import com.example.loginapp.utils.Constant;
@@ -12,10 +14,12 @@ public class OrderDetailInteractor {
 
     private OrderDetailListener listener;
 
-    private DatabaseReference orderRefOfCurrentUser = Constant.orderRef.child(FirebaseAuth.getInstance().getUid());
+    private DatabaseReference orderRefOfCurrentUser = null;
 
     public OrderDetailInteractor(OrderDetailListener listener) {
         this.listener = listener;
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) orderRefOfCurrentUser = Constant.orderRef.child(uid);
     }
 
     public void clear() {
@@ -24,15 +28,18 @@ public class OrderDetailInteractor {
     }
 
     public void cancelOrder(Order order) {
-        orderRefOfCurrentUser.child(order.getOrderId())
-                .setValue(order)
-                .addOnCompleteListener(task -> listener.isProcessSuccess(task.isSuccessful()))
-                .addOnFailureListener(e -> listener.isProcessSuccess(false));
-    }
-
-    public void buyAgain(Order newOrder) {
-        orderRefOfCurrentUser.child(newOrder.getOrderId()).setValue(newOrder)
-                .addOnCompleteListener(task -> listener.isProcessSuccess(task.isSuccessful()));
+        if (orderRefOfCurrentUser != null)
+            orderRefOfCurrentUser.child(order.getOrderId())
+                    .setValue(order)
+                    .addOnCompleteListener(task -> {
+                        if (listener != null) {
+                            listener.isProcessSuccess(task.isSuccessful());
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        if (listener != null) listener.isProcessSuccess(false);
+                        Log.e(TAG, "cancelOrder: " + e.getMessage());
+                    });
     }
 
 }

@@ -210,4 +210,6 @@
 
     <string name="order_empty">Không có đơn hàng nào</string>
 
+    <string name="checkout_confirm">Bạn chắc chắn muốn thanh toán?</string>
+
 </resources>

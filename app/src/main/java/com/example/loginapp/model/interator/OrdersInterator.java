@@ -17,14 +17,11 @@ import java.util.List;
 
 public class OrdersInterator {
 
-    private OrdersListener listener;
-
     private FirebaseUser currentUser;
 
     private ValueEventListener ordersValueEventListener;
 
     public OrdersInterator(OrdersListener listener) {
-        this.listener = listener;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         ordersValueEventListener = new ValueEventListener() {
             @Override
@@ -57,7 +54,6 @@ public class OrdersInterator {
     }
 
     public void clear() {
-        listener = null;
         ordersValueEventListener = null;
         currentUser = null;
     }

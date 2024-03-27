@@ -26,26 +26,30 @@ public class CheckoutInfoInterator {
     }
 
     public void getDeliveryAddresses() {
-        Constant.deliveryAddressRef.child(FirebaseAuth.getInstance().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (listener != null) {
-                            if (snapshot.exists()) {
-                                List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
-                                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                                    deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                                listener.getDeliveryAddresses(deliveryAddresses);
-                            } else {
-                                listener.isDeliveryAddressesEmpty();
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            Constant.deliveryAddressRef.child(uid)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (listener != null) {
+                                if (snapshot.exists()) {
+                                    List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                                        deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
+                                    listener.getDeliveryAddresses(deliveryAddresses);
+                                } else {
+                                    listener.isDeliveryAddressesEmpty();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+        }
+
     }
 }

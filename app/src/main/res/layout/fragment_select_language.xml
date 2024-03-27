@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.fragments.select_language.SelectLanguageFragment">
 
     <data>
 
@@ -14,13 +17,10 @@
         <import type="android.view.View" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".view.fragments.select_language.SelectLanguageFragment">
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,16 +50,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:includeFontPadding="false"
-                android:textAllCaps="true"
-                android:fontFamily="@font/poppins_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
                 android:onClick="@{() -> fragment.onSaveButtonClick()}"
                 android:padding="@dimen/_10sdp"
                 android:text="@string/save"
+                android:textAllCaps="true"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -91,6 +91,7 @@
                     android:id="@+id/ivVietnamFlag"
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
+                    android:contentDescription="@null"
                     android:src="@drawable/vietnam"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -105,12 +106,12 @@
                     android:text="@string/vietnam"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/ivVietnamFlag"
-                    app:layout_constraintTop_toTopOf="parent"
-                     />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_check"
                     android:visibility="@{isVietnamese ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -139,6 +140,7 @@
                     android:id="@+id/ivEnglishFlag"
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
+                    android:contentDescription="@null"
                     android:src="@drawable/united_kingdom"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -159,6 +161,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_check"
                     android:visibility="@{isVietnamese ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"

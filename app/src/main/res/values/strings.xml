@@ -150,6 +150,7 @@
     <string name="thank">Thank you for shopping with Smarteshop!</string>
     <string name="date_decor" translatable="false">%s-%s-%s</string>
     <string name="faq">Frequently asked question</string>
+    <string name="checkout_confirm">Are you sure you want to checkout?</string>
 
 
     <!--    Payment method-->

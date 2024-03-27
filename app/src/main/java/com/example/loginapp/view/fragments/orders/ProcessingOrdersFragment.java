@@ -18,7 +18,6 @@ import com.example.loginapp.databinding.FragmentOrdersProcessingBinding;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.fragments.orders.OrdersMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

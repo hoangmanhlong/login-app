@@ -24,6 +24,7 @@ import com.example.loginapp.model.entity.PaymentMethod;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.presenter.BuyAgainPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 import com.example.loginapp.view.commonUI.LoadingDialog;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         presenter = new BuyAgainPresenter(this);
     }
 
@@ -49,40 +51,37 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentBuyAgainBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
-        binding.setFragment(this);
         presenter.initData();
 
         NavBackStackEntry navBackStackEntry = navController.getCurrentBackStackEntry();
 
-        assert navBackStackEntry != null;
-        LiveData<DeliveryAddress> deliveryAddressLiveData
-                = navBackStackEntry.getSavedStateHandle().getLiveData(Constant.DELIVERY_ADDRESS_KEY);
-        LiveData<Voucher> voucherLiveData
-                = navBackStackEntry.getSavedStateHandle().getLiveData(Constant.VOUCHER_KEY_NAME);
-        LiveData<PaymentMethod> paymentMethodLiveData
-                = navBackStackEntry.getSavedStateHandle().getLiveData(Constant.PAYMENT_METHOD_KEY);
+        if (navBackStackEntry != null) {
+            LiveData<DeliveryAddress> deliveryAddressLiveData
+                    = navBackStackEntry.getSavedStateHandle().getLiveData(Constant.DELIVERY_ADDRESS_KEY);
+            LiveData<Voucher> voucherLiveData
+                    = navBackStackEntry.getSavedStateHandle().getLiveData(Constant.VOUCHER_KEY_NAME);
+            LiveData<PaymentMethod> paymentMethodLiveData
+                    = navBackStackEntry.getSavedStateHandle().getLiveData(Constant.PAYMENT_METHOD_KEY);
 
-        deliveryAddressLiveData.observe(getViewLifecycleOwner(), presenter::setDeliveryAddress);
-        voucherLiveData.observe(getViewLifecycleOwner(), presenter::setVoucher);
-        paymentMethodLiveData.observe(getViewLifecycleOwner(), presenter::setPaymentMethod);
+            deliveryAddressLiveData.observe(getViewLifecycleOwner(), presenter::setDeliveryAddress);
+            voucherLiveData.observe(getViewLifecycleOwner(), presenter::setVoucher);
+            paymentMethodLiveData.observe(getViewLifecycleOwner(), presenter::setPaymentMethod);
+        }
     }
 
     @Override
     public void getSharedData() {
         if (getArguments() != null) {
             Order order = (Order) getArguments().getSerializable(Constant.ORDER_KEY);
-            if (order != null) {
-
-                presenter.setCurrentOrder(order);
-            }
+            if (order != null) presenter.setCurrentOrder(order);
         }
     }
 
@@ -155,7 +154,7 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
     }
 
     public void onNavigateUp() {
-        NavHostFragment.findNavController(this).navigateUp();
+        navController.navigateUp();
     }
 
     public void onSelectVoucherViewClick() {
@@ -166,9 +165,24 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
         presenter.onPaymentMethodClick();
     }
 
-
     public void onCheckoutButtonClick() {
-        presenter.checkout();
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.checkout),
+                getString(R.string.checkout_confirm),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        presenter.checkout();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+
+        );
     }
 
     public void onDeliveryAddressClick() {

@@ -5,6 +5,7 @@ import androidx.core.os.LocaleListCompat;
 
 import com.example.loginapp.App;
 import com.example.loginapp.data.local.AppSharedPreferences;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.select_language.SelectLanguageView;
 
 public class SelectLanguagePresenter {
@@ -18,7 +19,7 @@ public class SelectLanguagePresenter {
     private boolean isSelectedVietnamese;
 
     public SelectLanguagePresenter(SelectLanguageView view) {
-        this.view= view;
+        this.view = view;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }
 
@@ -30,7 +31,7 @@ public class SelectLanguagePresenter {
     public void initData() {
         isVietnamese = sharedPreferences.getLanguage();
         isSelectedVietnamese = isVietnamese;
-        view.isVietnamese(isSelectedVietnamese);
+        if (view != null) view.isVietnamese(isSelectedVietnamese);
     }
 
     public void setSelectedVietnamese(boolean selectedVietnamese) {
@@ -41,7 +42,10 @@ public class SelectLanguagePresenter {
     public void changeLanguage() {
         if (isSelectedVietnamese != isVietnamese) {
             sharedPreferences.setLanguage(isSelectedVietnamese);
-            LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(isSelectedVietnamese ? "vi" : "en-US");
+            LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(
+                    isSelectedVietnamese ?
+                            Constant.VIETNAM_COUNTRY_CODE : Constant.ENGLISH_COUNTRY_CODE
+            );
             AppCompatDelegate.setApplicationLocales(appLocale);
         }
     }

@@ -14,7 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryAddressInterator {
+public class DeliveryAddressInteractor {
 
     private DeliveryAddressListener listener;
 
@@ -23,13 +23,15 @@ public class DeliveryAddressInterator {
     private ValueEventListener deliveryAddressValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists()) {
-                List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                    deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                listener.getDeliveryAddress(deliveryAddresses);
-            } else {
-                listener.isDeliveryAddressEmpty();
+            if (listener != null) {
+                if (snapshot.exists()) {
+                    List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
+                    listener.getDeliveryAddress(deliveryAddresses);
+                } else {
+                    listener.isDeliveryAddressEmpty();
+                }
             }
         }
 
@@ -45,7 +47,7 @@ public class DeliveryAddressInterator {
         user = null;
     }
 
-    public DeliveryAddressInterator(DeliveryAddressListener listener) {
+    public DeliveryAddressInteractor(DeliveryAddressListener listener) {
         this.listener = listener;
     }
 

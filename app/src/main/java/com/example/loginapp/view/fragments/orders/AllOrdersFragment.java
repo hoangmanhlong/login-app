@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.order_adapter.OnOrderClickListener;
 import com.example.loginapp.adapter.order_adapter.OrdersAdapter;
@@ -86,7 +85,7 @@ public class AllOrdersFragment extends Fragment implements OnOrderClickListener 
     public void onOrderClick(Order order) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.ORDER_KEY, order);
-        NavHostFragment.findNavController(getParentFragment())
+        NavHostFragment.findNavController(this)
                 .navigate(R.id.action_ordersFragment_to_orderDetailFragment, bundle);
     }
 }

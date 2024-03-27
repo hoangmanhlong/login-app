@@ -25,7 +25,6 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.CartPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
-import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionMessage;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
 
@@ -65,13 +64,27 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         cartEmptyLottieAnimationView = binding.animationView;
         shoppingCartRecyclerview = binding.basketRecyclerView;
         adapter = new CartAdapter(this);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView();
+        shoppingCartRecyclerview.setAdapter(adapter);
+        ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
+        presenter.initBasket();
+        new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
+            @Override
+            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                underlayButtons.add(new SwipeHelper.UnderlayButton(
+                        "Delete",
+                        0,
+                        Color.parseColor("#FF3C30"),
+                        adapter::getProductByPosition
+                ));
+            }
+        };
     }
 
     @Override
@@ -126,24 +139,6 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         presenter.setClearCode(true);
         PaymentOptionMessage paymentOptionMessage1 = EventBus.getDefault().getStickyEvent(PaymentOptionMessage.class);
         if (paymentOptionMessage1 != null) EventBus.getDefault().removeStickyEvent(paymentOptionMessage1);
-    }
-
-    private void initView() {
-        binding.setFragment(this);
-        shoppingCartRecyclerview.setAdapter(adapter);
-        ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
-        presenter.initBasket();
-        new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
-            @Override
-            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
-                underlayButtons.add(new SwipeHelper.UnderlayButton(
-                        "Delete",
-                        0,
-                        Color.parseColor("#FF3C30"),
-                        adapter::getProductByPosition
-                ));
-            }
-        };
     }
 
     @Override
