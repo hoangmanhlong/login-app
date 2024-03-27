@@ -20,18 +20,22 @@
         android:localeConfig="@xml/locale_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Base.Theme.LoginApp"
+        android:theme="@style/Smarteshop.Theme.Main"
         tools:targetApi="tiramisu">
 
         <activity
-            android:name=".view.activities.MainActivity"
+            android:name=".view.activities.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.App.Splash">
+            android:theme="@style/Smarteshop.Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".view.activities.MainActivity"
+            android:theme="@style/Smarteshop.Theme.Main" />
 
         <!-- Let AndroidX handle auto-store locales for pre-T devices to hold the user's selected locale -->
         <service

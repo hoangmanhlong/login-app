@@ -16,6 +16,7 @@
         <variable
             name="isAskLoginVisible"
             type="Boolean" />
+
         <import type="android.view.View" />
     </data>
 
@@ -40,26 +41,26 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:visibility="@{isAskLoginVisible ? View.VISIBLE : View.GONE}"
-                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="@{isAskLoginVisible ? View.VISIBLE : View.GONE}">
 
                     <TextView
-                        android:layout_marginStart="@dimen/_14sdp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_14sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/dm_sans_36pt_regular"
                         android:text="@string/prompt_to_log_in" />
 
                     <Button
-                        android:fontFamily="@font/dm_sans_36pt_regular"
-                        android:onClick="@{() -> homeFragment.onLoginButtonClick()}"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
+                        android:onClick="@{() -> homeFragment.onLoginButtonClick()}"
                         android:text="@string/log_in"
                         android:textColor="@android:color/holo_blue_light" />
 
@@ -105,20 +106,25 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/hello_user" />
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/imUser"
-                        imgUrl="@{userData.avatar}"
-                        android:onClick="@{() -> homeFragment.onUserAvatarClick()}"
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_38sdp"
                         android:layout_height="@dimen/_38sdp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"
                         android:background="?attr/selectableItemBackgroundBorderless"
+                        android:onClick="@{() -> homeFragment.onUserAvatarClick()}"
+                        app:cardCornerRadius="@dimen/_19sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearance="@style/circleImageView"
-                        tools:src="@drawable/dog" />
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            imgUrl="@{userData.avatar}"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@null"
+                            android:scaleType="centerCrop"
+                            tools:src="@drawable/dog" />
+                    </com.google.android.material.card.MaterialCardView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,32 +150,33 @@
                     app:sliderStartAutoCycle="true" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:padding="@dimen/_12sdp"
-                    android:visibility="gone"
                     android:id="@+id/expandRecommendedProductsView"
-                    android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
-                    android:background="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> homeFragment.onExpandRecommendProductsButtonClick()}"
+                    android:padding="@dimen/_12sdp"
+                    android:visibility="gone">
+
                     <TextView
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:fontFamily="@font/dm_sans_36pt_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
                         android:includeFontPadding="false"
                         android:text="@string/recommended_for_you"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:layout_width="@dimen/_14sdp"
                         android:layout_height="@dimen/_14sdp"
                         android:src="@drawable/ic_arrow_forward_black"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include
@@ -190,32 +197,33 @@
                     tools:listitem="@layout/layout_product_item" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:padding="@dimen/_12sdp"
-                    android:visibility="gone"
                     android:id="@+id/expandTopChartsProductsView"
-                    android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
-                    android:background="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> homeFragment.onExpandTopChartProductsButtonClick()}"
+                    android:padding="@dimen/_12sdp"
+                    android:visibility="gone">
+
                     <TextView
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:fontFamily="@font/dm_sans_36pt_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
                         android:includeFontPadding="false"
                         android:text="@string/bestseller"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:layout_width="@dimen/_14sdp"
                         android:layout_height="@dimen/_14sdp"
                         android:src="@drawable/ic_arrow_forward_black"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include
@@ -235,33 +243,33 @@
                     tools:listitem="@layout/layout_product_item" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:padding="@dimen/_12sdp"
-                    android:visibility="gone"
                     android:id="@+id/expandDiscountProductsView"
-                    android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
-                    android:background="?attr/selectableItemBackground"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> homeFragment.onExpandDiscountProductsButtonClick()}"
+                    android:padding="@dimen/_12sdp"
+                    android:visibility="gone">
 
                     <TextView
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:fontFamily="@font/dm_sans_36pt_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/dm_sans_36pt_regular"
                         android:includeFontPadding="false"
                         android:text="@string/discounted_products_label"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:layout_width="@dimen/_14sdp"
                         android:layout_height="@dimen/_14sdp"
                         android:src="@drawable/ic_arrow_forward_black"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include

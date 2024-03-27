@@ -1,7 +1,6 @@
 package com.example.loginapp.adapter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class BindingAdapter {
+
     @androidx.databinding.BindingAdapter("imgRes")
     public static void loadImage(ImageView view, int res) {
         view.setImageResource(res);
@@ -48,24 +48,10 @@ public class BindingAdapter {
         textView.setText(new SimpleDateFormat("dd-MM-yyyy h:mm a", Locale.getDefault()).format(time));
     }
 
-//    @androidx.databinding.BindingAdapter("bindRoundedPrice")
-//    public static void bindRoundedPrice(TextView textView, double price) {
-//        price = Math.round(price * 100.0) / 100.0;
-//
-//    }
-
     @SuppressLint("StringFormatMatches")
     @androidx.databinding.BindingAdapter("layoutVoucherDateFormat")
     public static void layoutVoucherDateFormat(TextView textView, Long time) {
         String timeFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(time);
         textView.setText(String.format(textView.getContext().getString(R.string.valid_till, timeFormat)));
-    }
-
-    @SuppressLint("StringFormatMatches")
-    @androidx.databinding.BindingAdapter("bindTextViewEndDate")
-    public static void bindTextViewEndDate(TextView textView, Long time) {
-        Log.d("BindingAdapter", "bindTextViewEndDate: " + time);
-        String timeFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(time);
-        textView.setText(timeFormat);
     }
 }

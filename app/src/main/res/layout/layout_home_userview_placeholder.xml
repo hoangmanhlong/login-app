@@ -27,18 +27,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imUser"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="@dimen/_38sdp"
             android:layout_height="@dimen/_38sdp"
-            android:adjustViewBounds="true"
-            android:background="#DDDDDD"
-            android:scaleType="centerCrop"
+            app:cardCornerRadius="@dimen/_19sdp"
+            app:cardBackgroundColor="#DDDDDD"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/circleImageView" />
+            app:strokeWidth="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

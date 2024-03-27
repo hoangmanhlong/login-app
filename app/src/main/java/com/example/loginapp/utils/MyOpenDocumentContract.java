@@ -12,7 +12,6 @@ public class MyOpenDocumentContract extends ActivityResultContracts.OpenDocument
     public Intent createIntent(@NonNull Context context, String[] input) {
         Intent intent = super.createIntent(context, input);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-
         return intent;
     }
 }
