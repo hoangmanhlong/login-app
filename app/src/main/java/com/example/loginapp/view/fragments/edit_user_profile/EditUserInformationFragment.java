@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
 
     private Animator currentAnimator;
 
-    private int shortAnimationDuration;
+    private Integer shortAnimationDuration;
 
     private FragmentEditUserInformationBinding binding;
 
@@ -67,6 +66,7 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentEditUserInformationBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         etAddress = binding.etAddress;
         etName = binding.etName;
         etPhoneNumber = binding.etPhoneNumber;
@@ -76,7 +76,6 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
 
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         dialog = LoadingDialog.getLoadingDialog(requireContext());
@@ -198,15 +197,17 @@ public class EditUserInformationFragment extends Fragment implements EditUserPro
         etName = null;
         etPhoneNumber = null;
         etAddress = null;
+        dialog = null;
+        shortAnimationDuration = null;
         System.gc();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
+        presenter.clear();
         presenter = null;
-        dialog = null;
+        openDocument = null;
         System.gc();
     }
 

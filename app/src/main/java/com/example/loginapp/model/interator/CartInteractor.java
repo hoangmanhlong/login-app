@@ -6,7 +6,6 @@ import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.listener.CartListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,13 +14,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartInterator {
+public class CartInteractor {
 
 //    private final String TAG = this.toString();
 
     private DatabaseReference cartRef = Constant.cartRef;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String uid;
 
     private CartListener listener;
 
@@ -46,34 +45,45 @@ public class CartInterator {
         }
     };
 
-    public CartInterator(CartListener listener) {
+    public CartInteractor(CartListener listener) {
         this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public void addShoppingCartValueEventListener() {
-        Constant.cartRef.child(user.getUid()).addValueEventListener(shoppingCartValueEventListener);
+        if (uid != null){
+            Constant.cartRef.child(uid).addValueEventListener(shoppingCartValueEventListener);
+        }
     }
 
     public void removeShoppingCartValueEventListener() {
-        Constant.cartRef.child(user.getUid()).removeEventListener(shoppingCartValueEventListener);
+        if (uid != null) {
+            Constant.cartRef.child(uid).removeEventListener(shoppingCartValueEventListener);
+        }
     }
 
     public void updateQuantity(int id, int quantity) {
-        cartRef.child(user.getUid()).child(String.valueOf(id)).child("quantity").setValue(quantity);
+        if (uid != null) {
+            cartRef.child(uid).child(String.valueOf(id)).child("quantity").setValue(quantity);
+        }
     }
 
     public void updateChecked(int id, boolean checked) {
-        cartRef.child(user.getUid()).child(String.valueOf(id)).child("checked").setValue(checked);
+        if (uid != null) {
+            cartRef.child(uid).child(String.valueOf(id)).child("checked").setValue(checked);
+        }
     }
 
     public void removeProductFromShoppingCart(FirebaseProduct product) {
-        cartRef.child(user.getUid()).child(String.valueOf(product.getId())).removeValue();
+        if (uid != null) {
+            cartRef.child(uid).child(String.valueOf(product.getId())).removeValue();
+        }
     }
 
     public void clearData() {
         listener = null;
         cartRef = null;
-        user = null;
+        uid = null;
         shoppingCartValueEventListener = null;
     }
 }

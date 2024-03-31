@@ -8,11 +8,13 @@ import androidx.annotation.StringRes;
 
 import com.bumptech.glide.Glide;
 import com.example.loginapp.R;
+import com.example.loginapp.model.entity.OrderStatus;
+import com.example.loginapp.view.commonUI.OrderStatusConverter;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class BindingAdapter {
+public final class BindingAdapter {
 
     @androidx.databinding.BindingAdapter("imgRes")
     public static void loadImage(ImageView view, int res) {
@@ -53,5 +55,21 @@ public class BindingAdapter {
     public static void layoutVoucherDateFormat(TextView textView, Long time) {
         String timeFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(time);
         textView.setText(String.format(textView.getContext().getString(R.string.valid_till, timeFormat)));
+    }
+
+    @androidx.databinding.BindingAdapter("bindOrderStatusRes")
+    public static void bindOrderStatusRes(TextView view, OrderStatus orderStatus) {
+        view.setText(OrderStatusConverter.convertToStringRes(orderStatus));
+    }
+
+    @androidx.databinding.BindingAdapter("bindFormattedOrderStatus")
+    public static void bindFormattedOrderStatus(TextView textView, OrderStatus orderStatus) {
+        String text = textView.getContext().getString(
+                R.string.order_status,
+                textView.getContext()
+                        .getString(OrderStatusConverter.convertToStringRes(orderStatus))
+                        .toLowerCase()
+        );
+        textView.setText(text);
     }
 }

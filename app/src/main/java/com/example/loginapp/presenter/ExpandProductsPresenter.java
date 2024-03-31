@@ -14,7 +14,11 @@ import java.util.stream.Collectors;
 
 public class ExpandProductsPresenter {
 
-    @StringRes private int label;
+    private Boolean retrievedData = false;
+
+    @StringRes private Integer screenLabel;
+
+    @StringRes private Integer sortStatusLabel;
 
     private ExpandProductsView view;
 
@@ -24,19 +28,24 @@ public class ExpandProductsPresenter {
 
     public ExpandProductsPresenter(ExpandProductsView view) {
         this.view = view;
+        status = SortStatus.PRICE_LOW_TO_HIGH;
     }
 
     public void clear() {
         products = null;
         status = null;
         view = null;
+        screenLabel = null;
+        sortStatusLabel = null;
+        retrievedData = null;
     }
 
     public void initData() {
-        if (products == null || products.isEmpty()) view.getSharedData();
-        else {
+        if (retrievedData) {
             sortProduct(status);
-            view.bindScreenLabel(label);
+            view.bindScreenLabel(screenLabel);
+        } else {
+            view.getSharedData();
         }
     }
 
@@ -46,59 +55,44 @@ public class ExpandProductsPresenter {
 
     public void setProducts(Products products) {
         this.products = products.getProducts();
-        sortProduct(SortStatus.PRICE_LOW_TO_HIGH);
+        sortProduct(status);
+        retrievedData = true;
     }
 
-    public void setLabel(int label) {
-        this.label = label;
-        view.bindScreenLabel(label);
+    public void setScreenLabel(int screenLabel) {
+        this.screenLabel = screenLabel;
+        view.bindScreenLabel(screenLabel);
     }
 
     public void sortProduct(SortStatus status) {
         this.status = status;
-        setLabel(status);
-
         switch (status) {
             case PRICE_HIGH_TO_LOW:
+                sortStatusLabel = R.string.price_high_to_low;
                 products = products.stream()
                         .sorted(Comparator.comparingInt(Product::getPrice).reversed())
                         .collect(Collectors.toList());
                 break;
             case PRICE_LOW_TO_HIGH:
+                sortStatusLabel = R.string.price_low_to_high;
                 products = products.stream()
                         .sorted(Comparator.comparingDouble(Product::getPrice))
                         .collect(Collectors.toList());
                 break;
             case RATE_LOW_TO_HIGH:
+                sortStatusLabel = R.string.rate_low_to_high;
                 products = products.stream()
                         .sorted(Comparator.comparingDouble(Product::getRating))
                         .collect(Collectors.toList());
                 break;
             case RATE_HIGH_TO_LOW:
+                sortStatusLabel = R.string.rate_high_to_low;
                 products = products.stream()
                         .sorted(Comparator.comparingDouble(Product::getRating).reversed())
                         .collect(Collectors.toList());
                 break;
         }
+        view.setSortStatusLabel(sortStatusLabel);
         view.getProducts(products);
-    }
-
-    private void setLabel(SortStatus status) {
-        int statusLabel = 0;
-        switch (status) {
-            case PRICE_HIGH_TO_LOW:
-                statusLabel = R.string.price_high_to_low;
-                break;
-            case PRICE_LOW_TO_HIGH:
-                statusLabel = R.string.price_low_to_high;
-                break;
-            case RATE_LOW_TO_HIGH:
-                statusLabel = R.string.rate_low_to_high;
-                break;
-            case RATE_HIGH_TO_LOW:
-                statusLabel = R.string.rate_high_to_low;
-                break;
-        }
-        if (statusLabel != 0) view.setSortStatusName(statusLabel);
     }
 }

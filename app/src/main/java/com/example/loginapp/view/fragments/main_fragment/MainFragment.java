@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.main_fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,14 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentMainBinding;
 import com.example.loginapp.presenter.MainFragmentPresenter;
+import com.example.loginapp.view.commonUI.AppConfirmDialog;
 import com.example.loginapp.view.fragments.cart.CartFragment;
 import com.example.loginapp.view.fragments.favorite_product.FavoriteProductFragment;
 import com.example.loginapp.view.fragments.home.HomeFragment;
@@ -54,7 +57,9 @@ public class MainFragment extends Fragment implements MainFragmentView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        if (getActivity() != null) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        }
         presenter = new MainFragmentPresenter(this);
         listOfVerifiedDestinations = new ArrayList<>(Arrays.asList(
                 new HomeFragment(),
@@ -83,7 +88,6 @@ public class MainFragment extends Fragment implements MainFragmentView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.initData();
-        viewPager.setOffscreenPageLimit(5);
         viewPager.setUserInputEnabled(false);
         tabSelectedListener();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -217,9 +221,35 @@ public class MainFragment extends Fragment implements MainFragmentView {
 
     @Override
     public void setAdapter(boolean logged) {
-        if (logged) viewPagerAdapter = new ViewPagerAdapter(this, listOfVerifiedDestinations);
-        else viewPagerAdapter = new ViewPagerAdapter(this, listOfUnconfirmedDestinations);
+        Log.d(TAG, "setAdapter: " + logged);
+        if (logged) {
+            viewPagerAdapter = new ViewPagerAdapter(this, listOfVerifiedDestinations);
+            viewPager.setOffscreenPageLimit(listOfVerifiedDestinations.size());
+        } else {
+            viewPagerAdapter = new ViewPagerAdapter(this, listOfUnconfirmedDestinations);
+            viewPager.setOffscreenPageLimit(listOfUnconfirmedDestinations.size());
+        }
         viewPager.setAdapter(viewPagerAdapter);
+    }
+
+    @Override
+    public void showLoginPopup() {
+        AppConfirmDialog.show(
+                requireContext(),
+                getString(R.string.log_in),
+                getString(R.string.login_popup_message),
+                new AppConfirmDialog.AppConfirmDialogButtonListener() {
+                    @Override
+                    public void onPositiveButtonClickListener() {
+                        NavHostFragment.findNavController(MainFragment.this).navigate(R.id.overviewFragment);
+                    }
+
+                    @Override
+                    public void onNegativeButtonClickListener() {
+
+                    }
+                }
+        );
     }
 
     public static class ViewPagerAdapter extends FragmentStateAdapter {

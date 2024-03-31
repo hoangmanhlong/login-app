@@ -11,10 +11,6 @@
             type="com.example.loginapp.model.entity.Order" />
 
         <variable
-            name="deliveryAddress"
-            type="com.example.loginapp.model.entity.DeliveryAddress" />
-
-        <variable
             name="fragment"
             type="com.example.loginapp.view.fragments.order_detail.OrderDetailFragment" />
     </data>
@@ -73,11 +69,11 @@
 
                     <TextView
                         android:id="@+id/tvOrderStatus"
+                        bindFormattedOrderStatus="@{order.orderStatus}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="@{order.orderStatus.toString()}"
                         android:textColor="#fff"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -152,7 +148,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
                                 android:includeFontPadding="false"
-                                android:text="@{deliveryAddress.recipientName}"
+                                android:text="@{order.deliveryAddress.recipientName}"
                                 tools:text="Hoang Manh Long" />
 
                             <com.google.android.material.divider.MaterialDivider
@@ -165,7 +161,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
                                 android:includeFontPadding="false"
-                                android:text="@{deliveryAddress.phoneNumber}"
+                                android:text="@{order.deliveryAddress.phoneNumber}"
                                 android:textColor="@color/gray_500"
                                 tools:text="(+84) 12345678" />
                         </LinearLayout>
@@ -177,7 +173,7 @@
                             android:layout_marginTop="@dimen/_4sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="@{deliveryAddress.address}"
+                            android:text="@{order.deliveryAddress.address}"
                             android:textColor="@color/gray_500"
                             tools:text="15 phuong phuong canh" />
 
@@ -188,7 +184,7 @@
                             android:layout_marginTop="@dimen/_4sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:includeFontPadding="false"
-                            android:text="@{@string/province_country(deliveryAddress.province, deliveryAddress.country)}"
+                            android:text="@{@string/province_country(order.deliveryAddress.province, order.deliveryAddress.country)}"
                             android:textColor="@color/gray_500"
                             tools:text="Nam tu Liem, Ha Noi" />
 
@@ -370,8 +366,8 @@
                 android:textStyle="bold" />
 
             <Button
-                style="@style/Widget.Material3.Button"
                 android:id="@+id/btBuyAgain"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

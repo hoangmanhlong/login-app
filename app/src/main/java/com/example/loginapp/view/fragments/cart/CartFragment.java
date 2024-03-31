@@ -72,7 +72,9 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         shoppingCartRecyclerview.setAdapter(adapter);
-        ((SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        SimpleItemAnimator simpleItemAnimator = (SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator();
+        if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
         presenter.initBasket();
         new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
             @Override
@@ -118,6 +120,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         super.onDestroy();
         presenter.detachView();
         presenter = null;
+        navController = null;
         MessageVoucherSelected messageVoucherSelected =
                 EventBus.getDefault().getStickyEvent(MessageVoucherSelected.class);
         if (messageVoucherSelected != null)

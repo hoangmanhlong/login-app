@@ -1,16 +1,13 @@
 package com.example.loginapp.view.fragments.user_profile;
 
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,7 +18,6 @@ import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.UserProfileDetailPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppConfirmDialog;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -57,7 +53,6 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     public void onLogoutButtonClick() {
-
         AppConfirmDialog.show(
                 requireContext(),
                 getString(R.string.logout),
@@ -65,9 +60,9 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
                 new AppConfirmDialog.AppConfirmDialogButtonListener() {
                     @Override
                     public void onPositiveButtonClickListener() {
-                        FirebaseAuth.getInstance().signOut();
                         navController.popBackStack(navController.getCurrentDestination().getId(), true);
                         navController.navigate(R.id.overviewFragment);
+                        FirebaseAuth.getInstance().signOut();
                     }
 
                     @Override
@@ -104,8 +99,9 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
+        presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Override

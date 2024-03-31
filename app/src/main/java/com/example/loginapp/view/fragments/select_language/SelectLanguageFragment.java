@@ -73,6 +73,7 @@ public class SelectLanguageFragment extends Fragment implements SelectLanguageVi
         super.onDestroy();
         presenter.detachView();
         presenter = null;
+        navController = null;
     }
 
     @Override

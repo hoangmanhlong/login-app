@@ -5,7 +5,7 @@ import com.example.loginapp.data.local.AppSharedPreferences;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.model.entity.UserData;
-import com.example.loginapp.model.interator.UserProfileInterator;
+import com.example.loginapp.model.interator.UserProfileInteractor;
 import com.example.loginapp.model.listener.UserProfileDetailListener;
 import com.example.loginapp.view.fragments.user_profile.UserProfileDetailView;
 
@@ -14,45 +14,42 @@ import java.util.List;
 
 public class UserProfileDetailPresenter implements UserProfileDetailListener {
 
-    private final String TAG = this.toString();
+    private static final String TAG = UserProfileDetailPresenter.class.getSimpleName();
 
     private UserProfileDetailView view;
 
-    private boolean userDataIsObtainedForTheFirstTime = false;
+    private Boolean userDataIsObtainedForTheFirstTime = false;
 
     /**
      * @English List of orders taken for the first time
      * @Vietnamese Danh sách đơn hàng được lấy lần đầu tiên
      * @Default false
      */
-    private boolean listOfOrdersTakenForTheFirstTime = false;
+    private Boolean listOfOrdersTakenForTheFirstTime = false;
 
-    private UserProfileInterator interator;
+    private UserProfileInteractor interactor;
 
-    private final AppSharedPreferences sharedPreferences;
+    private AppSharedPreferences sharedPreferences;
 
     private UserData userData;
 
-    private boolean isVietnamese;
+    private Boolean isVietnamese;
 
     public UserData getUserData() {
         return userData;
     }
 
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders;
 
     public UserProfileDetailPresenter(UserProfileDetailView view) {
         this.view = view;
+        orders = new ArrayList<>();
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
-        interator = new UserProfileInterator(this);
-    }
-
-    public boolean isVietnamese() {
-        return isVietnamese;
+        isVietnamese = sharedPreferences.getLanguage();
+        interactor = new UserProfileInteractor(this);
     }
 
     public void initData() {
-        isVietnamese = sharedPreferences.getLanguage();
         if (view != null) {
             view.bindLanguageState(isVietnamese);
             if (userDataIsObtainedForTheFirstTime && userData != null) view.bindUserData(userData);
@@ -64,11 +61,11 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     }
 
     public void addOrdersValueEventListener() {
-        interator.addOrdersValueEventListener();
+        interactor.addOrdersValueEventListener();
     }
 
     public void removeOrdersValueEventListener() {
-        interator.removeOrdersValueEventListener();
+        interactor.removeOrdersValueEventListener();
     }
 
     @Override
@@ -79,11 +76,11 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
     }
 
     public void addUserDataValueEventListener() {
-        interator.addUserDataValueEventListener();
+        interactor.addUserDataValueEventListener();
     }
 
     public void removeUserDataValueEventListener() {
-        interator.removeUserDataValueEventListener();
+        interactor.removeUserDataValueEventListener();
     }
 
     @Override
@@ -114,9 +111,15 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         return (int) orders.stream().filter(order -> order.getOrderStatus() == status).count();
     }
 
-    public void detachView() {
+    public void clear() {
         view = null;
-        interator.clear();
-        interator = null;
+        sharedPreferences = null;
+        isVietnamese = null;
+        userData = null;
+        orders = null;
+        listOfOrdersTakenForTheFirstTime = null;
+        userDataIsObtainedForTheFirstTime = null;
+        interactor.clear();
+        interactor = null;
     }
 }

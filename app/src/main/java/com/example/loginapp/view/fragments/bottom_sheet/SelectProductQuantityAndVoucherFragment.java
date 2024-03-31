@@ -42,13 +42,13 @@ public class SelectProductQuantityAndVoucherFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSelectProductQuantityAndVoucherBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         getSharedData();
     }
 
@@ -97,9 +97,8 @@ public class SelectProductQuantityAndVoucherFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
+        presenter.clear();
         presenter = null;
-        System.gc();
     }
 
     public void onClearDiscountCodeClick() {

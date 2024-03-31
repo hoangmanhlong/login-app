@@ -15,11 +15,11 @@ public class ProductPresenter implements ProductListener {
 
     private Product product;
 
-    public boolean isFavorite = false;
+    public Boolean isFavorite = false;
 
     private ProductView view;
 
-    private ProductInteractor interator;
+    private ProductInteractor interactor;
 
     private List<Comment> comments;
 
@@ -27,9 +27,21 @@ public class ProductPresenter implements ProductListener {
 
     private final boolean authenticated;
 
+    private Boolean retrievedComments = false;
+
+    private Boolean retrievedSimilarProducts = false;
+
     public void initData() {
-        if (!comments.isEmpty()) view.getComments(comments);
-        if (!similarProducts.isEmpty()) view.getSimilarProducts(similarProducts);
+        if (product != null) {
+            view.bindProduct(product);
+            view.enableFavorite(isFavorite);
+        } else {
+            view.getDataShared();
+        }
+        if (retrievedComments) {
+            view.getComments(comments);
+        }
+        if (retrievedSimilarProducts) view.getSimilarProducts(similarProducts);
     }
 
     public Product getProduct() {
@@ -39,29 +51,29 @@ public class ProductPresenter implements ProductListener {
     public void setProduct(Product product) {
         this.product = product;
         view.bindProduct(product);
-        if (authenticated) interator.isFavoriteProduct(product);
+        if (authenticated) interactor.isFavoriteProduct(product);
     }
 
     public ProductPresenter(ProductView view) {
         this.view = view;
-        interator = new ProductInteractor(this);
+        interactor = new ProductInteractor(this);
         comments = new ArrayList<>();
         similarProducts = new ArrayList<>();
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     public void onBuyNowButtonClick() {
-        if (authenticated) view.showSelectProductQuantityAndVoucherFragment(product);
+        if (authenticated && view != null) view.showSelectProductQuantityAndVoucherFragment(product);
     }
 
     public void onAddToCartButtonClick() {
-        if (authenticated) view.showAddProductToCartFragment(product);
+        if (authenticated && view != null) view.showAddProductToCartFragment(product);
     }
 
     public void updateFavorite() {
         if (authenticated) {
-            if (isFavorite) interator.removeFavoriteProduct(product.getId());
-            else interator.saveFavoriteProduct(product);
+            if (isFavorite) interactor.removeFavoriteProduct(product.getId());
+            else interactor.saveFavoriteProduct(product);
         }
     }
 
@@ -82,6 +94,7 @@ public class ProductPresenter implements ProductListener {
     @Override
     public void getCommentRespond(CommentRespond commentRespond) {
         if (view != null) {
+            retrievedComments = true;
             comments = commentRespond.getComments();
             view.getComments(comments);
             view.getCommentCount(String.valueOf(commentRespond.getLimit()));
@@ -90,17 +103,21 @@ public class ProductPresenter implements ProductListener {
 
     @Override
     public void getSimilarProducts(List<Product> products) {
+        retrievedSimilarProducts = true;
         similarProducts = products;
         similarProducts.remove(product);
         if (view != null) view.getSimilarProducts(products);
     }
 
     public void clear() {
+        isFavorite = null;
         comments = null;
         product = null;
         similarProducts = null;
         view = null;
-        interator.clear();
-        interator = null;
+        interactor.clear();
+        interactor = null;
+        retrievedComments = null;
+        retrievedSimilarProducts = null;
     }
 }

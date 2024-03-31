@@ -46,6 +46,7 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDeliveryAddressBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         deliveryAddressesRecyclerView = binding.deliveryAddressRecyclerview;
         deliveryAddressAdapter = new DeliveryAddressAdapter(this);
         return binding.getRoot();
@@ -54,7 +55,6 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         deliveryAddressesRecyclerView.setAdapter(deliveryAddressAdapter);
         SimpleItemAnimator simpleItemAnimator = ((SimpleItemAnimator) deliveryAddressesRecyclerView.getItemAnimator());
         if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
@@ -78,6 +78,7 @@ public class DeliveryAddressFragment extends Fragment implements OnDeliveryAddre
         super.onDestroy();
         presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Override

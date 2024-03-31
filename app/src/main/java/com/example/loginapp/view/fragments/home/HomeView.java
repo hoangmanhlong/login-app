@@ -28,6 +28,4 @@ public interface HomeView {
     void bindRecommendedEveryDay(List<Product> products);
 
     void setShowUserView(Boolean show);
-
-    void showAskLogin(boolean visible);
 }

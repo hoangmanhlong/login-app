@@ -1,12 +1,8 @@
 package com.example.loginapp.presenter;
 
-import android.annotation.SuppressLint;
-
-import com.example.loginapp.App;
 import com.example.loginapp.model.entity.Product;
-import com.example.loginapp.model.entity.ProductName;
 import com.example.loginapp.model.entity.SearchHistory;
-import com.example.loginapp.model.interator.SearchProductInterator;
+import com.example.loginapp.model.interator.SearchProductInteractor;
 import com.example.loginapp.model.listener.SearchListener;
 import com.example.loginapp.view.fragments.search.SearchView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,43 +10,51 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-
 public class SearchPresenter implements SearchListener {
 
-    private final String TAG = SearchPresenter.class.getSimpleName();
+    private static final String TAG = SearchPresenter.class.getSimpleName();
 
-    private SearchProductInterator interator;
+    private SearchProductInteractor interator;
 
     private SearchView view;
 
-    public boolean isShowSearchResult = false;
+    // Màn hình có đang ở trạng thái show kết quả tìm kiếm không?
+    public Boolean isShowSearchResult = false;
 
-    private boolean retrievedSearchHistories = false;
+    // Lịch sử tìm kiếm đã được lấy từ Firebase hay chưa?
+    private Boolean retrievedSearchHistories = false;
 
-    private final boolean authenticated;
+    // Người dùng đã xác thực hay chưa?
+    // Mục đích: hiển thị lịch sử tìm kiếm của họ
+    private Boolean authenticated;
 
-    private static List<String> searchSuggestions = new ArrayList<>();
+    // Danh sách lịch sử tìm kiếm
+    public List<SearchHistory> searchHistories;
 
-    public List<SearchHistory> searchHistories = new ArrayList<>();
+    // Products từ kết quả tìm kiếm
+    public List<Product> products;
 
-    public List<Product> products = new ArrayList<>();
-
+    // Truy vấn hiện tại của người dùng
     private String query;
 
-    public void detachView() {
+    public void detachView() { // Clear unused variable
         view = null;
+        authenticated = null;
+        isShowSearchResult = null;
+        retrievedSearchHistories = null;
         interator.clearRef();
         interator = null;
         products = null;
+        query = null;
         searchHistories = null;
     }
 
     public SearchPresenter(SearchView view) {
         this.view = view;
-        interator = new SearchProductInterator(this);
+        interator = new SearchProductInteractor(this);
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
+        searchHistories = new ArrayList<>();
+        products = new ArrayList<>();
     }
 
     public void initData() {
@@ -66,13 +70,15 @@ public class SearchPresenter implements SearchListener {
         }
 
         if (isShowSearchResult) {
+            view.isSearchResultsViewVisible(true);
             if (products.isEmpty()) {
-                view.isProductListEmpty(true);
+                view.isSearchResultsEmpty(true);
             } else {
-                view.isProductListEmpty(false);
+                view.isSearchResultsEmpty(false);
                 view.bindProducts(this.products);
             }
-            view.isProductListVisible(true);
+        } else {
+            view.isSearchResultsViewVisible(false);
         }
     }
 
@@ -81,20 +87,20 @@ public class SearchPresenter implements SearchListener {
         view.clearQueryButtonVisible(!query.isEmpty());
     }
 
-    @SuppressLint("CheckResult")
-    public void getSearchSuggestions() {
-        App.getDatabase().dao().getProductsName()
-                .map(productNames -> {
-                    List<String> names = new ArrayList<>();
-                    for (ProductName productName : productNames) {
-                        names.add(productName.productName);
-                    }
-                    return names;
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::getSearchSuggestions);
-    }
+//    @SuppressLint("CheckResult")
+//    public void getSearchSuggestions() {
+//        App.getDatabase().dao().getProductsName()
+//                .map(productNames -> {
+//                    List<String> names = new ArrayList<>();
+//                    for (ProductName productName : productNames) {
+//                        names.add(productName.productName);
+//                    }
+//                    return names;
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(view::getSearchSuggestions);
+//    }
 
     public void searchWithSearchHistory(String query) {
         this.query = query;
@@ -109,7 +115,7 @@ public class SearchPresenter implements SearchListener {
         if (query != null && !query.isEmpty() && isValidFirebasePath(query)) {
             interator.searchProduct(query);
             if (authenticated) interator.saveSearchHistory(query);
-            view.isProductListVisible(true);
+            view.isSearchResultsViewVisible(true);
             view.hideSearchSuggestionsDropdown();
         }
     }
@@ -126,8 +132,13 @@ public class SearchPresenter implements SearchListener {
     public void getProducts(List<Product> products) {
         this.products = products;
         isShowSearchResult = true;
-        if (!products.isEmpty()) view.bindProducts(this.products);
-        view.isProductListEmpty(products.isEmpty());
+        view.isSearchResultsViewVisible(true);
+        if (products.isEmpty()) {
+            view.isSearchResultsEmpty(true);
+        } else {
+            view.isSearchResultsEmpty(false);
+            view.bindProducts(products);
+        }
     }
 
     @Override
@@ -142,12 +153,7 @@ public class SearchPresenter implements SearchListener {
 
     public void onBtBackClick() {
         isShowSearchResult = false;
-        view.isProductListVisible(false);
-    }
-
-    @Override
-    public void deleteSuccess(boolean isSuccess) {
-
+        view.isSearchResultsViewVisible(false);
     }
 
     @Override

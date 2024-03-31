@@ -44,6 +44,9 @@ public class RegisterFragment extends Fragment implements RegisterView {
         super.onCreate(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
         presenter = new RegisterPresenter(this);
+        if (getActivity() != null) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
     }
 
     @Nullable
@@ -61,12 +64,12 @@ public class RegisterFragment extends Fragment implements RegisterView {
         super.onDestroy();
         presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         buttonState();

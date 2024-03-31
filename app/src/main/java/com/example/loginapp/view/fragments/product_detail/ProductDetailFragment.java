@@ -32,7 +32,9 @@ import com.example.loginapp.view.fragments.bottom_sheet.SelectProductQuantityAnd
 
 import java.util.List;
 
-public class ProductDetailFragment extends Fragment implements ProductView, OnImageClickListener, OnProductClickListener {
+public class ProductDetailFragment
+        extends Fragment
+        implements ProductView, OnImageClickListener, OnProductClickListener {
 
     private ProductPresenter presenter;
 
@@ -73,6 +75,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
         super.onDestroy();
         presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Nullable
@@ -104,11 +107,11 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
         commentRecyclerView.setAdapter(commentAdapter);
         similarProductsRecyclerView.setAdapter(similarProductsAdapter);
 
-        getDataShared();
         presenter.initData();
     }
 
-    private void getDataShared() {
+    @Override
+    public void getDataShared() {
         if (getArguments() != null) {
             Product product = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
             if (product != null) presenter.setProduct(product);
@@ -187,7 +190,7 @@ public class ProductDetailFragment extends Fragment implements ProductView, OnIm
     }
 
     @Override
-    public void onImageClick(String url) {
+    public void onImageClick(int position) {
     }
 
     @Override

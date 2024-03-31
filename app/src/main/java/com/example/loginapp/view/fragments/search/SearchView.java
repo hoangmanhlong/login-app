@@ -9,11 +9,11 @@ public interface SearchView {
 
     void bindSearchHistories(List<SearchHistory> searchHistories);
 
-    void isProductListVisible(boolean visible);
+    void isSearchResultsViewVisible(boolean visible);
 
     void bindProducts(List<Product> products);
 
-    void isProductListEmpty(boolean isEmpty);
+    void isSearchResultsEmpty(boolean isEmpty);
 
     void getSearchSuggestions(List<String> list);
 

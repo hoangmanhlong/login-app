@@ -1,7 +1,6 @@
 package com.example.loginapp.adapter.product_images_adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,7 @@ import com.example.loginapp.databinding.LayoutProductImageSmailBinding;
  */
 public class ProductImageAdapter extends ListAdapter<String, ProductImageAdapter.ImageViewHolder> {
 
-    private OnImageClickListener listener;
+    private final OnImageClickListener listener;
 
     public ProductImageAdapter(OnImageClickListener listener) {
         super(DiffCallback);
@@ -36,15 +35,12 @@ public class ProductImageAdapter extends ListAdapter<String, ProductImageAdapter
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
 
-        private OnImageClickListener listener;
-
         private final LayoutProductImageSmailBinding binding;
 
         public ImageViewHolder(LayoutProductImageSmailBinding binding, OnImageClickListener listener) {
             super(binding.getRoot());
-            this.listener = listener;
             this.binding = binding;
-            binding.getRoot().setOnClickListener(v -> listener.onImageClick(getItem(getAdapterPosition())));
+            binding.getRoot().setOnClickListener(v -> listener.onImageClick(getAdapterPosition()));
         }
 
         public void bind(String imgUrl) {

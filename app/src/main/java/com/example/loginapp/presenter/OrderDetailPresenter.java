@@ -1,7 +1,5 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
-
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.model.interator.OrderDetailInteractor;
@@ -32,10 +30,7 @@ public class OrderDetailPresenter implements OrderDetailListener {
 
     public void initData() {
         if (order == null) view.getSharedOrder();
-        else {
-            Log.d(TAG, "initData: " + order);
-            view.bindOrder(order);
-        }
+        else view.bindOrder(order);
     }
 
     public void setOrder(Order order) {
@@ -47,8 +42,10 @@ public class OrderDetailPresenter implements OrderDetailListener {
         return order;
     }
 
-    public void cancelOrder() {
-        order.setOrderStatus(OrderStatus.Cancel);
+    public void cancelOrReturnOrder() {
+        OrderStatus orderStatus = order.getOrderStatus();
+        if (orderStatus == OrderStatus.Completed) order.setOrderStatus(OrderStatus.Return);
+        if (orderStatus == OrderStatus.Processing) order.setOrderStatus(OrderStatus.Cancel);
         interactor.cancelOrder(order);
     }
 

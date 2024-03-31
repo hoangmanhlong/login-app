@@ -1,12 +1,13 @@
 package com.example.loginapp.model.interator;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.FavoriteListener;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -14,11 +15,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteInterator {
+public class FavoriteInteractor {
+
+    private static final String TAG = FavoriteInteractor.class.getSimpleName();
 
     private FavoriteListener listener;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String uid;
 
     private ValueEventListener favoriteListValueEventListener = new ValueEventListener() {
         @Override
@@ -42,29 +45,36 @@ public class FavoriteInterator {
         }
     };
 
-    public FavoriteInterator(FavoriteListener listener) {
+    public FavoriteInteractor(FavoriteListener listener) {
         this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public void addFavoriteListValueEventListener() {
-        Constant.favoriteProductRef.child(user.getUid())
-                .addValueEventListener(favoriteListValueEventListener);
+        if (uid != null) {
+            Constant.favoriteProductRef.child(uid)
+                    .addValueEventListener(favoriteListValueEventListener);
+        }
     }
 
     public void removeFavoriteListValueEventListener() {
-        Constant.favoriteProductRef.child(user.getUid())
-                .removeEventListener(favoriteListValueEventListener);
+        if (uid != null) {
+            Constant.favoriteProductRef.child(uid)
+                    .removeEventListener(favoriteListValueEventListener);
+        }
     }
 
     public void deleteProduct(int id) {
-        Constant.favoriteProductRef.child(user.getUid())
-                .child(String.valueOf(id)).removeValue()
-                .addOnFailureListener(e -> listener.onMessage("Error"));
+        if (uid != null) {
+            Constant.favoriteProductRef.child(uid)
+                    .child(String.valueOf(id)).removeValue()
+                    .addOnFailureListener(e -> Log.e(TAG, "deleteProduct: " + e.getMessage()));
+        }
     }
 
     public void clearData() {
         listener = null;
         favoriteListValueEventListener = null;
-        user = null;
+        uid = null;
     }
 }

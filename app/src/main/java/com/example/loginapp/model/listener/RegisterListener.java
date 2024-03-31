@@ -4,6 +4,5 @@ import androidx.annotation.StringRes;
 
 public interface RegisterListener {
     void onSignupSuccess();
-
     void onSignupError(@StringRes int message);
 }

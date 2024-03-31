@@ -76,7 +76,7 @@
     <string name="voucher_name">%s%% off </string>
     <string name="delivery_address">Delivery Address</string>
     <string name="password">Password</string>
-    <string name="order_total">Order Total</string>
+
     <string name="payment_method">Payment Method</string>
     <string name="order_id">Order ID</string>
     <string name="order_time">Order Time</string>
@@ -126,15 +126,20 @@
 
     <!--Orders Screen-->
     <string name="orders_empty_message">Oops, No Orders Yet…</string>
+    <string name="order_total">Order Total</string>
 
     <!--Order Detail Screen-->
-    <string name="confirm_message">Are you sure you want to cancel this order?</string>
+    <string name="cancel_return_message">Are you sure you want to %s?</string>
     <string name="return_text">Return</string>
     <string name="cancel_order">Cancel order</string>
+    <string name="return_order">Return Order</string>
+    <string name="order_status">Order %s</string>
+    <string name="canceled">Canceled</string>
 
     <!--Coins Reward Screen -->
     <string name="get_coin_button_text">Get 100 coins now</string>
     <string name="redeem">Redeem</string>
+    <string name="can_not_redeem_message">You do not have enough points to redeem this voucher</string>
 
     <!--Buy Again Screen-->
     <string name="voucher_label">PlatForm Voucher</string>
@@ -217,4 +222,10 @@
     <string name="added_to_cart">Added to cart</string>
 
     <string name="order_empty">There are no orders</string>
+
+    <string name="login_popup_message">Log in to use all Smarteshop shopping services now</string>
+
+    <!--    Order Detail-->
+
+
 </resources>

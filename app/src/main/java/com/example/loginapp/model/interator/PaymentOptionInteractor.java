@@ -14,15 +14,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class PaymentOptionInterator {
+public class PaymentOptionInteractor {
 
-    private static final String TAG = PaymentOptionInterator.class.getSimpleName();
+    private static final String TAG = PaymentOptionInteractor.class.getSimpleName();
 
     private PaymentOptionListener listener;
 
     private FirebaseUser user;
 
-    public PaymentOptionInterator(PaymentOptionListener listener) {
+    public PaymentOptionInteractor(PaymentOptionListener listener) {
         this.listener = listener;
         user = FirebaseAuth.getInstance().getCurrentUser();
     }

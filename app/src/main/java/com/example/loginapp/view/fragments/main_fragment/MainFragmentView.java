@@ -7,4 +7,6 @@ public interface MainFragmentView {
     void hasNewProductInFavoritesList(boolean hasNewProduct);
 
     void setAdapter(boolean logged);
+
+    void showLoginPopup();
 }

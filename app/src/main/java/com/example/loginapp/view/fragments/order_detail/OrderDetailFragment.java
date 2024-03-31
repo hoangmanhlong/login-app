@@ -15,6 +15,7 @@ import com.example.loginapp.R;
 import com.example.loginapp.adapter.order_product_adapter.OrderProductAdapter;
 import com.example.loginapp.databinding.FragmentOrderDetailBinding;
 import com.example.loginapp.model.entity.Order;
+import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.presenter.OrderDetailPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppConfirmDialog;
@@ -57,14 +58,15 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
     }
 
     public void onCancelOrderButtonClick() {
+        String actionLabel = binding.btCancelOrder.getText().toString();
         AppConfirmDialog.show(
                 requireContext(),
-                getString(R.string.delete),
-                getString(R.string.confirm_message),
+                actionLabel,
+                getString(R.string.cancel_return_message, actionLabel.toLowerCase()),
                 new AppConfirmDialog.AppConfirmDialogButtonListener() {
                     @Override
                     public void onPositiveButtonClickListener() {
-                        presenter.cancelOrder();
+                        presenter.cancelOrReturnOrder();
                     }
 
                     @Override
@@ -96,20 +98,20 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
         super.onDestroy();
         presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Override
     public void bindOrder(Order order) {
         binding.setOrder(order);
-        binding.setDeliveryAddress(order.getDeliveryAddress());
         boolean cancelOrderButtonVisible = true;
         int statusColorResId;
-        switch (order.getOrderStatus()) {
+        OrderStatus orderStatus = order.getOrderStatus();
+        switch (orderStatus) {
             case Processing:
                 statusColorResId = R.color.orange;
                 break;
             case Completed:
-                cancelOrderButtonVisible = false;
                 statusColorResId = R.color.free_shipping_color;
                 break;
             default:
@@ -117,6 +119,7 @@ public class OrderDetailFragment extends Fragment implements OrderDetailView {
                 statusColorResId = android.R.color.holo_red_dark;
                 break;
         }
+        binding.btCancelOrder.setText(orderStatus == OrderStatus.Completed ? R.string.return_order : R.string.cancel_order);
         binding.btCancelOrder.setVisibility(cancelOrderButtonVisible ? View.VISIBLE : View.GONE);
         binding.orderStatusView.setBackgroundResource(statusColorResId);
         binding.orderProductRecyclerview.setAdapter(new OrderProductAdapter(order.getOrderProducts()));

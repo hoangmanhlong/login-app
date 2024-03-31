@@ -3,13 +3,13 @@ package com.example.loginapp.model.interator;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.loginapp.model.entity.AttendanceManager;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.listener.CoinsRewardListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -17,19 +17,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoinsRewardInterator {
+public class CoinsRewardInteractor {
 
-    private final String TAG = this.toString();
+    private static final String TAG = CoinsRewardInteractor.class.getSimpleName();
 
     private CoinsRewardListener listener;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    @Nullable
+    private String uid;
 
     private ValueEventListener attendanceDataValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (listener != null) {
-                if (snapshot.exists()) listener.getAttendanceData(snapshot.getValue(AttendanceManager.class));
+                if (snapshot.exists())
+                    listener.getAttendanceData(snapshot.getValue(AttendanceManager.class));
                 else listener.isAttendanceDataEmpty();
             }
         }
@@ -82,8 +84,9 @@ public class CoinsRewardInterator {
         }
     };
 
-    public CoinsRewardInterator(CoinsRewardListener listener) {
+    public CoinsRewardInteractor(CoinsRewardListener listener) {
         this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public void clear() {
@@ -91,21 +94,31 @@ public class CoinsRewardInterator {
         listener = null;
         vouchersValueEventListener = null;
         attendanceDataValueEventListener = null;
-        user = null;
+        uid = null;
     }
 
     public void attendance(AttendanceManager attendanceManager) {
-        Constant.coinsRef.child(user.getUid()).setValue(attendanceManager)
-                .addOnCompleteListener(s -> listener.iAttendanceSuccess(s.isSuccessful()))
-                .addOnCompleteListener(e -> listener.iAttendanceSuccess(false));
+        if (uid != null) {
+            Constant.coinsRef.child(uid).setValue(attendanceManager)
+                    .addOnCompleteListener(s -> listener.iAttendanceSuccess(s.isSuccessful()))
+                    .addOnFailureListener(e -> {
+                        listener.iAttendanceSuccess(false);
+                        Log.e(TAG, "attendance: " + e.getMessage());
+                    });
+        }
+
     }
 
     public void addAttendanceDataValueEventListener() {
-        Constant.coinsRef.child(user.getUid()).addValueEventListener(attendanceDataValueEventListener);
+        if (uid != null)
+            Constant.coinsRef.child(uid)
+                    .addValueEventListener(attendanceDataValueEventListener);
     }
 
     public void removeAttendanceDataValueEventListener() {
-        Constant.coinsRef.child(user.getUid()).removeEventListener(attendanceDataValueEventListener);
+        if (uid != null)
+            Constant.coinsRef.child(uid)
+                    .removeEventListener(attendanceDataValueEventListener);
     }
 
     public void addVouchersValueEventListener() {
@@ -117,28 +130,34 @@ public class CoinsRewardInterator {
     }
 
     public void addMyVouchersValueEventListener() {
-        Constant.myVoucherRef.child(user.getUid()).addValueEventListener(myVouchersValueEventListener);
+        if (uid != null)
+            Constant.myVoucherRef.child(uid)
+                    .addValueEventListener(myVouchersValueEventListener);
     }
 
     public void removeMyVouchersValueEventListener() {
-        Constant.myVoucherRef.child(user.getUid()).removeEventListener(myVouchersValueEventListener);
+        if (uid != null)
+            Constant.myVoucherRef.child(uid)
+                    .removeEventListener(myVouchersValueEventListener);
     }
 
     public void redeemVoucher(Voucher voucher, int newNumberOfCoins) {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Constant.coinsRef.child(uid).child(AttendanceManager.NUMBER_OF_COINS)
-                .setValue(newNumberOfCoins)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Constant.myVoucherRef.child(uid)
-                                .child(voucher.getVoucherCode())
-                                .setValue(voucher)
-                                .addOnCompleteListener(myVoucherTask -> {
-                                    if (listener != null)
-                                        listener.isRedeemSuccess(myVoucherTask.isSuccessful());
-                                })
-                                .addOnFailureListener(e -> Log.e(TAG, "redeemVoucher: " + e.getMessage() ));
-                    }
-                });
+        if (uid != null) {
+            Constant.coinsRef.child(uid).child(AttendanceManager.NUMBER_OF_COINS)
+                    .setValue(newNumberOfCoins)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Constant.myVoucherRef.child(uid)
+                                    .child(voucher.getVoucherCode())
+                                    .setValue(voucher)
+                                    .addOnCompleteListener(myVoucherTask -> {
+                                        if (listener != null)
+                                            listener.isRedeemSuccess(myVoucherTask.isSuccessful());
+                                    })
+                                    .addOnFailureListener(e -> Log.e(TAG, "redeemVoucher: " + e.getMessage()));
+                        }
+                    });
+        }
+
     }
 }

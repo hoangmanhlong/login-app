@@ -19,9 +19,9 @@ public class RegisterPresenter implements RegisterListener {
 
     private String password;
 
-    private boolean isEmailValid = false;
+    private Boolean isEmailValid = false;
 
-    private boolean isPasswordValid = false;
+    private Boolean isPasswordValid = false;
 
     public RegisterPresenter(RegisterView view) {
         this.view = view;
@@ -34,6 +34,8 @@ public class RegisterPresenter implements RegisterListener {
         interator = null;
         email = null;
         password = null;
+        isPasswordValid = null;
+        isEmailValid = null;
     }
 
     public void register() {

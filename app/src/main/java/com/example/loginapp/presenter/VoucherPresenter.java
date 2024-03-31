@@ -35,9 +35,9 @@ public class VoucherPresenter implements VoucherListener {
         if (view != null) view.isVouchersEmpty(true);
     }
 
-    public void detachView() {
+    public void clear() {
         view = null;
-        interactor.clearRef();
+        interactor.clear();
         interactor = null;
     }
 }

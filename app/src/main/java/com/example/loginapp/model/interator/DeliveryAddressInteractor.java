@@ -6,7 +6,6 @@ import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.listener.DeliveryAddressListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -18,7 +17,7 @@ public class DeliveryAddressInteractor {
 
     private DeliveryAddressListener listener;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String uid;
 
     private ValueEventListener deliveryAddressValueEventListener = new ValueEventListener() {
         @Override
@@ -44,20 +43,23 @@ public class DeliveryAddressInteractor {
     public void clear() {
         listener = null;
         deliveryAddressValueEventListener = null;
-        user = null;
+        uid = null;
     }
 
     public DeliveryAddressInteractor(DeliveryAddressListener listener) {
         this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public void addDeliveryAddressValueEventListener() {
-        Constant.deliveryAddressRef.child(user.getUid())
+        if (uid != null)
+            Constant.deliveryAddressRef.child(uid)
                 .addValueEventListener(deliveryAddressValueEventListener);
     }
 
     public void removeDeliveryAddressValueEventListener() {
-        Constant.deliveryAddressRef.child(user.getUid())
+        if (uid != null)
+            Constant.deliveryAddressRef.child(uid)
                 .removeEventListener(deliveryAddressValueEventListener);
     }
 }

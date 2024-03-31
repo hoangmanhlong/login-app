@@ -9,6 +9,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainFragmentPresenter implements MainListener {
 
+    private static final String TAG = MainFragmentPresenter.class.getSimpleName();
+
     private MainFragmentView view;
 
     private MainInteractor interactor;
@@ -27,12 +29,13 @@ public class MainFragmentPresenter implements MainListener {
     public MainFragmentPresenter(MainFragmentView view) {
         this.view = view;
         interactor = new MainInteractor(this);
-        logged = FirebaseAuth.getInstance().getCurrentUser() != null;
+        logged = FirebaseAuth.getInstance().getUid() != null;
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
     }
 
     public void initData() {
         view.setAdapter(logged);
+        if (!logged) view.showLoginPopup();
     }
 
     private void getWishlistStatus() {

@@ -16,7 +16,7 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
     private List<DeliveryAddress> deliveryAddresses;
 
-    private boolean wasTakenForTheFirstTime = false;
+    private Boolean wasTakenForTheFirstTime = false;
 
     public DeliveryAddressPresenter(DeliveryAddressView view) {
         this.view = view;
@@ -29,6 +29,7 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
         interactor.clear();
         interactor = null;
         deliveryAddresses = null;
+        wasTakenForTheFirstTime = false;
     }
 
     public void initData() {
@@ -37,8 +38,8 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
             if (deliveryAddresses.isEmpty()) {
                 view.isDeliveryAddressEmpty(true);
                 view.addNewDeliveryAddressButtonVisible(true);
-            }
-            else {
+            } else {
+                view.isDeliveryAddressEmpty(false);
                 view.bindShippingAddresses(deliveryAddresses);
                 view.addNewDeliveryAddressButtonVisible(deliveryAddresses.size() < 3);
             }
@@ -46,7 +47,7 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
     }
 
     public void addDeliveryAddressValueEventListener() {
-        view.isLoading(true);
+        if (!wasTakenForTheFirstTime) view.isLoading(true);
         interactor.addDeliveryAddressValueEventListener();
     }
 
@@ -56,20 +57,20 @@ public class DeliveryAddressPresenter implements DeliveryAddressListener {
 
     @Override
     public void getDeliveryAddress(List<DeliveryAddress> deliveryAddresses) {
+        this.deliveryAddresses = deliveryAddresses;
         view.isLoading(false);
         view.isDeliveryAddressEmpty(false);
-        this.deliveryAddresses = deliveryAddresses;
-        view.addNewDeliveryAddressButtonVisible(deliveryAddresses.size() < 3);
-        view.bindShippingAddresses(deliveryAddresses);
+        view.addNewDeliveryAddressButtonVisible(this.deliveryAddresses.size() < 3);
+        view.bindShippingAddresses(this.deliveryAddresses);
         wasTakenForTheFirstTime = true;
     }
 
     @Override
     public void isDeliveryAddressEmpty() {
+        deliveryAddresses.clear();
         view.isLoading(false);
         view.isDeliveryAddressEmpty(true);
         view.addNewDeliveryAddressButtonVisible(true);
-        deliveryAddresses.clear();
         wasTakenForTheFirstTime = true;
     }
 }

@@ -50,7 +50,6 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentExpandProductsBinding.inflate(inflater, container, false);
-        binding.setFragment(this);
         expandAdapter = new ExpandAdapter(this);
         binding.recommendedRecyclerview.setAdapter(expandAdapter);
         return binding.getRoot();
@@ -61,25 +60,23 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
         super.onViewCreated(view, savedInstanceState);
         presenter.initData();
         binding.sortButton.setOnClickListener(v -> showMenu(v, R.menu.sort_menu));
+        binding.navigateUpButton.setOnClickListener(c -> navController.navigateUp());
     }
 
     @Override
     public void getSharedData() {
         if (getArguments() != null) {
             @StringRes int label = getArguments().getInt(Constant.EXPAND_LABEL_KEY);
-            presenter.setLabel(label);
+            presenter.setScreenLabel(label);
 
             Products products = (Products) getArguments().getSerializable(Constant.EXPAND_PRODUCTS_KEY);
-            if (products != null) {
-                if (presenter.getProducts() == null) presenter.setProducts(products);
-                else presenter.initData();
-            }
+            if (products != null) presenter.setProducts(products);
         }
     }
 
     @Override
-    public void bindScreenLabel(int label) {
-        binding.fragmentLabelTextView.setText(label);
+    public void bindScreenLabel(@StringRes int screenLabel) {
+        binding.fragmentLabelTextView.setText(screenLabel);
     }
 
     @SuppressLint("RestrictedApi")
@@ -88,7 +85,7 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
         popupMenu.getMenuInflater().inflate(menuRes, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             SortStatus status = null;
-            int id = item.getItemId();
+            final int id = item.getItemId();
             if (id == R.id.price_high_to_low) status = SortStatus.PRICE_HIGH_TO_LOW;
             if (id == R.id.price_low_to_high) status = SortStatus.PRICE_LOW_TO_HIGH;
             if (id == R.id.rate_high_to_low) status = SortStatus.RATE_HIGH_TO_LOW;
@@ -122,6 +119,7 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
         super.onDestroy();
         presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Override
@@ -130,7 +128,7 @@ public class ExpandProductsFragment extends Fragment implements ExpandProductCli
     }
 
     @Override
-    public void setSortStatusName(@StringRes int res) {
-        binding.setSortName(res);
+    public void setSortStatusLabel(@StringRes int sortStatusLabel) {
+        binding.sortNameChip.setText(sortStatusLabel);
     }
 }

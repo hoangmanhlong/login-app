@@ -16,9 +16,9 @@ public class BuyAgainPresenter {
 
     private Order currentOrder;
 
-    private double reducedPrice = 0.0;
+    private Double reducedPrice = 0.000;
 
-    private double total = 0;
+    private Double total = 0.000;
 
     public BuyAgainPresenter(BuyAgainView view) {
         this.view = view;
@@ -27,6 +27,8 @@ public class BuyAgainPresenter {
     public void clear() {
         view = null;
         currentOrder = null;
+        reducedPrice = null;
+        total = null;
     }
 
     public void initData() {
@@ -57,24 +59,26 @@ public class BuyAgainPresenter {
 
     public void checkout() {
         view.isLoading(true);
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        currentOrder.setOrderId("SA" + System.currentTimeMillis());
-        currentOrder.setOrderStatus(OrderStatus.Processing);
-        currentOrder.setOrderDate(System.currentTimeMillis());
-        currentOrder.setPaymentTotal(total);
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            currentOrder.setOrderId("SA" + System.currentTimeMillis());
+            currentOrder.setOrderStatus(OrderStatus.Processing);
+            currentOrder.setOrderDate(System.currentTimeMillis());
+            currentOrder.setPaymentTotal(total);
 
-        Voucher voucher = currentOrder.getVoucher();
-        if (voucher != null) {
-            Constant.myVoucherRef.child(uid)
-                    .child(voucher.getVoucherCode()).removeValue()
+            Voucher voucher = currentOrder.getVoucher();
+            if (voucher != null) {
+                Constant.myVoucherRef.child(uid)
+                        .child(voucher.getVoucherCode()).removeValue()
+                        .addOnFailureListener(e -> view.onCheckoutSuccess(false));
+            }
+
+            Constant.orderRef.child(uid)
+                    .child(currentOrder.getOrderId())
+                    .setValue(currentOrder)
+                    .addOnCompleteListener(task -> view.onCheckoutSuccess(task.isSuccessful()))
                     .addOnFailureListener(e -> view.onCheckoutSuccess(false));
         }
-
-        Constant.orderRef.child(uid)
-                .child(currentOrder.getOrderId())
-                .setValue(currentOrder)
-                .addOnCompleteListener(task -> view.onCheckoutSuccess(task.isSuccessful()))
-                .addOnFailureListener(e -> view.onCheckoutSuccess(false));
     }
 
     public void setVoucher(Voucher voucher) {
@@ -93,17 +97,17 @@ public class BuyAgainPresenter {
         int shippingCost = Constant.ShippingCost;
         view.bindShippingCost(String.valueOf(shippingCost));
         Voucher voucher = order.getVoucher();
-        total = merchandiseSubtotal + shippingCost;
+        total = (double) (merchandiseSubtotal + shippingCost);
         if (voucher != null) {
             view.bindVoucherCode(order.getVoucher().getVoucherCode());
             if (voucher.getVoucherType() == VoucherType.FreeShipping) {
-                reducedPrice = 200;
+                reducedPrice = 200d;
             }
             if (voucher.getVoucherType() == VoucherType.Discount) {
                 reducedPrice = (total * voucher.getDiscountPercentage() / 100);
             }
         } else {
-            reducedPrice = 0;
+            reducedPrice = (double) 0;
         }
 
         // Làm tròn reducedPrice đến chữ số thứ hai sau dấu phẩy

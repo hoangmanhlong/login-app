@@ -1,12 +1,11 @@
 package com.example.loginapp.presenter;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.loginapp.model.entity.UserData;
-import com.example.loginapp.model.interator.EditUserProfileInterator;
+import com.example.loginapp.model.interator.EditUserProfileInteractor;
 import com.example.loginapp.model.listener.EditUserProfileListener;
 import com.example.loginapp.view.fragments.edit_user_profile.EditUserProfileView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,34 +16,42 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
 
     private static final String TAG = EditUserProfilePresenter.class.getSimpleName();
 
-    private final EditUserProfileInterator interator = new EditUserProfileInterator(this);
+    private EditUserProfileInteractor interactor;
 
     private EditUserProfileView view;
 
     @Nullable
     private Uri photoUri = null;
 
-    private final UserData userData;
+    private UserData userData;
 
-    private boolean isNameValid = false;
+    private Boolean isNameValid = false;
 
-    private boolean isPhoneNumberValid = false;
+    private Boolean isPhoneNumberValid = false;
 
-    private boolean isAddressValid = false;
-
-    public UserData getUserData() {
-        return userData;
-    }
-
-    public void setUserData(UserData userData) {
-        this.userData.copy(userData);
-        view.bindUserData(this.userData);
-    }
+    private Boolean isAddressValid = false;
 
     public EditUserProfilePresenter(EditUserProfileView view) {
         this.view = view;
         userData = new UserData();
         userData.setUid(FirebaseAuth.getInstance().getUid());
+        interactor = new EditUserProfileInteractor(this);
+    }
+
+    public void clear() {
+        userData = null;
+        view = null;
+        photoUri = null;
+        isAddressValid = null;
+        isNameValid = null;
+        isPhoneNumberValid = null;
+        interactor.clear();
+        interactor = null;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData.copy(userData);
+        view.bindUserData(this.userData);
     }
 
     public void setUsername(String username) {
@@ -77,18 +84,13 @@ public class EditUserProfilePresenter implements EditUserProfileListener {
 
     public void saveUserData() {
         view.showProcessBar(true);
-        interator.saveUserData(photoUri, userData);
+        interactor.saveUserData(photoUri, userData);
     }
 
     @Override
     public void isUpdateSuccess(boolean success) {
         view.showProcessBar(false);
         if (success) view.onNavigateUp();
-        else view.onMessage("Error");
-    }
-
-    public void detachView() {
-        view = null;
     }
 
     public static boolean isNumber(String text) {

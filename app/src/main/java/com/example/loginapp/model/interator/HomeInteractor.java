@@ -14,7 +14,6 @@ import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.HomeListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -27,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeInterator {
+public class HomeInteractor {
 
     private final AppDatabase database;
 
@@ -35,37 +34,33 @@ public class HomeInterator {
 
     private ValueEventListener userDataValueEventListener;
 
-    private FirebaseUser currentUser;
+    private String uid;
 
     private HomeListener listener;
 
     public void clear() {
         userDataValueEventListener = null;
-        currentUser = null;
+        uid = null;
         listener = null;
     }
 
-    public HomeInterator(HomeListener listener) {
+    public HomeInteractor(HomeListener listener) {
         this.listener = listener;
         database = App.getDatabase();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        userDataValueEventListener = createUserDataListener();
-    }
-
-    private ValueEventListener createUserDataListener() {
-        return new ValueEventListener() {
+        uid = FirebaseAuth.getInstance().getUid();
+        userDataValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    listener.getUserData(snapshot.getValue(UserData.class));
+                    if (listener != null) listener.getUserData(snapshot.getValue(UserData.class));
                 } else {
-                    listener.isUserDataEmpty();
+                    if (listener != null) listener.isUserDataEmpty();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle potential errors (optional)
+
             }
         };
     }
@@ -79,8 +74,8 @@ public class HomeInterator {
                     ProductResponse productResponse = response.body();
                     if (productResponse != null) {
                         List<Product> products = productResponse.getProducts();
-                        listener.getProductsFromAPI(products);
-                        insertProductNames(products);
+                        if (listener != null) listener.getProductsFromAPI(products);
+//                        insertProductNames(products);
                     }
                 }
             }
@@ -93,23 +88,23 @@ public class HomeInterator {
     }
 
     public void addUserDataValueEventListener() {
-        if (currentUser != null) {
-            Constant.userRef.child(currentUser.getUid())
+        if (uid != null) {
+            Constant.userRef.child(uid)
                     .addValueEventListener(userDataValueEventListener);
         }
     }
 
     public void removeUserDataValueEventListener() {
-        if (currentUser != null) {
-            Constant.userRef.child(currentUser.getUid())
+        if (uid != null) {
+            Constant.userRef.child(uid)
                     .removeEventListener(userDataValueEventListener);
         }
     }
 
     public void getFavoriteProductFromFirebase() {
 
-        if (currentUser != null)
-            Constant.favoriteProductRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        if (uid != null)
+            Constant.favoriteProductRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (listener != null) {

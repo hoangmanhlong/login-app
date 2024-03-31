@@ -3,11 +3,10 @@ package com.example.loginapp.model.interator;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.utils.Constant;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.listener.OrdersListener;
+import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -17,12 +16,12 @@ import java.util.List;
 
 public class OrdersInterator {
 
-    private FirebaseUser currentUser;
+    private String uid;
 
     private ValueEventListener ordersValueEventListener;
 
     public OrdersInterator(OrdersListener listener) {
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = FirebaseAuth.getInstance().getUid();
         ordersValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -46,15 +45,21 @@ public class OrdersInterator {
     }
 
     public void addOrdersValueEventListener() {
-        Constant.orderRef.child(currentUser.getUid()).addValueEventListener(ordersValueEventListener);
+        if (uid != null) {
+            Constant.orderRef.child(uid).addValueEventListener(ordersValueEventListener);
+        }
+
     }
 
     public void removeOrdersValueEventListener() {
-        Constant.orderRef.child(currentUser.getUid()).removeEventListener(ordersValueEventListener);
+        if (uid != null) {
+            Constant.orderRef.child(uid).removeEventListener(ordersValueEventListener);
+        }
+
     }
 
     public void clear() {
         ordersValueEventListener = null;
-        currentUser = null;
+        uid = null;
     }
 }

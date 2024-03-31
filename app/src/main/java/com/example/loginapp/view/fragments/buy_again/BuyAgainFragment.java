@@ -138,6 +138,7 @@ public class BuyAgainFragment extends Fragment implements BuyAgainView {
         super.onDestroy();
         presenter.clear();
         presenter = null;
+        navController = null;
     }
 
     @Override

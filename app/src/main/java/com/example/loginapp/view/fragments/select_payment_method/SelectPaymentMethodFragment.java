@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -26,10 +27,17 @@ public class SelectPaymentMethodFragment extends Fragment {
 
     private PaymentMethod selectedPaymentMethod;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSelectPaymentMethodBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
@@ -43,13 +51,12 @@ public class SelectPaymentMethodFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         selectedPaymentMethod = null;
+        navController = null;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
-        binding.setFragment(this);
         if (getArguments() != null) {
             selectedPaymentMethod = (PaymentMethod) getArguments().getSerializable(Constant.PAYMENT_METHOD_KEY);
             if (selectedPaymentMethod != null) {
@@ -106,8 +113,9 @@ public class SelectPaymentMethodFragment extends Fragment {
     }
 
     public void onOkButtonClick() {
-        navController.getPreviousBackStackEntry()
-                .getSavedStateHandle().set(Constant.PAYMENT_METHOD_KEY, selectedPaymentMethod);
+        NavBackStackEntry navBackStackEntry = navController.getPreviousBackStackEntry();
+        if (navBackStackEntry != null)
+                navBackStackEntry.getSavedStateHandle().set(Constant.PAYMENT_METHOD_KEY, selectedPaymentMethod);
         navController.navigateUp();
     }
 }

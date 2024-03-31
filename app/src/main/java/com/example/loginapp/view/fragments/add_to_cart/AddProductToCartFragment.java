@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.add_to_cart;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,10 @@ import com.example.loginapp.databinding.FragmentAddProductToCartBinding;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.AddProductToCartPresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.AppMessage;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 
-public class AddProductToCartFragment extends BottomSheetDialogFragment implements AddProductToCartView {
+public class AddProductToCartFragment extends BottomSheetDialogFragment implements IAddProductToCartView {
 
     public static final String TAG = AddProductToCartFragment.class.getSimpleName();
 
@@ -34,14 +34,14 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAddProductToCartBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
-        presenter.initData();
+        getSharedData();
     }
 
     public void onAddToCartClick() {
@@ -53,7 +53,6 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
         binding.quantity.setText(quantity);
     }
 
-    @Override
     public void getSharedData() {
         if (getArguments() != null) {
             Product product = (Product) getArguments().getSerializable(Constant.PRODUCT_KEY);
@@ -67,7 +66,7 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
     }
 
     @Override
-    public void dismissAddProductToCartFragment() {
+    public void dismissFragment() {
         this.dismiss();
     }
 
@@ -88,6 +87,7 @@ public class AddProductToCartFragment extends BottomSheetDialogFragment implemen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.clear();
         presenter = null;
     }
 }

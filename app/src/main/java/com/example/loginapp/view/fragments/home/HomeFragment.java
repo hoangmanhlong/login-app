@@ -48,11 +48,18 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private DiscountAdapter adapter;
 
-    private ShimmerFrameLayout recommendedProductsPlaceHolder, topChartsProductsPlaceHolder, discountProductsPlaceHolder, userPlaceHolder;
+    private ShimmerFrameLayout recommendedProductsPlaceHolder,
+            topChartsProductsPlaceHolder,
+            discountProductsPlaceHolder,
+            userPlaceHolder;
 
-    private RecyclerView recommendedRecyclerview, topChartsRecyclerview, discountRecyclerView;
+    private RecyclerView recommendedRecyclerview,
+            topChartsRecyclerview,
+            discountRecyclerView;
 
-    private ConstraintLayout expandRecommendedProductsView, expandTopChartsProductsView, expandDiscountProductsView;
+    private ConstraintLayout expandRecommendedProductsView,
+            expandTopChartsProductsView,
+            expandDiscountProductsView;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -70,10 +77,12 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @SuppressLint("ResourceAsColor")
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
         recommendedAdapter = new ProductAdapter(this);
         topChartsAdapter = new ProductAdapter(this);
         discountAdapter = new ProductAdapter(this);
         adapter = new DiscountAdapter(new ArrayList<>());
+
         recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder.getRoot();
         topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder.getRoot();
         discountProductsPlaceHolder = binding.discountProductsPlaceHolder.getRoot();
@@ -89,7 +98,9 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
         swipeRefreshLayout = binding.homeSwipe;
         swipeRefreshLayout.setColorSchemeResources(R.color.free_shipping_color, R.color.cam, R.color.blue, R.color.red);
+
         sliderView = binding.discountSliderView;
+
         return binding.getRoot();
     }
 
@@ -148,19 +159,16 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void showRecommendedProducts(List<Product> products) {
-        isRecommendedProductsLoading(false);
         recommendedAdapter.submitList(products);
     }
 
     @Override
     public void showTopChartsProducts(List<Product> products) {
-        isTopChartsProductsLoading(false);
         topChartsAdapter.submitList(products);
     }
 
     @Override
     public void showDiscountProducts(List<Product> products) {
-        isDiscountProductsLoading(false);
         discountAdapter.submitList(products);
     }
 
@@ -168,10 +176,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.USER_KEY_NAME, presenter.currentUserData);
         navController.navigate(R.id.editUserInformationFragment, bundle);
-    }
-
-    public void onLoginButtonClick() {
-        navController.navigate(R.id.overviewFragment);
     }
 
     @Override
@@ -240,11 +244,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void setShowUserView(Boolean show) {
         binding.userView.setVisibility(show ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void showAskLogin(boolean visible) {
-        binding.setIsAskLoginVisible(visible);
     }
 
     public void onExpandRecommendProductsButtonClick() {

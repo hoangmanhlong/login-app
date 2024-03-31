@@ -487,6 +487,7 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:textStyle="bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -499,7 +500,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppins_regular"
+                                android:fontFamily="@font/poppins_bold"
                                 android:includeFontPadding="false"
                                 android:text="@{@string/dollar_price(totalPayment)}"
                                 android:textColor="@color/orange"
@@ -514,7 +515,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -531,7 +532,7 @@
 
                     <TextView
                         android:id="@+id/tvconfirm_payment"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:fontFamily="@font/poppins_regular"
@@ -539,9 +540,10 @@
                         android:text="@string/confirm_payment"
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@id/ivAsk"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 

@@ -177,7 +177,6 @@ public class LoginFragment extends Fragment implements LoginView {
                 navController.popBackStack(R.id.loginFragment, true);
                 navController.navigate(startDestinationId);
             }
-
         } else {
             binding.setLoginEmailAndPasswordMessageVisible(true);
         }

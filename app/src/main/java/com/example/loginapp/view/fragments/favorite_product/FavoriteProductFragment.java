@@ -21,14 +21,13 @@ import com.example.loginapp.databinding.FragmentFavoriteProductBinding;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.FavoritePresenter;
 import com.example.loginapp.utils.Constant;
-import com.example.loginapp.view.commonUI.AppMessage;
 
 import java.util.List;
 
 
 public class FavoriteProductFragment extends Fragment implements FavoriteView, FavoriteItemClickListener {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = FavoriteProductFragment.class.getSimpleName();
 
     private FavoritePresenter presenter;
 
@@ -68,7 +67,8 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
         recyclerView.setAdapter(adapter);
 
         // Remove flashes
-        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        SimpleItemAnimator simpleItemAnimator = (SimpleItemAnimator) recyclerView.getItemAnimator();
+        if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
         presenter.initData();
         new SwipeHelper(requireContext(), recyclerView) {
             @Override
@@ -81,11 +81,6 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
                 ));
             }
         };
-    }
-
-    @Override
-    public void onMessage(String message) {
-        AppMessage.showMessage(requireContext(), message);
     }
 
     @Override

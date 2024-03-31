@@ -29,7 +29,7 @@
     <!--    Select Delivery Address-->
     <string name="select_delivery_address">Chọn địa chỉ giao hàng</string>
 
-    <string name="favorites_list_empty">Danh sách yêu thích của bạn trống</string>
+    <string name="favorites_list_empty">Danh sách yêu thích trống</string>
     <string name="voucher_label">Kho mã giảm giá</string>
     <string name="hello_user">Xin chào, %s</string>
     <string name="welcome_back">Chào mừng trở lại</string>
@@ -47,12 +47,10 @@
     <string name="otp_description">Một mã gồm 6 chữ số đã được gửi tới</string>
     <string name="coins_description"> xu hết hạn vào </string>
     <string name="delete">Xóa</string>
-    <string name="cancel">Hủy</string>
     <string name="log_in">Đăng nhập</string>
     <string name="later">Để sau</string>
     <string name="orders_empty_message">Rất tiếc, chưa có đơn đặt hàng nào…</string>
-    <string name="confirm_message">Bạn có chắc chắn muốn hủy đơn hàng này không?</string>
-    <string name="return_text">Trả về</string>
+
     <string name="cancel_order">Hủy đơn hàng</string>
     <string name="get_coin_button_text">Nhận 100 xu ngay</string>
     <string name="payment_details">Chi tiết thanh toán</string>
@@ -129,8 +127,6 @@
     <string name="add_new_address">Thêm địa chỉ giao hàng mới</string>
     <string name="edit_address">Chỉnh sửa địa chỉ giao hàng</string>
     <string name="my_orders">Đơn hàng của tôi</string>
-    <string name="processing">Đang xử lý</string>
-    <string name="completed">Hoàn thành</string>
     <string name="login_email_false_message">Tài khoản hoặc mật khẩu không đúng. Thử lại!</string>
     <string name="rating_des">Xếp hạng và đánh giá được xác minh và đến từ những người sử dụng cùng loại thiết bị mà bạn sử dụng</string>
     <string name="change_voucher_title">Bạn có chắc chắn muốn đổi %s xu để lấy phiếu thưởng này không</string>
@@ -139,6 +135,7 @@
     <string name="coins_reward">Săn xu</string>
     <string name="redeem">Đổi</string>
     <string name="need_s_coins">Cần %s xu</string>
+    <string name="can_not_redeem_message">Bạn không đủ điểm để đổi voucher này</string>
 
 
     <string name="customer_service">Dịch vụ chăm sóc khách hàng</string>
@@ -211,5 +208,17 @@
     <string name="order_empty">Không có đơn hàng nào</string>
 
     <string name="checkout_confirm">Bạn chắc chắn muốn thanh toán?</string>
+
+    <string name="login_popup_message">Đăng nhập để sử dụng toàn bộ dịch vụ mua sắm của Smarteshop ngay</string>
+
+<!--    Order Detail-->
+    <string name="return_order">Trả hàng</string>
+    <string name="order_status">Đơn hàng %s</string>
+    <string name="processing">Đang xử lý</string>
+    <string name="completed">Hoàn thành</string>
+    <string name="cancel">Hủy</string>
+    <string name="canceled">Đã hủy</string>
+    <string name="return_text">Trả về</string>
+    <string name="cancel_return_message">Bạn có chắc muốn %s?</string>
 
 </resources>

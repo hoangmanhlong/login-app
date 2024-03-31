@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="orderStatusConverter"
+            type="com.example.loginapp.view.commonUI.OrderStatusConverter" />
+
+        <variable
             name="order"
             type="com.example.loginapp.model.entity.Order" />
 
@@ -38,11 +42,11 @@
 
                 <TextView
                     android:id="@+id/tvOrderStatus"
+                    bindOrderStatusRes="@{order.orderStatus}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:padding="@dimen/_8sdp"
-                    android:text="@{order.orderStatus.toString()}"
                     android:textColor="@color/orange"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -199,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        android:text="Order Total: "
+                        android:text="@string/order_total_"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/tvTotalPrice"
                         app:layout_constraintTop_toTopOf="parent" />

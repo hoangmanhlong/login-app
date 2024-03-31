@@ -1,7 +1,8 @@
 package com.example.loginapp.view.fragments.coins;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import android.app.UiModeManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -48,7 +50,7 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
 
     private ShimmerFrameLayout coinsPlaceHolder, vouchersLoadingView;
 
-    private RecyclerView changeCoinsRecyclerView;
+    private RecyclerView voucherRecyclerView; // Vouchers List of App
 
     private NavController navController;
 
@@ -66,7 +68,7 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         binding.setFragment(this);
         coinsPlaceHolder = binding.coinsPlaceHolder;
         vouchersLoadingView = binding.voucherLoadingView;
-        changeCoinsRecyclerView = binding.changeCoinsRecyclerView;
+        voucherRecyclerView = binding.changeCoinsRecyclerView;
         calendarAdapter = new CalendarAdapter();
         changeCoinsAdapter = new ChangeCoinsAdapter(this);
         return binding.getRoot();
@@ -78,9 +80,19 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         super.onViewCreated(view, savedInstanceState);
         RecyclerView calendarRecyclerview = binding.calendarRecyclerview;
         calendarRecyclerview.setAdapter(calendarAdapter);
-        ((SimpleItemAnimator) calendarRecyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
-        ((SimpleItemAnimator) changeCoinsRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        changeCoinsRecyclerView.setAdapter(changeCoinsAdapter);
+        voucherRecyclerView.setAdapter(changeCoinsAdapter);
+
+        // Remove Effect when item changed/updated
+        SimpleItemAnimator calendarRecyclerviewSimpleItemAnimator =
+                ((SimpleItemAnimator) calendarRecyclerview.getItemAnimator());
+        if (calendarRecyclerviewSimpleItemAnimator != null)
+            calendarRecyclerviewSimpleItemAnimator.setSupportsChangeAnimations(false);
+
+        SimpleItemAnimator voucherRecyclerViewSimpleItemAnimator =
+                ((SimpleItemAnimator) voucherRecyclerView.getItemAnimator());
+        if (voucherRecyclerViewSimpleItemAnimator != null)
+            voucherRecyclerViewSimpleItemAnimator.setSupportsChangeAnimations(false);
+
         presenter.initData();
     }
 
@@ -96,7 +108,7 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         super.onDestroyView();
         changeCoinsAdapter = null;
         calendarAdapter = null;
-        changeCoinsRecyclerView = null;
+        voucherRecyclerView = null;
         coinsPlaceHolder = null;
         vouchersLoadingView = null;
         binding = null;
@@ -153,11 +165,9 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         binding.setDate(date);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void bindCheckedDates(List<DayWithCheck> dayWithCheckList) {
         calendarAdapter.submitList(dayWithCheckList);
-        calendarAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -165,7 +175,6 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
         binding.btAttendance.setVisibility(visible ? View.GONE : View.VISIBLE);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void bindVouchersList(List<Voucher> vouchers) {
         changeCoinsAdapter.submitList(vouchers);
@@ -177,20 +186,30 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
     }
 
     @Override
-    public void onMessage(String message) {
-        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+    public void showSnackBar(@StringRes int message) {
+        Snackbar.make(binding.getRoot(), getString(message), Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(isSystemInDarkMode() ? Color.WHITE : Color.BLACK)
+                .setTextColor(isSystemInDarkMode() ? Color.BLACK : Color.WHITE)
+                .show();
+    }
+
+    private boolean isSystemInDarkMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return requireContext().getSystemService(UiModeManager.class).getNightMode() == UiModeManager.MODE_NIGHT_YES;
+        }
+        return false;
     }
 
     @Override
     public void isVouchersLoading(boolean isLoading) {
         if (isLoading) {
-            changeCoinsRecyclerView.setVisibility(View.GONE);
+            voucherRecyclerView.setVisibility(View.GONE);
             vouchersLoadingView.setVisibility(View.VISIBLE);
             vouchersLoadingView.startShimmerAnimation();
         } else {
             vouchersLoadingView.stopShimmerAnimation();
             vouchersLoadingView.setVisibility(View.GONE);
-            changeCoinsRecyclerView.setVisibility(View.VISIBLE);
+            voucherRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 

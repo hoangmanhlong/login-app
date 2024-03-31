@@ -27,11 +27,16 @@ public class OverviewFragment extends Fragment {
 
     private SliderView sliderView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOverviewBinding.inflate(inflater, container, false);
-        navController = NavHostFragment.findNavController(this);
         sliderView = binding.sliderView;
         binding.setOverviewFragment(this);
         return binding.getRoot();
@@ -60,10 +65,16 @@ public class OverviewFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        navController = null;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
         sliderView = null;
+        binding = null;
     }
 
     public void goLoginScreen() {

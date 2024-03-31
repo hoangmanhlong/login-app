@@ -7,7 +7,6 @@ import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.UserProfileDetailListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -15,22 +14,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfileInterator {
+public class UserProfileInteractor {
+
+    private static final String TAG = UserProfileInteractor.class.getSimpleName();
 
     private UserProfileDetailListener listener;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String uid;
 
-    public UserProfileInterator(UserProfileDetailListener listener) {
-        this.listener = listener;
-    }
-
-    public void clear() {
-        listener = null;
-        user = null;
-    }
-
-    private final ValueEventListener userDataValueEventListener = new ValueEventListener() {
+    private ValueEventListener userDataValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (listener != null) {
@@ -48,7 +40,7 @@ public class UserProfileInterator {
         }
     };
 
-    private final ValueEventListener ordersValueEventListener = new ValueEventListener() {
+    private ValueEventListener ordersValueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (listener != null) {
@@ -70,20 +62,36 @@ public class UserProfileInterator {
         }
     };
 
+    public UserProfileInteractor(UserProfileDetailListener listener) {
+        this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
+    }
+
+    public void clear() {
+        listener = null;
+        uid = null;
+        userDataValueEventListener = null;
+        ordersValueEventListener = null;
+    }
+
     public void addUserDataValueEventListener() {
-        Constant.userRef.child(user.getUid()).addValueEventListener(userDataValueEventListener);
+
+        if (uid != null)
+            Constant.userRef.child(uid).addValueEventListener(userDataValueEventListener);
     }
 
     public void removeUserDataValueEventListener() {
-        Constant.userRef.child(user.getUid()).removeEventListener(userDataValueEventListener);
+        if (uid != null)
+            Constant.userRef.child(uid).removeEventListener(userDataValueEventListener);
     }
 
     public void addOrdersValueEventListener() {
-        Constant.orderRef.child(user.getUid()).addValueEventListener(ordersValueEventListener);
+        if (uid != null)
+            Constant.orderRef.child(uid).addValueEventListener(ordersValueEventListener);
     }
 
     public void removeOrdersValueEventListener() {
-        Constant.orderRef.child(user.getUid()).removeEventListener(ordersValueEventListener);
+        if (uid != null)
+            Constant.orderRef.child(uid).removeEventListener(ordersValueEventListener);
     }
-
 }

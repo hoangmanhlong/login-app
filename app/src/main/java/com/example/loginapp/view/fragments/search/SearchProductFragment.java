@@ -68,6 +68,8 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentSearchProductBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
+        etQueryBox = binding.etQuery;
         searchHistoryAdapter = new SearchHistoryAdapter(this);
         searchProductAdapter = new SearchProductAdapter(this);
         arrayAdapter = new ArrayAdapter<>(
@@ -80,7 +82,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     @Override
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setFragment(this);
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         inputMethodManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // Lấy instance của InputMethodManager
         initView();
@@ -88,7 +89,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
-        etQueryBox = binding.etQuery;
         etQueryBox.setAdapter(arrayAdapter);
 
         RecyclerView recyclerView = binding.productRecyclerview;
@@ -126,7 +126,6 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 presenter.setQuery(s.toString().trim());
-
             }
 
             @Override
@@ -176,7 +175,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
-    public void isProductListVisible(boolean visible) {
+    public void isSearchResultsViewVisible(boolean visible) {
         binding.setIsProductsViewVisible(visible);
     }
 
@@ -186,7 +185,7 @@ public class SearchProductFragment extends Fragment implements SearchView, OnSea
     }
 
     @Override
-    public void isProductListEmpty(boolean isEmpty) {
+    public void isSearchResultsEmpty(boolean isEmpty) {
         binding.setIsProductListEmpty(isEmpty);
     }
 

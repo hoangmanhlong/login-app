@@ -4,25 +4,28 @@ import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.interator.AddProductToCartInteractor;
 import com.example.loginapp.model.listener.AddProductToCartListener;
-import com.example.loginapp.view.fragments.add_to_cart.AddProductToCartView;
+import com.example.loginapp.view.fragments.add_to_cart.IAddProductToCartView;
 
 public class AddProductToCartPresenter implements AddProductToCartListener {
 
-    private final AddProductToCartInteractor interactor = new AddProductToCartInteractor(this);
+    private AddProductToCartInteractor interactor;
 
     private Product product;
 
     private int quantity = 1;
 
-    private final AddProductToCartView view;
+    private IAddProductToCartView view;
 
-    public AddProductToCartPresenter(AddProductToCartView view) {
+    public AddProductToCartPresenter(IAddProductToCartView view) {
         this.view = view;
+        interactor = new AddProductToCartInteractor(this);
     }
 
-    public void initData() {
-        bindQuantity();
-        view.getSharedData();
+    public void clear() {
+        interactor.clear();
+        interactor = null;
+        product = null;
+        view = null;
     }
 
     public void setQuantity(int quantity) {
@@ -32,7 +35,8 @@ public class AddProductToCartPresenter implements AddProductToCartListener {
 
     public void setProduct(Product product) {
         this.product = product;
-        view.bindProduct(product);
+        if (view != null) view.bindProduct(product);
+        bindQuantity();
     }
 
     public void increasingTheNumber() {
@@ -48,7 +52,7 @@ public class AddProductToCartPresenter implements AddProductToCartListener {
     }
 
     public void bindQuantity() {
-        view.bindQuantity(String.valueOf(quantity));
+        if (view != null) view.bindQuantity(String.valueOf(quantity));
     }
 
     public void addProductToCart() {
@@ -58,6 +62,6 @@ public class AddProductToCartPresenter implements AddProductToCartListener {
 
     @Override
     public void isAddProductSuccess(boolean success) {
-        if (success) view.dismissAddProductToCartFragment();
+        if (success) view.dismissFragment();
     }
 }

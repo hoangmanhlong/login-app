@@ -1,5 +1,7 @@
 package com.example.loginapp.view.fragments.coins;
 
+import androidx.annotation.StringRes;
+
 import com.example.loginapp.model.entity.Date;
 import com.example.loginapp.model.entity.DayWithCheck;
 import com.example.loginapp.model.entity.Voucher;
@@ -22,7 +24,7 @@ public interface CoinsRewardView {
 
     void isVouchersListEmpty(boolean isEmpty);
 
-    void onMessage(String message);
+    void showSnackBar(@StringRes int message);
 
     void isVouchersLoading(boolean isLoading);
 }

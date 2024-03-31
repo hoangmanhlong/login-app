@@ -11,7 +11,5 @@ public interface SearchListener {
 
     void getSearchHistories(List<SearchHistory> searchHistories);;
 
-    void deleteSuccess(boolean isSuccess);
-
     void isSearchHistoriesEmpty();
 }

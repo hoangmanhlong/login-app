@@ -30,7 +30,6 @@ public class VoucherFragment extends Fragment implements VoucherView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new VoucherPresenter(this);
-        adapter = new VoucherAdapter();
     }
 
     @Nullable
@@ -38,6 +37,7 @@ public class VoucherFragment extends Fragment implements VoucherView {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentVoucherBinding.inflate(inflater, container, false);
         binding.setFragment(this);
+        adapter = new VoucherAdapter();
         return binding.getRoot();
     }
 
@@ -58,7 +58,7 @@ public class VoucherFragment extends Fragment implements VoucherView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
+        presenter.clear();
         presenter = null;
     }
 

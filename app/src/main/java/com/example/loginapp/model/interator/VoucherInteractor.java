@@ -21,7 +21,7 @@ public class VoucherInteractor {
         this.listener = listener;
     }
 
-    public void clearRef() {
+    public void clear() {
         listener = null;
     }
 

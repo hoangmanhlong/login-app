@@ -33,12 +33,15 @@ public class OrderSuccessFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                onBackHomeScreen();
-            }
-        });
+        if (getActivity() != null) {
+            getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    onBackHomeScreen();
+                }
+            });
+        }
+
         binding.btBack.setOnClickListener(v -> onBackHomeScreen());
     }
 
@@ -50,5 +53,6 @@ public class OrderSuccessFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        navController = null;
     }
 }

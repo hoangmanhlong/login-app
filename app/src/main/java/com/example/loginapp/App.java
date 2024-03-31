@@ -17,7 +17,9 @@ public class App extends Application {
         database = AppDatabase.getDatabase(this);
     }
 
-    public static AppDatabase getDatabase() { return database; }
+    public static AppDatabase getDatabase() {
+        return database;
+    }
 
     public static Application getInstance() {
         return instance;

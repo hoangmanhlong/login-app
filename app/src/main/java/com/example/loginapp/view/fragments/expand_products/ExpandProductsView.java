@@ -9,9 +9,9 @@ import java.util.List;
 public interface ExpandProductsView {
     void getProducts(List<Product> products);
 
-    void setSortStatusName(@StringRes int res);
+    void setSortStatusLabel(@StringRes int sortStatusLabel);
 
     void getSharedData();
 
-    void bindScreenLabel(@StringRes int label);
+    void bindScreenLabel(@StringRes int screenLabel);
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ProductView {
 
+    void getDataShared();
+
     void onMessage(String message);
 
     void enableFavorite(Boolean compare);

@@ -127,6 +127,7 @@ public class PaymentOptionFragment extends Fragment implements PaymentOptionView
         super.onDestroy();
         presenter.DetachView();
         presenter = null;
+        navController = null;
     }
 
     @Override

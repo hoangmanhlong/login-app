@@ -6,7 +6,7 @@ import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.OrderProduct;
 import com.example.loginapp.model.entity.Voucher;
-import com.example.loginapp.model.interator.CartInterator;
+import com.example.loginapp.model.interator.CartInteractor;
 import com.example.loginapp.model.listener.CartListener;
 import com.example.loginapp.view.fragments.cart.CartView;
 
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 public class CartPresenter implements CartListener {
 
-    private final String TAG = this.toString();
+    private final String TAG = CartPresenter.class.getSimpleName();
 
-    private CartInterator interator;
+    private CartInteractor interactor;
 
     private CartView view;
 
@@ -26,20 +26,20 @@ public class CartPresenter implements CartListener {
 
     public List<FirebaseProduct> selectedProduct;
 
-    private boolean wasTakenForTheFirstTime = false;
+    private Boolean retrievedData = false;
 
     private Order order;
 
     public CartPresenter(CartView view) {
         this.view = view;
-        interator = new CartInterator(this);
+        interactor = new CartInteractor(this);
         basket = new ArrayList<>();
         selectedProduct = new ArrayList<>();
         order = new Order();
     }
 
     public void initBasket() {
-        if (wasTakenForTheFirstTime) {
+        if (retrievedData) {
             if (!basket.isEmpty()) {
                 view.bindBasket(basket);
                 updateUI();
@@ -67,7 +67,7 @@ public class CartPresenter implements CartListener {
     @Override
     public void getProductsFromShoppingCart(List<FirebaseProduct> products) {
         this.basket = products;
-        wasTakenForTheFirstTime = true;
+        retrievedData = true;
         view.bindBasket(basket);
         updateUI();
     }
@@ -79,23 +79,23 @@ public class CartPresenter implements CartListener {
     }
 
     public void deleteProductInFirebase(FirebaseProduct product) {
-        interator.removeProductFromShoppingCart(product);
+        interactor.removeProductFromShoppingCart(product);
     }
 
     public void updateQuantity(int id, int quantity) {
-        interator.updateQuantity(id, quantity);
+        interactor.updateQuantity(id, quantity);
     }
 
     public void onItemChecked(FirebaseProduct product) {
-        interator.updateChecked(product.getId(), !product.isChecked());
+        interactor.updateChecked(product.getId(), !product.isChecked());
     }
 
     public void addShoppingCartValueEventListener() {
-        interator.addShoppingCartValueEventListener();
+        interactor.addShoppingCartValueEventListener();
     }
 
     public void removeShoppingCartValueEventListener() {
-        interator.removeShoppingCartValueEventListener();
+        interactor.removeShoppingCartValueEventListener();
     }
 
     private void updateUI() {
@@ -126,7 +126,7 @@ public class CartPresenter implements CartListener {
     }
 
     public void updateCheckboxAllSelected(Boolean checked) {
-        for (FirebaseProduct product : basket) interator.updateChecked(product.getId(), checked);
+        for (FirebaseProduct product : basket) interactor.updateChecked(product.getId(), checked);
     }
 
     private List<OrderProduct> toOrdersProductList(List<FirebaseProduct> firebaseProducts) {
@@ -140,7 +140,8 @@ public class CartPresenter implements CartListener {
         basket = null;
         selectedProduct = null;
         order = null;
-        interator.clearData();
-        interator = null;
+        retrievedData = null;
+        interactor.clearData();
+        interactor = null;
     }
 }

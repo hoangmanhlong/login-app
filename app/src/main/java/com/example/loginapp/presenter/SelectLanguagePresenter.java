@@ -14,9 +14,9 @@ public class SelectLanguagePresenter {
 
     private SelectLanguageView view;
 
-    private boolean isVietnamese;
+    private Boolean isVietnamese;
 
-    private boolean isSelectedVietnamese;
+    private Boolean isSelectedVietnamese;
 
     public SelectLanguagePresenter(SelectLanguageView view) {
         this.view = view;
@@ -26,6 +26,8 @@ public class SelectLanguagePresenter {
     public void detachView() {
         view = null;
         sharedPreferences = null;
+        isSelectedVietnamese = null;
+        isVietnamese = null;
     }
 
     public void initData() {

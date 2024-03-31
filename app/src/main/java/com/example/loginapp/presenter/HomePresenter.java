@@ -2,7 +2,7 @@ package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
-import com.example.loginapp.model.interator.HomeInterator;
+import com.example.loginapp.model.interator.HomeInteractor;
 import com.example.loginapp.model.listener.HomeListener;
 import com.example.loginapp.view.fragments.home.HomeView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +18,7 @@ public class HomePresenter implements HomeListener {
 
     private HomeView view;
 
-    private HomeInterator interator = new HomeInterator(this);
+    private HomeInteractor interactor;
 
     private List<Product> products = new ArrayList<>(); // All Products get from API
 
@@ -32,16 +32,19 @@ public class HomePresenter implements HomeListener {
 
     public UserData currentUserData;
 
-    private final boolean authenticated;
+    private Boolean authenticated;
 
-    private boolean gotDataFromAPI = false;
+    private Boolean gotDataFromAPI = false;
 
-    private boolean gotUserData = false;
+    private Boolean gotUserData = false;
 
     public void clear() {
+        authenticated = null;
+        gotDataFromAPI = null;
+        gotUserData = null;
         view = null;
-        interator.clear();
-        interator = null;
+        interactor.clear();
+        interactor = null;
         products = null;
         recommendedEveryDay = null;
         topChartsProducts = null;
@@ -53,13 +56,16 @@ public class HomePresenter implements HomeListener {
     public HomePresenter(HomeView view) {
         this.view = view;
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
+        interactor = new HomeInteractor(this);
     }
 
     public void initData() {
-        view.showAskLogin(!authenticated);
-        if (gotUserData) {
+        if (gotUserData && view != null) {
             view.isUserLoading(false);
-            if (currentUserData != null) view.getUserData(currentUserData);
+            if (currentUserData != null) {
+                view.setShowUserView(true);
+                view.getUserData(currentUserData);
+            }
             else view.setShowUserView(false);
         }
 
@@ -68,25 +74,38 @@ public class HomePresenter implements HomeListener {
     }
 
     public void addUserDataValueEventListener() {
-        if (authenticated) interator.addUserDataValueEventListener();
+        if (authenticated) {
+            view.isUserLoading(!gotUserData);
+            interactor.addUserDataValueEventListener();
+        } else {
+            view.isUserLoading(false);
+            view.setShowUserView(false);
+        }
     }
 
     public void removeUserDataValueEventListener() {
-        if (authenticated) interator.removeUserDataValueEventListener();
+        if (authenticated) interactor.removeUserDataValueEventListener();
     }
 
     public void getListProductFromNetwork() {
-        view.isRecommendedProductsLoading(true);
-        view.isTopChartsProductsLoading(true);
-        view.isDiscountProductsLoading(true);
-        interator.getListProductFromNetwork();
+        if (view != null) {
+            view.isRecommendedProductsLoading(true);
+            view.isTopChartsProductsLoading(true);
+            view.isDiscountProductsLoading(true);
+            interactor.getListProductFromNetwork();
+        }
     }
 
     private void showProducts() {
-        view.bindRecommendedEveryDay(recommendedEveryDay);
-        view.showRecommendedProducts(recommendedProducts);
-        view.showTopChartsProducts(topChartsProducts);
-        view.showDiscountProducts(discountProducts);
+        if (view != null) {
+            view.isRecommendedProductsLoading(false);
+            view.isTopChartsProductsLoading(false);
+            view.isDiscountProductsLoading(false);
+            view.bindRecommendedEveryDay(recommendedEveryDay);
+            view.showRecommendedProducts(recommendedProducts);
+            view.showTopChartsProducts(topChartsProducts);
+            view.showDiscountProducts(discountProducts);
+        }
     }
 
     @Override
@@ -94,8 +113,10 @@ public class HomePresenter implements HomeListener {
         currentUserData = userData;
         view.isUserLoading(false);
         boolean isUserViewVisible = currentUserData.getAvatar() != null && currentUserData.getUsername() != null;
-        if (isUserViewVisible) view.getUserData(userData);
-        view.setShowUserView(isUserViewVisible);
+        if (view != null) {
+            if (isUserViewVisible) view.getUserData(userData);
+            view.setShowUserView(isUserViewVisible);
+        }
         gotUserData = true;
     }
 
@@ -110,33 +131,44 @@ public class HomePresenter implements HomeListener {
         getRecommendedEveryDay(products);
         getTopChartsProducts(products);
         getDiscountProducts(products);
-        if (authenticated) interator.getFavoriteProductFromFirebase();
+        if (authenticated) interactor.getFavoriteProductFromFirebase();
         else getRecommendedProducts();
     }
 
     private void getRecommendedEveryDay(List<Product> products) {
         Collections.shuffle(products);
         recommendedEveryDay = products.subList(0, Math.min(products.size(), 10));
-        view.bindRecommendedEveryDay(recommendedEveryDay);
+        if (view != null) {
+            view.isRecommendedProductsLoading(false);
+            view.bindRecommendedEveryDay(recommendedEveryDay);
+        }
     }
 
     private void getTopChartsProducts(List<Product> products) {
         topChartsProducts = products.stream().filter(product -> product.getRating() > 4.8f).collect(Collectors.toList());
-        view.showTopChartsProducts(topChartsProducts);
+        if (view != null) {
+            view.isTopChartsProductsLoading(false);
+            view.showTopChartsProducts(topChartsProducts);
+        }
     }
 
     private void getDiscountProducts(List<Product> products) {
         discountProducts = products.stream().filter(v -> v.getDiscountPercentage() > 12.00).collect(Collectors.toList());
-        view.showDiscountProducts(discountProducts);
+        if (view != null) {
+            view.isDiscountProductsLoading(false);
+            view.showDiscountProducts(discountProducts);
+        }
     }
-
 
     private void getRecommendedProducts() {
         List<Product> tempProducts = new ArrayList<>(this.products);
         Collections.shuffle(tempProducts);
         recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 30));
-        view.showRecommendedProducts(recommendedProducts);
-        view.refreshInvisible();
+        if (view != null) {
+            view.isRecommendedProductsLoading(false);
+            view.showRecommendedProducts(recommendedProducts);
+            view.refreshInvisible();
+        }
     }
 
     @Override
@@ -149,15 +181,20 @@ public class HomePresenter implements HomeListener {
             Collections.shuffle(tempProducts);
             recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 20));
         }
-        view.showRecommendedProducts(recommendedProducts);
-        view.refreshInvisible();
+        if (view != null) {
+            view.isRecommendedProductsLoading(false);
+            view.showRecommendedProducts(recommendedProducts);
+            view.refreshInvisible();
+        }
     }
 
     @Override
     public void isUserDataEmpty() {
         currentUserData = null;
-        view.isUserLoading(false);
-        view.setShowUserView(false);
+        if (view != null) {
+            view.isUserLoading(false);
+            view.setShowUserView(false);
+        }
         gotUserData = true;
     }
 

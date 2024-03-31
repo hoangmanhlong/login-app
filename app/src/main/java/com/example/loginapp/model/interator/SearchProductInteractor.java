@@ -10,7 +10,6 @@ import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.listener.SearchListener;
 import com.example.loginapp.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,15 +22,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchProductInterator {
+public class SearchProductInteractor {
 
-    private final String TAG = this.toString();
+    private static final String TAG = SearchProductInteractor.class.getSimpleName();
 
     private SearchListener listener;
 
     private DatabaseReference searchHistoriesRef = Constant.searchHistoriesRef;
 
-    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private String uid;
 
     private ValueEventListener searchHistoriesValueEventListener = new ValueEventListener() {
         @Override
@@ -40,9 +39,9 @@ public class SearchProductInterator {
                 List<SearchHistory> searchHistories = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren())
                     searchHistories.add(dataSnapshot.getValue(SearchHistory.class));
-                listener.getSearchHistories(searchHistories);
+                if (listener != null) listener.getSearchHistories(searchHistories);
             } else {
-                listener.isSearchHistoriesEmpty();
+                if (listener != null) listener.isSearchHistoriesEmpty();
             }
         }
 
@@ -55,12 +54,13 @@ public class SearchProductInterator {
     public void clearRef() {
         listener = null;
         searchHistoriesValueEventListener = null;
-        currentUser = null;
+        uid = null;
         searchHistoriesRef = null;
     }
 
-    public SearchProductInterator(SearchListener listener) {
+    public SearchProductInteractor(SearchListener listener) {
         this.listener = listener;
+        uid = FirebaseAuth.getInstance().getUid();
     }
 
     public void searchProduct(String query) {
@@ -71,40 +71,39 @@ public class SearchProductInterator {
             public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
                 if (response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
-                    if (productResponse != null) {
+                    if (productResponse != null && listener != null) {
                         listener.getProducts(productResponse.getProducts());
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ProductResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: " +  t.getMessage());
+            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
     }
 
     public void saveSearchHistory(String text) {
-        searchHistoriesRef
-                .child(currentUser.getUid())
-                .child(text)
-                .setValue(new SearchHistory(text));
+        if (uid != null)
+            searchHistoriesRef.child(uid).child(text).setValue(new SearchHistory(text));
     }
 
     public void addSearchHistoriesValueEventListener() {
-        searchHistoriesRef.child(currentUser.getUid()).addValueEventListener(searchHistoriesValueEventListener);
+        if (uid != null)
+            searchHistoriesRef.child(uid).addValueEventListener(searchHistoriesValueEventListener);
     }
 
     public void removeSearchHistoriesValueEventListener() {
-        searchHistoriesRef.child(currentUser.getUid()).removeEventListener(searchHistoriesValueEventListener);
+        if (uid != null)
+            searchHistoriesRef.child(uid).removeEventListener(searchHistoriesValueEventListener);
     }
 
     public void deleteSearchHistory(String key) {
-        searchHistoriesRef.child(currentUser.getUid()).child(key).removeValue();
+        if (uid != null) searchHistoriesRef.child(uid).child(key).removeValue();
     }
 
     public void deleteAllSearchHistories() {
-        searchHistoriesRef.child(currentUser.getUid()).removeValue()
-                .addOnCompleteListener(s -> listener.deleteSuccess(s.isSuccessful()));
+        if (uid != null) searchHistoriesRef.child(uid).removeValue();
     }
 }

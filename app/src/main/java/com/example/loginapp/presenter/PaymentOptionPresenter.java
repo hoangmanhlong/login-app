@@ -4,7 +4,7 @@ import com.example.loginapp.model.entity.Order;
 import com.example.loginapp.model.entity.PaymentMethod;
 import com.example.loginapp.model.entity.Voucher;
 import com.example.loginapp.model.entity.VoucherType;
-import com.example.loginapp.model.interator.PaymentOptionInterator;
+import com.example.loginapp.model.interator.PaymentOptionInteractor;
 import com.example.loginapp.model.listener.PaymentOptionListener;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionView;
@@ -13,17 +13,17 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
 
     private PaymentOptionView view;
 
-    private PaymentOptionInterator interator;
+    private PaymentOptionInteractor interactor;
 
-    private boolean isSaveDeliveryAddress;
+    private Boolean isSaveDeliveryAddress;
 
-    private boolean isProductsFromShoppingCart;
+    private Boolean isProductsFromShoppingCart;
 
     private Order order;
 
     public PaymentOptionPresenter(PaymentOptionView view) {
         this.view = view;
-        interator = new PaymentOptionInterator(this);
+        interactor = new PaymentOptionInteractor(this);
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
@@ -67,7 +67,7 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
 
     public void createOrder() {
         view.isLoading(true);
-        interator.createOrder(order, isSaveDeliveryAddress, isProductsFromShoppingCart);
+        interactor.createOrder(order, isSaveDeliveryAddress, isProductsFromShoppingCart);
     }
 
     @Override
@@ -83,8 +83,8 @@ public class PaymentOptionPresenter implements PaymentOptionListener {
 
     public void DetachView() {
         view = null;
-        interator.removePaymentOptionListener();
-        interator = null;
+        interactor.removePaymentOptionListener();
+        interactor = null;
         order = null;
     }
 }

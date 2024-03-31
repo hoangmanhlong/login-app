@@ -1,15 +1,11 @@
 package com.example.loginapp.model.interator;
 
-import android.app.Activity;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.example.loginapp.R;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.listener.RegisterListener;
 import com.example.loginapp.utils.Constant;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
@@ -17,7 +13,7 @@ import java.util.HashMap;
 
 public class RegisterInterator {
 
-    private final String TAG = this.toString();
+    private static final String TAG = RegisterInterator.class.getSimpleName();
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -39,10 +35,19 @@ public class RegisterInterator {
                     HashMap<String, Object> updates = new HashMap<>();
                     updates.put(UserData.USERID, uid);
                     updates.put(UserData.EMAIL, email);
-                    Constant.userRef.child(uid)
-                                    .updateChildren(updates);
-                    listener.onSignupSuccess();  // Clearer method name
-                    Log.d(TAG, "User registration successful.");  // Informative log message
+                    if (uid != null) {
+                        Constant.userRef.child(uid)
+                                .updateChildren(updates)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        listener.onSignupSuccess();
+                                        Log.d(TAG, "User registration successful.");
+                                    } else {
+                                        listener.onSignupError(R.string.server_error);
+                                    }
+                                });
+                    }
+
                 })
                 .addOnFailureListener(e -> {
                     if (e instanceof FirebaseAuthUserCollisionException) {

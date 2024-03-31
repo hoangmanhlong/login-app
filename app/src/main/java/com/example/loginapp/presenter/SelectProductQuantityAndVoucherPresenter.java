@@ -24,6 +24,12 @@ public class SelectProductQuantityAndVoucherPresenter {
         order = new Order();
     }
 
+    public void clear() {
+        view = null;
+        product = null;
+        order = null;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
         view.bindProduct(product);
@@ -54,9 +60,12 @@ public class SelectProductQuantityAndVoucherPresenter {
         view.isSelectVoucherViewVisible(false);
         updateUI();
     }
+
     public void onMinusBtnClick() {
-        if (quantity > 1) quantity--;
-        updateUI();
+        if (quantity > 1) {
+            quantity--;
+            updateUI();
+        }
     }
 
     private void updateUI() {
@@ -70,9 +79,5 @@ public class SelectProductQuantityAndVoucherPresenter {
         }
         total = Math.round(total * 100.00) / 100.00;
         view.bindQuantityAndTotal(String.valueOf(quantity), String.valueOf(total));
-    }
-
-    public void detachView() {
-        view = null;
     }
 }

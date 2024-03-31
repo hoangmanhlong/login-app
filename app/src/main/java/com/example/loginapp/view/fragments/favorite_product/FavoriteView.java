@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface FavoriteView {
 
-    void onMessage(String message);
-
     void isWishlistEmpty(Boolean isEmpty);
 
     void bindFavoriteListProduct(List<Product> products);
