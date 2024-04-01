@@ -46,10 +46,14 @@ public class DeliveryAddressDetailInteractor {
                         List<DeliveryAddress> deliveryAddresses = new ArrayList<>();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren())
                             deliveryAddresses.add(dataSnapshot.getValue(DeliveryAddress.class));
-                        for (DeliveryAddress deliveryAddress1 : deliveryAddresses)
-                            ref.child(deliveryAddress1.getDeliveryAddressId())
-                                    .child(DeliveryAddress.IS_DEFAULT).setValue(false);
-                        update(deliveryAddress);
+                        if (deliveryAddress.getIsDefault()) {
+                            for (DeliveryAddress deliveryAddress1 : deliveryAddresses)
+                                ref.child(deliveryAddress1.getDeliveryAddressId())
+                                        .child(DeliveryAddress.IS_DEFAULT).setValue(false);
+                            update(deliveryAddress);
+                        } else {
+                            update(deliveryAddress);
+                        }
                     } else {
                         update(deliveryAddress);
                     }
