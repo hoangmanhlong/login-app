@@ -9,6 +9,9 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Keyboard pressing when clicking on view is not EditText
+ */
 public final class HideKeyboard {
 
     private static void hideSoftKeyboard(@NonNull Activity activity) {

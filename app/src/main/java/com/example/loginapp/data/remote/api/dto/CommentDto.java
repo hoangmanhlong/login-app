@@ -1,24 +1,28 @@
 package com.example.loginapp.data.remote.api.dto;
 
-import com.example.loginapp.model.entity.Product;
+import com.example.loginapp.model.entity.Comment;
 
 import java.util.List;
 
-public class ProductResponse {
-    private List<Product> products;
+public class CommentDto {
+
+    private List<Comment> comments;
+
     private int total;
+
     private int skip;
+
     private int limit;
 
-    public ProductResponse(List<Product> products, int total, int skip, int limit) {
-        this.products = products;
+    public CommentDto(List<Comment> comments, int total, int skip, int limit) {
+        this.comments = comments;
         this.total = total;
         this.skip = skip;
         this.limit = limit;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Comment> getComments() {
+        return comments;
     }
 
     public int getTotal() {

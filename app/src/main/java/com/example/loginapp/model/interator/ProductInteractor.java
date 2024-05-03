@@ -5,8 +5,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.loginapp.data.remote.api.AppApiService;
-import com.example.loginapp.data.remote.api.dto.ProductResponse;
-import com.example.loginapp.model.entity.CommentRespond;
+import com.example.loginapp.data.remote.api.dto.ProductDto;
+import com.example.loginapp.data.remote.api.dto.CommentDto;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.listener.ProductListener;
 import com.example.loginapp.utils.Constant;
@@ -73,39 +73,39 @@ public class ProductInteractor {
     }
 
     private void getComments() {
-        Call<CommentRespond> call = AppApiService.retrofit.getComments(5);
-        call.enqueue(new Callback<CommentRespond>() {
+        Call<CommentDto> call = AppApiService.retrofit.getComments(5);
+        call.enqueue(new Callback<CommentDto>() {
             @Override
-            public void onResponse(@NonNull Call<CommentRespond> call, @NonNull Response<CommentRespond> response) {
+            public void onResponse(@NonNull Call<CommentDto> call, @NonNull Response<CommentDto> response) {
                 if (response.isSuccessful()) {
-                    CommentRespond commentRespond = response.body();
-                    if (commentRespond != null && listener != null)
-                        listener.getCommentRespond(commentRespond);
+                    CommentDto commentDto = response.body();
+                    if (commentDto != null && listener != null)
+                        listener.getCommentRespond(commentDto);
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<CommentRespond> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<CommentDto> call, @NonNull Throwable t) {
 
             }
         });
     }
 
     private void getSimilarProducts(String category) {
-        Call<ProductResponse> call = AppApiService.retrofit.getProductOfCategory(category);
+        Call<ProductDto> call = AppApiService.retrofit.getProductOfCategory(category);
 
-        call.enqueue(new Callback<ProductResponse>() {
+        call.enqueue(new Callback<ProductDto>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductDto> call, @NonNull Response<ProductDto> response) {
                 if (response.isSuccessful()) {
-                    ProductResponse productResponse = response.body();
-                    if (productResponse != null && listener != null)
-                        listener.getSimilarProducts(productResponse.getProducts());
+                    ProductDto productDto = response.body();
+                    if (productDto != null && listener != null)
+                        listener.getSimilarProducts(productDto.getProducts());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductDto> call, @NonNull Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });

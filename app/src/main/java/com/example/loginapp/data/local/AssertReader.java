@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class AssertReader {
-    public  static String[] getProvinces() {
+    public static String[] getProvinces() {
         try {
             JSONArray jsonArray = JsonReader.loadJSONArrayFromAsset(App.getInstance(), "city.list.min.json");
             List<Province> provinces = new ArrayList<>();

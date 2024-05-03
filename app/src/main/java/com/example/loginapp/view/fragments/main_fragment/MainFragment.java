@@ -112,8 +112,6 @@ public class MainFragment extends Fragment implements MainFragmentView {
         presenter = null;
         listOfVerifiedDestinations = null;
         listOfUnconfirmedDestinations = null;
-        NewProductInWishlistMessage message = EventBus.getDefault().getStickyEvent(NewProductInWishlistMessage.class);
-        if (message != null) EventBus.getDefault().removeStickyEvent(message);
     }
 
     @Override
@@ -152,49 +150,11 @@ public class MainFragment extends Fragment implements MainFragmentView {
                 int position = tab.getPosition();
                 viewPager.setCurrentItem(position);
                 if (position == 3) presenter.viewedFavoritesList(true);
-                int res = 0;
-                switch (position) {
-                    case 0:
-                        res = R.drawable.ichome;
-                        break;
-                    case 1:
-                        res = R.drawable.ic_search_dark;
-                        break;
-                    case 2:
-                        res = R.drawable.ic_cart_dark;
-                        break;
-                    case 3:
-                        res = R.drawable.favorite;
-                        break;
-                    case 4:
-                        res = R.drawable.ic_user_dark;
-                        break;
-                }
-                tab.setIcon(res);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                int res = 0;
-                switch (position) {
-                    case 0:
-                        res = R.drawable.ic_home_gray;
-                        break;
-                    case 1:
-                        res = R.drawable.ic_search_gray;
-                        break;
-                    case 2:
-                        res = R.drawable.ic_cart_gray;
-                        break;
-                    case 3:
-                        res = R.drawable.ic_favorite_gray;
-                        break;
-                    case 4:
-                        res = R.drawable.ic_user_gray;
-                        break;
-                }
-                tab.setIcon(res);
+
             }
 
             @Override
@@ -207,16 +167,20 @@ public class MainFragment extends Fragment implements MainFragmentView {
     @Override
     public void bindNumberOfProductInShoppingCart(int number, boolean isShoppingCartEmpty) {
         TabLayout.Tab shoppingCartTab = tabLayout.getTabAt(2);
-        BadgeDrawable drawable = shoppingCartTab.getOrCreateBadge();
-        if (isShoppingCartEmpty) shoppingCartTab.removeBadge();
-        else drawable.setNumber(number);
+        if (shoppingCartTab != null) {
+            BadgeDrawable drawable = shoppingCartTab.getOrCreateBadge();
+            if (isShoppingCartEmpty) shoppingCartTab.removeBadge();
+            else drawable.setNumber(number);
+        }
     }
 
     @Override
     public void hasNewProductInFavoritesList(boolean hasNewProduct) {
         TabLayout.Tab favoritesListTab = tabLayout.getTabAt(3);
-        if (hasNewProduct) favoritesListTab.getOrCreateBadge();
-        else favoritesListTab.removeBadge();
+        if (favoritesListTab != null) {
+            if (hasNewProduct) favoritesListTab.getOrCreateBadge();
+            else favoritesListTab.removeBadge();
+        }
     }
 
     @Override

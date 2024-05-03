@@ -1,7 +1,7 @@
 package com.example.loginapp.presenter;
 
 import com.example.loginapp.model.entity.Comment;
-import com.example.loginapp.model.entity.CommentRespond;
+import com.example.loginapp.data.remote.api.dto.CommentDto;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.interator.ProductInteractor;
 import com.example.loginapp.model.listener.ProductListener;
@@ -87,17 +87,12 @@ public class ProductPresenter implements ProductListener {
     }
 
     @Override
-    public void saveToBasketSuccess() {
-        if (view != null) view.saveToBasketSuccess();
-    }
-
-    @Override
-    public void getCommentRespond(CommentRespond commentRespond) {
+    public void getCommentRespond(CommentDto commentDto) {
         if (view != null) {
             retrievedComments = true;
-            comments = commentRespond.getComments();
+            comments = commentDto.getComments();
             view.getComments(comments);
-            view.getCommentCount(String.valueOf(commentRespond.getLimit()));
+            view.getCommentCount(String.valueOf(commentDto.getLimit()));
         }
     }
 

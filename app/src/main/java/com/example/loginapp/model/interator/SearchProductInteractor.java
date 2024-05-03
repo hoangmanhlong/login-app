@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.loginapp.data.remote.api.AppApiService;
-import com.example.loginapp.data.remote.api.dto.ProductResponse;
+import com.example.loginapp.data.remote.api.dto.ProductDto;
 import com.example.loginapp.model.entity.SearchHistory;
 import com.example.loginapp.model.listener.SearchListener;
 import com.example.loginapp.utils.Constant;
@@ -64,21 +64,21 @@ public class SearchProductInteractor {
     }
 
     public void searchProduct(String query) {
-        Call<ProductResponse> call = AppApiService.retrofit.searchProduct(query);
+        Call<ProductDto> call = AppApiService.retrofit.searchProduct(query);
 
-        call.enqueue(new Callback<ProductResponse>() {
+        call.enqueue(new Callback<ProductDto>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductDto> call, @NonNull Response<ProductDto> response) {
                 if (response.isSuccessful()) {
-                    ProductResponse productResponse = response.body();
-                    if (productResponse != null && listener != null) {
-                        listener.getProducts(productResponse.getProducts());
+                    ProductDto productDto = response.body();
+                    if (productDto != null && listener != null) {
+                        listener.getProducts(productDto.getProducts());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductDto> call, @NonNull Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });

@@ -1,6 +1,6 @@
 package com.example.loginapp.model.listener;
 
-import com.example.loginapp.model.entity.CommentRespond;
+import com.example.loginapp.data.remote.api.dto.CommentDto;
 import com.example.loginapp.model.entity.Product;
 
 import java.util.List;
@@ -9,9 +9,7 @@ public interface ProductListener {
 
     void isFavoriteProduct(Boolean isFavoriteProduct);
 
-    void saveToBasketSuccess();
-
-    void getCommentRespond(CommentRespond commentRespond);
+    void getCommentRespond(CommentDto commentDto);
 
     void getSimilarProducts(List<Product> products);
 }

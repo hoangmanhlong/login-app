@@ -1,13 +1,10 @@
 package com.example.loginapp.data.local.room;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.loginapp.model.entity.OrderProduct;
-import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.ProductName;
 
 import java.util.List;

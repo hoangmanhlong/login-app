@@ -27,11 +27,11 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private ConnectivityManager connectivityManager;
 
-    private MutableLiveData<Boolean> isConnected = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isConnected = new MutableLiveData<>(); // observe network state
 
     private final NetworkRequest networkRequest = new NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        if (Boolean.FALSE.equals(isConnected.getValue())) networkShimmerFrameLayout.startShimmerAnimation();
         connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
     }
 
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         connectivityManager.unregisterNetworkCallback(networkCallback);
+        if (networkShimmerFrameLayout.isAnimationStarted()) networkShimmerFrameLayout.stopShimmerAnimation();
     }
 
     @Override
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         isConnected = null;
         networkCallback = null;
         binding = null;
+        networkShimmerFrameLayout = null;
     }
 
     //    public void showPopupDialog() {

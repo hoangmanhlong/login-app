@@ -117,6 +117,7 @@ public class CoinsRewardFragment extends Fragment implements CoinsRewardView, On
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.clear();
         presenter = null;
     }
 

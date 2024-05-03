@@ -19,23 +19,32 @@ import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentLoginBinding;
 import com.example.loginapp.presenter.LoginPresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.utils.NetworkChecker;
 import com.example.loginapp.view.commonUI.AppMessage;
 import com.example.loginapp.view.commonUI.HideKeyboard;
 import com.example.loginapp.view.commonUI.LoadingDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
+/**
+ * This screen is used to log in to your account
+ */
 public class LoginFragment extends Fragment implements LoginView {
 
+    // refer [home fragment] layout using view binding
     private FragmentLoginBinding binding;
 
     private LoginPresenter presenter;
 
+    // Use for navigation
     private NavController navController;
 
+    // use used when authenticating users
     private Dialog dialog;
 
+    // holder ref to email, password field
     private TextInputEditText[] editTexts;
 
+    // holder ref to phone number field
     private EditText etPhoneNumber;
 
     @Override
@@ -59,9 +68,14 @@ public class LoginFragment extends Fragment implements LoginView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dialog = LoadingDialog.getLoadingDialog(requireContext());
+        // Keyboard pressing when clicking on view is not editText
         HideKeyboard.setupHideKeyboard(view, requireActivity());
         presenter.initData();
+
+        // observer email, password input
         loginWithEmailButtonObserver();
+
+        // observer phone number input
         phoneNumberEditTextListener();
     }
 
@@ -74,6 +88,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Save input into presenter
                 presenter.setPhoneNumber(s.toString().trim());
             }
 
@@ -84,6 +99,7 @@ public class LoginFragment extends Fragment implements LoginView {
         });
     }
 
+    // update UI when phone number view clicked
     public void onNumberPhoneBtn() {
         binding.numberPhoneInput.setVisibility(View.VISIBLE);
         binding.linearInputEmail.setVisibility(View.GONE);
@@ -91,6 +107,7 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.loginEmail.setBackgroundResource(R.drawable.wrap_select_option_login_background);
     }
 
+    // update UI when email view clicked
     public void onEmailClick() {
         binding.numberPhoneInput.setVisibility(View.GONE);
         binding.linearInputEmail.setVisibility(View.VISIBLE);
@@ -98,14 +115,23 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.loginEmail.setBackgroundResource(R.drawable.background_login_select);
     }
 
+    // called when login with email button clicked
     public void onLoginWithEmailClick() {
-        presenter.loginWithEmail();
+        // Check network before authentication
+        if (NetworkChecker.isNetworkAvailable(requireContext()))
+            // Authenticate email and password
+            presenter.loginWithEmail();
     }
 
+    /**
+     * Called when login with email button clicked, navigate to
+     * {@link com.example.loginapp.view.fragments.register.RegisterFragment}
+     */
     public void goRegisterScreen() {
         navController.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 
+    // remove all ref view - avoid memory leak
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -114,6 +140,7 @@ public class LoginFragment extends Fragment implements LoginView {
         etPhoneNumber = null;
     }
 
+    // remove all data when fragment destroyed
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -159,16 +186,20 @@ public class LoginFragment extends Fragment implements LoginView {
 
     }
 
+    // Called again when account authentication begins and completes
     @Override
     public void isLoading(@NonNull Boolean show) {
         if (show) dialog.show();
         else dialog.dismiss();
     }
 
+    // Called again when authentication is successful
     @Override
     public void isLoginSuccess(boolean isSuccess) {
+        // Hide loading Dialog
         dialog.dismiss();
         if (isSuccess) {
+            // navigate to MainFragment
             int startDestinationId = navController.getGraph().getStartDestinationId();
             if (navController.getPreviousBackStackEntry() != null) {
                 navController.popBackStack(startDestinationId, true);
@@ -178,6 +209,7 @@ public class LoginFragment extends Fragment implements LoginView {
                 navController.navigate(startDestinationId);
             }
         } else {
+            // is done when authentication ís failure
             binding.setLoginEmailAndPasswordMessageVisible(true);
         }
     }
@@ -187,11 +219,13 @@ public class LoginFragment extends Fragment implements LoginView {
         AppMessage.showMessage(requireContext(), message);
     }
 
+    // Called again when phone number is valid or not
     @Override
     public void requestOTPButtonEnabled(boolean enabled) {
         binding.setLoginWithPhoneNumberButtonEnabled(enabled);
     }
 
+    // Called again when email, password is valid or not
     @Override
     public void loginEmailAndPasswordButtonEnabled(boolean visible) {
         binding.setLoginEmailAndPasswordButtonEnable(visible);

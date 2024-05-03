@@ -16,7 +16,7 @@ abstract public class AppDatabase extends RoomDatabase {
     public abstract AppDao dao();
 
     private static volatile AppDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = Runtime.getRuntime().availableProcessors();
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 

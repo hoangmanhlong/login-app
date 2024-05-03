@@ -97,7 +97,7 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
-        NavHostFragment.findNavController(this).navigate(R.id.action_global_productFragment, bundle);
+        NavHostFragment.findNavController(requireParentFragment()).navigate(R.id.action_global_productFragment, bundle);
     }
 
     @Override

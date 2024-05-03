@@ -4,6 +4,7 @@ import com.example.loginapp.App;
 import com.example.loginapp.data.local.AppSharedPreferences;
 import com.example.loginapp.model.interator.MainInteractor;
 import com.example.loginapp.model.listener.MainListener;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.main_fragment.MainFragmentView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -39,12 +40,14 @@ public class MainFragmentPresenter implements MainListener {
     }
 
     private void getWishlistStatus() {
-        view.hasNewProductInFavoritesList(!sharedPreferences.getFavoritesListStatus());
+        view.hasNewProductInFavoritesList(!sharedPreferences.getBoolean(Constant.IS_VIEWED_FAVORITES_LIST_KEY));
     }
 
     public void viewedFavoritesList(boolean viewedFavoritesList) {
-        sharedPreferences.saveViewedFavoritesListStatus(viewedFavoritesList);
-        getWishlistStatus();
+        if (logged) {
+            sharedPreferences.putBoolean(Constant.IS_VIEWED_FAVORITES_LIST_KEY, viewedFavoritesList);
+            getWishlistStatus();
+        }
     }
 
     public void addValueEventListener() {

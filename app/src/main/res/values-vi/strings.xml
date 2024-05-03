@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smarteshop</string>
 
     <string name="login">Đăng nhập</string>
     <string name="or">Hoặc</string>

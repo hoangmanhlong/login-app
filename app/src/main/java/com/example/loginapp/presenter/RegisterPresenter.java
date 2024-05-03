@@ -4,10 +4,8 @@ import androidx.annotation.StringRes;
 
 import com.example.loginapp.model.interator.RegisterInterator;
 import com.example.loginapp.model.listener.RegisterListener;
+import com.example.loginapp.utils.RegexUtils;
 import com.example.loginapp.view.fragments.register.RegisterView;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegisterPresenter implements RegisterListener {
 
@@ -44,7 +42,7 @@ public class RegisterPresenter implements RegisterListener {
     }
 
     public void setEmail(String email) {
-        isEmailValid = isValidEmail(email);
+        isEmailValid = RegexUtils.isValidEmail(email);
         this.email = email;
         view.isValidEmail(isEmailValid);
         view.isRegisterButtonVisible(isRegisterButtonVisible());
@@ -71,14 +69,5 @@ public class RegisterPresenter implements RegisterListener {
     public void onSignupError(@StringRes int message) {
         view.isLoading(false);
         view.onMessage(message);
-    }
-
-    private boolean isValidEmail(String email) {
-        String emailRegex =
-                "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 }

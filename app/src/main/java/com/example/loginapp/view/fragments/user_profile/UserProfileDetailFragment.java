@@ -34,7 +34,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
+        navController = NavHostFragment.findNavController(requireParentFragment());
         presenter = new UserProfileDetailPresenter(this);
     }
 

@@ -31,7 +31,7 @@ public class SelectLanguagePresenter {
     }
 
     public void initData() {
-        isVietnamese = sharedPreferences.getLanguage();
+        isVietnamese = sharedPreferences.getBoolean(Constant.IS_VIETNAMESE_LANGUAGE);
         isSelectedVietnamese = isVietnamese;
         if (view != null) view.isVietnamese(isSelectedVietnamese);
     }
@@ -43,7 +43,7 @@ public class SelectLanguagePresenter {
 
     public void changeLanguage() {
         if (isSelectedVietnamese != isVietnamese) {
-            sharedPreferences.setLanguage(isSelectedVietnamese);
+            sharedPreferences.putBoolean(Constant.IS_VIETNAMESE_LANGUAGE, isSelectedVietnamese);
             LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(
                     isSelectedVietnamese ?
                             Constant.VIETNAM_COUNTRY_CODE : Constant.ENGLISH_COUNTRY_CODE

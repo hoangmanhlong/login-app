@@ -21,23 +21,13 @@ public class AppSharedPreferences {
         return instance;
     }
 
-    public void saveViewedFavoritesListStatus(Boolean viewed) {
+    public void putBoolean(String key, Boolean value) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Constant.IS_VIEWED_FAVORITES_LIST_KEY, viewed);
+        editor.putBoolean(key, value);
         editor.apply();
     }
 
-    public boolean getFavoritesListStatus() {
-        return preferences.getBoolean(Constant.IS_VIEWED_FAVORITES_LIST_KEY, false);
-    }
-
-    public void setLanguage(boolean isVietnamese) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Constant.IS_VIETNAMESE_LANGUAGE, isVietnamese);
-        editor.apply();
-    }
-
-    public boolean getLanguage() {
-        return preferences.getBoolean(Constant.IS_VIETNAMESE_LANGUAGE, false);
+    public boolean getBoolean(String key) {
+        return preferences.getBoolean(key, false);
     }
 }

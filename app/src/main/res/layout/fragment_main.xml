@@ -27,27 +27,27 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ichome" />
+            android:icon="@drawable/bg_home_menu" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_search_gray" />
+            android:icon="@drawable/bg_search_menu" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_cart_gray" />
+            android:icon="@drawable/bg_cart_menu" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_favorite_gray" />
+            android:icon="@drawable/bg_favorite_menu" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_user_gray" />
+            android:icon="@drawable/bg_personal_menu" />
     </com.google.android.material.tabs.TabLayout>
 
 </LinearLayout>

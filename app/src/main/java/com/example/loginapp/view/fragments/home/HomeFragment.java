@@ -1,6 +1,5 @@
 package com.example.loginapp.view.fragments.home;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,18 +69,18 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
+        navController = NavHostFragment.findNavController(requireParentFragment());
         presenter = new HomePresenter(this);
     }
 
-    @SuppressLint("ResourceAsColor")
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding.setHomeFragment(this);
 
         recommendedAdapter = new ProductAdapter(this);
         topChartsAdapter = new ProductAdapter(this);
         discountAdapter = new ProductAdapter(this);
-        adapter = new DiscountAdapter(new ArrayList<>());
+        adapter = new DiscountAdapter(new ArrayList<>(), this);
 
         recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder.getRoot();
         topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder.getRoot();
@@ -97,9 +96,31 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         discountRecyclerView = binding.discountRecyclerView;
 
         swipeRefreshLayout = binding.homeSwipe;
-        swipeRefreshLayout.setColorSchemeResources(R.color.free_shipping_color, R.color.cam, R.color.blue, R.color.red);
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light
+        );
 
         sliderView = binding.discountSliderView;
+
+        recommendedRecyclerview.setAdapter(recommendedAdapter);
+        topChartsRecyclerview.setAdapter(topChartsAdapter);
+        discountRecyclerView.setAdapter(discountAdapter);
+
+        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+        sliderView.setScrollTimeInSec(4);
+        sliderView.setSliderAdapter(adapter);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (!isRefreshing) {
+                isRefreshing = true;
+                presenter.getListProductFromNetwork();
+            }
+        });
 
         return binding.getRoot();
     }
@@ -108,7 +129,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     public void onViewCreated(@NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        binding.homeScreenContent.getLayoutTransition().setAnimateParentHierarchy(false);
-        initView();
+        presenter.initData();
     }
 
     @Override
@@ -131,30 +152,6 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         sliderView = null;
         binding = null;
         adapter = null;
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private void initView() {
-        binding.setHomeFragment(this);
-
-        recommendedRecyclerview.setAdapter(recommendedAdapter);
-        topChartsRecyclerview.setAdapter(topChartsAdapter);
-        discountRecyclerView.setAdapter(discountAdapter);
-
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        sliderView.setScrollTimeInSec(4);
-        sliderView.setSliderAdapter(adapter);
-
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (!isRefreshing) {
-                isRefreshing = true;
-                presenter.getListProductFromNetwork();
-            }
-        });
-
-        presenter.initData();
     }
 
     @Override
@@ -181,10 +178,10 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void isRecommendedProductsLoading(boolean isLoading) {
         if (isLoading) {
-            recommendedProductsPlaceHolder.setVisibility(View.VISIBLE);
-            recommendedProductsPlaceHolder.startShimmerAnimation();
             recommendedRecyclerview.setVisibility(View.GONE);
             expandRecommendedProductsView.setVisibility(View.GONE);
+            recommendedProductsPlaceHolder.setVisibility(View.VISIBLE);
+            recommendedProductsPlaceHolder.startShimmerAnimation();
         } else {
             recommendedProductsPlaceHolder.stopShimmerAnimation();
             recommendedProductsPlaceHolder.setVisibility(View.GONE);

@@ -7,6 +7,7 @@ import com.example.loginapp.model.entity.OrderStatus;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.UserProfileInteractor;
 import com.example.loginapp.model.listener.UserProfileDetailListener;
+import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.fragments.user_profile.UserProfileDetailView;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class UserProfileDetailPresenter implements UserProfileDetailListener {
         this.view = view;
         orders = new ArrayList<>();
         sharedPreferences = AppSharedPreferences.getInstance(App.getInstance());
-        isVietnamese = sharedPreferences.getLanguage();
+        isVietnamese = sharedPreferences.getBoolean(Constant.IS_VIETNAMESE_LANGUAGE);
         interactor = new UserProfileInteractor(this);
     }
 

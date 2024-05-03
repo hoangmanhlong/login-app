@@ -13,8 +13,6 @@ public interface ProductView {
 
     void enableFavorite(Boolean compare);
 
-    void saveToBasketSuccess();
-
     void getComments(List<Comment> comments);
 
     void getCommentCount(String number);

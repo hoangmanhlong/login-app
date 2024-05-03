@@ -12,17 +12,23 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.example.loginapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesProductAdapter extends PagerAdapter {
 
-    private final List<String> images;
+    private List<String> images;
 
     private final Context context;
 
-    public ImagesProductAdapter(List<String> images, Context context) {
-        this.images = images;
+    public ImagesProductAdapter(Context context) {
         this.context = context;
+        images = new ArrayList<>();
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+        notifyDataSetChanged();
     }
 
     @Override

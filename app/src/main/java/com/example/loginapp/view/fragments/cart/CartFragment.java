@@ -53,7 +53,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
+        navController = NavHostFragment.findNavController(requireParentFragment());
         presenter = new CartPresenter(this);
     }
 
@@ -140,8 +140,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getPaymentOptionMessage(PaymentOptionMessage paymentOptionMessage) {
         presenter.setClearCode(true);
-        PaymentOptionMessage paymentOptionMessage1 = EventBus.getDefault().getStickyEvent(PaymentOptionMessage.class);
-        if (paymentOptionMessage1 != null) EventBus.getDefault().removeStickyEvent(paymentOptionMessage1);
+        EventBus.getDefault().removeStickyEvent(paymentOptionMessage);
     }
 
     @Override
@@ -190,8 +189,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     @Override
     public void showCheckAllCheckbox(Boolean visible) {
-        if (visible) binding.checkAllView.setVisibility(View.VISIBLE);
-        else binding.checkAllView.setVisibility(View.GONE);
+        binding.selectAllCheckbox.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override

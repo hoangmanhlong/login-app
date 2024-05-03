@@ -1,6 +1,7 @@
 package com.example.loginapp.view.fragments.product_detail;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ public class ProductDetailFragment
         extends Fragment
         implements ProductView, OnImageClickListener, OnProductClickListener {
 
+    private static final String TAG = "ProductDetailFragment";
+
     private ProductPresenter presenter;
 
     private ProductImageAdapter productImageAdapter;
@@ -51,6 +54,8 @@ public class ProductDetailFragment
     private CheckBox btFavorite;
 
     private ProductAdapter similarProductsAdapter;
+
+    private ImagesProductAdapter imagesProductAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +73,7 @@ public class ProductDetailFragment
         commentAdapter = null;
         btFavorite = null;
         viewPager = null;
+        imagesProductAdapter = null;
     }
 
     @Override
@@ -80,14 +86,20 @@ public class ProductDetailFragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         binding = FragmentProductDetailBinding.inflate(inflater, container, false);
         binding.setFragment(this);
         similarProductsAdapter = new ProductAdapter(this);
         productImageAdapter = new ProductImageAdapter(this);
+        imagesProductAdapter = new ImagesProductAdapter(requireContext());
         commentAdapter = new CommentAdapter();
         btFavorite = binding.favoriteBtn;
         viewPager = binding.viewPager;
+        viewPager.setAdapter(imagesProductAdapter);
         return binding.getRoot();
     }
 
@@ -145,11 +157,6 @@ public class ProductDetailFragment
     }
 
     @Override
-    public void saveToBasketSuccess() {
-        binding.tvAddToCart.setVisibility(View.GONE);
-    }
-
-    @Override
     public void getComments(List<Comment> comments) {
         commentAdapter.submitList(comments);
     }
@@ -163,7 +170,7 @@ public class ProductDetailFragment
     public void bindProduct(Product product) {
         binding.setProduct(product);
         productImageAdapter.submitList(product.getImages());
-        viewPager.setAdapter(new ImagesProductAdapter(product.getImages(), requireContext()));
+        imagesProductAdapter.setImages(product.getImages());
     }
 
     @Override
@@ -191,6 +198,7 @@ public class ProductDetailFragment
 
     @Override
     public void onImageClick(int position) {
+        viewPager.setCurrentItem(position);
     }
 
     @Override

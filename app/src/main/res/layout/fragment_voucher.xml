@@ -72,10 +72,14 @@
                 tools:listitem="@layout/layout_voucher" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:fontFamily="@font/poppins_bold"
+                android:includeFontPadding="false"
                 android:text="@string/voucher_empty"
-                android:textSize="@dimen/_16sdp"
+                android:textAlignment="center"
+                android:textSize="16sp"
                 android:visibility="@{isAllVouchersEmpty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

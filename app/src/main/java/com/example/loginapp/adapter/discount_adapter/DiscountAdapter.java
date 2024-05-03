@@ -3,6 +3,7 @@ package com.example.loginapp.adapter.discount_adapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.example.loginapp.adapter.product_adapter.OnProductClickListener;
 import com.example.loginapp.databinding.LayoutDiscountItemBinding;
 import com.example.loginapp.model.entity.Product;
 import com.smarteist.autoimageslider.SliderViewAdapter;
@@ -13,8 +14,11 @@ public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountS
 
     private final List<Product> products;
 
-    public DiscountAdapter(List<Product> products) {
+    private final OnProductClickListener listener;
+
+    public DiscountAdapter(List<Product> products, OnProductClickListener listener) {
         this.products = products;
+        this.listener = listener;
     }
 
     public void setData(List<Product> products) {
@@ -36,7 +40,9 @@ public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountS
 
     @Override
     public void onBindViewHolder(DiscountSliderAdapterViewHolder viewHolder, final int position) {
-        viewHolder.bind(products.get(position));
+        Product product = products.get(position);
+        viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(product));
+        viewHolder.bind(product);
     }
 
     @Override
@@ -44,7 +50,7 @@ public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountS
         return products.size();
     }
 
-    static class DiscountSliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
+    public static class DiscountSliderAdapterViewHolder extends SliderViewAdapter.ViewHolder {
 
         private final LayoutDiscountItemBinding binding;
 

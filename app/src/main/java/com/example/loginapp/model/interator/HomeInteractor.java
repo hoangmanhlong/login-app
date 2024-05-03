@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.loginapp.App;
 import com.example.loginapp.data.local.room.AppDatabase;
 import com.example.loginapp.data.remote.api.AppApiService;
-import com.example.loginapp.data.remote.api.dto.ProductResponse;
+import com.example.loginapp.data.remote.api.dto.ProductDto;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.ProductName;
 import com.example.loginapp.model.entity.UserData;
@@ -60,20 +60,19 @@ public class HomeInteractor {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if (listener != null) listener.isUserDataEmpty();
             }
         };
     }
 
     public void getListProductFromNetwork() {
-        Call<ProductResponse> call = AppApiService.retrofit.getProducts();
-        call.enqueue(new Callback<ProductResponse>() {
+        AppApiService.retrofit.getProducts().enqueue(new Callback<ProductDto>() {
             @Override
-            public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+            public void onResponse(@NonNull Call<ProductDto> call, @NonNull Response<ProductDto> response) {
                 if (response.isSuccessful()) {
-                    ProductResponse productResponse = response.body();
-                    if (productResponse != null) {
-                        List<Product> products = productResponse.getProducts();
+                    ProductDto productDto = response.body();
+                    if (productDto != null) {
+                        List<Product> products = productDto.getProducts();
                         if (listener != null) listener.getProductsFromAPI(products);
 //                        insertProductNames(products);
                     }
@@ -81,7 +80,7 @@ public class HomeInteractor {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProductDto> call, @NonNull Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
