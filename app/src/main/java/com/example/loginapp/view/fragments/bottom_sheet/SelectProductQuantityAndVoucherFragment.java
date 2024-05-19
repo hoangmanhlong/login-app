@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.R;
 import com.example.loginapp.databinding.FragmentSelectProductQuantityAndVoucherBinding;
@@ -108,7 +110,7 @@ public class SelectProductQuantityAndVoucherFragment
     }
 
     public void onSelectCodeClick() {
-        Navigation.findNavController(requireParentFragment().requireView()).navigate(R.id.action_productFragment_to_selectVoucherFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.selectVoucherFragment);
     }
 
     @Override

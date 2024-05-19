@@ -8,6 +8,7 @@ import com.example.loginapp.databinding.LayoutDiscountItemBinding;
 import com.example.loginapp.model.entity.Product;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountSliderAdapterViewHolder> {
@@ -16,8 +17,8 @@ public class DiscountAdapter extends SliderViewAdapter<DiscountAdapter.DiscountS
 
     private final OnProductClickListener listener;
 
-    public DiscountAdapter(List<Product> products, OnProductClickListener listener) {
-        this.products = products;
+    public DiscountAdapter(OnProductClickListener listener) {
+        this.products = new ArrayList<>();
         this.listener = listener;
     }
 

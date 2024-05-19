@@ -22,10 +22,6 @@ public class FavoriteAdapter extends ListAdapter<Product, FavoriteAdapter.ItemVi
         this.listener = listener;
     }
 
-    public void getProductByPosition(int pos) {
-        listener.getProductByPosition(getItem(pos).getId());
-    }
-
     @NonNull
     @Override
     public FavoriteAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -47,6 +43,10 @@ public class FavoriteAdapter extends ListAdapter<Product, FavoriteAdapter.ItemVi
             this.binding = binding;
             this.listener = onItemClickListener;
             binding.getRoot().setOnClickListener(v -> listener.onItemClick(getItem(getAdapterPosition())));
+            binding.getRoot().setOnLongClickListener(v -> {
+                listener.onItemLongClick(getItem(getAdapterPosition()));
+                return false;
+            });
         }
 
         public void bind(Product product) {

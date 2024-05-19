@@ -19,8 +19,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/_20sdp"
-            app:cardElevation="@dimen/_2sdp"
+            app:cardCornerRadius="@dimen/_8sdp"
+            app:cardElevation="1dp"
             app:strokeWidth="0dp">
 
             <ImageView

@@ -7,7 +7,13 @@ import com.google.firebase.storage.StorageReference;
 
 public final class Constant {
 
+    public static final String DUMMY_JSON_URL = "https://dummyjson.com/";
+
     public static final String VIETNAM_COUNTRY_CODE = "vi";
+
+    public static final String OPENED_FROM_BUY_NOW_OF_ACTION_ON_PRODUCT_FRAGMENT = "o23yh680x7t348c4rt4";
+
+    public static final String OPENED_FROM_CART = "is_product_in_cart";
 
     public static final String ENGLISH_COUNTRY_CODE = "en-US";
 
@@ -17,7 +23,7 @@ public final class Constant {
 
     public static final int BACK_PRESS_INTERVAL = 2000;
 
-    public static final String VIEWED_STATUS_KEY = "viewed_status";
+    public static final String APP_PREFERENCE_KEY = "app_preference_key";
 
     public static final String IS_VIEWED_FAVORITES_LIST_KEY = "isViewedFavoritesList";
 

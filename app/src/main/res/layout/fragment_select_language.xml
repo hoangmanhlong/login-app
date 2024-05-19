@@ -19,23 +19,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_12sdp"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
-
-            <Button
-                android:id="@+id/navigationButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> fragment.onNavigateUp()}"
-                app:icon="@drawable/ic_arrow_left"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -46,24 +36,7 @@
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/navigationButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:background="?attr/selectableItemBackground"
-                android:fontFamily="@font/poppins_regular"
-                android:includeFontPadding="false"
-                android:onClick="@{() -> fragment.onSaveButtonClick()}"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/save"
-                android:textAllCaps="true"
-                android:textColor="@android:color/holo_blue_light"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,7 +45,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -169,9 +141,16 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.divider.MaterialDivider
+            <Button
+                style="@style/Widget.Material3.Button"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp" />
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:fontFamily="@font/poppins_bold"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> fragment.onSaveButtonClick()}" />
+
         </LinearLayout>
 
 

@@ -1,11 +1,11 @@
 package com.example.loginapp.view.fragments.product_detail;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,11 +47,11 @@ public class ProductDetailFragment
 
     private FragmentProductDetailBinding binding;
 
-    private ViewPager viewPager;
+    private ViewPager productImagesViewPager;
 
     private NavController navController;
 
-    private CheckBox btFavorite;
+    private ImageView btFavorite;
 
     private ProductAdapter similarProductsAdapter;
 
@@ -72,7 +72,7 @@ public class ProductDetailFragment
         binding = null;
         commentAdapter = null;
         btFavorite = null;
-        viewPager = null;
+        productImagesViewPager = null;
         imagesProductAdapter = null;
     }
 
@@ -98,8 +98,8 @@ public class ProductDetailFragment
         imagesProductAdapter = new ImagesProductAdapter(requireContext());
         commentAdapter = new CommentAdapter();
         btFavorite = binding.favoriteBtn;
-        viewPager = binding.viewPager;
-        viewPager.setAdapter(imagesProductAdapter);
+        productImagesViewPager = binding.viewPager;
+        productImagesViewPager.setAdapter(imagesProductAdapter);
         return binding.getRoot();
     }
 
@@ -153,7 +153,7 @@ public class ProductDetailFragment
 
     @Override
     public void enableFavorite(Boolean isEnable) {
-        btFavorite.setChecked(isEnable);
+        btFavorite.setImageResource(isEnable ? R.drawable.ic_favorite_red_24 : R.drawable.ic_favorite_outline);
     }
 
     @Override
@@ -198,7 +198,7 @@ public class ProductDetailFragment
 
     @Override
     public void onImageClick(int position) {
-        viewPager.setCurrentItem(position);
+        productImagesViewPager.setCurrentItem(position);
     }
 
     @Override

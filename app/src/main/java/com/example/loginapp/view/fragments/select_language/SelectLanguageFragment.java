@@ -7,28 +7,23 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.loginapp.databinding.FragmentSelectLanguageBinding;
 import com.example.loginapp.presenter.SelectLanguagePresenter;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 
-public class SelectLanguageFragment extends Fragment implements SelectLanguageView {
+public class SelectLanguageFragment extends BottomSheetDialogFragment implements SelectLanguageView {
 
-    private static final String TAG = SelectLanguageFragment.class.getSimpleName();
+    public static final String TAG = SelectLanguageFragment.class.getSimpleName();
 
     private SelectLanguagePresenter presenter;
 
     private FragmentSelectLanguageBinding binding;
 
-    private NavController navController;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
         presenter = new SelectLanguagePresenter(this);
     }
 
@@ -46,11 +41,8 @@ public class SelectLanguageFragment extends Fragment implements SelectLanguageVi
         presenter.initData();
     }
 
-    public void onNavigateUp() {
-        navController.navigateUp();
-    }
-
     public void onSaveButtonClick() {
+        this.dismiss();
         presenter.changeLanguage();
     }
 
@@ -73,7 +65,6 @@ public class SelectLanguageFragment extends Fragment implements SelectLanguageVi
         super.onDestroy();
         presenter.detachView();
         presenter = null;
-        navController = null;
     }
 
     @Override

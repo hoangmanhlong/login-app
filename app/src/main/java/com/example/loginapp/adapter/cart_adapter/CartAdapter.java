@@ -22,10 +22,6 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
         this.listener = listener;
     }
 
-    public void getProductByPosition(int pos) {
-        listener.onDeleteProduct(getItem(pos));
-    }
-
     @NonNull
     @Override
     public ItemCartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,6 +54,10 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
             binding.add.setOnClickListener(this);
             binding.minus.setOnClickListener(this);
             binding.checkbox.setOnClickListener(c -> listener.onCheckboxClick(getItem(getAdapterPosition())));
+            binding.getRoot().setOnLongClickListener(v -> {
+                listener.onProductLongClick(getItem(getAdapterPosition()).toProduct());
+                return false;
+            });
         }
 
         public void bind(FirebaseProduct product) {
@@ -71,7 +71,7 @@ public class CartAdapter extends ListAdapter<FirebaseProduct, CartAdapter.ItemCa
             int quantity = product.getQuantity();
             if (v.getId() == binding.minus.getId()) {
                 if (quantity > 1) listener.updateQuantity(product.getId(), quantity - 1);
-                else listener.onDeleteProduct(product);
+                else listener.onDeleteProduct(product.getId());
             }
             if (v.getId() == binding.add.getId())
                 listener.updateQuantity(product.getId(), quantity + 1);

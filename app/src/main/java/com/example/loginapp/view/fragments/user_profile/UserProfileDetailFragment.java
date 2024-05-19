@@ -18,6 +18,7 @@ import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.presenter.UserProfileDetailPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppConfirmDialog;
+import com.example.loginapp.view.fragments.select_language.SelectLanguageFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -131,7 +132,7 @@ public class UserProfileDetailFragment extends Fragment implements UserProfileDe
     }
 
     public void onChangeLanguageClick() {
-        navController.navigate(R.id.selectLanguageFragment);
+        new SelectLanguageFragment().show(getParentFragmentManager(), SelectLanguageFragment.TAG);
     }
 
     public void goVoucherScreen() {

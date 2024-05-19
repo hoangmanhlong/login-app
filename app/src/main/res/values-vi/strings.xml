@@ -150,6 +150,10 @@
     <string name="select_voucher">Chọn mã giảm giá</string>
     <string name="all">Tất cả</string>
     <string name="my_voucher">Mã giảm giá của tôi</string>
+    <string name="add_to_wishlist">Thêm vào danh sách yêu thích</string>
+    <string name="add_to_basket">Thêm vào giỏ hàng</string>
+    <string name="remove_from_wishlist">Xóa khỏi danh sách yêu thích</string>
+    <string name="remove_from_basket">Xóa khỏi giỏ hàng</string>
 
     <string name="vietnamese">Việt Nam</string>
 

@@ -38,13 +38,13 @@ public class VoucherFragment extends Fragment implements VoucherView {
         binding = FragmentVoucherBinding.inflate(inflater, container, false);
         binding.setFragment(this);
         adapter = new VoucherAdapter();
+        binding.myVoucherRecyclerView.setAdapter(adapter);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.myVoucherRecyclerView.setAdapter(adapter);
         presenter.getVouchers();
     }
 
@@ -68,11 +68,11 @@ public class VoucherFragment extends Fragment implements VoucherView {
 
     @Override
     public void bindVouchers(List<Voucher> vouchers) {
-        adapter.submitList(vouchers);
+        if (adapter != null) adapter.submitList(vouchers);
     }
 
     @Override
     public void isVouchersEmpty(boolean isEmpty) {
-        binding.setIsAllVouchersEmpty(isEmpty);
+        if (binding != null) binding.setIsAllVouchersEmpty(isEmpty);
     }
 }

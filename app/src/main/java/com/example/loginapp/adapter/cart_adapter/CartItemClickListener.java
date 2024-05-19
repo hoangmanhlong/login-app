@@ -6,9 +6,11 @@ import com.example.loginapp.model.entity.Product;
 public interface CartItemClickListener {
     void onItemClick(Product product);
 
+    void onProductLongClick(Product product);
+
     void updateQuantity(int id, int quantity);
 
     void onCheckboxClick(FirebaseProduct product);
 
-    void onDeleteProduct(FirebaseProduct product);
+    void onDeleteProduct(int productId);
 }

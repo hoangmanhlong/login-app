@@ -1,6 +1,7 @@
 package com.example.loginapp.presenter;
 
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.loginapp.model.entity.FirebaseProduct;
 import com.example.loginapp.model.entity.Order;
@@ -12,6 +13,8 @@ import com.example.loginapp.view.fragments.cart.CartView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class CartPresenter implements CartListener {
@@ -30,20 +33,26 @@ public class CartPresenter implements CartListener {
 
     private Order order;
 
+    private ExecutorService executorService;
+
+    private Handler handler;
+
     public CartPresenter(CartView view) {
         this.view = view;
         interactor = new CartInteractor(this);
         basket = new ArrayList<>();
         selectedProduct = new ArrayList<>();
         order = new Order();
+        executorService = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     public void initBasket() {
         if (retrievedData) {
             if (!basket.isEmpty()) {
                 view.bindBasket(basket);
-                updateUI();
             }
+            updateUI();
         }
     }
 
@@ -74,12 +83,13 @@ public class CartPresenter implements CartListener {
 
     @Override
     public void isCartEmpty() {
+        retrievedData = true;
         basket.clear();
         updateUI();
     }
 
-    public void deleteProductInFirebase(FirebaseProduct product) {
-        interactor.removeProductFromShoppingCart(product);
+    public void deleteProductInFirebase(int productId) {
+        interactor.removeProductFromShoppingCart(productId);
     }
 
     public void updateQuantity(int id, int quantity) {
@@ -87,7 +97,7 @@ public class CartPresenter implements CartListener {
     }
 
     public void onItemChecked(FirebaseProduct product) {
-        interactor.updateChecked(product.getId(), !product.isChecked());
+        executorService.execute(() -> interactor.updateChecked(product.getId(), !product.isChecked()));
     }
 
     public void addShoppingCartValueEventListener() {
@@ -100,33 +110,40 @@ public class CartPresenter implements CartListener {
 
     private void updateUI() {
         if (basket.isEmpty()) {
-            view.isBasketEmpty(true);
             view.isCheckAllCheckboxChecked(false);
+            view.isBasketEmpty(true);
             return;
         }
 
         view.isBasketEmpty(false);
         selectedProduct = basket.stream().filter(FirebaseProduct::isChecked).collect(Collectors.toList());
-        Log.d(TAG, "selectedProduct: " + selectedProduct.size());
-        Log.d(TAG, "basket: " + basket.size());
         view.isCheckAllCheckboxChecked(selectedProduct.size() == basket.size());
         view.showCheckoutView(!selectedProduct.isEmpty());
         view.showCheckAllCheckbox(!basket.isEmpty());
         if (!selectedProduct.isEmpty()) {
-            order.setOrderProducts(toOrdersProductList(selectedProduct));
+            executorService.execute(() -> {
+                order.setOrderProducts(toOrdersProductList(selectedProduct));
 
-            double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
-            double total = subtotal;
+                double subtotal = selectedProduct.stream().mapToInt(product -> product.getPrice() * product.getQuantity()).sum();
+                double total = subtotal;
 
-            Voucher voucher = order.getVoucher();
-            if (voucher != null)
-                total = subtotal - (subtotal * voucher.getDiscountPercentage() / 100);
-            view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(total));
+                Voucher voucher = order.getVoucher();
+                if (voucher != null)
+                    total = subtotal - (subtotal * voucher.getDiscountPercentage() / 100);
+                double finalTotal = total;
+                handler.post(() ->
+                        view.setTotal(String.valueOf(subtotal), String.valueOf(selectedProduct.size()), String.valueOf(finalTotal))
+                );
+
+            });
+
         }
     }
 
     public void updateCheckboxAllSelected(Boolean checked) {
-        for (FirebaseProduct product : basket) interactor.updateChecked(product.getId(), checked);
+        executorService.execute(() -> {
+            for (FirebaseProduct product : basket) interactor.updateChecked(product.getId(), checked);
+        });
     }
 
     private List<OrderProduct> toOrdersProductList(List<FirebaseProduct> firebaseProducts) {
@@ -143,5 +160,8 @@ public class CartPresenter implements CartListener {
         retrievedData = null;
         interactor.clearData();
         interactor = null;
+        executorService.shutdown();
+        executorService = null;
+        handler = null;
     }
 }

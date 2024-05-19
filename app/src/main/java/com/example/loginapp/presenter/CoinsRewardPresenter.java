@@ -1,6 +1,8 @@
 package com.example.loginapp.presenter;
 
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.example.loginapp.R;
@@ -17,6 +19,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Presenter for Coins Reward Screen - {@link CoinsRewardPresenter}.
@@ -82,8 +86,7 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
      * Mục đính: Người dùng chỉ được đổi những voucher mà người dùng chưa có - tránh đổi cùng
      * 1 Voucher.
      * <p>
-     * Danh sách được này =
-     * tất cả voucher từ server - danh sách voucher của người dùng
+     * Danh sách được này = tất cả voucher từ server - danh sách voucher của người dùng
      */
     private List<Voucher> voucherListHasBeenFiltered;
 
@@ -92,12 +95,19 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
      */
     private int currentDay;
 
+    private ExecutorService executorService;
+
+    private Handler handler;
+
     public CoinsRewardPresenter(CoinsRewardView view) {
         this.view = view;
         interactor = new CoinsRewardInteractor(this);
         listOfAllOriginalVouchers = new ArrayList<>();
         voucherListHasBeenFiltered = new ArrayList<>();
-        getsTheCurrentWeekday();
+        executorService = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
+        executorService.execute(this::getsTheCurrentWeekday);
+
     }
 
     private void getsTheCurrentWeekday() {
@@ -175,7 +185,7 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
     }
 
     public void addAttendanceDataValueEventListener() {
-        view.isAttendanceLoading(true); // show view holder when loading
+        if (!tookAttendance) view.isAttendanceLoading(true); // show view holder when loading
         interactor.addAttendanceDataValueEventListener(); // add a listener
     }
 
@@ -184,7 +194,7 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
     }
 
     public void addVouchersValueEventListener() {
-        view.isVouchersLoading(true); // show view holder when loading
+        if (!tookTheVoucherListForTheFirstTime) view.isVouchersLoading(true); // show view holder when loading
         interactor.addVouchersValueEventListener();
     }
 
@@ -204,21 +214,24 @@ public class CoinsRewardPresenter implements CoinsRewardListener {
      * This method called when "Get 100 coins now" button Clicked
      */
     public void attendance() {
-        if (!tookAttendance) {
-            List<Integer> newCheckedDays = new ArrayList<>();
+        executorService.execute(() -> {
+            if (!tookAttendance) {
+                List<Integer> newCheckedDays = new ArrayList<>();
 
-            if (attendanceManager != null) newCheckedDays = attendanceManager.getCheckedDates();
+                if (attendanceManager != null) newCheckedDays = attendanceManager.getCheckedDates();
 
-            newCheckedDays.add(currentDay);
+                newCheckedDays.add(currentDay);
 
-            interactor.attendance(
-                    new AttendanceManager(
-                            newCheckedDays,
-                            attendanceManager == null ? 100 : attendanceManager.getNumberOfCoins() + 100,
-                            lastDayOfMonth
-                    )
-            );
-        }
+                interactor.attendance(
+                        new AttendanceManager(
+                                newCheckedDays,
+                                attendanceManager == null ? 100 : attendanceManager.getNumberOfCoins() + 100,
+                                lastDayOfMonth
+                        )
+                );
+            }
+        });
+
     }
 
     @Override

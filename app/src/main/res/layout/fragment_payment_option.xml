@@ -68,419 +68,418 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/checkoutView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
-                    android:id="@+id/checkoutView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
+                    <ImageView
+                        android:layout_width="@dimen/_26sdp"
+                        android:layout_height="@dimen/_29sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_local" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_dark" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_dark" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_dark" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_dark" />
+
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_card_dark" />
 
-                        <ImageView
-                            android:layout_width="@dimen/_26sdp"
-                            android:layout_height="@dimen/_29sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_local" />
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_15" />
 
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:layout_marginHorizontal="@dimen/_15sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_dark" />
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_15" />
 
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_dark" />
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_15" />
 
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:layout_marginHorizontal="@dimen/_15sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_dark" />
+                    <ImageView
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_7sdp"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ellipse_15" />
 
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_dark" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/_15sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_card_dark" />
-
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_15" />
-
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:layout_marginHorizontal="@dimen/_15sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_15" />
-
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_15" />
-
-                        <ImageView
-                            android:layout_width="@dimen/_6sdp"
-                            android:layout_height="@dimen/_7sdp"
-                            android:layout_marginHorizontal="@dimen/_15sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ellipse_15" />
-
-                        <ImageView
-                            android:layout_width="@dimen/_23sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/check__5__1" />
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="@dimen/_23sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/check__5__1" />
                 </LinearLayout>
+            </LinearLayout>
 
-                <LinearLayout
-                    app:layout_constraintTop_toBottomOf="@id/checkoutView"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_25sdp"
+                app:layout_constraintTop_toBottomOf="@id/checkoutView">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_25sdp">
+                    android:fontFamily="@font/montserrat_regular"
+                    android:letterSpacing="-0.01"
+                    android:lineSpacingExtra="-20sp"
+                    android:text="@string/payment_option"
+                    android:textColor="@color/black_100"
+                    android:textSize="@dimen/_14ssp"
+                    android:textStyle="bold" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/fpxBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/payment_card_no_selected_background"
+                    android:onClick="@{() -> fragment.onFpxClick()}"
+                    tools:background="@drawable/payment_card_selected_background">
+
+                    <View
+                        android:id="@+id/onlineBankingRadio"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:background="@drawable/ic_radio_no_selected"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:background="@drawable/ic_radio_selected" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:letterSpacing="-0.01"
-                        android:lineSpacingExtra="-20sp"
-                        android:text="@string/payment_option"
-                        android:textColor="@color/black_100"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/fpxBackground"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@drawable/payment_card_no_selected_background"
-                        android:onClick="@{() -> fragment.onFpxClick()}"
-                        tools:background="@drawable/payment_card_selected_background">
-
-                        <View
-                            android:id="@+id/onlineBankingRadio"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_margin="@dimen/_8sdp"
-                            android:background="@drawable/ic_radio_no_selected"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:background="@drawable/ic_radio_selected" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/online_banking"
-                            android:textColor="@color/black_100"
-                            android:textSize="@dimen/_10sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/onlineBankingRadio"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/fpx_1_1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/visaBackground"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@drawable/payment_card_no_selected_background"
-                        android:onClick="@{() -> fragment.onVisaClick()}">
-
-                        <View
-                            android:id="@+id/visaRadio"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_margin="@dimen/_8sdp"
-                            android:background="@drawable/ic_radio_no_selected"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/visa"
-                            android:textColor="@color/black_100"
-                            android:textSize="@dimen/_10sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/visaRadio"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/visaImage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_visa"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/materCardImage"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/materCardImage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:src="@drawable/ic_matercard"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/paypalBackground"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@drawable/payment_card_no_selected_background"
-                        android:onClick="@{() -> fragment.onPaypalClick()}">
-
-                        <View
-                            android:id="@+id/payPalRadio"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_margin="@dimen/_8sdp"
-                            android:background="@drawable/ic_radio_no_selected"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/paypal"
-                            android:textColor="@color/black_100"
-                            android:textSize="@dimen/_10sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/payPalRadio"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_paypal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:elevation="@dimen/_10sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/checkout_background"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_25sdp"
-                    android:paddingTop="@dimen/_25sdp"
-                    android:paddingBottom="@dimen/_14sdp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/merchandise_subtotal"
-                            android:textColor="@color/gray_500" />
-
-
-                        <TextView
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@{@string/dollar_price(merchandiseSubtotal)}"
-                            android:textColor="@color/black_100"
-                            tools:text="1000$" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_16sdp">
-
-                        <TextView
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/shipping_subtotal"
-                            android:textColor="@color/gray_500" />
-
-                        <TextView
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@{@string/dollar_price(shippingCost)}"
-                            android:textColor="@color/black_100"
-                            tools:text="200$" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:visibility="@{hasVoucher ? View.VISIBLE : View.GONE}"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_16sdp">
-
-                        <TextView
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/voucher_discount"
-                            android:textColor="@color/gray_500" />
-
-                        <TextView
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@{@string/dollar_discount_price(reducedPrice)}"
-                            android:textColor="@color/black_100"
-                            tools:text="200$" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp">
-
-                        <TextView
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@string/total_payment"
-                            android:textColor="@color/black_100"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:includeFontPadding="false"
-                            android:text="@{@string/dollar_price(totalPayment)}"
-                            android:textColor="@color/black_100"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            tools:text="1200$" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:fontFamily="@font/poppins_bold"
-                        android:onClick="@{() -> fragment.onPayButtonClick()}"
-                        android:text="@string/pay"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
                         android:includeFontPadding="false"
-                        app:elevation="@dimen/_10sdp"
+                        android:text="@string/online_banking"
+                        android:textColor="@color/black_100"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/onlineBankingRadio"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_46sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/fpx_1_1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/visaBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/payment_card_no_selected_background"
+                    android:onClick="@{() -> fragment.onVisaClick()}">
+
+                    <View
+                        android:id="@+id/visaRadio"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:background="@drawable/ic_radio_no_selected"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/visa"
+                        android:textColor="@color/black_100"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/visaRadio"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/visaImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_visa"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/materCardImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/materCardImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:src="@drawable/ic_matercard"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/paypalBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/payment_card_no_selected_background"
+                    android:onClick="@{() -> fragment.onPaypalClick()}">
+
+                    <View
+                        android:id="@+id/payPalRadio"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:background="@drawable/ic_radio_no_selected"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/paypal"
+                        android:textColor="@color/black_100"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/payPalRadio"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_paypal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/checkout_background"
+                android:elevation="@dimen/_10sdp"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/_25sdp"
+                android:paddingTop="@dimen/_25sdp"
+                android:paddingBottom="@dimen/_14sdp"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/merchandise_subtotal"
+                        android:textColor="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/dollar_price(merchandiseSubtotal)}"
+                        android:textColor="@color/black_100"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="1000$" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_16sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/shipping_subtotal"
+                        android:textColor="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/dollar_price(shippingCost)}"
+                        android:textColor="@color/black_100"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="200$" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    android:visibility="@{hasVoucher ? View.VISIBLE : View.GONE}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/voucher_discount"
+                        android:textColor="@color/gray_500"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/dollar_discount_price(reducedPrice)}"
+                        android:textColor="@color/black_100"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="200$" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/total_payment"
+                        android:textColor="@color/black_100"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{@string/dollar_price(totalPayment)}"
+                        android:textColor="@color/black_100"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="1200$" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:includeFontPadding="false"
+                    android:onClick="@{() -> fragment.onPayButtonClick()}"
+                    android:text="@string/pay"
+                    app:elevation="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

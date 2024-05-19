@@ -2,6 +2,7 @@ package com.example.loginapp.view.fragments.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +15,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.loginapp.R;
 import com.example.loginapp.adapter.discount_adapter.DiscountAdapter;
@@ -30,7 +32,6 @@ import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnima
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeView, OnProductClickListener {
@@ -66,6 +67,12 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     private boolean isRefreshing = false;
 
+    private ViewPager2 mainViewpager;
+
+    public void setMainViewpager(ViewPager2 mainViewpager) {
+        this.mainViewpager = mainViewpager;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +87,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         recommendedAdapter = new ProductAdapter(this);
         topChartsAdapter = new ProductAdapter(this);
         discountAdapter = new ProductAdapter(this);
-        adapter = new DiscountAdapter(new ArrayList<>(), this);
+        adapter = new DiscountAdapter(this);
 
         recommendedProductsPlaceHolder = binding.recommendedProductsPlaceHolder.getRoot();
         topChartsProductsPlaceHolder = binding.topChartsProductsPlaceHolder.getRoot();
@@ -109,6 +116,72 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
         topChartsRecyclerview.setAdapter(topChartsAdapter);
         discountRecyclerView.setAdapter(discountAdapter);
 
+        recommendedRecyclerview.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
+                    mainViewpager.setUserInputEnabled(false);
+                } else if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                    mainViewpager.setUserInputEnabled(true);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+
+        topChartsRecyclerview.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
+                    mainViewpager.setUserInputEnabled(false);
+                } else if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                    mainViewpager.setUserInputEnabled(true);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+
+        discountRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
+                    mainViewpager.setUserInputEnabled(false);
+                } else if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                    mainViewpager.setUserInputEnabled(true);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
@@ -135,6 +208,7 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mainViewpager = null;
         recommendedProductsPlaceHolder = null;
         topChartsProductsPlaceHolder = null;
         discountProductsPlaceHolder = null;
@@ -156,17 +230,17 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void showRecommendedProducts(List<Product> products) {
-        recommendedAdapter.submitList(products);
+        if(recommendedAdapter != null) recommendedAdapter.submitList(products);
     }
 
     @Override
     public void showTopChartsProducts(List<Product> products) {
-        topChartsAdapter.submitList(products);
+        if (topChartsAdapter != null) topChartsAdapter.submitList(products);
     }
 
     @Override
     public void showDiscountProducts(List<Product> products) {
-        discountAdapter.submitList(products);
+        if(discountAdapter != null) discountAdapter.submitList(products);
     }
 
     public void onUserAvatarClick() {
@@ -177,70 +251,79 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void isRecommendedProductsLoading(boolean isLoading) {
-        if (isLoading) {
-            recommendedRecyclerview.setVisibility(View.GONE);
-            expandRecommendedProductsView.setVisibility(View.GONE);
-            recommendedProductsPlaceHolder.setVisibility(View.VISIBLE);
-            recommendedProductsPlaceHolder.startShimmerAnimation();
-        } else {
-            recommendedProductsPlaceHolder.stopShimmerAnimation();
-            recommendedProductsPlaceHolder.setVisibility(View.GONE);
-            recommendedRecyclerview.setVisibility(View.VISIBLE);
-            expandRecommendedProductsView.setVisibility(View.VISIBLE);
+        if (binding != null) {
+            if (isLoading) {
+                recommendedRecyclerview.setVisibility(View.GONE);
+                expandRecommendedProductsView.setVisibility(View.GONE);
+                recommendedProductsPlaceHolder.setVisibility(View.VISIBLE);
+                recommendedProductsPlaceHolder.startShimmerAnimation();
+            } else {
+                recommendedProductsPlaceHolder.stopShimmerAnimation();
+                recommendedProductsPlaceHolder.setVisibility(View.GONE);
+                recommendedRecyclerview.setVisibility(View.VISIBLE);
+                expandRecommendedProductsView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public void isTopChartsProductsLoading(boolean isLoading) {
-        if (isLoading) {
-            topChartsRecyclerview.setVisibility(View.GONE);
-            expandTopChartsProductsView.setVisibility(View.GONE);
-            topChartsProductsPlaceHolder.setVisibility(View.VISIBLE);
-            topChartsProductsPlaceHolder.startShimmerAnimation();
-        } else {
-            topChartsProductsPlaceHolder.stopShimmerAnimation();
-            topChartsProductsPlaceHolder.setVisibility(View.GONE);
-            topChartsRecyclerview.setVisibility(View.VISIBLE);
-            expandTopChartsProductsView.setVisibility(View.VISIBLE);
+        if (binding != null) {
+            if (isLoading) {
+                topChartsRecyclerview.setVisibility(View.GONE);
+                expandTopChartsProductsView.setVisibility(View.GONE);
+                topChartsProductsPlaceHolder.setVisibility(View.VISIBLE);
+                topChartsProductsPlaceHolder.startShimmerAnimation();
+            } else {
+                topChartsProductsPlaceHolder.stopShimmerAnimation();
+                topChartsProductsPlaceHolder.setVisibility(View.GONE);
+                topChartsRecyclerview.setVisibility(View.VISIBLE);
+                expandTopChartsProductsView.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
     @Override
     public void isDiscountProductsLoading(boolean isLoading) {
-        if (isLoading) {
-            discountRecyclerView.setVisibility(View.GONE);
-            expandDiscountProductsView.setVisibility(View.GONE);
-            discountProductsPlaceHolder.setVisibility(View.VISIBLE);
-            discountProductsPlaceHolder.startShimmerAnimation();
-        } else {
-            discountProductsPlaceHolder.stopShimmerAnimation();
-            discountProductsPlaceHolder.setVisibility(View.GONE);
-            discountRecyclerView.setVisibility(View.VISIBLE);
-            expandDiscountProductsView.setVisibility(View.VISIBLE);
+        if (binding != null) {
+            if (isLoading) {
+                discountRecyclerView.setVisibility(View.GONE);
+                expandDiscountProductsView.setVisibility(View.GONE);
+                discountProductsPlaceHolder.setVisibility(View.VISIBLE);
+                discountProductsPlaceHolder.startShimmerAnimation();
+            } else {
+                discountProductsPlaceHolder.stopShimmerAnimation();
+                discountProductsPlaceHolder.setVisibility(View.GONE);
+                discountRecyclerView.setVisibility(View.VISIBLE);
+                expandDiscountProductsView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public void isUserLoading(boolean isLoading) {
-        if (isLoading) {
-            binding.userView.setVisibility(View.GONE);
-            userPlaceHolder.setVisibility(View.VISIBLE);
-            userPlaceHolder.startShimmerAnimation();
-        } else {
-            userPlaceHolder.stopShimmerAnimation();
-            userPlaceHolder.setVisibility(View.GONE);
-            binding.userView.setVisibility(View.VISIBLE);
+        if (binding != null) {
+            if (isLoading) {
+                binding.userView.setVisibility(View.GONE);
+                userPlaceHolder.setVisibility(View.VISIBLE);
+                userPlaceHolder.startShimmerAnimation();
+            } else {
+                userPlaceHolder.stopShimmerAnimation();
+                userPlaceHolder.setVisibility(View.GONE);
+                binding.userView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public void bindRecommendedEveryDay(List<Product> products) {
-        adapter.setData(products);
+        if (adapter != null) adapter.setData(products);
     }
 
     @Override
     public void setShowUserView(Boolean show) {
-        binding.userView.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (binding != null) binding.userView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void onExpandRecommendProductsButtonClick() {
@@ -298,19 +381,20 @@ public class HomeFragment extends Fragment implements HomeView, OnProductClickLi
 
     @Override
     public void getUserData(UserData userData) {
-        binding.setUserData(userData);
+        if (binding != null) binding.setUserData(userData);
     }
 
     @Override
     public void refreshInvisible() {
         isRefreshing = false;
-        swipeRefreshLayout.setRefreshing(false);
+        if (binding != null) swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
+
         navController.navigate(R.id.action_global_productFragment, bundle);
     }
 }

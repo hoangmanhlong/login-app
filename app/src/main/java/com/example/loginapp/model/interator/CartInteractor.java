@@ -74,9 +74,9 @@ public class CartInteractor {
         }
     }
 
-    public void removeProductFromShoppingCart(FirebaseProduct product) {
+    public void removeProductFromShoppingCart(int productId) {
         if (uid != null) {
-            cartRef.child(uid).child(String.valueOf(product.getId())).removeValue();
+            cartRef.child(uid).child(String.valueOf(productId)).removeValue();
         }
     }
 

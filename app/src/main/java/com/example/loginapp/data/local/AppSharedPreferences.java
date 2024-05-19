@@ -13,7 +13,7 @@ public class AppSharedPreferences {
     private final SharedPreferences preferences;
 
     private AppSharedPreferences(Context context) {
-        preferences = context.getSharedPreferences(Constant.VIEWED_STATUS_KEY, Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(Constant.APP_PREFERENCE_KEY, Context.MODE_PRIVATE);
     }
 
     public static synchronized AppSharedPreferences getInstance(Context context) {

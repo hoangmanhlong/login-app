@@ -248,11 +248,7 @@
         app:destination="@id/voucherFragment" />
     <action
         android:id="@+id/action_global_productFragment"
-        app:destination="@id/productFragment"
-        app:enterAnim="@anim/from_right"
-        app:exitAnim="@anim/to_left"
-        app:popEnterAnim="@anim/from_left"
-        app:popExitAnim="@anim/to_right" />
+        app:destination="@id/productFragment" />
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.loginapp.view.fragments.main_fragment.MainFragment"
@@ -266,10 +262,5 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
-    <fragment
-        android:id="@+id/selectLanguageFragment"
-        android:name="com.example.loginapp.view.fragments.select_language.SelectLanguageFragment"
-        android:label="fragment_select_language"
-        tools:layout="@layout/fragment_select_language" />
 
 </navigation>

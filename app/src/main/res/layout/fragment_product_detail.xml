@@ -45,15 +45,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <CheckBox
+                <ImageView
                     android:id="@+id/favorite_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@drawable/sl_favorite_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:onClick="@{() -> fragment.onFavoriteButtonClick()}"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/ic_favorite_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -126,15 +129,15 @@
                                     tools:text="Iphone 15 pro max" />
 
                                 <TextView
-                                    android:layout_marginTop="@dimen/_8sdp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_8sdp"
                                     android:fontFamily="@font/poppins_regular"
                                     android:includeFontPadding="false"
                                     android:text="@{product.category}"
                                     android:textColor="@color/blue"
-                                    android:textStyle="bold"
                                     android:textSize="13sp"
+                                    android:textStyle="bold"
                                     tools:text="Iphone" />
 
 
@@ -348,7 +351,7 @@
 
         </LinearLayout>
 
-        <include layout="@layout/fragment_select_product_quantity_and_voucher" />
+        <!--        <include layout="@layout/fragment_select_product_quantity_and_voucher" />-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

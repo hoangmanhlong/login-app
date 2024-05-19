@@ -40,7 +40,9 @@ import com.google.android.flexbox.JustifyContent;
 
 import java.util.List;
 
-public class SearchProductFragment extends Fragment implements SearchView, OnSearchProductClickListener, OnSearchSuggestionClickListener {
+public class SearchProductFragment
+        extends Fragment
+        implements SearchView, OnSearchProductClickListener, OnSearchSuggestionClickListener {
 
     private SearchPresenter presenter;
 

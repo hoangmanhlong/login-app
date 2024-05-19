@@ -1,6 +1,5 @@
 package com.example.loginapp.view.fragments.cart;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.loginapp.R;
-import com.example.loginapp.adapter.SwipeHelper;
 import com.example.loginapp.adapter.cart_adapter.CartAdapter;
 import com.example.loginapp.adapter.cart_adapter.CartItemClickListener;
 import com.example.loginapp.databinding.FragmentCartBinding;
@@ -25,6 +24,7 @@ import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.CartPresenter;
 import com.example.loginapp.utils.Constant;
 import com.example.loginapp.view.commonUI.AppAnimationState;
+import com.example.loginapp.view.fragments.action_on_product.ActionOnProductFragment;
 import com.example.loginapp.view.fragments.payment_option.PaymentOptionMessage;
 import com.example.loginapp.view.fragments.select_voucher_fragment.MessageVoucherSelected;
 
@@ -35,7 +35,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 public class CartFragment extends Fragment implements CartView, CartItemClickListener {
-    
+
     private static final String TAG = CartFragment.class.getSimpleName();
 
     private NavController navController;
@@ -53,7 +53,7 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navController = NavHostFragment.findNavController(requireParentFragment());
+        navController = NavHostFragment.findNavController(this);
         presenter = new CartPresenter(this);
     }
 
@@ -61,32 +61,21 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCartBinding.inflate(inflater, container, false);
+        binding.setFragment(this);
         cartEmptyLottieAnimationView = binding.animationView;
         shoppingCartRecyclerview = binding.basketRecyclerView;
         adapter = new CartAdapter(this);
-        binding.setFragment(this);
+        shoppingCartRecyclerview.setAdapter(adapter);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        shoppingCartRecyclerview.setAdapter(adapter);
 
         SimpleItemAnimator simpleItemAnimator = (SimpleItemAnimator) shoppingCartRecyclerview.getItemAnimator();
         if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
         presenter.initBasket();
-        new SwipeHelper(requireContext(), shoppingCartRecyclerview) {
-            @Override
-            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
-                underlayButtons.add(new SwipeHelper.UnderlayButton(
-                        "Delete",
-                        0,
-                        Color.parseColor("#FF3C30"),
-                        adapter::getProductByPosition
-                ));
-            }
-        };
     }
 
     @Override
@@ -157,11 +146,28 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
         adapter.submitList(products);
     }
 
+//    /**
+//     * when click buy now button in {@link ActionOnProductFragment} will pass
+//     * 'OPENED_FROM_BUY_NOW_OF_ACTION_ON_PRODUCT_FRAGMENT' key to open dialog buy now
+//     * in {@link ProductDetailFragment}
+//     *
+//     * @param product Product clicked
+//     */
     @Override
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
         navController.navigate(R.id.action_global_productFragment, bundle);
+    }
+
+    @Override
+    public void onProductLongClick(Product product) {
+        ActionOnProductFragment actionOnProductFragment = new ActionOnProductFragment(this);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.PRODUCT_KEY, product);
+        bundle.putBoolean(Constant.OPENED_FROM_CART, true);
+        actionOnProductFragment.setArguments(bundle);
+        actionOnProductFragment.show(requireActivity().getSupportFragmentManager(), ActionOnProductFragment.TAG);
     }
 
     @Override
@@ -181,10 +187,11 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
 
     @Override
     public void showCheckoutView(Boolean check) {
-        if ((binding.checkoutView.getVisibility() == View.GONE) && check)
-            AppAnimationState.setCheckoutViewState(binding.checkoutView, true);
-        if ((binding.checkoutView.getVisibility() == View.VISIBLE) && !check)
-            AppAnimationState.setCheckoutViewState(binding.checkoutView, false);
+        ConstraintLayout checkoutView = binding.checkoutView;
+        if ((checkoutView.getVisibility() == View.GONE) && check)
+            AppAnimationState.setCheckoutViewState(checkoutView, true);
+        if ((checkoutView.getVisibility() == View.VISIBLE) && !check)
+            AppAnimationState.setCheckoutViewState(checkoutView, false);
     }
 
     @Override
@@ -207,8 +214,8 @@ public class CartFragment extends Fragment implements CartView, CartItemClickLis
     }
 
     @Override
-    public void onDeleteProduct(FirebaseProduct product) {
-        presenter.deleteProductInFirebase(product);
+    public void onDeleteProduct(int productId) {
+        presenter.deleteProductInFirebase(productId);
     }
 
     @Override

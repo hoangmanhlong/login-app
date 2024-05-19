@@ -21,6 +21,8 @@ import com.example.loginapp.databinding.FragmentFavoriteProductBinding;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.presenter.FavoritePresenter;
 import com.example.loginapp.utils.Constant;
+import com.example.loginapp.view.fragments.action_on_product.ActionOnProductFragment;
+import com.example.loginapp.view.fragments.product_detail.ProductDetailFragment;
 
 import java.util.List;
 
@@ -70,17 +72,6 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
         SimpleItemAnimator simpleItemAnimator = (SimpleItemAnimator) recyclerView.getItemAnimator();
         if (simpleItemAnimator != null) simpleItemAnimator.setSupportsChangeAnimations(false);
         presenter.initData();
-        new SwipeHelper(requireContext(), recyclerView) {
-            @Override
-            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
-                underlayButtons.add(new SwipeHelper.UnderlayButton(
-                        "Delete",
-                        0,
-                        Color.parseColor("#FF3C30"),
-                        adapter::getProductByPosition
-                ));
-            }
-        };
     }
 
     @Override
@@ -93,10 +84,18 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
         adapter.submitList(products);
     }
 
+//    /**
+//     * when click buy now button in {@link ActionOnProductFragment} will pass
+//     * 'OPENED_FROM_BUY_NOW_OF_ACTION_ON_PRODUCT_FRAGMENT' key to open dialog buy now
+//     * in {@link ProductDetailFragment}
+//     *
+//     * @param product Product clicked
+//     */
     @Override
     public void onItemClick(Product product) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.PRODUCT_KEY, product);
+//        bundle.putBoolean(Constant.OPENED_FROM_BUY_NOW_OF_ACTION_ON_PRODUCT_FRAGMENT, true);
         NavHostFragment.findNavController(requireParentFragment()).navigate(R.id.action_global_productFragment, bundle);
     }
 
@@ -119,8 +118,17 @@ public class FavoriteProductFragment extends Fragment implements FavoriteView, F
         presenter.removeFavoriteListValueEventListener();
     }
 
-    @Override
-    public void getProductByPosition(int productId) {
+    public void removeProductFromWishList(int productId) {
         presenter.deleteFavoriteProduct(productId);
+    }
+
+    @Override
+    public void onItemLongClick(Product product) {
+        ActionOnProductFragment actionOnProductFragment = new ActionOnProductFragment(this);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.PRODUCT_KEY, product);
+        bundle.putBoolean(Constant.OPENED_FROM_CART, false);
+        actionOnProductFragment.setArguments(bundle);
+        actionOnProductFragment.show(requireActivity().getSupportFragmentManager(), ActionOnProductFragment.TAG);
     }
 }

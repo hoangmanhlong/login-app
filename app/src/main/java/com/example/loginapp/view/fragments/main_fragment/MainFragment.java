@@ -88,7 +88,6 @@ public class MainFragment extends Fragment implements MainFragmentView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.initData();
-        viewPager.setUserInputEnabled(false);
         tabSelectedListener();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -98,6 +97,7 @@ public class MainFragment extends Fragment implements MainFragmentView {
             }
         });
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void getWishlistStatus(NewProductInWishlistMessage message) {
@@ -189,9 +189,11 @@ public class MainFragment extends Fragment implements MainFragmentView {
         if (logged) {
             viewPagerAdapter = new ViewPagerAdapter(this, listOfVerifiedDestinations);
             viewPager.setOffscreenPageLimit(listOfVerifiedDestinations.size());
+            ((HomeFragment) listOfVerifiedDestinations.get(0)).setMainViewpager(viewPager);
         } else {
             viewPagerAdapter = new ViewPagerAdapter(this, listOfUnconfirmedDestinations);
             viewPager.setOffscreenPageLimit(listOfUnconfirmedDestinations.size());
+            ((HomeFragment) listOfUnconfirmedDestinations.get(0)).setMainViewpager(viewPager);
         }
         viewPager.setAdapter(viewPagerAdapter);
     }

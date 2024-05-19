@@ -1,5 +1,8 @@
 package com.example.loginapp.presenter;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.example.loginapp.data.local.AssertReader;
 import com.example.loginapp.model.entity.DeliveryAddress;
 import com.example.loginapp.model.interator.DeliveryAddressDetailInteractor;
@@ -26,14 +29,17 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
         this.view = view;
         deliveryAddress = new DeliveryAddress();
         interactor = new DeliveryAddressDetailInteractor(this);
-        execute = Executors.newFixedThreadPool(5);
+        execute = Executors.newSingleThreadExecutor();
     }
 
     public void fetchProvinces() {
         execute.execute(() -> {
             String[] provinces = AssertReader.getProvinces();
-            if (provinces != null && view != null) view.bindProvinces(provinces);
-            execute.shutdown();
+            if (provinces != null && view != null)
+                new Handler(Looper.getMainLooper()).post(() -> {
+                            if (view != null) view.bindProvinces(provinces);
+                        }
+                );
         });
     }
 
@@ -112,6 +118,8 @@ public class DeliveryAddressDetailPresenter implements DeliveryAddressDetailList
     }
 
     public void detachView() {
+        execute.shutdown();
+        execute = null;
         view = null;
         interactor.clearData();
         interactor = null;

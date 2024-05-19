@@ -1,20 +1,27 @@
 package com.example.loginapp.presenter;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import com.example.loginapp.App;
 import com.example.loginapp.model.entity.Product;
 import com.example.loginapp.model.entity.UserData;
 import com.example.loginapp.model.interator.HomeInteractor;
 import com.example.loginapp.model.listener.HomeListener;
+import com.example.loginapp.utils.NetworkChecker;
 import com.example.loginapp.view.fragments.home.HomeView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class HomePresenter implements HomeListener {
 
-    private  static final String TAG = HomePresenter.class.getName();
+    private static final String TAG = HomePresenter.class.getName();
 
     private HomeView view;
 
@@ -38,7 +45,15 @@ public class HomePresenter implements HomeListener {
 
     private Boolean gotUserData = false;
 
+    private ExecutorService executorService;
+
+    private Handler handler;
+
     public void clear() {
+        executorService.shutdown();
+        handler.removeCallbacksAndMessages(null);
+        executorService = null;
+        handler = null;
         authenticated = null;
         gotDataFromAPI = null;
         gotUserData = null;
@@ -57,6 +72,8 @@ public class HomePresenter implements HomeListener {
         this.view = view;
         authenticated = FirebaseAuth.getInstance().getCurrentUser() != null;
         interactor = new HomeInteractor(this);
+        executorService = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     public void initData() {
@@ -65,8 +82,9 @@ public class HomePresenter implements HomeListener {
             if (currentUserData != null) {
                 view.setShowUserView(true);
                 view.getUserData(currentUserData);
+            } else {
+                view.setShowUserView(false);
             }
-            else view.setShowUserView(false);
         }
 
         if (gotDataFromAPI) showProducts();
@@ -88,11 +106,13 @@ public class HomePresenter implements HomeListener {
     }
 
     public void getListProductFromNetwork() {
-        if (view != null) {
-            view.isRecommendedProductsLoading(true);
-            view.isTopChartsProductsLoading(true);
-            view.isDiscountProductsLoading(true);
+        if (view != null && NetworkChecker.isNetworkAvailable(App.getInstance())) {
             interactor.getListProductFromNetwork();
+            if (!gotDataFromAPI) {
+                view.isRecommendedProductsLoading(true);
+                view.isTopChartsProductsLoading(true);
+                view.isDiscountProductsLoading(true);
+            }
         }
     }
 
@@ -110,21 +130,25 @@ public class HomePresenter implements HomeListener {
 
     @Override
     public void getUserData(UserData userData) {
+        gotUserData = true;
         currentUserData = userData;
-        view.isUserLoading(false);
-        boolean isUserViewVisible = currentUserData.getAvatar() != null && currentUserData.getUsername() != null;
+        boolean isUserViewVisible =
+                (currentUserData.getAvatar() != null && currentUserData.getUsername() != null) ||
+                        (!currentUserData.getAvatar().isEmpty() && !currentUserData.getUsername().isEmpty());
         if (view != null) {
+            view.isUserLoading(false);
             if (isUserViewVisible) view.getUserData(userData);
             view.setShowUserView(isUserViewVisible);
         }
-        gotUserData = true;
     }
 
     @Override
     public void getProductsFromAPI(List<Product> products) {
-        this.products = products;
-        gotDataFromAPI = true;
-        productClassification(products);
+        executorService.execute(() -> {
+            this.products = products;
+            gotDataFromAPI = true;
+            productClassification(products);
+        });
     }
 
     private void productClassification(List<Product> products) {
@@ -139,24 +163,30 @@ public class HomePresenter implements HomeListener {
         Collections.shuffle(products);
         recommendedEveryDay = products.subList(0, Math.min(products.size(), 10));
         if (view != null) {
-            view.isRecommendedProductsLoading(false);
-            view.bindRecommendedEveryDay(recommendedEveryDay);
+            handler.post(() -> {
+                view.isRecommendedProductsLoading(false);
+                view.bindRecommendedEveryDay(recommendedEveryDay);
+            });
         }
     }
 
     private void getTopChartsProducts(List<Product> products) {
         topChartsProducts = products.stream().filter(product -> product.getRating() > 4.8f).collect(Collectors.toList());
         if (view != null) {
-            view.isTopChartsProductsLoading(false);
-            view.showTopChartsProducts(topChartsProducts);
+            handler.post(() -> {
+                view.isTopChartsProductsLoading(false);
+                view.showTopChartsProducts(topChartsProducts);
+            });
         }
     }
 
     private void getDiscountProducts(List<Product> products) {
         discountProducts = products.stream().filter(v -> v.getDiscountPercentage() > 12.00).collect(Collectors.toList());
         if (view != null) {
-            view.isDiscountProductsLoading(false);
-            view.showDiscountProducts(discountProducts);
+            handler.post(() -> {
+                view.isDiscountProductsLoading(false);
+                view.showDiscountProducts(discountProducts);
+            });
         }
     }
 
@@ -165,9 +195,11 @@ public class HomePresenter implements HomeListener {
         Collections.shuffle(tempProducts);
         recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 30));
         if (view != null) {
-            view.isRecommendedProductsLoading(false);
-            view.showRecommendedProducts(recommendedProducts);
-            view.refreshInvisible();
+            handler.post(() -> {
+                view.refreshInvisible();
+                view.isRecommendedProductsLoading(false);
+                view.showRecommendedProducts(recommendedProducts);
+            });
         }
     }
 
@@ -182,20 +214,22 @@ public class HomePresenter implements HomeListener {
             recommendedProducts = tempProducts.subList(0, Math.min(tempProducts.size(), 20));
         }
         if (view != null) {
-            view.isRecommendedProductsLoading(false);
-            view.showRecommendedProducts(recommendedProducts);
-            view.refreshInvisible();
+            handler.post(() -> {
+                view.isRecommendedProductsLoading(false);
+                view.showRecommendedProducts(recommendedProducts);
+                view.refreshInvisible();
+            });
         }
     }
 
     @Override
     public void isUserDataEmpty() {
+        gotUserData = true;
         currentUserData = null;
         if (view != null) {
             view.isUserLoading(false);
             view.setShowUserView(false);
         }
-        gotUserData = true;
     }
 
     @Override

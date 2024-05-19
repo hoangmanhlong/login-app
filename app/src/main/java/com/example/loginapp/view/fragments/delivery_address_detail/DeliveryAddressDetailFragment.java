@@ -114,9 +114,7 @@ public class DeliveryAddressDetailFragment extends Fragment implements DeliveryA
 
     @Override
     public void bindProvinces(String[] provinces) {
-        requireActivity().runOnUiThread(() ->
-                ((MaterialAutoCompleteTextView) binding.tvProvince).setSimpleItems(provinces)
-        );
+        ((MaterialAutoCompleteTextView) binding.tvProvince).setSimpleItems(provinces);
     }
 
     @Override

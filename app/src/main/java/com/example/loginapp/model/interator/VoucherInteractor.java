@@ -47,7 +47,7 @@ public class VoucherInteractor {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
+                            if (listener != null) listener.isVouchersEmpty();
                         }
                     });
         }
